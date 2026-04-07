@@ -1,0 +1,2291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vertex Africa — Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --surface2: #f1f3f7;
+  --surface3: #e8ebf2;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.14);
+  --text: #0d1117;
+  --text2: #5a6478;
+  --text3: #8b95a8;
+  --green: #0d9e6e;
+  --green-bg: #e6f7f2;
+  --green-text: #065c40;
+  --blue: #2563eb;
+  --blue-bg: #eff4ff;
+  --blue-text: #1d4ed8;
+  --amber: #d97706;
+  --amber-bg: #fef3c7;
+  --amber-text: #92400e;
+  --red: #dc2626;
+  --red-bg: #fef2f2;
+  --red-text: #991b1b;
+  --purple: #7c3aed;
+  --purple-bg: #f5f3ff;
+  --purple-text: #4c1d95;
+  --accent: #0d9e6e;
+  --sidebar-w: 224px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.04);
+}
+[data-theme="dark"] {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #1c2230;
+  --surface3: #242d3e;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #e6edf3;
+  --text2: #8b95a8;
+  --text3: #5a6478;
+  --green-bg: #0d2b21;
+  --green-text: #3dd68c;
+  --blue-bg: #0d1f3c;
+  --blue-text: #93c5fd;
+  --amber-bg: #2d1d06;
+  --amber-text: #fcd34d;
+  --red-bg: #2d0d0d;
+  --red-text: #fca5a5;
+  --purple-bg: #1e1040;
+  --purple-text: #c4b5fd;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: 'Inter', sans-serif; font-size: 14px; }
+body { background: var(--bg); color: var(--text); transition: background 0.2s, color 0.2s; }
+
+/* ── LOGIN ─────────────────────────────────────────────────────────────────── */
+#login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+.login-bg-pattern {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 20% 80%, rgba(13,158,110,0.08) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(37,99,235,0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 48px 44px;
+  width: 420px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  z-index: 1;
+}
+.login-logo {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 32px;
+}
+.login-logo-icon {
+  width: 44px; height: 44px; background: var(--green); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.login-logo-icon svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 2; }
+.login-logo-text { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
+.login-logo-sub { font-size: 12px; color: var(--text3); margin-top: 1px; }
+.login-title { font-size: 24px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.login-sub { font-size: 14px; color: var(--text2); margin-bottom: 28px; }
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 6px; }
+.form-input {
+  width: 100%; padding: 10px 14px; font-size: 14px; font-family: inherit;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); color: var(--text);
+  transition: border-color 0.15s, box-shadow 0.15s; outline: none;
+}
+.form-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(13,158,110,0.12); }
+.login-hint { font-size: 12px; color: var(--text3); margin-top: 5px; }
+.btn-login {
+  width: 100%; padding: 11px; background: var(--green); color: #fff;
+  border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600;
+  cursor: pointer; margin-top: 8px; transition: opacity 0.15s;
+}
+.btn-login:hover { opacity: 0.9; }
+.login-demo-users { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.demo-title { font-size: 12px; color: var(--text3); margin-bottom: 8px; }
+.demo-user {
+  display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer;
+  margin-bottom: 6px; transition: background 0.1s;
+}
+.demo-user:hover { background: var(--surface2); }
+.demo-avatar {
+  width: 28px; height: 28px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-size: 11px; font-weight: 600;
+}
+.demo-info { flex: 1; }
+.demo-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.demo-role { font-size: 11px; color: var(--text3); }
+.demo-badge { font-size: 10px; padding: 2px 7px; border-radius: 100px; font-weight: 500; }
+
+/* ── DASHBOARD ─────────────────────────────────────────────────────────────── */
+#dashboard { display: none; flex: 1; height: 100vh; overflow: hidden; }
+.db-layout { display: flex; height: 100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w); flex-shrink: 0; background: var(--surface);
+  border-right: 1px solid var(--border); display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.sidebar-header { padding: 20px 16px 16px; border-bottom: 1px solid var(--border); }
+.sidebar-logo { display: flex; align-items: center; gap: 10px; }
+.sidebar-logo-icon {
+  width: 36px; height: 36px; background: var(--green); border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.sidebar-logo-icon svg { width: 18px; height: 18px; }
+.sidebar-logo-name { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.sidebar-logo-sub { font-size: 10px; color: var(--text3); margin-top: 1px; }
+.sidebar-nav { flex: 1; padding: 12px 8px; overflow-y: auto; }
+.nav-section-label { font-size: 10px; font-weight: 600; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 10px 4px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 10px;
+  border-radius: var(--radius-sm); cursor: pointer; color: var(--text2);
+  font-size: 13px; font-weight: 500; margin-bottom: 2px; transition: all 0.12s;
+  position: relative;
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { background: var(--green-bg); color: var(--green-text); }
+.nav-item.active .nav-icon { color: var(--green); }
+.nav-icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.7; }
+.nav-item.active .nav-icon { opacity: 1; }
+.nav-badge {
+  margin-left: auto; min-width: 18px; height: 18px; padding: 0 5px;
+  background: var(--red); color: #fff; border-radius: 100px;
+  font-size: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center;
+}
+.nav-badge.green { background: var(--green); }
+.sidebar-footer { padding: 12px 8px; border-top: 1px solid var(--border); }
+.sidebar-user { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); }
+.user-avatar {
+  width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0;
+}
+.user-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.user-role { font-size: 11px; color: var(--text3); }
+.logout-btn { width: 28px; height: 28px; margin-left: auto; border-radius: 8px; background: var(--surface2); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text3); transition: all 0.12s; flex-shrink: 0; }
+.logout-btn:hover { background: var(--red-bg); color: var(--red); }
+
+/* MAIN */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar {
+  height: 58px; display: flex; align-items: center; gap: 12px;
+  padding: 0 24px; border-bottom: 1px solid var(--border);
+  background: var(--surface); flex-shrink: 0;
+}
+.topbar-title { font-size: 16px; font-weight: 600; flex: 1; color: var(--text); }
+.search-box {
+  display: flex; align-items: center; gap: 8px; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 7px 12px; width: 220px;
+}
+.search-box input { background: none; border: none; outline: none; font-size: 13px; color: var(--text); width: 100%; }
+.search-box input::placeholder { color: var(--text3); }
+.topbar-btn {
+  padding: 7px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+  cursor: pointer; border: 1px solid var(--border2); background: var(--surface);
+  color: var(--text); transition: all 0.12s;
+}
+.topbar-btn:hover { background: var(--surface2); }
+.topbar-btn.primary { background: var(--green); color: #fff; border-color: transparent; }
+.topbar-btn.primary:hover { opacity: 0.9; }
+.theme-toggle {
+  width: 34px; height: 34px; border-radius: var(--radius-sm); border: 1px solid var(--border2);
+  background: var(--surface2); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2);
+}
+.notif-btn {
+  width: 34px; height: 34px; border-radius: var(--radius-sm); border: 1px solid var(--border2);
+  background: var(--surface2); cursor: pointer; display: flex; align-items: center;
+  justify-content: center; color: var(--text2); position: relative;
+}
+.notif-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: var(--red); border-radius: 50%; border: 1.5px solid var(--surface); }
+.content { flex: 1; overflow-y: auto; padding: 24px; }
+
+/* CARDS & TABLES */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
+}
+.card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+.card-subtitle { font-size: 12px; color: var(--text3); font-weight: 400; }
+.metrics-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+.metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; position: relative; overflow: hidden; }
+.metric-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius: var(--radius) var(--radius) 0 0; }
+.metric-card.green::before { background: var(--green); }
+.metric-card.blue::before { background: var(--blue); }
+.metric-card.amber::before { background: var(--amber); }
+.metric-card.red::before { background: var(--red); }
+.metric-card.purple::before { background: var(--purple); }
+.metric-label { font-size: 12px; color: var(--text3); margin-bottom: 6px; }
+.metric-val { font-size: 26px; font-weight: 600; color: var(--text); line-height: 1; margin-bottom: 6px; }
+.metric-delta { font-size: 12px; display: flex; align-items: center; gap: 4px; }
+.delta-up { color: var(--green); }
+.delta-dn { color: var(--red); }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
+td { padding: 11px 12px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface2); }
+
+/* BADGES */
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 100px; }
+.badge-green { background: var(--green-bg); color: var(--green-text); }
+.badge-blue { background: var(--blue-bg); color: var(--blue-text); }
+.badge-amber { background: var(--amber-bg); color: var(--amber-text); }
+.badge-red { background: var(--red-bg); color: var(--red-text); }
+.badge-purple { background: var(--purple-bg); color: var(--purple-text); }
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* AVATARS */
+.av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+.av-sm { width: 26px; height: 26px; font-size: 10px; }
+.av-green { background: var(--green-bg); color: var(--green-text); }
+.av-blue { background: var(--blue-bg); color: var(--blue-text); }
+.av-amber { background: var(--amber-bg); color: var(--amber-text); }
+.av-red { background: var(--red-bg); color: var(--red-text); }
+.av-purple { background: var(--purple-bg); color: var(--purple-text); }
+
+/* PROGRESS */
+.prog-bar { height: 5px; background: var(--surface3); border-radius: 100px; flex: 1; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 100px; }
+
+/* SECTIONS */
+.section { display: none; }
+.section.active { display: block; }
+
+/* MODAL */
+.modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; }
+.modal-backdrop.show { display: flex; }
+.modal {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px; width: 500px; max-width: 95vw;
+  box-shadow: var(--shadow-md); animation: modalIn 0.18s ease;
+}
+@keyframes modalIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+.modal-title { font-size: 17px; font-weight: 600; margin-bottom: 20px; color: var(--text); }
+.modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+.fgroup { margin-bottom: 14px; }
+.flabel { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 5px; display: block; }
+.finput {
+  width: 100%; padding: 9px 12px; background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); font-size: 13px; color: var(--text); font-family: inherit; outline: none;
+}
+.finput:focus { border-color: var(--green); }
+.fg2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn { padding: 8px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border2); background: var(--surface); color: var(--text); transition: all 0.12s; }
+.btn:hover { background: var(--surface2); }
+.btn-green { background: var(--green); color: #fff; border-color: transparent; }
+.btn-green:hover { opacity: 0.9; }
+.btn-red { background: var(--red); color: #fff; border-color: transparent; }
+
+/* STEPS */
+.step-item { display: flex; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); margin-bottom: 6px; }
+.step-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+
+/* KPI */
+.kpi-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.kpi-row:last-child { border-bottom: none; }
+.kpi-label { min-width: 140px; color: var(--text2); }
+.kpi-target { min-width: 70px; color: var(--text3); font-size: 12px; }
+.kpi-pct { min-width: 36px; text-align: right; font-weight: 600; font-size: 13px; }
+
+/* NOTIF */
+.notif-item { display: flex; gap: 12px; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; background: var(--surface); transition: background 0.12s; }
+.notif-item:hover { background: var(--surface2); }
+.notif-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.notif-time { font-size: 11px; color: var(--text3); white-space: nowrap; }
+
+/* COUNTRY ROW */
+.corp-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.corp-row:last-child { border-bottom: none; }
+.flag { font-size: 18px; width: 26px; text-align: center; }
+
+/* TAB BAR */
+.tabs { display: flex; gap: 2px; background: var(--surface2); border-radius: var(--radius-sm); padding: 3px; margin-bottom: 16px; }
+.tab { padding: 6px 16px; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text3); transition: all 0.12s; }
+.tab.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+
+/* DONOR CARD */
+.donor-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px; background: var(--surface); }
+.donor-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+
+/* CHART WRAPPER */
+.chart-wrap { position: relative; }
+
+/* INSIGHT GRID */
+.insight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.insight-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+.insight-flag { font-size: 20px; margin-bottom: 4px; }
+.insight-country { font-size: 11px; font-weight: 600; color: var(--green); margin-bottom: 8px; }
+.insight-num { font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.insight-label { font-size: 11px; color: var(--text3); margin-bottom: 8px; }
+.insight-desc { font-size: 11px; color: var(--text2); line-height: 1.5; }
+
+/* EMAIL */
+.email-from { font-size: 12px; color: var(--green); font-weight: 600; background: var(--green-bg); padding: 4px 10px; border-radius: 100px; display: inline-flex; align-items: center; gap: 5px; }
+.sent-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.sent-row:last-child { border-bottom: none; }
+
+/* SPINNER */
+.spinner { width: 20px; height: 20px; border: 2px solid var(--border2); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════ LOGIN ════════ -->
+<div id="login-screen">
+  <div class="login-bg-pattern"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      </div>
+      <div>
+        <div class="login-logo-text">Vertex Africa</div>
+        <div class="login-logo-sub">Intelligence Platform</div>
+      </div>
+    </div>
+    <div class="login-title" data-i18n="login_title">Welcome back</div>
+    <div class="login-sub" data-i18n="login_sub">Sign in to access your dashboard</div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="login_email">Email address</label>
+      <input class="form-input" type="email" id="l-email" placeholder="you@vertexgroup.africa" value="admin@vertexgroup.africa">
+    </div>
+    <div class="form-group">
+      <label class="form-label" data-i18n="login_password">Password</label>
+      <input class="form-input" type="password" id="l-pass" placeholder="••••••••" value="ChangeMe2025!">
+      <div class="login-hint" id="login-hint-txt" data-i18n="login_hint">Default admin password: ChangeMe2025!</div>
+    </div>
+    <div id="login-error" style="display:none;color:var(--red);font-size:13px;margin-bottom:10px"></div>
+    <button class="btn-login" onclick="doLogin()" data-i18n="login_btn">Sign in →</button>
+    <div class="login-demo-users">
+      <div class="demo-title" data-i18n="login_demo_title">Demo accounts — click to auto-fill</div>
+      <div class="demo-user" onclick="fillDemo('admin@vertexgroup.africa','ChangeMe2025!','VA','Super Admin','#0d9e6e')">
+        <div class="demo-avatar av-green" style="background:var(--green-bg);color:var(--green-text)">VA</div>
+        <div class="demo-info"><div class="demo-name">Vertex Admin</div><div class="demo-role">admin@vertexgroup.africa</div></div>
+        <span class="demo-badge" style="background:var(--green-bg);color:var(--green-text)">Super Admin</span>
+      </div>
+      <div class="demo-user" onclick="fillDemo('k.asante@vertexgroup.africa','vertex2025','KA','Salesperson','#2563eb')">
+        <div class="demo-avatar" style="background:var(--blue-bg);color:var(--blue-text)">KA</div>
+        <div class="demo-info"><div class="demo-name">Kwame Asante</div><div class="demo-role">k.asante@vertexgroup.africa</div></div>
+        <span class="demo-badge" style="background:var(--blue-bg);color:var(--blue-text)">Salesperson</span>
+      </div>
+      <div class="demo-user" onclick="fillDemo('f.ndiaye@vertexgroup.africa','vertex2025','FN','Coach','#7c3aed')">
+        <div class="demo-avatar" style="background:var(--purple-bg);color:var(--purple-text)">FN</div>
+        <div class="demo-info"><div class="demo-name">Fatima Ndiaye</div><div class="demo-role">f.ndiaye@vertexgroup.africa</div></div>
+        <span class="demo-badge" style="background:var(--purple-bg);color:var(--purple-text)">Coach</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ DASHBOARD ════ -->
+<div id="dashboard">
+<div class="db-layout">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div>
+        <div class="sidebar-logo-name">Vertex</div>
+        <div class="sidebar-logo-sub">Africa Platform</div>
+      </div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label" data-i18n="sec_main">Main</div>
+    <div class="nav-item active" onclick="nav(this,'overview')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span data-i18n="nav_overview">Overview</span>
+    </div>
+    <div class="nav-item" onclick="nav(this,'leads')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span data-i18n="nav_leads">Leads & Quotes</span>
+    </div>
+    <div class="nav-item" onclick="nav(this,'pipeline')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span data-i18n="nav_pipeline">Sales Pipeline</span>
+    </div>
+    <div class="nav-item" onclick="nav(this,'diagnostics')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span data-i18n="nav_diagnostics">Diagnostics</span> <span class="nav-badge" id="diag-badge"></span>
+    </div>
+    <div class="nav-section-label" style="margin-top:8px" data-i18n="sec_network">Network</div>
+    <div class="nav-item" onclick="nav(this,'corporates')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span data-i18n="nav_corporates">Corporate Network</span>
+    </div>
+    <div class="nav-item" onclick="nav(this,'donors')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span data-i18n="nav_donors">Donors & SMEs</span>
+    </div>
+    <div class="nav-section-label" style="margin-top:8px" data-i18n="sec_intelligence">Intelligence</div>
+    <div class="nav-item" onclick="nav(this,'insights')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span data-i18n="nav_insights">Africa Insights</span>
+    </div>
+    <div class="nav-section-label" style="margin-top:8px" data-i18n="sec_operations">Operations</div>
+    <div class="nav-item" onclick="nav(this,'email')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <span data-i18n="nav_email">Email</span> <span class="nav-badge green">info@</span>
+    </div>
+    <div class="nav-item" onclick="nav(this,'team')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span data-i18n="nav_team">Team & Access</span>
+    </div>
+    <div class="nav-item" onclick="nav(this,'notifs')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span data-i18n="nav_notifs">Notifications</span> <span class="nav-badge" id="notif-nav-badge"></span>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="av av-green" id="sidebar-av">VA</div>
+      <div>
+        <div class="user-name" id="sidebar-name">Vertex Admin</div>
+        <div class="user-role" id="sidebar-role">Super Admin</div>
+      </div>
+      <button class="logout-btn" onclick="logout()" title="Sign out">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN AREA -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="page-title">Overview</div>
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="topbar-search" placeholder="Search leads, SMEs, donors..." data-i18n-ph="search_ph">
+    </div>
+    <button class="topbar-btn" onclick="openModal('modal-lead')" data-i18n="btn_add_lead">+ Add lead</button>
+    <button class="topbar-btn primary" onclick="openModal('modal-email')" data-i18n="btn_compose">Compose email</button>
+    <button class="topbar-btn" id="lang-btn" onclick="toggleLang()" title="Switch language" style="min-width:44px;font-weight:600;font-size:12px">FR</button>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="theme-icon"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="notif-btn" onclick="nav(document.querySelector('[onclick*=notifs]'),'notifs')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <div class="notif-dot"></div>
+    </button>
+  </div>
+
+  <div class="content">
+
+  <!-- MODALS -->
+  <div class="modal-backdrop" id="modal-lead">
+    <div class="modal">
+      <div class="modal-title">Add new lead / quote request</div>
+      <div class="fg2"><div class="fgroup"><label class="flabel">Full name</label><input class="finput" placeholder="Aminata Koné"></div><div class="fgroup"><label class="flabel">Company</label><input class="finput" placeholder="Company name"></div></div>
+      <div class="fg2"><div class="fgroup"><label class="flabel">Email</label><input class="finput" type="email" placeholder="email@company.com"></div><div class="fgroup"><label class="flabel">Country</label><input class="finput" placeholder="Senegal"></div></div>
+      <div class="fg2"><div class="fgroup"><label class="flabel">Service</label><select class="finput"><option>Business Diagnostic</option><option>Incubation Programme</option><option>TTT Training</option><option>Strategic Planning</option><option>Donor Matching</option></select></div><div class="fgroup"><label class="flabel">Assign to</label><select class="finput"><option>Kwame Asante</option><option>Fatima Ndiaye</option><option>Jean-Pierre Mbeki</option><option>Amara Diallo</option></select></div></div>
+      <div class="fg2"><div class="fgroup"><label class="flabel">Deal value ($)</label><input class="finput" type="number" placeholder="2500"></div><div class="fgroup"><label class="flabel">Stage</label><select class="finput"><option>New</option><option>Qualified</option><option>Proposal</option><option>Negotiation</option><option>Won</option><option>Lost</option></select></div></div>
+      <div class="fgroup"><label class="flabel">Notes</label><textarea class="finput" rows="3" placeholder="Context, source, key needs..."></textarea></div>
+      <div class="modal-footer"><button class="btn" onclick="closeModal('modal-lead')">Cancel</button><button class="btn btn-green" onclick="closeModal('modal-lead')">Save lead</button></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-email">
+    <div class="modal">
+      <div class="modal-title">Compose email</div>
+      <div class="fgroup"><div class="email-from"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>From: info@vertexgroup.africa</div></div>
+      <div class="fgroup"><label class="flabel">To</label><input class="finput" id="em-to" placeholder="recipient@example.com"></div>
+      <div class="fgroup"><label class="flabel">Subject</label><input class="finput" id="em-sub" placeholder="Subject..."></div>
+      <div class="fgroup"><label class="flabel">Template</label><select class="finput" onchange="applyTemplate(this.value)"><option value="">— or write custom —</option><option value="followup">Follow-up after diagnostic</option><option value="proposal">Send proposal</option><option value="donor">Donor partnership outreach</option><option value="welcome">Welcome new client</option></select></div>
+      <div class="fgroup"><label class="flabel">Message</label><textarea class="finput" id="em-body" rows="5" placeholder="Write your message..."></textarea></div>
+      <div class="modal-footer"><button class="btn" onclick="closeModal('modal-email')">Cancel</button><button class="btn" onclick="closeModal('modal-email')">Save draft</button><button class="btn btn-green" onclick="sendEmailAction()">Send via info@</button></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-team">
+    <div class="modal">
+      <div class="modal-title" id="team-modal-title">Add team member</div>
+      <input type="hidden" id="team-edit-id">
+      <div class="fg2">
+        <div class="fgroup"><label class="flabel">Full name *</label><input class="finput" id="team-name" placeholder="Name"></div>
+        <div class="fgroup"><label class="flabel">Email *</label><input class="finput" id="team-email" placeholder="name@vertexgroup.africa"></div>
+      </div>
+      <div class="fg2">
+        <div class="fgroup"><label class="flabel">Password <span id="team-pass-hint" style="color:var(--text3)">(required for new user)</span></label><input class="finput" id="team-password" type="password" placeholder="Min 8 characters"></div>
+        <div class="fgroup"><label class="flabel">Role</label>
+          <select class="finput" id="team-role">
+            <option value="salesperson">Salesperson</option>
+            <option value="business_developer">Business Developer</option>
+            <option value="coach">Coach</option>
+            <option value="admin">Admin</option>
+            <option value="super_admin">Super Admin</option>
+            <option value="viewer">Viewer</option>
+          </select>
+        </div>
+      </div>
+      <div class="fgroup"><label class="flabel">Countries assigned</label><input class="finput" id="team-countries" placeholder="Senegal, DRC, Nigeria…"></div>
+      <div id="team-modal-err" style="display:none;color:var(--red);font-size:12px;margin-top:4px"></div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('modal-team')">Cancel</button>
+        <button class="btn btn-green" onclick="saveTeamMember()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-donor">
+    <div class="modal">
+      <div class="modal-title">Link donor to SME</div>
+      <div class="fg2"><div class="fgroup"><label class="flabel">Donor / Organisation</label><input class="finput" placeholder="UNDP, GIZ, FAO..."></div><div class="fgroup"><label class="flabel">SME / Beneficiary</label><input class="finput" placeholder="Company name"></div></div>
+      <div class="fg2"><div class="fgroup"><label class="flabel">Amount ($)</label><input class="finput" type="number" placeholder="25000"></div><div class="fgroup"><label class="flabel">Country</label><input class="finput" placeholder="Senegal"></div></div>
+      <div class="fgroup"><label class="flabel">Objective</label><input class="finput" placeholder="e.g. Create 50 jobs by Dec 2025"></div>
+      <div class="fg2"><div class="fgroup"><label class="flabel">KPI metric</label><input class="finput" placeholder="Jobs created"></div><div class="fgroup"><label class="flabel">KPI target</label><input class="finput" placeholder="50"></div></div>
+      <div class="fg2"><div class="fgroup"><label class="flabel">Start date</label><input class="finput" type="date"></div><div class="fgroup"><label class="flabel">End date</label><input class="finput" type="date"></div></div>
+      <div class="modal-footer"><button class="btn" onclick="closeModal('modal-donor')">Cancel</button><button class="btn btn-green" onclick="closeModal('modal-donor')">Save link</button></div>
+    </div>
+  </div>
+
+  <!-- ── OVERVIEW ─────────────────────────────────────────────────────────── -->
+  <div class="section active" id="sec-overview">
+    <div class="metrics-grid">
+      <div id="m-leads"   class="metric-card green" ><div class="metric-label" data-i18n="kpi_leads">Total leads</div>      <div class="metric-val">—</div><div class="metric-delta delta-up" data-i18n="loading">loading…</div></div>
+      <div id="m-open"    class="metric-card blue"  ><div class="metric-label" data-i18n="kpi_open">Open deals</div>       <div class="metric-val">—</div><div class="metric-delta" style="color:var(--text3)" data-i18n="kpi_open_sub">active pipeline</div></div>
+      <div id="m-clients" class="metric-card amber" ><div class="metric-label" data-i18n="kpi_clients">Active clients</div>   <div class="metric-val">—</div><div class="metric-delta" style="color:var(--text3)" data-i18n="kpi_clients_sub">engagements</div></div>
+      <div id="m-diags"   class="metric-card purple"><div class="metric-label" data-i18n="kpi_diags">Diagnostics</div>      <div class="metric-val">—</div><div class="metric-delta" style="color:var(--text3)" data-i18n="loading">loading…</div></div>
+      <div id="m-revenue" class="metric-card red"   ><div class="metric-label" data-i18n="kpi_revenue">Total revenue (won)</div><div class="metric-val">—</div><div class="metric-delta" style="color:var(--text3)" data-i18n="kpi_revenue_sub">closed deals</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><span data-i18n="chart_pipeline">Pipeline by stage</span> <span class="card-subtitle" data-i18n="chart_pipeline_sub">current month</span></div>
+        <div class="chart-wrap" style="height:180px"><canvas id="c-pipeline"></canvas></div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:12px;color:var(--text3)">
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#2563eb;display:inline-block"></span>New 14</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#d97706;display:inline-block"></span>Qualified 9</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#7c3aed;display:inline-block"></span>Proposal 8</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#0d9e6e;display:inline-block"></span>Won 12</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#dc2626;display:inline-block"></span>Lost 4</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span data-i18n="chart_country">Revenue by country</span> <span class="card-subtitle" data-i18n="chart_country_sub">top 6</span></div>
+        <div class="chart-wrap" style="height:180px"><canvas id="c-country"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" data-i18n="recent_activity">Recent activity</div>
+      <table>
+        <thead><tr><th data-i18n="th_contact">Contact</th><th data-i18n="th_action">Action</th><th data-i18n="th_country">Country</th><th data-i18n="th_assigned">Assigned to</th><th data-i18n="th_time">Time</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><div style="display:flex;align-items:center;gap:9px"><div class="av av-green">AM</div><div><div style="font-weight:500">Aminata Mbaye</div><div style="font-size:11px;color:var(--text3)">aminata@agritech.sn</div></div></div></td><td><span class="badge badge-blue"><span class="badge-dot"></span>New quote</span></td><td>Senegal</td><td>Kwame A.</td><td style="color:var(--text3)">2 min ago</td><td><button class="btn" style="font-size:12px;padding:5px 10px">Open</button></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:9px"><div class="av av-amber">JK</div><div><div style="font-weight:500">Jean Kabila</div><div style="font-size:11px;color:var(--text3)">jkabila@kinshasa.cd</div></div></div></td><td><span class="badge badge-amber"><span class="badge-dot"></span>Proposal sent</span></td><td>DRC</td><td>Fatima N.</td><td style="color:var(--text3)">1h ago</td><td><button class="btn" style="font-size:12px;padding:5px 10px">Open</button></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:9px"><div class="av av-blue">CO</div><div><div style="font-weight:500">Chidi Okonkwo</div><div style="font-size:11px;color:var(--text3)">c.okw@lagosfin.ng</div></div></div></td><td><span class="badge badge-green"><span class="badge-dot"></span>Deal won $4,200</span></td><td>Nigeria</td><td>Jean-P. M.</td><td style="color:var(--text3)">3h ago</td><td><button class="btn" style="font-size:12px;padding:5px 10px">View</button></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:9px"><div class="av av-purple">HA</div><div><div style="font-weight:500">Hassan Amine</div><div style="font-size:11px;color:var(--text3)">h.amine@casa.ma</div></div></div></td><td><span class="badge badge-red"><span class="badge-dot"></span>KPI alert</span></td><td>Morocco</td><td>Amara D.</td><td style="color:var(--text3)">5h ago</td><td><button class="btn" style="font-size:12px;padding:5px 10px">View</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── LEADS ─────────────────────────────────────────────────────────────── -->
+  <div class="section" id="sec-leads">
+    <!-- Conversion funnel KPIs -->
+    <div id="leads-funnel" class="card" style="margin-bottom:16px;display:none">
+      <div class="card-title" id="t-funnel-title">Conversion Funnel</div>
+      <div id="funnel-body" style="display:flex;gap:0;align-items:stretch"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+      <div class="tabs" style="margin-bottom:0">
+        <div class="tab active" onclick="filterLeadStage(this,'')" data-i18n="tab_all">All</div>
+        <div class="tab" onclick="filterLeadStage(this,'new')" data-i18n="stage_new">New</div>
+        <div class="tab" onclick="filterLeadStage(this,'contacted')" data-i18n="stage_contacted">Contacted</div>
+        <div class="tab" onclick="filterLeadStage(this,'qualified')" data-i18n="stage_qualified">Qualified</div>
+        <div class="tab" onclick="filterLeadStage(this,'won')" data-i18n="stage_won">Won</div>
+        <div class="tab" onclick="filterLeadStage(this,'lost')" data-i18n="stage_lost">Lost</div>
+      </div>
+      <select class="finput" style="width:140px" id="lead-date-filter" onchange="loadLeads()">
+        <option value="" data-i18n="filter_all_time">All time</option>
+        <option value="today" data-i18n="filter_today">Today</option>
+        <option value="week" data-i18n="filter_week">This week</option>
+        <option value="month" data-i18n="filter_month">This month</option>
+      </select>
+      <input class="finput" style="flex:1;min-width:140px" id="lead-search" placeholder="Search leads…" oninput="searchLeads()">
+    </div>
+    <div class="card" style="margin-bottom:16px;padding:0;overflow:hidden">
+      <table>
+        <thead><tr>
+          <th data-i18n="th_contact">Contact</th><th data-i18n="th_company">Company</th><th data-i18n="th_country">Country</th><th data-i18n="th_value">Value</th>
+          <th data-i18n="th_status">Status</th><th data-i18n="th_assigned">Assigned</th><th data-i18n="th_date">Date</th><th data-i18n="th_actions">Actions</th>
+        </tr></thead>
+        <tbody id="leads-tbody">
+          <tr><td colspan="8" style="text-align:center;color:var(--text3);padding:32px">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" id="steps-card" style="display:none">
+      <div class="card-title" id="steps-title">Sales steps</div>
+      <div id="steps-body"></div>
+    </div>
+  </div>
+
+  <!-- ── PIPELINE ──────────────────────────────────────────────────────────── -->
+  <div class="section" id="sec-pipeline">
+    <div class="metrics-grid" id="pipeline-cards">
+      <div class="metric-card blue"><div class="metric-label">Loading…</div><div class="metric-val">—</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span data-i18n="chart_conv_by_sales">Conversion by salesperson</span> <span class="card-subtitle" data-i18n="chart_conv_sub">won / in progress / lost</span></div>
+      <div class="chart-wrap" style="height:240px"><canvas id="c-sales"></canvas></div>
+      <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--text3)">
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#0d9e6e;display:inline-block"></span>Won</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#2563eb;display:inline-block"></span>In progress</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#dc2626;display:inline-block"></span>Lost</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DIAGNOSTICS ───────────────────────────────────────────────────────── -->
+  <div class="section" id="sec-diagnostics">
+    <div style="display:flex;gap:10px;margin-bottom:16px;align-items:center;flex-wrap:wrap">
+      <select class="finput" style="width:160px" id="diag-filter" onchange="loadDiagnostics()">
+        <option value="" data-i18n="filter_all_statuses">All statuses</option>
+        <option value="pending" data-i18n="status_pending">Pending</option>
+        <option value="processing" data-i18n="status_processing">Processing</option>
+        <option value="completed" data-i18n="status_completed">Completed</option>
+        <option value="failed" data-i18n="status_failed">Failed</option>
+      </select>
+      <select class="finput" style="width:140px" id="diag-date-filter" onchange="loadDiagnostics()">
+        <option value="" data-i18n="filter_all_time">All time</option>
+        <option value="today" data-i18n="filter_today">Today</option>
+        <option value="week" data-i18n="filter_week">This week</option>
+        <option value="month" data-i18n="filter_month">This month</option>
+      </select>
+      <input class="finput" style="width:180px" id="diag-search" placeholder="Search…" oninput="filterDiagnostics()" data-i18n-ph="search_ph">
+      <div style="flex:1;font-size:13px;color:var(--text2)" id="diag-summary"></div>
+      <button class="btn" onclick="loadDiagnostics()" title="Refresh" id="diag-refresh-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+    <div id="diag-error" style="display:none;padding:12px 16px;background:var(--red-bg);color:var(--red-text);border-radius:8px;margin-bottom:12px;font-size:13px"></div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="th_company_contact">Company / Contact</th>
+            <th data-i18n="th_industry">Industry</th>
+            <th data-i18n="th_country">Country</th>
+            <th data-i18n="th_score">Score</th>
+            <th data-i18n="th_status">Status</th>
+            <th data-i18n="th_submitted">Submitted</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="diag-tbody">
+          <tr><td colspan="7" style="text-align:center;color:var(--text3);padding:32px"><div class="spinner"></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- Detail modal -->
+    <div class="modal-backdrop" id="modal-diag-detail">
+      <div class="modal" style="max-width:720px;max-height:85vh;overflow-y:auto">
+        <div class="modal-title" id="diag-detail-title">Diagnostic Detail</div>
+        <div id="diag-detail-body" style="font-size:13px;color:var(--text2);line-height:1.7"></div>
+        <div class="modal-footer">
+          <button class="btn" onclick="closeModal('modal-diag-detail')">Close</button>
+          <button class="btn btn-green" onclick="generateDiagPDF()" id="btn-pdf">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:middle"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download PDF
+          </button>
+          <button class="btn" onclick="sendDiagToClient()" id="btn-send-diag" style="border-color:var(--green);color:var(--green)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:middle"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Send to client
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CORPORATES ────────────────────────────────────────────────────────── -->
+  <div class="section" id="sec-corporates">
+    <div style="display:flex;gap:10px;margin-bottom:16px">
+      <input class="finput" style="flex:1" placeholder="Search corporates..." id="corp-search" oninput="loadCorporates()">
+      <select class="finput" style="width:160px" id="corp-country-filter" onchange="loadCorporates()">
+        <option value="">All countries</option>
+        <option>Senegal</option><option>Nigeria</option><option>DRC</option>
+        <option>Kenya</option><option>Ghana</option><option>Morocco</option>
+      </select>
+      <button class="btn btn-green" onclick="openModal('modal-corp')">+ Add corporate</button>
+    </div>
+
+    <!-- Add corporate modal -->
+    <div class="modal-backdrop" id="modal-corp">
+      <div class="modal">
+        <div class="modal-title">Add corporate partner</div>
+        <div class="fg2">
+          <div class="fgroup"><label class="flabel">Company name *</label><input class="finput" id="corp-name" placeholder="MTN Group"></div>
+          <div class="fgroup"><label class="flabel">Country *</label><input class="finput" id="corp-country" placeholder="Nigeria"></div>
+        </div>
+        <div class="fg2">
+          <div class="fgroup"><label class="flabel">Sector</label><input class="finput" id="corp-sector" placeholder="Telecom"></div>
+          <div class="fgroup"><label class="flabel">Partnership type</label>
+            <select class="finput" id="corp-type">
+              <option>Sponsor</option><option>Training partner</option><option>Distribution</option><option>Investor</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg2">
+          <div class="fgroup"><label class="flabel">Status</label>
+            <select class="finput" id="corp-status">
+              <option>New</option><option>Active</option><option>Prospecting</option><option>Negotiating</option><option>Inactive</option>
+            </select>
+          </div>
+          <div class="fgroup"><label class="flabel">Commitment ($)</label><input class="finput" id="corp-amount" type="number" placeholder="0"></div>
+        </div>
+        <div class="fg2">
+          <div class="fgroup"><label class="flabel">Contact person</label><input class="finput" id="corp-contact" placeholder="Name"></div>
+          <div class="fgroup"><label class="flabel">Contact email</label><input class="finput" id="corp-email" placeholder="contact@corp.com"></div>
+        </div>
+        <div class="fgroup"><label class="flabel">Notes</label><textarea class="finput" id="corp-notes" rows="2" placeholder="Optional notes…"></textarea></div>
+        <div class="modal-footer">
+          <button class="btn" onclick="closeModal('modal-corp')">Cancel</button>
+          <button class="btn btn-green" onclick="saveCorporate()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="corp-grid" class="grid-2">
+      <div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:40px">Loading corporate partners…</div>
+    </div>
+  </div>
+
+  <!-- ── DONORS ─────────────────────────────────────────────────────────────── -->
+  <div class="section" id="sec-donors">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div style="flex:1;font-size:13px;color:var(--text2)" id="donor-summary">Loading…</div>
+      <button class="btn btn-green" onclick="openModal('modal-donor-add')">+ Add donor</button>
+    </div>
+
+    <!-- Add donor modal -->
+    <div class="modal-backdrop" id="modal-donor-add">
+      <div class="modal">
+        <div class="modal-title">Add donor / funding partner</div>
+        <div class="fg2">
+          <div class="fgroup"><label class="flabel">Organisation name *</label><input class="finput" id="donor-name" placeholder="UNDP Africa SME Fund"></div>
+          <div class="fgroup"><label class="flabel">Acronym</label><input class="finput" id="donor-acronym" placeholder="UNDP"></div>
+        </div>
+        <div class="fg2">
+          <div class="fgroup"><label class="flabel">Type</label>
+            <select class="finput" id="donor-type">
+              <option>International org</option><option>Government</option><option>Foundation</option><option>Private fund</option><option>Other</option>
+            </select>
+          </div>
+          <div class="fgroup"><label class="flabel">Status</label>
+            <select class="finput" id="donor-status"><option>Active</option><option>Prospect</option><option>Completed</option><option>Inactive</option></select>
+          </div>
+        </div>
+        <div class="fg2">
+          <div class="fgroup"><label class="flabel">Contact person</label><input class="finput" id="donor-contact" placeholder="Name"></div>
+          <div class="fgroup"><label class="flabel">Contact email</label><input class="finput" id="donor-email" placeholder="email@org.com"></div>
+        </div>
+        <div class="fgroup"><label class="flabel">Notes</label><textarea class="finput" id="donor-notes" rows="2" placeholder="Optional notes…"></textarea></div>
+        <div class="modal-footer">
+          <button class="btn" onclick="closeModal('modal-donor-add')">Cancel</button>
+          <button class="btn btn-green" onclick="saveDonor()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add SME engagement modal -->
+    <div class="modal-backdrop" id="modal-sme-add">
+      <div class="modal">
+        <div class="modal-title">Link SME to donor</div>
+        <input type="hidden" id="sme-donor-id">
+        <div class="fg2">
+          <div class="fgroup"><label class="flabel">SME name *</label><input class="finput" id="sme-name" placeholder="AgroTech SN"></div>
+          <div class="fgroup"><label class="flabel">Country</label><input class="finput" id="sme-country" placeholder="Senegal"></div>
+        </div>
+        <div class="fg2">
+          <div class="fgroup"><label class="flabel">Sector</label><input class="finput" id="sme-sector" placeholder="Agriculture"></div>
+          <div class="fgroup"><label class="flabel">Amount ($)</label><input class="finput" id="sme-amount" type="number" placeholder="20000"></div>
+        </div>
+        <div class="fgroup"><label class="flabel">Objective</label><input class="finput" id="sme-objective" placeholder="20 jobs by Dec"></div>
+        <div class="fg2">
+          <div class="fgroup"><label class="flabel">KPI current</label><input class="finput" id="sme-kpi-cur" type="number" placeholder="0"></div>
+          <div class="fgroup"><label class="flabel">KPI target</label><input class="finput" id="sme-kpi-tgt" type="number" placeholder="100"></div>
+        </div>
+        <div class="fgroup"><label class="flabel">Status</label>
+          <select class="finput" id="sme-status"><option>On track</option><option>At risk</option><option>Near done</option><option>Completed</option><option>Stalled</option></select>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" onclick="closeModal('modal-sme-add')">Cancel</button>
+          <button class="btn btn-green" onclick="saveSME()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="donors-container">
+      <div style="text-align:center;color:var(--text3);padding:40px">Loading donor partnerships…</div>
+    </div>
+  </div>
+
+  <!-- ── INSIGHTS ───────────────────────────────────────────────────────────── -->
+  <div class="section" id="sec-insights">
+    <div style="margin-bottom:16px;font-size:13px;color:var(--text2)">African SME market intelligence — Vertex Group Africa operating markets</div>
+    <div class="insight-grid">
+      <div class="insight-card"><div class="insight-flag">🇳🇬</div><div class="insight-country">Nigeria</div><div class="insight-num">41M</div><div class="insight-label">SMEs (SMEDAN 2024)</div><div class="insight-desc">88% informal · $150B GDP contribution · Mobile money penetration 47%</div></div>
+      <div class="insight-card"><div class="insight-flag">🇸🇳</div><div class="insight-country">Senegal</div><div class="insight-num">350k</div><div class="insight-label">Formal SMEs active</div><div class="insight-desc">40% GDP contribution · Strong agri-tech growth · Orange Money 62%</div></div>
+      <div class="insight-card"><div class="insight-flag">🇨🇩</div><div class="insight-country">DRC</div><div class="insight-num">4.2M</div><div class="insight-label">Micro & small enterprises</div><div class="insight-desc">93% informal · Agriculture 21% GDP · $1.1B fintech opportunity 2026</div></div>
+      <div class="insight-card"><div class="insight-flag">🇰🇪</div><div class="insight-country">Kenya</div><div class="insight-num">7.4M</div><div class="insight-label">SMEs (KNBS 2023)</div><div class="insight-desc">M-Pesa 83% adults · Silicon Savannah · Leading innovation hub</div></div>
+      <div class="insight-card"><div class="insight-flag">🇬🇭</div><div class="insight-country">Ghana</div><div class="insight-num">1.2M</div><div class="insight-label">Registered businesses</div><div class="insight-desc">SME GDP share 70% · AfCFTA gateway · $320M SME finance gap/yr</div></div>
+      <div class="insight-card"><div class="insight-flag">🇲🇦</div><div class="insight-country">Morocco</div><div class="insight-num">640k</div><div class="insight-label">SMEs (OMPIC 2024)</div><div class="insight-desc">95% of all enterprises · Green economy pivot · EU-Morocco €1.2B programme</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">SME opportunity index by country</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="c-insight"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ── EMAIL ─────────────────────────────────────────────────────────────── -->
+  <div class="section" id="sec-email">
+    <div class="metrics-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="metric-card green"><div class="metric-label">Sent this month</div><div class="metric-val">143</div><div class="metric-delta" style="color:var(--text3)">info@vertexgroup.africa</div></div>
+      <div class="metric-card blue"><div class="metric-label">Open rate</div><div class="metric-val">61%</div><div class="metric-delta delta-up">+8% vs avg</div></div>
+      <div class="metric-card amber"><div class="metric-label">Reply rate</div><div class="metric-val">24%</div><div class="metric-delta delta-up">+3% vs avg</div></div>
+      <div class="metric-card red"><div class="metric-label">Awaiting reply</div><div class="metric-val">17</div><div class="metric-delta delta-dn">Action needed</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Compose email</div>
+        <div style="margin-bottom:12px"><div class="email-from"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>From: info@vertexgroup.africa</div></div>
+        <div class="fgroup"><label class="flabel">To</label><input class="finput" id="em-to2" placeholder="recipient@example.com"></div>
+        <div class="fgroup"><label class="flabel">Template</label><select class="finput" onchange="applyTemplate2(this.value)"><option value="">— or write custom —</option><option value="followup">Follow-up after diagnostic</option><option value="proposal">Send proposal</option><option value="donor">Donor outreach</option><option value="welcome">Welcome new client</option></select></div>
+        <div class="fgroup"><label class="flabel">Subject</label><input class="finput" id="em-sub2" placeholder="Subject..."></div>
+        <div class="fgroup"><label class="flabel">Message</label><textarea class="finput" id="em-body2" rows="6" placeholder="Write your message..."></textarea></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px">
+          <button class="btn">Save draft</button>
+          <button class="btn btn-green" onclick="sendEmail2()">Send from info@</button>
+        </div>
+        <div id="email-ok" style="display:none;margin-top:8px;color:var(--green);font-size:13px;font-weight:500">Email queued — sending via info@vertexgroup.africa</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Sent emails</div>
+        <div class="sent-row"><div class="av av-sm av-green">AM</div><div style="flex:1;min-width:0"><div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">aminata@agritech.sn</div><div style="font-size:11px;color:var(--text3)">Follow-up: your diagnostic</div></div><span class="badge badge-green">Opened</span></div>
+        <div class="sent-row"><div class="av av-sm av-amber">JK</div><div style="flex:1;min-width:0"><div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">jkabila@kinshasa.cd</div><div style="font-size:11px;color:var(--text3)">Proposal — Incubation $8,000</div></div><span class="badge badge-blue">Sent</span></div>
+        <div class="sent-row"><div class="av av-sm av-purple">HA</div><div style="flex:1;min-width:0"><div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">h.amine@casa.ma</div><div style="font-size:11px;color:var(--text3)">Partnership opportunity</div></div><span class="badge badge-green">Replied</span></div>
+        <div class="sent-row"><div class="av av-sm av-red">AO</div><div style="flex:1;min-width:0"><div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">a.owusu@accratech.gh</div><div style="font-size:11px;color:var(--text3)">Welcome to Vertex Africa</div></div><span class="badge badge-red">No reply</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TEAM ───────────────────────────────────────────────────────────────── -->
+  <div class="section" id="sec-team">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px"><button class="btn btn-green" onclick="openAddTeamModal()" data-i18n="btn_add_member">+ Add member</button></div>
+    <div class="card">
+      <table>
+        <thead><tr><th data-i18n="th_member">Member</th><th data-i18n="th_role">Role</th><th data-i18n="th_countries">Countries</th><th data-i18n="th_access">Access</th><th data-i18n="th_leads">Leads</th><th data-i18n="th_conv">Conv.</th><th data-i18n="th_status">Status</th><th></th></tr></thead>
+        <tbody id="team-tbody">
+          <tr><td colspan="8" style="text-align:center;color:var(--text3);padding:24px">Loading team…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── NOTIFICATIONS ─────────────────────────────────────────────────────── -->
+  <div class="section" id="sec-notifs">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="font-size:13px;color:var(--text2)" id="notif-count">Loading notifications…</div>
+      <div style="display:flex;gap:8px">
+        <select class="finput" style="width:130px" id="notif-filter" onchange="loadNotifications()">
+          <option value="">All</option>
+          <option value="unread">Unread only</option>
+        </select>
+        <button class="btn" onclick="markAllRead()" id="t-mark-all" data-i18n="btn_mark_all">Mark all read</button>
+      </div>
+    </div>
+    <div id="notifs-container">
+      <div style="text-align:center;color:var(--text3);padding:40px">Loading…</div>
+    </div>
+  </div>
+
+  </div><!-- end content -->
+</div><!-- end main -->
+</div><!-- end db-layout -->
+</div><!-- end dashboard -->
+
+<script>
+// ── API CONFIG ────────────────────────────────────────────────────────────────
+const API_BASE = window.VERTEX_API_BASE || 'http://localhost:5001';
+let AUTH_TOKEN = localStorage.getItem('vertex_token') || null;
+
+async function api(method, path, body) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (AUTH_TOKEN) headers['Authorization'] = 'Bearer ' + AUTH_TOKEN;
+  const res = await fetch(API_BASE + path, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const data = await res.json();
+  if (res.status === 401) { doLogout(); return null; }
+  return data;
+}
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+const TEMPLATES={
+  followup:{s:'Following up on your Business Diagnostic — Vertex Group Africa',b:'Dear [Name],\n\nThank you for completing your Business Diagnostic with Vertex Group Africa.\n\nWe have reviewed your results and would like to schedule a 30-minute call to walk you through our findings and tailored recommendations.\n\nPlease reply to this email or book a slot at your convenience.\n\nBest regards,\nThe Vertex Group Africa Team\ninfo@vertexgroup.africa'},
+  proposal:{s:'Your personalised proposal — Vertex Group Africa',b:'Dear [Name],\n\nPlease find attached our tailored proposal for [Service/Programme].\n\nWe believe this engagement will directly address your key priorities identified in the diagnostic.\n\nWe are available for a call to discuss the details.\n\nKind regards,\nVertex Group Africa'},
+  donor:{s:'Partnership opportunity — Vertex Group Africa',b:'Dear [Donor Name],\n\nWe are reaching out to explore a potential partnership in support of SME development across [Region].\n\nOur programme has supported 128 SMEs across 14 African countries with documented impact.\n\nWe would welcome the opportunity to present our impact report.\n\nBest regards,\nVertex Group Africa'},
+  welcome:{s:'Welcome to Vertex Group Africa!',b:'Dear [Name],\n\nWelcome to Vertex Group Africa! We are delighted to have you join our community.\n\nYour dedicated advisor will be in touch within 24 hours to schedule your onboarding call.\n\nFeel free to reach us at info@vertexgroup.africa.\n\nWarm regards,\nThe Vertex Group Africa Team'},
+};
+
+let currentUser = null;
+let isDark = false;
+let chartsInit = {};
+let liveLeads = [];
+let liveStats = null;
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function fmt(n) { return n >= 1000 ? '$' + (n/1000).toFixed(1) + 'k' : '$' + n; }
+function timeAgo(d) {
+  const s = Math.floor((Date.now() - new Date(d)) / 1000);
+  if (s < 60)   return s + 's ago';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  if (s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
+function stageBadge(stage) {
+  const map = {
+    new:           'badge-blue',
+    contacted:     'badge-blue',
+    qualified:     'badge-amber',
+    proposal_sent: 'badge-purple',
+    negotiation:   'badge-amber',
+    won:           'badge-green',
+    lost:          'badge-red',
+  };
+  return `<span class="badge ${map[stage]||'badge-blue'}">${stage.replace('_',' ')}</span>`;
+}
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+function fillDemo(email, pass) {
+  document.getElementById('l-email').value = email;
+  document.getElementById('l-pass').value = pass;
+}
+
+async function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pass  = document.getElementById('l-pass').value;
+  const errEl = document.getElementById('login-error');
+  if (!email || !pass) { errEl.textContent = 'Please enter email and password'; errEl.style.display = 'block'; return; }
+
+  const btn = document.querySelector('.btn-login');
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+
+  try {
+    const res = await fetch(API_BASE + '/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass }),
+    });
+    const data = await res.json();
+
+    if (!data.success) {
+      errEl.textContent = data.message || 'Invalid credentials';
+      errEl.style.display = 'block';
+      btn.textContent = 'Sign in'; btn.disabled = false;
+      return;
+    }
+
+    AUTH_TOKEN = data.token;
+    localStorage.setItem('vertex_token', AUTH_TOKEN);
+    currentUser = data.user;
+    mountDashboard(currentUser);
+  } catch (err) {
+    errEl.textContent = 'Cannot reach server — is the backend running?';
+    errEl.style.display = 'block';
+    btn.textContent = 'Sign in'; btn.disabled = false;
+  }
+}
+
+function mountDashboard(user) {
+  const avColors = { super_admin:'av-purple', admin:'av-purple', salesperson:'av-blue', coach:'av-amber', viewer:'av-green', business_developer:'av-green' };
+  document.getElementById('sidebar-av').textContent = user.initials || user.name[0];
+  document.getElementById('sidebar-av').className   = 'av ' + (avColors[user.role] || 'av-green');
+  document.getElementById('sidebar-name').textContent = user.name;
+  document.getElementById('sidebar-role').textContent = user.role.replace(/_/g, ' ');
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('dashboard').style.display    = 'flex';
+  // Apply saved language
+  const langBtn = document.getElementById('lang-btn');
+  if (langBtn) langBtn.textContent = window.LANG === 'en' ? 'FR' : 'EN';
+  setTimeout(applyTranslations, 50); // slight delay ensures DOM is ready
+  loadDashboardData();
+}
+
+function doLogout() {
+  AUTH_TOKEN = null;
+  localStorage.removeItem('vertex_token');
+  currentUser = null;
+  chartsInit  = {};
+  liveLeads   = [];
+  liveStats   = null;
+  document.getElementById('dashboard').style.display    = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-error').style.display  = 'none';
+  document.querySelector('.btn-login').textContent = 'Sign in';
+  document.querySelector('.btn-login').disabled = false;
+}
+
+// Keep old name for inline onclick handlers
+function logout() { doLogout(); }
+
+// Auto-login if token exists
+(async function tryAutoLogin() {
+  if (!AUTH_TOKEN) return;
+  const data = await api('GET', '/api/auth/me');
+  if (data && data.success) {
+    currentUser = data.user;
+    mountDashboard(currentUser);
+  } else {
+    AUTH_TOKEN = null;
+    localStorage.removeItem('vertex_token');
+  }
+})();
+
+// ── LOAD ALL DASHBOARD DATA ───────────────────────────────────────────────────
+async function loadDashboardData() {
+  await Promise.all([loadStats(), loadLeads(), loadNotifications(), loadTeam()]);
+  setTimeout(renderOverview, 200);
+}
+
+// ── DIAGNOSTICS ───────────────────────────────────────────────────────────────
+let _diagCache = [];
+let _diagPollTimer = null;
+
+async function loadDiagnostics() {
+  const status    = document.getElementById('diag-filter')?.value || '';
+  const dateParam = document.getElementById('diag-date-filter')?.value || '';
+  const tbody     = document.getElementById('diag-tbody');
+  const errEl     = document.getElementById('diag-error');
+  const summaryEl = document.getElementById('diag-summary');
+  if (errEl) errEl.style.display = 'none';
+  if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px"><div class="spinner" style="margin:auto"></div></td></tr>';
+
+  let url = '/api/diagnostics?limit=500';
+  if (status) url += '&status=' + status;
+  const data = await api('GET', url);
+
+  if (!data) {
+    if (errEl) { errEl.textContent = t('diag_error'); errEl.style.display = 'block'; }
+    if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--red);padding:24px">${t('diag_error')}</td></tr>`;
+    return;
+  }
+  if (!data.success) {
+    const msg = data.message || t('diag_error');
+    if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+    if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--red);padding:24px">${msg}</td></tr>`;
+    return;
+  }
+
+  let diags = data.diagnostics || [];
+  // Client-side date filter
+  if (dateParam) {
+    const now = new Date();
+    diags = diags.filter(d => {
+      const cr = new Date(d.createdAt);
+      if (dateParam === 'today')  return cr.toDateString() === now.toDateString();
+      if (dateParam === 'week')   { const ws = new Date(now); ws.setDate(now.getDate()-now.getDay()); ws.setHours(0,0,0,0); return cr >= ws; }
+      if (dateParam === 'month')  return cr.getMonth()===now.getMonth() && cr.getFullYear()===now.getFullYear();
+      return true;
+    });
+  }
+  _diagCache = diags;
+  filterDiagnostics();
+
+  // Update summary
+  const pending   = diags.filter(d => d.status==='pending'||d.status==='processing').length;
+  const completed = diags.filter(d => d.status==='completed').length;
+  const failed    = diags.filter(d => d.status==='failed').length;
+  if (summaryEl) {
+    summaryEl.innerHTML = window.LANG === 'fr'
+      ? `<strong style="color:var(--text)">${diags.length}</strong> total · <strong style="color:var(--green)">${completed}</strong> complétés · <strong style="color:var(--amber)">${pending}</strong> en cours · <strong style="color:var(--red)">${failed}</strong> échoués`
+      : `<strong style="color:var(--text)">${diags.length}</strong> total · <strong style="color:var(--green)">${completed}</strong> completed · <strong style="color:var(--amber)">${pending}</strong> processing · <strong style="color:var(--red)">${failed}</strong> failed`;
+  }
+  // Update nav badge
+  const badge = document.getElementById('diag-badge');
+  if (badge) badge.textContent = pending > 0 ? pending : '';
+
+  // Auto-poll if there are pending/processing diagnostics
+  clearTimeout(_diagPollTimer);
+  if (pending > 0) {
+    _diagPollTimer = setTimeout(() => {
+      const activeSection = document.querySelector('.section.active');
+      if (activeSection && activeSection.id === 'sec-diagnostics') loadDiagnostics();
+    }, 10000); // poll every 10 seconds
+  }
+
+  // Fallthrough to filterDiagnostics() already called above
+  return; // data is already processed
+}
+
+function filterDiagnostics() {
+  const search = (document.getElementById('diag-search')?.value || '').toLowerCase();
+  const tbody  = document.getElementById('diag-tbody');
+  if (!tbody) return;
+
+  let diags = _diagCache;
+  if (search) {
+    diags = diags.filter(d =>
+      (d.company||'').toLowerCase().includes(search) ||
+      (d.name||'').toLowerCase().includes(search) ||
+      (d.email||'').toLowerCase().includes(search) ||
+      (d.industry||'').toLowerCase().includes(search) ||
+      (d.country||'').toLowerCase().includes(search)
+    );
+  }
+
+  if (!diags.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:40px;line-height:1.7">
+      <div style="font-size:32px;margin-bottom:8px">📋</div>
+      <div style="font-weight:500">${t('diag_empty').split('—')[0]}</div>
+      ${_diagCache.length === 0 ? `<div style="font-size:12px;margin-top:4px;max-width:420px;margin-left:auto;margin-right:auto">${t('diag_empty').split('—')[1]||''}</div>` : ''}
+    </td></tr>`;
+    return;
+  }
+
+  const statusColor = { pending:'amber', processing:'blue', completed:'green', failed:'red' };
+  const statusLabel = {
+    pending:    t('status_pending'),
+    processing: t('status_processing'),
+    completed:  t('status_completed'),
+    failed:     t('status_failed'),
+  };
+  const viewLabel = window.LANG === 'fr' ? 'Voir' : 'View';
+
+  tbody.innerHTML = diags.map(d => {
+    const scoreColor = d.overallScore >= 70 ? 'var(--green)' : d.overallScore >= 45 ? 'var(--amber)' : 'var(--red)';
+    return `<tr>
+      <td>
+        <div style="font-weight:500">${d.company}</div>
+        <div style="font-size:11px;color:var(--text3)">${d.name} · <a href="mailto:${d.email}" style="color:var(--green)">${d.email}</a></div>
+      </td>
+      <td style="font-size:12px">${d.industry || '—'}</td>
+      <td style="font-size:12px">${d.country  || '—'}</td>
+      <td>${d.overallScore != null
+        ? `<strong style="color:${scoreColor};font-size:15px">${d.overallScore}</strong><span style="color:var(--text3);font-size:11px"> /100</span><br><span style="font-size:10px;color:var(--text3)">${d.scoreLabel||''}</span>`
+        : d.status === 'processing'
+          ? '<span class="spinner" style="width:14px;height:14px"></span>'
+          : '—'}</td>
+      <td><span class="badge badge-${statusColor[d.status]||'blue'}">${statusLabel[d.status]||d.status}</span></td>
+      <td style="color:var(--text3);font-size:11px">${timeAgo(d.createdAt)}</td>
+      <td><button class="btn" style="font-size:11px;padding:4px 10px" onclick="viewDiagnostic('${d._id}')">${viewLabel}</button></td>
+    </tr>`;
+  }).join('');
+}
+
+let _currentDiag = null;
+async function viewDiagnostic(id) {
+  const data = await api('GET', '/api/diagnostics/' + id);
+  if (!data || !data.success) return;
+  const d = data.diagnostic;
+  _currentDiag = d;
+  const modal = document.getElementById('modal-diag-detail');
+  document.getElementById('diag-detail-title').textContent = `${d.company} — ${d.name}`;
+
+  const scoreColor = d.overallScore >= 70 ? '#0d9e6e' : d.overallScore >= 45 ? '#d97706' : '#dc2626';
+  const dims = (d.dimensions||[]).map(dim => {
+    const c = dim.score>=70?'#0d9e6e':dim.score>=45?'#d97706':'#dc2626';
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="flex:1;font-weight:500;font-size:13px">${dim.title||dim.name||''}</div>
+      <div style="width:100px"><div style="height:5px;background:#e8ebf2;border-radius:3px"><div style="height:100%;width:${dim.score}%;background:${c};border-radius:3px"></div></div></div>
+      <strong style="color:${c};min-width:42px;text-align:right;font-size:13px">${dim.score}/100</strong>
+      <span style="font-size:11px;color:var(--text3);min-width:52px">${dim.severity||''}</span>
+    </div>`;
+  }).join('');
+
+  const isFr = window.LANG === 'fr';
+  document.getElementById('diag-detail-body').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;font-size:13px">
+      <div><span style="color:var(--text3)">Email:</span> <a href="mailto:${d.email}" style="color:var(--green)">${d.email}</a></div>
+      <div><span style="color:var(--text3)">${isFr?'Pays':'Country'}:</span> ${d.country||'—'}</div>
+      <div><span style="color:var(--text3)">${isFr?'Secteur':'Industry'}:</span> ${d.industry||'—'}</div>
+      <div><span style="color:var(--text3)">${isFr?'Employés':'Employees'}:</span> ${d.employees||'—'}</div>
+      <div><span style="color:var(--text3)">${isFr?'Revenus':'Revenue'}:</span> ${d.revenue||'—'}</div>
+      <div><span style="color:var(--text3)">${isFr?'Statut':'Status'}:</span> <span class="badge badge-${d.status==='completed'?'green':d.status==='failed'?'red':'amber'}">${t('status_'+d.status)||d.status}</span></div>
+    </div>
+    ${d.overallScore != null ? `<div style="text-align:center;padding:20px;background:var(--surface2);border-radius:10px;margin-bottom:16px;border:2px solid ${scoreColor}22">
+      <div style="font-size:56px;font-weight:700;color:${scoreColor};line-height:1">${d.overallScore}</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:4px">${d.scoreLabel||''}</div>
+    </div>` : ''}
+    ${d.executiveSummary ? `<div style="background:var(--surface2);border-left:3px solid var(--green);padding:12px 14px;border-radius:0 6px 6px 0;margin-bottom:14px;font-size:13px;line-height:1.7">${d.executiveSummary}</div>` : ''}
+    ${dims ? `<div style="margin-bottom:16px"><div style="font-weight:600;margin-bottom:8px;font-size:13px">${window.LANG==='fr'?'Scores par dimension':'Dimension Scores'}</div>${dims}</div>` : ''}
+    ${d.vertexRecommendation ? `<div style="padding:14px;background:var(--amber-bg);border-radius:8px;color:var(--amber-text);margin-bottom:12px">
+      <div style="font-weight:600;margin-bottom:4px">💡 ${window.LANG==='fr'?'Recommandation Vertex':'Vertex Recommendation'}</div>
+      <div style="font-size:13px;line-height:1.6">${d.vertexRecommendation}</div>
+    </div>` : ''}
+    ${d.callToAction ? `<div style="padding:14px;background:var(--green-bg);border-radius:8px;color:var(--green-text)">
+      <div style="font-weight:600;margin-bottom:4px">🚀 ${window.LANG==='fr'?'Prochaine étape':'Next Step'}</div>
+      <div style="font-size:13px">${d.callToAction}</div>
+    </div>` : ''}
+  `;
+  modal.classList.add('show');
+}
+
+function generateDiagPDF() {
+  const d = _currentDiag;
+  if (!d) return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const W = 210, margin = 18;
+  let y = 0;
+
+  // Header bar
+  doc.setFillColor(13, 158, 110);
+  doc.rect(0, 0, W, 28, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(18); doc.setFont('helvetica', 'bold');
+  doc.text('VERTEX GROUP AFRICA', margin, 13);
+  doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+  doc.text('Business Intelligence Platform — Powered by Vertex AI', margin, 20);
+  doc.text(`Generated: ${new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'long',year:'numeric'})}`, W - margin, 20, { align:'right' });
+
+  // Title
+  y = 38;
+  doc.setTextColor(10, 10, 10);
+  doc.setFontSize(15); doc.setFont('helvetica', 'bold');
+  doc.text('Business Diagnostic Report', margin, y);
+  y += 7;
+  doc.setFontSize(11); doc.setFont('helvetica', 'normal');
+  doc.setTextColor(90, 100, 120);
+  doc.text(`${d.company}  ·  ${d.name}`, margin, y);
+  y += 5;
+  doc.setFontSize(9);
+  doc.text(`${d.email}  |  ${d.industry||''}  |  ${d.country||''}`, margin, y);
+
+  // Divider
+  y += 6;
+  doc.setDrawColor(230, 230, 230); doc.setLineWidth(0.4);
+  doc.line(margin, y, W - margin, y);
+
+  // Score box
+  y += 8;
+  if (d.overallScore != null) {
+    const sc = d.overallScore;
+    const scoreRgb = sc >= 70 ? [13,158,110] : sc >= 45 ? [217,119,6] : [220,38,38];
+    doc.setFillColor(...scoreRgb);
+    doc.roundedRect(margin, y, 50, 24, 3, 3, 'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(26); doc.setFont('helvetica','bold');
+    doc.text(String(sc), margin + 25, y + 14, { align:'center' });
+    doc.setFontSize(8); doc.setFont('helvetica','normal');
+    doc.text('Overall Score /100', margin + 25, y + 20, { align:'center' });
+    if (d.scoreLabel) {
+      doc.setTextColor(10,10,10);
+      doc.setFontSize(10); doc.setFont('helvetica','bold');
+      doc.text(d.scoreLabel, margin + 56, y + 10);
+    }
+    y += 30;
+  }
+
+  // Executive summary
+  if (d.executiveSummary) {
+    doc.setFillColor(245, 248, 252);
+    doc.setDrawColor(13, 158, 110); doc.setLineWidth(1);
+    const lines = doc.splitTextToSize(d.executiveSummary, W - margin * 2 - 6);
+    const bh = lines.length * 5 + 8;
+    doc.line(margin, y, margin, y + bh);
+    doc.setFillColor(245,252,248); doc.rect(margin, y, W - margin*2, bh, 'F');
+    doc.setTextColor(30,30,30); doc.setFontSize(9); doc.setFont('helvetica','normal');
+    doc.text(lines, margin + 5, y + 6);
+    y += bh + 6;
+  }
+
+  // Dimensions
+  if ((d.dimensions||[]).length) {
+    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(10,10,10);
+    doc.text('Dimension Analysis', margin, y); y += 5;
+    d.dimensions.forEach(dim => {
+      if (y > 260) { doc.addPage(); y = 20; }
+      const sc = dim.score;
+      const rgb = sc >= 70 ? [13,158,110] : sc >= 45 ? [217,119,6] : [220,38,38];
+      doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(10,10,10);
+      doc.text(dim.title||dim.name||'', margin, y + 4);
+      doc.setFont('helvetica','normal'); doc.setTextColor(...rgb);
+      doc.text(`${sc}/100`, W - margin - 12, y + 4, {align:'right'});
+      // Bar
+      doc.setFillColor(230,235,242); doc.roundedRect(margin, y+6, W-margin*2-25, 3, 1, 1, 'F');
+      doc.setFillColor(...rgb); doc.roundedRect(margin, y+6, (W-margin*2-25)*(sc/100), 3, 1, 1, 'F');
+      if (dim.summary) {
+        const sl = doc.splitTextToSize(dim.summary, W - margin*2);
+        doc.setFontSize(8); doc.setTextColor(90,100,120); doc.text(sl, margin, y+14);
+        y += sl.length * 4 + 12;
+      } else { y += 14; }
+    });
+  }
+
+  // Recommendation
+  if (d.vertexRecommendation) {
+    if (y > 240) { doc.addPage(); y = 20; }
+    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(10,10,10);
+    doc.text('Vertex Recommendation', margin, y); y += 6;
+    doc.setFillColor(254,243,199);
+    const rlines = doc.splitTextToSize(d.vertexRecommendation, W - margin*2 - 4);
+    doc.rect(margin, y, W-margin*2, rlines.length*5+8, 'F');
+    doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(60,40,0);
+    doc.text(rlines, margin+4, y+6); y += rlines.length*5+14;
+  }
+
+  // CTA
+  if (d.callToAction) {
+    if (y > 250) { doc.addPage(); y = 20; }
+    doc.setFillColor(13,158,110);
+    doc.roundedRect(margin, y, W-margin*2, 18, 3, 3, 'F');
+    doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
+    const ctalines = doc.splitTextToSize(d.callToAction, W-margin*2-8);
+    doc.text(ctalines, margin+4, y+7); y += 26;
+  }
+
+  // Footer
+  const totalPages = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8); doc.setTextColor(150,160,175); doc.setFont('helvetica','normal');
+    doc.text('Vertex Group Africa  ·  info@vertexgroup.africa  ·  www.vertexgroup.africa', W/2, 290, {align:'center'});
+    doc.text(`Page ${i}/${totalPages}`, W-margin, 290, {align:'right'});
+    doc.setDrawColor(13,158,110); doc.setLineWidth(0.5);
+    doc.line(margin, 286, W-margin, 286);
+  }
+
+  doc.save(`Vertex_Diagnostic_${d.company.replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.pdf`);
+}
+
+async function sendDiagToClient() {
+  const d = _currentDiag;
+  if (!d || !d.email) return;
+  const btn = document.getElementById('btn-send-diag');
+  btn.textContent = 'Sending…'; btn.disabled = true;
+  // We just compose an email via the compose modal
+  const subject = `Your Business Diagnostic — Vertex Group Africa`;
+  const body = `Dear ${d.name},\n\nPlease find attached your Business Diagnostic results from Vertex Group Africa.\n\nYour overall score: ${d.overallScore}/100 — ${d.scoreLabel||''}\n\n${d.executiveSummary||''}\n\n${d.vertexRecommendation ? 'Our recommendation:\n' + d.vertexRecommendation + '\n\n' : ''}Ready to take action? Our team is available to discuss a tailored programme for ${d.company}.\n\nContact us: info@vertexgroup.africa\n\nBest regards,\nThe Vertex Group Africa Team`;
+  closeModal('modal-diag-detail');
+  document.getElementById('em-to2').value = d.email;
+  document.getElementById('em-sub2').value = subject;
+  document.getElementById('em-body2').value = body;
+  nav(document.querySelector('[onclick*="email"]'), 'email');
+  btn.textContent = 'Send to client'; btn.disabled = false;
+}
+
+// ── CORPORATES ────────────────────────────────────────────────────────────────
+async function loadCorporates() {
+  const search  = document.getElementById('corp-search')?.value || '';
+  const country = document.getElementById('corp-country-filter')?.value || '';
+  let url = '/api/corporates?';
+  if (search)  url += 'search=' + encodeURIComponent(search) + '&';
+  if (country) url += 'country=' + encodeURIComponent(country);
+  const data = await api('GET', url);
+  if (!data || !data.success) return;
+
+  const grid = document.getElementById('corp-grid');
+  if (!grid) return;
+  if (!data.corporates.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--text3);padding:40px">No corporate partners yet. Add one with the button above.</div>';
+    return;
+  }
+
+  const statusColor = { Active:'green', New:'blue', Prospecting:'amber', Negotiating:'amber', Inactive:'red' };
+  // group by country
+  const byCountry = data.byCountry;
+  grid.innerHTML = Object.entries(byCountry).map(([country, corps]) => `
+    <div class="card">
+      <div class="card-title">${country} <span class="card-subtitle">${corps.length} partner${corps.length>1?'s':''}</span></div>
+      ${corps.map(c => `
+        <div class="corp-row">
+          <div style="flex:1">
+            <div style="font-weight:500;font-size:13px">${c.name}</div>
+            <div style="font-size:11px;color:var(--text3)">${[c.sector,c.partnershipType].filter(Boolean).join(' · ')}</div>
+            ${c.contactEmail ? `<div style="font-size:11px;color:var(--text3)">${c.contactPerson||''} · ${c.contactEmail}</div>` : ''}
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+            <span class="badge badge-${statusColor[c.status]||'blue'}">${c.status}</span>
+            <button class="btn" style="font-size:10px;padding:2px 8px;color:var(--red)" onclick="deleteCorporate('${c._id}')">Delete</button>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+async function saveCorporate() {
+  const body = {
+    name:             document.getElementById('corp-name').value.trim(),
+    country:          document.getElementById('corp-country').value.trim(),
+    sector:           document.getElementById('corp-sector').value.trim(),
+    partnershipType:  document.getElementById('corp-type').value,
+    status:           document.getElementById('corp-status').value,
+    commitmentAmount: parseFloat(document.getElementById('corp-amount').value) || 0,
+    contactPerson:    document.getElementById('corp-contact').value.trim(),
+    contactEmail:     document.getElementById('corp-email').value.trim(),
+    notes:            document.getElementById('corp-notes').value.trim(),
+  };
+  if (!body.name || !body.country) { alert('Name and country are required'); return; }
+  const data = await api('POST', '/api/corporates', body);
+  if (data && data.success) {
+    closeModal('modal-corp');
+    ['corp-name','corp-country','corp-sector','corp-contact','corp-email','corp-notes'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('corp-amount').value = '';
+    loadCorporates();
+  } else {
+    alert(data?.message || 'Failed to save');
+  }
+}
+
+async function deleteCorporate(id) {
+  if (!confirm('Delete this corporate partner?')) return;
+  await api('DELETE', '/api/corporates/' + id);
+  loadCorporates();
+}
+
+// ── DONORS ────────────────────────────────────────────────────────────────────
+async function loadDonors() {
+  const data = await api('GET', '/api/donors');
+  if (!data || !data.success) return;
+
+  const summary = document.getElementById('donor-summary');
+  if (summary) summary.innerHTML = `Tracking <strong style="color:var(--text)">$${data.totalCommitted.toLocaleString()}</strong> across <strong style="color:var(--text)">${data.totalSMEs}</strong> donor-SME relationships`;
+
+  const container = document.getElementById('donors-container');
+  if (!container) return;
+  if (!data.donors.length) {
+    container.innerHTML = '<div style="text-align:center;color:var(--text3);padding:40px">No donors yet. Add one with the button above.</div>';
+    return;
+  }
+
+  const statusColor = { 'On track':'green', 'At risk':'red', 'Near done':'green', 'Completed':'green', 'Stalled':'amber' };
+  const avColors = ['av-blue','av-amber','av-green','av-purple','av-red'];
+  container.innerHTML = data.donors.map((d, i) => {
+    const rows = d.smeEngagements.map(s => {
+      const pct = s.kpiTarget > 0 ? Math.round((s.kpiCurrent/s.kpiTarget)*100) : 0;
+      const barColor = pct >= 70 ? '#0d9e6e' : pct >= 40 ? '#d97706' : '#dc2626';
+      return `<tr>
+        <td><div style="font-weight:500">${s.smeName}</div><div style="font-size:11px;color:var(--text3)">${[s.smeCountry,s.smeSector].filter(Boolean).join(' · ')}</div></td>
+        <td>$${(s.amount||0).toLocaleString()}</td>
+        <td>${s.objective||'—'}</td>
+        <td>
+          <div class="kpi-row" style="border:none;padding:0">
+            <span class="kpi-label" style="min-width:0;margin-right:8px;font-size:12px">${s.kpiCurrent} / ${s.kpiTarget}</span>
+            <div class="prog-bar"><div class="prog-fill" style="width:${Math.min(pct,100)}%;background:${barColor}"></div></div>
+            <span class="kpi-pct" style="color:${barColor}">${pct}%</span>
+          </div>
+        </td>
+        <td><span class="badge badge-${statusColor[s.status]||'blue'}">${s.status}</span></td>
+      </tr>`;
+    }).join('');
+
+    return `<div class="donor-card">
+      <div class="donor-header">
+        <div class="av ${avColors[i%avColors.length]}" style="width:38px;height:38px;font-size:11px;flex-shrink:0">${d.acronym||d.name.slice(0,4).toUpperCase()}</div>
+        <div style="flex:1">
+          <div style="font-weight:600;font-size:14px">${d.name}</div>
+          <div style="font-size:12px;color:var(--text3)">$${(d.totalCommitment||0).toLocaleString()} committed · ${d.smeEngagements.length} SMEs · ${(d.countries||[]).join(', ')||'—'}</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span class="badge badge-${d.status==='Active'?'green':d.status==='Prospect'?'amber':'blue'}">${d.status}</span>
+          <button class="btn" style="font-size:11px;padding:4px 8px" onclick="openSMEModal('${d._id}')">+ SME</button>
+          <button class="btn" style="font-size:10px;padding:3px 8px;color:var(--red)" onclick="deleteDonor('${d._id}')">Delete</button>
+        </div>
+      </div>
+      ${d.smeEngagements.length ? `
+      <table style="table-layout:fixed">
+        <thead><tr>
+          <th style="width:140px">SME</th><th style="width:90px">Amount</th>
+          <th style="width:110px">Objective</th><th>KPI progress</th><th style="width:90px">Status</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>` : `<div style="padding:12px;color:var(--text3);font-size:13px">No SMEs linked yet. Click "+ SME" to add one.</div>`}
+    </div>`;
+  }).join('');
+}
+
+async function saveDonor() {
+  const body = {
+    name:          document.getElementById('donor-name').value.trim(),
+    acronym:       document.getElementById('donor-acronym').value.trim(),
+    type:          document.getElementById('donor-type').value,
+    status:        document.getElementById('donor-status').value,
+    contactPerson: document.getElementById('donor-contact').value.trim(),
+    contactEmail:  document.getElementById('donor-email').value.trim(),
+    notes:         document.getElementById('donor-notes').value.trim(),
+  };
+  if (!body.name) { alert('Organisation name is required'); return; }
+  const data = await api('POST', '/api/donors', body);
+  if (data && data.success) {
+    closeModal('modal-donor-add');
+    ['donor-name','donor-acronym','donor-contact','donor-email','donor-notes'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    loadDonors();
+  } else {
+    alert(data?.message || 'Failed to save');
+  }
+}
+
+async function deleteDonor(id) {
+  if (!confirm('Delete this donor and all linked SMEs?')) return;
+  await api('DELETE', '/api/donors/' + id);
+  loadDonors();
+}
+
+function openSMEModal(donorId) {
+  document.getElementById('sme-donor-id').value = donorId;
+  ['sme-name','sme-country','sme-sector','sme-objective'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  ['sme-amount','sme-kpi-cur','sme-kpi-tgt'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  openModal('modal-sme-add');
+}
+
+async function saveSME() {
+  const donorId = document.getElementById('sme-donor-id').value;
+  const body = {
+    smeName:    document.getElementById('sme-name').value.trim(),
+    smeCountry: document.getElementById('sme-country').value.trim(),
+    smeSector:  document.getElementById('sme-sector').value.trim(),
+    amount:     parseFloat(document.getElementById('sme-amount').value) || 0,
+    objective:  document.getElementById('sme-objective').value.trim(),
+    kpiCurrent: parseFloat(document.getElementById('sme-kpi-cur').value) || 0,
+    kpiTarget:  parseFloat(document.getElementById('sme-kpi-tgt').value) || 0,
+    status:     document.getElementById('sme-status').value,
+  };
+  if (!body.smeName) { alert('SME name is required'); return; }
+  const data = await api('POST', '/api/donors/' + donorId + '/sme', body);
+  if (data && data.success) {
+    closeModal('modal-sme-add');
+    loadDonors();
+  } else {
+    alert(data?.message || 'Failed to save');
+  }
+}
+
+async function loadTeam() {
+  const data = await api('GET', '/api/users');
+  if (!data || !data.success) return;
+  const tbody = document.getElementById('team-tbody');
+  if (!tbody) return;
+  const roleColor = { super_admin:'purple', admin:'purple', salesperson:'blue', coach:'amber', viewer:'green', business_developer:'green' };
+  const avColors  = { super_admin:'av-purple', admin:'av-purple', salesperson:'av-blue', coach:'av-amber', viewer:'av-green', business_developer:'av-green' };
+  tbody.innerHTML = data.users.map(u => `
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:9px">
+        <div class="av ${avColors[u.role]||'av-green'}">${u.initials || u.name[0]}</div>
+        <div><div style="font-weight:500">${u.name}</div><div style="font-size:11px;color:var(--text3)">${u.email}</div></div>
+      </div></td>
+      <td><span class="badge badge-${roleColor[u.role]||'blue'}">${u.role.replace(/_/g,' ')}</span></td>
+      <td style="font-size:12px">${(u.countries||[]).join(', ') || (window.LANG==='fr'?'Tous':'All')}</td>
+      <td><span class="badge badge-${u.role==='super_admin'||u.role==='admin'?'purple':'blue'}">${u.role==='super_admin'?'Super Admin':u.role==='admin'?'Admin':'Editor'}</span></td>
+      <td>—</td><td>—</td>
+      <td><span class="badge badge-${u.isActive?'green':'red'}">${u.isActive?(window.LANG==='fr'?'Actif':'Active'):(window.LANG==='fr'?'Inactif':'Inactive')}</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="btn" style="font-size:11px;padding:4px 8px" onclick="openEditTeamModal(${JSON.stringify(u).replace(/"/g,'&quot;')})">${window.LANG==='fr'?'Modifier':'Edit'}</button>
+          ${currentUser && (currentUser.role==='super_admin') && u._id !== currentUser._id
+            ? `<button class="btn" style="font-size:11px;padding:4px 8px;color:var(--red)" onclick="deleteTeamMember('${u._id}','${u.name.replace(/'/g,"\\'")}')">✕</button>`
+            : ''}
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function openAddTeamModal() {
+  document.getElementById('team-edit-id').value = '';
+  document.getElementById('team-name').value = '';
+  document.getElementById('team-email').value = '';
+  document.getElementById('team-password').value = '';
+  document.getElementById('team-countries').value = '';
+  document.getElementById('team-role').value = 'salesperson';
+  document.getElementById('team-email').disabled = false;
+  document.getElementById('team-pass-hint').textContent = '(required for new user)';
+  document.getElementById('team-modal-title').textContent = window.LANG==='fr'?'Ajouter un membre':'Add team member';
+  document.getElementById('team-modal-err').style.display = 'none';
+  openModal('modal-team');
+}
+
+function openEditTeamModal(u) {
+  document.getElementById('team-edit-id').value = u._id;
+  document.getElementById('team-name').value = u.name;
+  document.getElementById('team-email').value = u.email;
+  document.getElementById('team-email').disabled = true;
+  document.getElementById('team-password').value = '';
+  document.getElementById('team-countries').value = (u.countries||[]).join(', ');
+  document.getElementById('team-role').value = u.role;
+  document.getElementById('team-pass-hint').textContent = window.LANG==='fr'?'(laisser vide pour ne pas changer)':'(leave blank to keep unchanged)';
+  document.getElementById('team-modal-title').textContent = window.LANG==='fr'?'Modifier le membre':'Edit team member';
+  document.getElementById('team-modal-err').style.display = 'none';
+  openModal('modal-team');
+}
+
+async function saveTeamMember() {
+  const id       = document.getElementById('team-edit-id').value;
+  const name     = document.getElementById('team-name').value.trim();
+  const email    = document.getElementById('team-email').value.trim();
+  const password = document.getElementById('team-password').value;
+  const role     = document.getElementById('team-role').value;
+  const countries = document.getElementById('team-countries').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const errEl    = document.getElementById('team-modal-err');
+  errEl.style.display = 'none';
+
+  if (!name || !email) { errEl.textContent = 'Name and email are required'; errEl.style.display = 'block'; return; }
+  if (!id && !password) { errEl.textContent = 'Password is required for new users'; errEl.style.display = 'block'; return; }
+
+  let data;
+  if (id) {
+    // Edit
+    const body = { name, role, countries };
+    if (password) body.password = password;
+    data = await api('PATCH', '/api/users/' + id, body);
+  } else {
+    // Create
+    data = await api('POST', '/api/users', { name, email, password, role, countries });
+  }
+  if (data && data.success) {
+    closeModal('modal-team');
+    loadTeam();
+  } else {
+    errEl.textContent = data?.message || 'Failed to save';
+    errEl.style.display = 'block';
+  }
+}
+
+async function deleteTeamMember(id, name) {
+  const msg = window.LANG === 'fr' ? `Supprimer ${name} ?` : `Delete ${name}?`;
+  if (!confirm(msg)) return;
+  const data = await api('DELETE', '/api/users/' + id);
+  if (data && data.success) loadTeam();
+  else alert(data?.message || 'Failed to delete');
+}
+
+async function loadStats() {
+  const data = await api('GET', '/api/dashboard/stats');
+  if (!data || !data.success) return;
+  liveStats = data;
+
+  // Update metric cards
+  const s = data.stats;
+  setMetric('m-leads',    s.totalLeads,       s.leadGrowth + '%');
+  setMetric('m-open',     s.openDeals,        null);
+  setMetric('m-revenue',  fmt(s.totalRevenue), null);
+  setMetric('m-clients',  s.activeClients,    null);
+  setMetric('m-diags',    s.totalDiagnostics, s.pendingDiagnostics + ' pending');
+
+  // Update notification badge
+  const badge = document.querySelector('.notif-dot');
+  if (badge) badge.style.display = s.unreadNotifications > 0 ? 'block' : 'none';
+}
+
+function setMetric(id, val, delta) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.querySelector('.metric-val').textContent = val ?? '—';
+  if (delta !== null && delta !== undefined) {
+    const d = el.querySelector('.metric-delta');
+    if (d) d.innerHTML = `<span class="delta-up">↑ ${delta}</span>`;
+  }
+}
+
+// ── LEADS ─────────────────────────────────────────────────────────────────────
+let _leadStageFilter = '';
+async function loadLeads(stage, search) {
+  if (stage !== undefined) _leadStageFilter = stage;
+  const stageParam  = _leadStageFilter || '';
+  const searchParam = search !== undefined ? search : (document.getElementById('lead-search')?.value || '');
+  const dateParam   = document.getElementById('lead-date-filter')?.value || '';
+  let url = '/api/leads?limit=100';
+  if (stageParam)  url += '&stage=' + stageParam;
+  if (searchParam) url += '&search=' + encodeURIComponent(searchParam);
+  const data = await api('GET', url);
+  if (!data || !data.success) return;
+  let leads = data.leads;
+  // Client-side date filter
+  if (dateParam) {
+    const now = new Date();
+    leads = leads.filter(l => {
+      const d = new Date(l.createdAt);
+      if (dateParam === 'today') {
+        return d.toDateString() === now.toDateString();
+      } else if (dateParam === 'week') {
+        const wStart = new Date(now); wStart.setDate(now.getDate() - now.getDay());
+        wStart.setHours(0,0,0,0);
+        return d >= wStart;
+      } else if (dateParam === 'month') {
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      }
+      return true;
+    });
+  }
+  liveLeads = leads;
+  renderLeadsTable(leads);
+}
+
+function filterLeadStage(el, stage) {
+  el.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  loadLeads(stage);
+}
+
+function renderLeadsTable(leads) {
+  const tbody = document.getElementById('leads-tbody');
+  if (!tbody) return;
+  const noMsg = window.LANG==='fr' ? 'Aucun lead pour l\'instant.' : 'No leads yet — they appear here when visitors submit forms on the website.';
+  if (!leads.length) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:32px">${noMsg}</td></tr>`;
+    // Show funnel (empty)
+    renderLeadsFunnel([]);
+    return;
+  }
+  renderLeadsFunnel(leads);
+  const stageConv = { new:10, contacted:25, qualified:45, proposal_sent:65, negotiation:80, won:100, lost:0 };
+  tbody.innerHTML = leads.map(l => {
+    const pct = stageConv[l.stage] || 10;
+    const barColor = l.stage==='won'?'#0d9e6e':l.stage==='lost'?'#dc2626':pct>=65?'#7c3aed':pct>=45?'#d97706':'#2563eb';
+    const actionBtns = l.stage !== 'won' && l.stage !== 'lost' ? `
+      <button class="btn" style="font-size:10px;padding:3px 7px;background:var(--green);color:#fff;border-color:transparent" onclick="updateLeadStage('${l._id}','won')" title="Mark Won">Won</button>
+      <button class="btn" style="font-size:10px;padding:3px 7px;background:var(--amber);color:#fff;border-color:transparent" onclick="updateLeadStage('${l._id}','negotiation')" title="In Progress">⏳</button>
+      <button class="btn" style="font-size:10px;padding:3px 7px;background:var(--red);color:#fff;border-color:transparent" onclick="updateLeadStage('${l._id}','lost')" title="Mark Lost">Lost</button>
+    ` : `<button class="btn" style="font-size:10px;padding:3px 7px" onclick="updateLeadStage('${l._id}','new')">Reset</button>`;
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:9px">
+        <div class="av av-sm av-green">${(l.name||'?')[0].toUpperCase()}</div>
+        <div><div style="font-weight:500">${l.name}</div><div style="font-size:11px;color:var(--text3)">${l.email}</div></div>
+      </div></td>
+      <td style="font-size:12px">${l.company || '—'}</td>
+      <td style="font-size:12px">${l.country || '—'}</td>
+      <td style="font-weight:600;color:var(--green)">${l.value ? fmt(l.value) : '—'}</td>
+      <td>${stageBadge(l.stage)}</td>
+      <td style="font-size:12px">${l.assignedTo ? l.assignedTo.name.split(' ')[0] : '—'}</td>
+      <td style="color:var(--text3);font-size:11px">${timeAgo(l.createdAt)}</td>
+      <td><div style="display:flex;gap:3px;flex-wrap:wrap">${actionBtns}</div></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderLeadsFunnel(leads) {
+  const el = document.getElementById('leads-funnel');
+  const body = document.getElementById('funnel-body');
+  if (!el || !body) return;
+  const stages = [
+    { key:'new',           label: window.LANG==='fr'?'Nouveaux':'New' },
+    { key:'contacted',     label: window.LANG==='fr'?'Contactés':'Contacted' },
+    { key:'qualified',     label: window.LANG==='fr'?'Qualifiés':'Qualified' },
+    { key:'proposal_sent', label: window.LANG==='fr'?'Proposition':'Proposal' },
+    { key:'negotiation',   label: window.LANG==='fr'?'Négociation':'Negotiation' },
+    { key:'won',           label: window.LANG==='fr'?'Gagnés':'Won' },
+    { key:'lost',          label: window.LANG==='fr'?'Perdus':'Lost' },
+  ];
+  const counts = {};
+  stages.forEach(s => { counts[s.key] = 0; });
+  leads.forEach(l => { if (counts[l.stage] !== undefined) counts[l.stage]++; });
+  const total = leads.length || 1;
+  const funnelStages = stages.filter(s => s.key !== 'lost');
+  const colors = { new:'#2563eb', contacted:'#60a5fa', qualified:'#d97706', proposal_sent:'#7c3aed', negotiation:'#f59e0b', won:'#0d9e6e' };
+  el.style.display = 'block';
+  const wonCount = counts['won'];
+  const convRate = total > 0 ? Math.round((wonCount / (total)) * 100) : 0;
+  body.innerHTML = funnelStages.map(s => {
+    const pct = Math.round((counts[s.key] / total) * 100);
+    return `<div style="flex:1;text-align:center;padding:10px 6px;border-right:1px solid var(--border)">
+      <div style="font-size:20px;font-weight:700;color:${colors[s.key]||'var(--text)'}">${counts[s.key]}</div>
+      <div style="font-size:10px;color:var(--text3);margin:2px 0">${s.label}</div>
+      <div style="height:3px;background:var(--surface3);border-radius:2px;margin-top:6px"><div style="height:100%;width:${pct}%;background:${colors[s.key]};border-radius:2px"></div></div>
+    </div>`;
+  }).join('') + `<div style="flex:1;text-align:center;padding:10px 6px">
+    <div style="font-size:20px;font-weight:700;color:var(--green)">${convRate}%</div>
+    <div style="font-size:10px;color:var(--text3);margin:2px 0">${window.LANG==='fr'?'Taux conv.':'Conv. Rate'}</div>
+    <div style="height:3px;background:var(--surface3);border-radius:2px;margin-top:6px"><div style="height:100%;width:${convRate}%;background:var(--green);border-radius:2px"></div></div>
+  </div>`;
+}
+
+async function updateLeadStage(id, stage) {
+  await api('PATCH', '/api/leads/' + id, { stage });
+  await loadLeads();
+  await loadStats();
+  if (chartsInit._ov) { chartsInit._ov = false; chartsInit.overview = false; renderOverview(); }
+}
+
+async function searchLeads() {
+  const q = document.getElementById('lead-search')?.value || '';
+  await loadLeads(undefined, q);
+}
+
+// ── NOTIFICATIONS ─────────────────────────────────────────────────────────────
+async function loadNotifications() {
+  const unreadOnly = document.getElementById('notif-filter')?.value === 'unread';
+  let url = '/api/dashboard/notifications?limit=40';
+  if (unreadOnly) url += '&unreadOnly=true';
+  const data = await api('GET', url);
+  if (!data || !data.success) return;
+
+  const container = document.getElementById('notifs-container');
+  const countEl   = document.getElementById('notif-count');
+  if (!container) return;
+
+  const noMsg = window.LANG === 'fr' ? 'Aucune notification.' : 'No notifications yet.';
+  if (!data.notifications.length) {
+    container.innerHTML = `<div style="text-align:center;color:var(--text3);padding:40px">${noMsg}</div>`;
+    if (countEl) countEl.textContent = noMsg;
+    return;
+  }
+
+  if (countEl) countEl.innerHTML = window.LANG === 'fr'
+    ? `<strong style="color:var(--text)">${data.unreadCount}</strong> non lues sur <strong style="color:var(--text)">${data.total}</strong>`
+    : `<strong style="color:var(--text)">${data.unreadCount}</strong> unread of <strong style="color:var(--text)">${data.total}</strong> notifications`;
+
+  const iconMap = {
+    new_lead:       { bg:'var(--blue-bg)',   stroke:'#2563eb',  icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>' },
+    new_diagnostic: { bg:'var(--purple-bg)', stroke:'#7c3aed',  icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>' },
+    deal_won:       { bg:'var(--green-bg)',  stroke:'#0d9e6e',  icon:'<polyline points="20 6 9 17 4 12"/>' },
+    deal_lost:      { bg:'var(--red-bg)',    stroke:'#dc2626',  icon:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>' },
+    kpi_alert:      { bg:'var(--red-bg)',    stroke:'#dc2626',  icon:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>' },
+    new_quote:      { bg:'var(--blue-bg)',   stroke:'#2563eb',  icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>' },
+    new_subscriber: { bg:'var(--green-bg)', stroke:'#0d9e6e',   icon:'<polyline points="20 6 9 17 4 12"/>' },
+  };
+
+  container.innerHTML = data.notifications.map(n => {
+    const ic = iconMap[n.type] || iconMap.new_lead;
+    return `<div class="notif-item" id="notif-${n._id}" style="${n.isRead?'opacity:0.55':''}">
+      <div class="notif-icon" style="background:${ic.bg}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${ic.stroke}" stroke-width="2">${ic.icon}</svg>
+      </div>
+      <div style="flex:1">
+        <div style="font-weight:500;font-size:13px">${n.title}</div>
+        ${n.body ? `<div style="font-size:12px;color:var(--text3);margin-top:3px">${n.body}</div>` : ''}
+      </div>
+      <span class="notif-time">${timeAgo(n.createdAt)}</span>
+      ${!n.isRead ? `<button onclick="markOneRead('${n._id}')" title="${window.LANG==='fr'?'Marquer comme lu':'Mark as read'}"
+        style="margin-left:8px;width:26px;height:26px;border-radius:50%;border:1px solid var(--border2);background:var(--surface2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);flex-shrink:0;font-size:14px;transition:all 0.12s"
+        onmouseover="this.style.background='var(--green-bg)';this.style.color='var(--green)'"
+        onmouseout="this.style.background='var(--surface2)';this.style.color='var(--text3)'">✓</button>` : ''}
+    </div>`;
+  }).join('');
+
+  // Update unread badge in sidebar
+  const nb = document.getElementById('notif-nav-badge');
+  if (nb) nb.textContent = data.unreadCount || '';
+  const notifDot = document.querySelector('.notif-dot');
+  if (notifDot) notifDot.style.display = data.unreadCount > 0 ? 'block' : 'none';
+}
+
+async function markOneRead(id) {
+  await api('PATCH', '/api/dashboard/notifications/' + id + '/read');
+  const el = document.getElementById('notif-' + id);
+  if (el) {
+    el.style.transition = 'opacity 0.3s, max-height 0.4s';
+    el.style.opacity = '0';
+    el.style.overflow = 'hidden';
+    setTimeout(() => {
+      el.style.maxHeight = '0';
+      el.style.padding = '0';
+      el.style.margin = '0';
+      el.style.border = 'none';
+    }, 300);
+    setTimeout(() => { el.remove(); }, 700);
+  }
+  // Update sidebar badge count
+  const nb = document.getElementById('notif-nav-badge');
+  if (nb) {
+    const cur = parseInt(nb.textContent) || 0;
+    nb.textContent = Math.max(0, cur - 1) || '';
+  }
+  const countEl = document.getElementById('notif-count');
+  if (countEl) {
+    const match = countEl.innerHTML.match(/<strong[^>]*>(\d+)<\/strong>/);
+    if (match) {
+      const newUnread = Math.max(0, parseInt(match[1]) - 1);
+      countEl.innerHTML = countEl.innerHTML.replace(/<strong[^>]*>\d+<\/strong>/, `<strong style="color:var(--text)">${newUnread}</strong>`);
+    }
+  }
+}
+
+async function markAllRead() {
+  await api('PATCH', '/api/dashboard/notifications/read-all');
+  await loadNotifications();
+}
+
+// ── LANGUAGE ──────────────────────────────────────────────────────────────────
+window.LANG = localStorage.getItem('vertex_lang') || 'en';
+
+const TRANSLATIONS = {
+  en: {
+    // Login
+    login_title: 'Welcome back', login_sub: 'Sign in to access your dashboard',
+    login_email: 'Email address', login_password: 'Password',
+    login_hint: 'Default admin password: ChangeMe2025!',
+    login_btn: 'Sign in →', login_demo_title: 'Demo accounts — click to auto-fill',
+    // Nav sections
+    sec_main: 'Main', sec_network: 'Network', sec_intelligence: 'Intelligence', sec_operations: 'Operations',
+    // Nav items
+    nav_overview: 'Overview', nav_leads: 'Leads & Quotes', nav_pipeline: 'Sales Pipeline',
+    nav_diagnostics: 'Diagnostics', nav_corporates: 'Corporate Network', nav_donors: 'Donors & SMEs',
+    nav_insights: 'Africa Insights', nav_email: 'Email', nav_team: 'Team & Access', nav_notifs: 'Notifications',
+    // Page titles (for topbar)
+    overview: 'Overview', leads: 'Leads & Quotes', pipeline: 'Sales Pipeline',
+    diagnostics: 'Diagnostics', corporates: 'Corporate Network', donors: 'Donors & SME Tracking',
+    insights: 'Africa Intelligence', email: 'Email — info@vertexgroup.africa',
+    team: 'Team & Access', notifs: 'Notifications',
+    // Topbar
+    btn_add_lead: '+ Add lead', btn_compose: 'Compose email',
+    search_ph: 'Search leads, SMEs, donors…',
+    // KPI cards
+    kpi_leads: 'Total leads', kpi_open: 'Open deals', kpi_clients: 'Active clients',
+    kpi_diags: 'Diagnostics', kpi_revenue: 'Total revenue (won)',
+    kpi_open_sub: 'active pipeline', kpi_clients_sub: 'engagements', kpi_revenue_sub: 'closed deals',
+    loading: 'loading…',
+    // Charts
+    chart_pipeline: 'Pipeline by stage', chart_pipeline_sub: 'current month',
+    chart_country: 'Revenue by country', chart_country_sub: 'top 6',
+    chart_conv_by_sales: 'Conversion by salesperson', chart_conv_sub: 'won / in progress / lost',
+    // Tabs & filters
+    tab_all: 'All', stage_new: 'New', stage_contacted: 'Contacted', stage_qualified: 'Qualified',
+    stage_won: 'Won', stage_lost: 'Lost',
+    filter_all_time: 'All time', filter_today: 'Today', filter_week: 'This week', filter_month: 'This month',
+    filter_all_statuses: 'All statuses', status_pending: 'Pending', status_processing: 'Processing',
+    status_completed: 'Completed', status_failed: 'Failed',
+    // Table headers
+    th_contact: 'Contact', th_action: 'Action', th_country: 'Country', th_assigned: 'Assigned to',
+    th_time: 'Time', th_company: 'Company', th_value: 'Value', th_status: 'Status',
+    th_date: 'Date', th_actions: 'Actions', th_company_contact: 'Company / Contact',
+    th_industry: 'Industry', th_score: 'Score', th_submitted: 'Submitted',
+    th_member: 'Member', th_role: 'Role', th_countries: 'Countries', th_access: 'Access',
+    th_leads: 'Leads', th_conv: 'Conv.', th_name: 'Name',
+    // Recent activity
+    recent_activity: 'Recent activity',
+    // Pipeline legend
+    legend_won: 'Won', legend_in_progress: 'In progress', legend_lost: 'Lost',
+    // Buttons
+    btn_mark_all: 'Mark all read', btn_add_member: '+ Add member', btn_add_corp: '+ Add corporate',
+    btn_add_donor: '+ Add donor', btn_refresh: 'Refresh',
+    // Diagnostics
+    diag_empty: 'No diagnostics yet — they appear here when visitors submit a diagnostic on your website.',
+    diag_error: 'Could not load diagnostics. Check your connection or permissions.',
+    // Notifications
+    notif_empty: 'No notifications yet.', notif_unread: 'Unread only', notif_all: 'All',
+    // Africa insights
+    insight_title: 'African SME market intelligence — Vertex Group Africa operating markets',
+    insight_opp_title: 'SME opportunity index by country',
+    // Email section
+    email_sent_month: 'Sent this month', email_open_rate: 'Open rate',
+    email_reply_rate: 'Reply rate', email_awaiting: 'Awaiting reply',
+    email_compose_title: 'Compose email', email_sent_title: 'Sent emails',
+    email_ok: 'Email queued — sending via info@vertexgroup.africa',
+    // Funnel
+    funnel_title: 'Conversion Funnel', conv_rate: 'Conv. Rate',
+  },
+  fr: {
+    // Login
+    login_title: 'Bienvenue', login_sub: 'Connectez-vous à votre tableau de bord',
+    login_email: 'Adresse e-mail', login_password: 'Mot de passe',
+    login_hint: 'Mot de passe admin par défaut : ChangeMe2025!',
+    login_btn: 'Se connecter →', login_demo_title: 'Comptes démo — cliquez pour remplir',
+    // Nav sections
+    sec_main: 'Principal', sec_network: 'Réseau', sec_intelligence: 'Intelligence', sec_operations: 'Opérations',
+    // Nav items
+    nav_overview: 'Vue d\'ensemble', nav_leads: 'Leads & Devis', nav_pipeline: 'Pipeline Commercial',
+    nav_diagnostics: 'Diagnostics', nav_corporates: 'Réseau Corporate', nav_donors: 'Donateurs & PME',
+    nav_insights: 'Intelligence Africaine', nav_email: 'Email', nav_team: 'Équipe & Accès', nav_notifs: 'Notifications',
+    // Page titles
+    overview: 'Vue d\'ensemble', leads: 'Leads & Devis', pipeline: 'Pipeline Commercial',
+    diagnostics: 'Diagnostics', corporates: 'Réseau Corporate', donors: 'Donateurs & PME',
+    insights: 'Intelligence Africaine', email: 'Email — info@vertexgroup.africa',
+    team: 'Équipe & Accès', notifs: 'Notifications',
+    // Topbar
+    btn_add_lead: '+ Ajouter un lead', btn_compose: 'Rédiger un email',
+    search_ph: 'Rechercher leads, PME, donateurs…',
+    // KPI cards
+    kpi_leads: 'Total leads', kpi_open: 'Deals ouverts', kpi_clients: 'Clients actifs',
+    kpi_diags: 'Diagnostics', kpi_revenue: 'Chiffre d\'affaires (gagné)',
+    kpi_open_sub: 'pipeline actif', kpi_clients_sub: 'engagements', kpi_revenue_sub: 'deals conclus',
+    loading: 'chargement…',
+    // Charts
+    chart_pipeline: 'Pipeline par étape', chart_pipeline_sub: 'mois en cours',
+    chart_country: 'Revenus par pays', chart_country_sub: 'top 6',
+    chart_conv_by_sales: 'Conversion par commercial', chart_conv_sub: 'gagné / en cours / perdu',
+    // Tabs & filters
+    tab_all: 'Tous', stage_new: 'Nouveau', stage_contacted: 'Contacté', stage_qualified: 'Qualifié',
+    stage_won: 'Gagné', stage_lost: 'Perdu',
+    filter_all_time: 'Toute période', filter_today: 'Aujourd\'hui', filter_week: 'Cette semaine', filter_month: 'Ce mois',
+    filter_all_statuses: 'Tous les statuts', status_pending: 'En attente', status_processing: 'En traitement',
+    status_completed: 'Complété', status_failed: 'Échoué',
+    // Table headers
+    th_contact: 'Contact', th_action: 'Action', th_country: 'Pays', th_assigned: 'Assigné à',
+    th_time: 'Heure', th_company: 'Entreprise', th_value: 'Valeur', th_status: 'Statut',
+    th_date: 'Date', th_actions: 'Actions', th_company_contact: 'Entreprise / Contact',
+    th_industry: 'Secteur', th_score: 'Score', th_submitted: 'Soumis le',
+    th_member: 'Membre', th_role: 'Rôle', th_countries: 'Pays', th_access: 'Accès',
+    th_leads: 'Leads', th_conv: 'Conv.', th_name: 'Nom',
+    // Recent activity
+    recent_activity: 'Activité récente',
+    // Pipeline legend
+    legend_won: 'Gagné', legend_in_progress: 'En cours', legend_lost: 'Perdu',
+    // Buttons
+    btn_mark_all: 'Tout marquer lu', btn_add_member: '+ Ajouter un membre', btn_add_corp: '+ Ajouter un partenaire',
+    btn_add_donor: '+ Ajouter un donateur', btn_refresh: 'Actualiser',
+    // Diagnostics
+    diag_empty: 'Aucun diagnostic pour l\'instant — ils apparaissent ici quand des visiteurs soumettent un diagnostic sur votre site.',
+    diag_error: 'Impossible de charger les diagnostics. Vérifiez votre connexion ou vos permissions.',
+    // Notifications
+    notif_empty: 'Aucune notification.', notif_unread: 'Non lus seulement', notif_all: 'Tous',
+    // Africa insights
+    insight_title: 'Intelligence du marché PME africain — marchés opérationnels de Vertex Group Africa',
+    insight_opp_title: 'Indice d\'opportunité PME par pays',
+    // Email section
+    email_sent_month: 'Envoyés ce mois', email_open_rate: 'Taux d\'ouverture',
+    email_reply_rate: 'Taux de réponse', email_awaiting: 'En attente de réponse',
+    email_compose_title: 'Rédiger un email', email_sent_title: 'Emails envoyés',
+    email_ok: 'Email en file d\'attente — envoi via info@vertexgroup.africa',
+    // Funnel
+    funnel_title: 'Entonnoir de conversion', conv_rate: 'Taux conv.',
+  },
+};
+
+function t(key) { return (TRANSLATIONS[window.LANG] || TRANSLATIONS.en)[key] || key; }
+
+function toggleLang() {
+  window.LANG = window.LANG === 'en' ? 'fr' : 'en';
+  localStorage.setItem('vertex_lang', window.LANG);
+  const btn = document.getElementById('lang-btn');
+  if (btn) btn.textContent = window.LANG === 'en' ? 'FR' : 'EN';
+  applyTranslations();
+  // Re-render current section to pick up language changes in dynamic content
+  const activeSection = document.querySelector('.section.active');
+  if (activeSection) {
+    const id = activeSection.id.replace('sec-', '');
+    if (id === 'leads')       renderLeadsTable(liveLeads);
+    if (id === 'diagnostics') loadDiagnostics();
+    if (id === 'notifs')      loadNotifications();
+    if (id === 'team')        loadTeam();
+  }
+}
+
+function applyTranslations() {
+  const L = window.LANG;
+  // Apply to all [data-i18n] elements (textContent)
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = t(key);
+    if (val && val !== key) el.textContent = val;
+  });
+  // Apply to placeholder attributes [data-i18n-ph]
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    const val = t(key);
+    if (val && val !== key) el.placeholder = val;
+  });
+  // Update page title based on active nav
+  const activeNav = document.querySelector('.nav-item.active');
+  if (activeNav) {
+    const onclick = activeNav.getAttribute('onclick') || '';
+    const match = onclick.match(/'([^']+)'\)/);
+    if (match) {
+      const titleEl = document.getElementById('page-title');
+      if (titleEl) titleEl.textContent = t(match[1]) || match[1];
+    }
+  }
+  // Update html lang attribute
+  document.documentElement.lang = L;
+  // Update filter/select option text (they have data-i18n directly)
+  document.querySelectorAll('option[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const val = t(key);
+    if (val && val !== key) el.textContent = val;
+  });
+  // Update funnel title
+  const ft = document.getElementById('t-funnel-title');
+  if (ft) ft.textContent = t('funnel_title');
+  // Notif filter options
+  const nf = document.getElementById('notif-filter');
+  if (nf) {
+    nf.options[0].textContent = t('notif_all');
+    if (nf.options[1]) nf.options[1].textContent = t('notif_unread');
+  }
+  // Login hint
+  document.documentElement.lang = L;
+}
+
+// ── CHARTS ────────────────────────────────────────────────────────────────────
+function toggleTheme() {
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : '');
+  const icon = document.getElementById('theme-icon');
+  if(isDark) icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" fill="none"/>';
+  else icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
+
+function nav(el, id) {
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.getElementById('page-title').textContent = t(id) || id;
+  if(id==='leads')       loadLeads();
+  if(id==='notifs')      loadNotifications();
+  if(id==='diagnostics') loadDiagnostics();
+  if(id==='corporates')  loadCorporates();
+  if(id==='donors')      loadDonors();
+  if(id==='team')        loadTeam();
+  if(!chartsInit[id]) { chartsInit[id]=true; setTimeout(()=>renderSection(id),150); }
+}
+
+function renderSection(id) {
+  if(id==='overview') renderOverview();
+  if(id==='pipeline') renderPipeline();
+  if(id==='insights') renderInsights();
+}
+
+function renderOverview() {
+  if(chartsInit._ov) return; chartsInit._ov = true;
+
+  // Pipeline doughnut — from live stats if available
+  const stageData = liveStats?.charts?.pipelineByStage || [];
+  const stageOrder = ['new','contacted','qualified','proposal_sent','negotiation','won','lost'];
+  const stageMap   = Object.fromEntries(stageData.map(s => [s._id, s.count]));
+  const pipeVals   = stageOrder.map(s => stageMap[s] || 0);
+
+  new Chart(document.getElementById('c-pipeline'), {
+    type:'doughnut',
+    data:{ labels:['New','Contacted','Qualified','Proposal','Negotiation','Won','Lost'],
+           datasets:[{data: pipeVals.some(v=>v>0) ? pipeVals : [14,4,8,6,3,12,4],
+             backgroundColor:['#2563eb','#60a5fa','#d97706','#7c3aed','#f59e0b','#0d9e6e','#dc2626'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'65%'}
+  });
+
+  // Revenue by country bar chart
+  const countries = liveStats?.charts?.revenueByCountry || [];
+  const cLabels = countries.length ? countries.map(c=>c._id) : ['Nigeria','Senegal','DRC','Kenya','Ghana','Morocco'];
+  const cVals   = countries.length ? countries.map(c=>c.revenue) : [31000,18500,14200,22000,16800,19400];
+
+  new Chart(document.getElementById('c-country'), {
+    type:'bar',
+    data:{ labels:cLabels, datasets:[{data:cVals,backgroundColor:'#0d9e6e',borderRadius:4,borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},
+      scales:{x:{ticks:{callback:v=>'$'+Math.round(v/1000)+'k',color:'#8b95a8'},grid:{display:false}},
+              y:{ticks:{color:'#8b95a8'},grid:{display:false}}}}
+  });
+}
+
+function renderPipeline() {
+  if(chartsInit._pl) return; chartsInit._pl = true;
+  const team = liveStats?.charts?.teamPerformance || [];
+  const colors = ['green','blue','amber','purple','red'];
+
+  // Render live team metric cards
+  const cardsEl = document.getElementById('pipeline-cards');
+  if (cardsEl) {
+    if (team.length) {
+      const totalRev = team.reduce((s,t)=>s+t.revenue,0);
+      const avgConv  = team.length ? Math.round(team.reduce((s,t)=>s+t.conversionRate,0)/team.length) : 0;
+      cardsEl.innerHTML = team.map((t,i) => `
+        <div class="metric-card ${colors[i%colors.length]}">
+          <div class="metric-label">${t.name}</div>
+          <div class="metric-val">$${Math.round(t.revenue/1000)}k</div>
+          <div class="metric-delta ${t.conversionRate>=35?'delta-up':'delta-dn'}">Conv. ${Math.round(t.conversionRate)}%</div>
+        </div>`).join('') + `
+        <div class="metric-card purple">
+          <div class="metric-label">Team total</div>
+          <div class="metric-val">$${Math.round(totalRev/1000)}k</div>
+          <div class="metric-delta" style="color:var(--text3)">${avgConv}% avg conv.</div>
+        </div>`;
+    } else {
+      cardsEl.innerHTML = '<div class="metric-card blue"><div class="metric-label">No pipeline data yet</div><div class="metric-val">—</div><div class="metric-delta" style="color:var(--text3)">Leads will appear here</div></div>';
+    }
+  }
+
+  const labels = team.length ? team.map(t=>t.name.split(' ')[0] + ' ' + (t.name.split(' ')[1]?.[0]||'') + '.') : ['—'];
+  const won  = team.length ? team.map(t=>t.won)   : [0];
+  const prog = team.length ? team.map(t=>Math.max(0, t.total - t.won - t.lost)) : [0];
+  const lost = team.length ? team.map(t=>t.lost)  : [0];
+
+  new Chart(document.getElementById('c-sales'), {
+    type:'bar',
+    data:{ labels, datasets:[
+      {label:'Won',      data:won,  backgroundColor:'#0d9e6e',borderRadius:4,borderWidth:0},
+      {label:'Progress', data:prog, backgroundColor:'#2563eb',borderRadius:4,borderWidth:0},
+      {label:'Lost',     data:lost, backgroundColor:'#dc2626',borderRadius:4,borderWidth:0},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{stacked:true,ticks:{color:'#8b95a8'},grid:{display:false}},
+              y:{stacked:true,ticks:{color:'#8b95a8'},grid:{display:false}}}}
+  });
+}
+
+function renderInsights() {
+  if(chartsInit._in) return; chartsInit._in=true;
+  new Chart(document.getElementById('c-insight'),{type:'bar',data:{labels:['Nigeria','Kenya','Senegal','Ghana','Morocco','DRC','Cote d\'Ivoire','Tanzania','Ethiopia'],datasets:[{data:[92,88,76,74,71,65,69,61,58],backgroundColor:['#0d9e6e','#0d9e6e','#2563eb','#2563eb','#2563eb','#d97706','#2563eb','#d97706','#d97706'],borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8b95a8',autoSkip:false,maxRotation:30},grid:{display:false}},y:{max:100,ticks:{color:'#8b95a8'},grid:{color:'rgba(0,0,0,0.05)'}}}}});
+}
+
+// ── UI HELPERS ────────────────────────────────────────────────────────────────
+function showSteps(idx) {
+  const STEPS=[
+    {name:'Aminata Mbaye',steps:[{t:'Confirm quote',done:true},{t:'Schedule discovery call',done:true},{t:'Send Diagnostic questionnaire',done:false,urgent:true},{t:'Analyse & prepare proposal',done:false},{t:'Send proposal — follow up',done:false},{t:'Negotiate and close',done:false}]},
+    {name:'Jean Kabila',steps:[{t:'Discovery call completed',done:true},{t:'Proposal $8,000 sent',done:true},{t:'Follow-up — address objections',done:true},{t:'Revised proposal with payment plan',done:false,urgent:true},{t:'Contract signature',done:false},{t:'Kick-off meeting',done:false}]},
+    {name:'Chidi Okonkwo',steps:[{t:'Initial contact',done:true},{t:'Proposal sent',done:true},{t:'Negotiation completed',done:true},{t:'Contract signed $4,200',done:true},{t:'Onboarding pack sent',done:true},{t:'Kick-off complete',done:true}]},
+    {name:'Hassan Amine',steps:[{t:'Discovery call',done:true},{t:'Market analysis sent',done:true},{t:'Proposal $6,000 sent',done:true},{t:'Pricing negotiation',done:false,urgent:true},{t:'Final contract terms',done:false},{t:'Sign and onboard',done:false}]},
+  ];
+  const d = STEPS[idx];
+  document.getElementById('steps-title').textContent = 'Sales roadmap — ' + d.name;
+  const body = document.getElementById('steps-body');
+  body.innerHTML = '';
+  d.steps.forEach((s,i)=>{
+    const cls = s.done ? 'background:#e6f7f2;color:#065c40' : s.urgent ? 'background:#fef3c7;color:#92400e' : 'background:var(--blue-bg);color:var(--blue-text)';
+    const lbl = s.done ? '✓' : s.urgent ? '!' : String(i+1);
+    body.innerHTML += `<div class="step-item"><div class="step-num" style="${cls}">${lbl}</div><div style="font-size:13px;color:var(--text);padding-top:2px">${s.t}</div></div>`;
+  });
+  document.getElementById('steps-card').style.display='block';
+}
+
+function switchTab(el) {
+  el.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function openModal(id)  { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+document.querySelectorAll('.modal-backdrop').forEach(m=>{
+  m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('show'); });
+});
+
+function applyTemplate(v)  { if(!v)return; document.getElementById('em-sub').value=TEMPLATES[v].s;  document.getElementById('em-body').value=TEMPLATES[v].b; }
+function applyTemplate2(v) { if(!v)return; document.getElementById('em-sub2').value=TEMPLATES[v].s; document.getElementById('em-body2').value=TEMPLATES[v].b; }
+function sendEmailAction() { closeModal('modal-email'); }
+function sendEmail2() {
+  const ok = document.getElementById('email-ok');
+  ok.style.display='block';
+  setTimeout(()=>ok.style.display='none',4000);
+}
+
+// Auto-refresh stats every 60 seconds while dashboard is open
+setInterval(() => { if (currentUser) loadStats(); }, 60000);
+</script>
+</body>
+</html>
