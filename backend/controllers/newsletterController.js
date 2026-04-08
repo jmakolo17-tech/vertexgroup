@@ -62,3 +62,48 @@ exports.getSubscribers = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
+// POST /api/newsletter/send (protected — admin/super_admin)
+exports.sendNewsletter = async (req, res) => {
+  try {
+    const { subject, html, text, testOnly, testEmail } = req.body;
+    if (!subject || !html) {
+      return res.status(400).json({ success: false, message: 'Subject and HTML body are required.' });
+    }
+
+    // Test send — just to one address
+    if (testOnly && testEmail) {
+      const result = await sendEmail({ to: testEmail, subject: `[TEST] ${subject}`, html, text });
+      return res.json({ success: true, sent: 1, message: 'Test email sent.', result });
+    }
+
+    // Real send — all active subscribers
+    const subscribers = await Newsletter.find({ isActive: true }).select('email name');
+    if (!subscribers.length) {
+      return res.json({ success: true, sent: 0, message: 'No active subscribers.' });
+    }
+
+    let sent = 0, failed = 0;
+    for (const sub of subscribers) {
+      // Personalise greeting if name available
+      const personalHtml = html.replace(/\{\{name\}\}/g, sub.name || 'there');
+      const result = await sendEmail({ to: sub.email, subject, html: personalHtml, text });
+      if (result.success) sent++; else failed++;
+    }
+
+    res.json({ success: true, sent, failed, total: subscribers.length });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// DELETE /api/newsletter/:id (protected — admin/super_admin)
+exports.deleteSubscriber = async (req, res) => {
+  try {
+    const sub = await Newsletter.findByIdAndDelete(req.params.id);
+    if (!sub) return res.status(404).json({ success: false, message: 'Subscriber not found.' });
+    res.json({ success: true, message: 'Subscriber removed.' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};

@@ -468,6 +468,10 @@ tr:hover td { background: var(--surface2); }
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <span data-i18n="nav_team">Team & Access</span>
     </div>
+    <div class="nav-item" onclick="nav(this,'newsletter')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      <span data-i18n="nav_newsletter">Newsletter</span> <span class="nav-badge" id="nl-nav-badge"></span>
+    </div>
     <div class="nav-item" onclick="nav(this,'notifs')">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       <span data-i18n="nav_notifs">Notifications</span> <span class="nav-badge" id="notif-nav-badge"></span>
@@ -934,6 +938,132 @@ tr:hover td { background: var(--surface2); }
     <div id="notifs-container">
       <div style="text-align:center;color:var(--text3);padding:40px">Loading…</div>
     </div>
+  </div>
+
+  <!-- ── NEWSLETTER ──────────────────────────────────────────── -->
+  <div class="section" id="sec-newsletter">
+
+    <!-- Stats bar -->
+    <div class="metrics-grid" style="margin-bottom:20px">
+      <div class="metric-card green">
+        <div class="metric-label" data-i18n="nl_total">Total Subscribers</div>
+        <div class="metric-val" id="nl-stat-total">—</div>
+        <div class="metric-delta delta-up" id="nl-stat-active"></div>
+      </div>
+      <div class="metric-card blue">
+        <div class="metric-label" data-i18n="nl_sent_label">Campaigns Sent</div>
+        <div class="metric-val" id="nl-stat-sent">—</div>
+        <div class="metric-delta" style="color:var(--text3)" data-i18n="nl_this_month">this session</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label" data-i18n="nl_unsub_label">Unsubscribed</div>
+        <div class="metric-val" id="nl-stat-unsub">—</div>
+        <div class="metric-delta" style="color:var(--text3)" data-i18n="nl_inactive">inactive</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:20px;align-items:start">
+
+      <!-- LEFT: subscriber list -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)">
+          <div style="font-weight:600;font-size:13px" data-i18n="nl_subscribers">Subscribers</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select class="finput" style="width:120px;padding:4px 8px;font-size:11px" id="nl-filter" onchange="loadNewsletterSubscribers()">
+              <option value="" data-i18n="filter_all">All</option>
+              <option value="true" data-i18n="nl_active">Active</option>
+              <option value="false" data-i18n="nl_unsubscribed">Unsubscribed</option>
+            </select>
+            <input class="finput" style="width:130px;padding:4px 8px;font-size:11px" id="nl-search" placeholder="Search…" oninput="filterNlSubscribers()">
+          </div>
+        </div>
+        <div style="max-height:520px;overflow-y:auto">
+          <table class="data-table" style="margin:0">
+            <thead>
+              <tr>
+                <th data-i18n="col_name">Name</th>
+                <th data-i18n="col_email">Email</th>
+                <th data-i18n="col_lang">Lang</th>
+                <th data-i18n="col_date">Date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="nl-tbody">
+              <tr><td colspan="5" style="text-align:center;color:var(--text3);padding:30px" data-i18n="loading">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="nl-pagination" style="padding:10px 16px;border-top:1px solid var(--border);font-size:12px;color:var(--text3);display:flex;justify-content:space-between;align-items:center">
+          <span id="nl-page-info"></span>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-sm" id="nl-prev" onclick="nlPageChange(-1)" disabled data-i18n="prev">Prev</button>
+            <button class="btn btn-sm" id="nl-next" onclick="nlPageChange(1)" data-i18n="next">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: compose newsletter -->
+      <div class="card">
+        <div style="font-weight:600;font-size:13px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between">
+          <span data-i18n="nl_compose">Compose Newsletter</span>
+          <span id="nl-send-result" style="font-size:11px;color:var(--green)"></span>
+        </div>
+
+        <div class="fgroup">
+          <label class="flabel" data-i18n="nl_subject">Subject *</label>
+          <input class="finput" id="nl-subject" placeholder="e.g. Vertex Market Insights — April 2026">
+        </div>
+
+        <div class="fgroup" style="margin-bottom:8px">
+          <label class="flabel" data-i18n="nl_body">Message (HTML supported) *</label>
+          <!-- Toolbar -->
+          <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap">
+            <button class="btn btn-sm" onclick="nlInsert('<strong>','</strong>')" title="Bold"><b>B</b></button>
+            <button class="btn btn-sm" onclick="nlInsert('<em>','</em>')" title="Italic"><i>I</i></button>
+            <button class="btn btn-sm" onclick="nlInsert('<h2 style=&quot;color:#0a0a0a&quot;>','</h2>')" title="Heading">H2</button>
+            <button class="btn btn-sm" onclick="nlInsert('<p>','</p>')" title="Paragraph">¶</button>
+            <button class="btn btn-sm" onclick="nlInsert('<a href=&quot;https://vertexgroup.africa&quot;>','</a>')" title="Link">🔗</button>
+            <button class="btn btn-sm" onclick="nlInsert('<ul><li>','</li></ul>')" title="List">≡</button>
+            <button class="btn btn-sm" onclick="nlInsert('{{name}}','')" title="Personalise with subscriber name" style="color:var(--green)">{{name}}</button>
+          </div>
+          <textarea class="finput" id="nl-body" rows="12" placeholder="Write your newsletter content here. Use {{name}} to personalise. HTML is fully supported." style="font-family:monospace;font-size:12px;resize:vertical"></textarea>
+        </div>
+
+        <!-- Preview toggle -->
+        <div style="margin-bottom:12px">
+          <button class="btn btn-sm" onclick="nlTogglePreview()" id="nl-preview-btn" data-i18n="nl_preview">Preview</button>
+          <span style="font-size:11px;color:var(--text3);margin-left:8px" data-i18n="nl_preview_hint">See how it looks before sending</span>
+        </div>
+        <div id="nl-preview-box" style="display:none;border:1px solid var(--border);border-radius:6px;padding:16px;margin-bottom:12px;background:var(--surface2);font-size:13px;max-height:220px;overflow-y:auto"></div>
+
+        <!-- Test send -->
+        <div class="fgroup" style="margin-bottom:12px">
+          <label class="flabel" data-i18n="nl_test_label">Test send (your email)</label>
+          <div style="display:flex;gap:8px">
+            <input class="finput" id="nl-test-email" placeholder="you@example.com" style="flex:1">
+            <button class="btn" onclick="nlSendTest()" data-i18n="nl_test_btn">Send test</button>
+          </div>
+        </div>
+
+        <div style="border-top:1px solid var(--border);padding-top:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;color:var(--text3)">
+            <span data-i18n="nl_will_send">Will send to</span>
+            <strong id="nl-recipient-count" style="color:var(--green)">—</strong>
+            <span data-i18n="nl_active_subs">active subscribers</span>
+          </div>
+          <button class="btn btn-primary" id="nl-send-btn" onclick="nlSendAll()" data-i18n="nl_send_all">Send to all subscribers</button>
+        </div>
+
+        <!-- Send progress -->
+        <div id="nl-sending-bar" style="display:none;margin-top:12px">
+          <div style="font-size:12px;color:var(--text3);margin-bottom:6px" data-i18n="nl_sending">Sending…</div>
+          <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div id="nl-progress-fill" style="height:100%;background:var(--green);width:0%;transition:width 0.5s"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   </div><!-- end content -->
@@ -1932,6 +2062,179 @@ async function markAllRead() {
   await loadNotifications();
 }
 
+// ── NEWSLETTER ───────────────────────────────────────────────────────────────
+let _nlCache = [];
+let _nlPage  = 1;
+let _nlTotal = 0;
+let _nlSentCount = 0;
+const NL_PER_PAGE = 25;
+
+async function loadNewsletterSubscribers() {
+  const activeFilter = document.getElementById('nl-filter').value;
+  const params = new URLSearchParams({ page: _nlPage, limit: NL_PER_PAGE });
+  if (activeFilter !== '') params.set('active', activeFilter);
+
+  const data = await api('GET', `/api/newsletter?${params}`);
+  if (!data || !data.success) return;
+
+  _nlCache  = data.subscribers || [];
+  _nlTotal  = data.total || 0;
+
+  const all     = _nlCache.length;
+  const active  = _nlCache.filter(s => s.isActive).length;
+  const unsub   = _nlCache.filter(s => !s.isActive).length;
+
+  document.getElementById('nl-stat-total').textContent = _nlTotal;
+  document.getElementById('nl-stat-active').textContent = `${active} active`;
+  document.getElementById('nl-stat-sent').textContent  = _nlSentCount;
+  document.getElementById('nl-stat-unsub').textContent = unsub;
+  document.getElementById('nl-recipient-count').textContent = active;
+
+  const badge = document.getElementById('nl-nav-badge');
+  if (badge) badge.textContent = _nlTotal || '';
+
+  const totalPages = Math.ceil(_nlTotal / NL_PER_PAGE);
+  document.getElementById('nl-page-info').textContent =
+    `${(_nlPage-1)*NL_PER_PAGE + 1}–${Math.min(_nlPage*NL_PER_PAGE, _nlTotal)} of ${_nlTotal}`;
+  document.getElementById('nl-prev').disabled = _nlPage <= 1;
+  document.getElementById('nl-next').disabled = _nlPage >= totalPages;
+
+  renderNlTable(_nlCache);
+}
+
+function renderNlTable(rows) {
+  const tbody = document.getElementById('nl-tbody');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:30px">${t('no_results')}</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(s => {
+    const date = new Date(s.createdAt).toLocaleDateString();
+    const statusDot = s.isActive
+      ? `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:4px"></span>`
+      : `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--text3);margin-right:4px"></span>`;
+    return `
+      <tr>
+        <td>${statusDot}${s.name || '<span style="color:var(--text3)">—</span>'}</td>
+        <td style="font-family:monospace;font-size:12px">${s.email}</td>
+        <td><span class="badge">${(s.language||'en').toUpperCase()}</span></td>
+        <td style="color:var(--text3);font-size:11px">${date}</td>
+        <td>
+          <button class="btn btn-sm" style="color:var(--red);border-color:var(--red)"
+            onclick="nlDeleteSubscriber('${s._id}','${s.email}')" title="${t('delete')}">✕</button>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+function filterNlSubscribers() {
+  const q = document.getElementById('nl-search').value.toLowerCase();
+  if (!q) { renderNlTable(_nlCache); return; }
+  renderNlTable(_nlCache.filter(s =>
+    (s.email||'').toLowerCase().includes(q) || (s.name||'').toLowerCase().includes(q)
+  ));
+}
+
+function nlPageChange(delta) {
+  _nlPage += delta;
+  loadNewsletterSubscribers();
+}
+
+async function nlDeleteSubscriber(id, email) {
+  if (!confirm(`Remove ${email} from newsletter list?`)) return;
+  const data = await api('DELETE', `/api/newsletter/${id}`);
+  if (data && data.success) {
+    showToast(`${email} removed.`, 'success');
+    loadNewsletterSubscribers();
+  } else {
+    showToast(data?.message || 'Error', 'error');
+  }
+}
+
+function nlInsert(before, after) {
+  const ta = document.getElementById('nl-body');
+  const s = ta.selectionStart, e = ta.selectionEnd;
+  const selected = ta.value.substring(s, e);
+  ta.value = ta.value.substring(0, s) + before + selected + after + ta.value.substring(e);
+  ta.focus();
+  ta.selectionStart = s + before.length;
+  ta.selectionEnd   = s + before.length + selected.length;
+}
+
+function nlTogglePreview() {
+  const box = document.getElementById('nl-preview-box');
+  const btn = document.getElementById('nl-preview-btn');
+  if (box.style.display === 'none') {
+    box.innerHTML = document.getElementById('nl-body').value
+      .replace(/{{name}}/g, '<strong style="color:var(--green)">[subscriber name]</strong>');
+    box.style.display = 'block';
+    btn.textContent = t('nl_hide_preview');
+  } else {
+    box.style.display = 'none';
+    btn.textContent = t('nl_preview');
+  }
+}
+
+async function nlSendTest() {
+  const subject = document.getElementById('nl-subject').value.trim();
+  const html    = document.getElementById('nl-body').value.trim();
+  const testEmail = document.getElementById('nl-test-email').value.trim();
+  if (!subject || !html) { showToast(t('nl_err_fields'), 'error'); return; }
+  if (!testEmail) { showToast(t('nl_err_test_email'), 'error'); return; }
+
+  const btn = document.querySelector('[onclick="nlSendTest()"]');
+  btn.disabled = true; btn.textContent = t('sending');
+  const data = await api('POST', '/api/newsletter/send', { subject, html, testOnly: true, testEmail });
+  btn.disabled = false; btn.textContent = t('nl_test_btn');
+
+  if (data && data.success) showToast(`${t('nl_test_sent')} ${testEmail}`, 'success');
+  else showToast(data?.message || t('error_generic'), 'error');
+}
+
+async function nlSendAll() {
+  const subject = document.getElementById('nl-subject').value.trim();
+  const html    = document.getElementById('nl-body').value.trim();
+  if (!subject || !html) { showToast(t('nl_err_fields'), 'error'); return; }
+
+  const activeCount = document.getElementById('nl-recipient-count').textContent;
+  if (!confirm(`${t('nl_confirm_send')} ${activeCount} subscribers?`)) return;
+
+  const btn = document.getElementById('nl-send-btn');
+  const bar = document.getElementById('nl-sending-bar');
+  const fill = document.getElementById('nl-progress-fill');
+  btn.disabled = true;
+  bar.style.display = 'block';
+
+  // Animate progress bar while waiting
+  let prog = 0;
+  const progInterval = setInterval(() => {
+    prog = Math.min(prog + 2, 90);
+    fill.style.width = prog + '%';
+  }, 200);
+
+  const data = await api('POST', '/api/newsletter/send', { subject, html });
+
+  clearInterval(progInterval);
+  fill.style.width = '100%';
+  setTimeout(() => { bar.style.display = 'none'; fill.style.width = '0%'; }, 1200);
+
+  btn.disabled = false;
+
+  if (data && data.success) {
+    _nlSentCount++;
+    document.getElementById('nl-stat-sent').textContent = _nlSentCount;
+    const result = document.getElementById('nl-send-result');
+    result.textContent = `✓ Sent to ${data.sent} subscribers${data.failed ? ` (${data.failed} failed)` : ''}`;
+    showToast(`Newsletter sent to ${data.sent} subscribers.`, 'success');
+    // Clear form
+    document.getElementById('nl-subject').value = '';
+    document.getElementById('nl-body').value = '';
+    document.getElementById('nl-preview-box').style.display = 'none';
+  } else {
+    showToast(data?.message || t('error_generic'), 'error');
+  }
+}
+
 // ── LANGUAGE ──────────────────────────────────────────────────────────────────
 window.LANG = localStorage.getItem('vertex_lang') || 'en';
 
@@ -1948,11 +2251,12 @@ const TRANSLATIONS = {
     nav_overview: 'Overview', nav_leads: 'Leads & Quotes', nav_pipeline: 'Sales Pipeline',
     nav_diagnostics: 'Diagnostics', nav_corporates: 'Corporate Network', nav_donors: 'Donors & SMEs',
     nav_insights: 'Africa Insights', nav_email: 'Email', nav_team: 'Team & Access', nav_notifs: 'Notifications',
+    nav_newsletter: 'Newsletter',
     // Page titles (for topbar)
     overview: 'Overview', leads: 'Leads & Quotes', pipeline: 'Sales Pipeline',
     diagnostics: 'Diagnostics', corporates: 'Corporate Network', donors: 'Donors & SME Tracking',
     insights: 'Africa Intelligence', email: 'Email — info@vertexgroup.africa',
-    team: 'Team & Access', notifs: 'Notifications',
+    team: 'Team & Access', notifs: 'Notifications', newsletter: 'Newsletter',
     // Topbar
     btn_add_lead: '+ Add lead', btn_compose: 'Compose email',
     search_ph: 'Search leads, SMEs, donors…',
@@ -1985,6 +2289,24 @@ const TRANSLATIONS = {
     // Buttons
     btn_mark_all: 'Mark all read', btn_add_member: '+ Add member', btn_add_corp: '+ Add corporate',
     btn_add_donor: '+ Add donor', btn_refresh: 'Refresh',
+    // Newsletter
+    nl_total: 'Total Subscribers', nl_sent_label: 'Campaigns Sent', nl_unsub_label: 'Unsubscribed',
+    nl_this_month: 'this session', nl_inactive: 'inactive',
+    nl_subscribers: 'Subscribers', nl_active: 'Active', nl_unsubscribed: 'Unsubscribed',
+    nl_compose: 'Compose Newsletter',
+    nl_subject: 'Subject *', nl_body: 'Message (HTML supported) *',
+    nl_preview: 'Preview', nl_hide_preview: 'Hide preview',
+    nl_preview_hint: 'See how it looks before sending',
+    nl_test_label: 'Send a test to your email first',
+    nl_test_btn: 'Send test', nl_test_sent: 'Test sent to',
+    nl_will_send: 'Will send to', nl_active_subs: 'active subscribers',
+    nl_send_all: 'Send to all subscribers',
+    nl_sending: 'Sending to subscribers…',
+    nl_confirm_send: 'Send this newsletter to',
+    nl_err_fields: 'Subject and message body are required.',
+    nl_err_test_email: 'Enter a test email address.',
+    prev: '← Prev', next: 'Next →',
+    sending: 'Sending…', error_generic: 'An error occurred.',
     // Diagnostics
     diag_empty: 'No diagnostics yet — they appear here when visitors submit a diagnostic on your website.',
     diag_error: 'Could not load diagnostics. Check your connection or permissions.',
@@ -2013,11 +2335,12 @@ const TRANSLATIONS = {
     nav_overview: 'Vue d\'ensemble', nav_leads: 'Leads & Devis', nav_pipeline: 'Pipeline Commercial',
     nav_diagnostics: 'Diagnostics', nav_corporates: 'Réseau Corporate', nav_donors: 'Donateurs & PME',
     nav_insights: 'Intelligence Africaine', nav_email: 'Email', nav_team: 'Équipe & Accès', nav_notifs: 'Notifications',
+    nav_newsletter: 'Newsletter',
     // Page titles
     overview: 'Vue d\'ensemble', leads: 'Leads & Devis', pipeline: 'Pipeline Commercial',
     diagnostics: 'Diagnostics', corporates: 'Réseau Corporate', donors: 'Donateurs & PME',
     insights: 'Intelligence Africaine', email: 'Email — info@vertexgroup.africa',
-    team: 'Équipe & Accès', notifs: 'Notifications',
+    team: 'Équipe & Accès', notifs: 'Notifications', newsletter: 'Newsletter',
     // Topbar
     btn_add_lead: '+ Ajouter un lead', btn_compose: 'Rédiger un email',
     search_ph: 'Rechercher leads, PME, donateurs…',
@@ -2050,6 +2373,24 @@ const TRANSLATIONS = {
     // Buttons
     btn_mark_all: 'Tout marquer lu', btn_add_member: '+ Ajouter un membre', btn_add_corp: '+ Ajouter un partenaire',
     btn_add_donor: '+ Ajouter un donateur', btn_refresh: 'Actualiser',
+    // Newsletter FR
+    nl_total: 'Total Abonnés', nl_sent_label: 'Campagnes envoyées', nl_unsub_label: 'Désabonnés',
+    nl_this_month: 'cette session', nl_inactive: 'inactifs',
+    nl_subscribers: 'Abonnés', nl_active: 'Actifs', nl_unsubscribed: 'Désabonnés',
+    nl_compose: 'Rédiger une newsletter',
+    nl_subject: 'Objet *', nl_body: 'Message (HTML supporté) *',
+    nl_preview: 'Aperçu', nl_hide_preview: 'Masquer l\'aperçu',
+    nl_preview_hint: 'Visualisez avant d\'envoyer',
+    nl_test_label: 'Envoyer un test à votre email d\'abord',
+    nl_test_btn: 'Envoyer le test', nl_test_sent: 'Test envoyé à',
+    nl_will_send: 'Sera envoyé à', nl_active_subs: 'abonnés actifs',
+    nl_send_all: 'Envoyer à tous les abonnés',
+    nl_sending: 'Envoi en cours…',
+    nl_confirm_send: 'Envoyer cette newsletter à',
+    nl_err_fields: 'L\'objet et le corps du message sont requis.',
+    nl_err_test_email: 'Entrez une adresse e-mail de test.',
+    prev: '← Préc.', next: 'Suiv. →',
+    sending: 'Envoi…', error_generic: 'Une erreur est survenue.',
     // Diagnostics
     diag_empty: 'Aucun diagnostic pour l\'instant — ils apparaissent ici quand des visiteurs soumettent un diagnostic sur votre site.',
     diag_error: 'Impossible de charger les diagnostics. Vérifiez votre connexion ou vos permissions.',
@@ -2084,6 +2425,7 @@ function toggleLang() {
     if (id === 'diagnostics') loadDiagnostics();
     if (id === 'notifs')      loadNotifications();
     if (id === 'team')        loadTeam();
+    if (id === 'newsletter')  { _nlPage = 1; loadNewsletterSubscribers(); }
   }
 }
 
@@ -2153,6 +2495,7 @@ function nav(el, id) {
   if(id==='corporates')  loadCorporates();
   if(id==='donors')      loadDonors();
   if(id==='team')        loadTeam();
+  if(id==='newsletter')  { _nlPage=1; loadNewsletterSubscribers(); }
   if(!chartsInit[id]) { chartsInit[id]=true; setTimeout(()=>renderSection(id),150); }
 }
 
