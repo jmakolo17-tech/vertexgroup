@@ -1,6 +1,6 @@
 const Newsletter = require('../models/Newsletter');
 const Notification = require('../models/Notification');
-const { sendEmail, newsletterConfirmation } = require('../utils/email');
+const { sendEmail, newsletterConfirmation, buildNewsletterHtml } = require('../utils/email');
 
 // POST /api/newsletter/subscribe (public)
 exports.subscribe = async (req, res) => {
@@ -66,28 +66,34 @@ exports.getSubscribers = async (req, res) => {
 // POST /api/newsletter/send (protected — admin/super_admin)
 exports.sendNewsletter = async (req, res) => {
   try {
-    const { subject, html, text, testOnly, testEmail } = req.body;
+    const { subject, html, text, testOnly, testEmail, lang } = req.body;
     if (!subject || !html) {
       return res.status(400).json({ success: false, message: 'Subject and HTML body are required.' });
     }
 
-    // Test send — just to one address
+    const language = lang || 'en';
+
+    // Test send — wrap in full template and send to one address
     if (testOnly && testEmail) {
-      const result = await sendEmail({ to: testEmail, subject: `[TEST] ${subject}`, html, text });
+      const builtHtml = buildNewsletterHtml({ subject, bodyHtml: html, subscriberName: 'there' }, language);
+      const result = await sendEmail({ to: testEmail, subject: `[TEST] ${subject}`, html: builtHtml, text });
       return res.json({ success: true, sent: 1, message: 'Test email sent.', result });
     }
 
-    // Real send — all active subscribers
-    const subscribers = await Newsletter.find({ isActive: true }).select('email name');
+    // Real send — build personalised full template for each active subscriber
+    const subscribers = await Newsletter.find({ isActive: true }).select('email name language');
     if (!subscribers.length) {
       return res.json({ success: true, sent: 0, message: 'No active subscribers.' });
     }
 
     let sent = 0, failed = 0;
     for (const sub of subscribers) {
-      // Personalise greeting if name available
-      const personalHtml = html.replace(/\{\{name\}\}/g, sub.name || 'there');
-      const result = await sendEmail({ to: sub.email, subject, html: personalHtml, text });
+      const subLang = sub.language || language;
+      const builtHtml = buildNewsletterHtml(
+        { subject, bodyHtml: html.replace(/\{\{name\}\}/g, sub.name || (subLang === 'fr' ? 'cher lecteur' : 'there')), subscriberName: sub.name || undefined },
+        subLang
+      );
+      const result = await sendEmail({ to: sub.email, subject, html: builtHtml, text });
       if (result.success) sent++; else failed++;
     }
 
