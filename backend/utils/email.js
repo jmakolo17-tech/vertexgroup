@@ -75,8 +75,8 @@ const diagnosticConfirmation = (data, lang = 'en') => {
           <div style="background:#f3f4f6;border-radius:8px;padding:20px;margin-bottom:24px;text-align:center">
             <p style="margin:0 0 4px;font-size:13px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:0.08em">${isFr ? 'Ce que vous allez recevoir' : 'What you will receive'}</p>
             <p style="margin:0;font-size:14px;color:#374151;line-height:1.8">${isFr
-              ? '✓ Score global sur 100 · ✓ Analyse 5 dimensions · ✓ Recommandation Vertex · ✓ Plan d\'action prioritaire'
-              : '✓ Overall score out of 100 · ✓ 5-dimension analysis · ✓ Vertex recommendation · ✓ Priority action plan'}</p>
+              ? '✓ Score global sur 100 · ✓ Analyse 5 dimensions stratégiques · ✓ Recommandation Vertex · ✓ Leviers de croissance prioritaires'
+              : '✓ Overall score out of 100 · ✓ 5-dimension analysis · ✓ Vertex recommendation · ✓ Priority growth levers'}</p>
           </div>
         </div>
         <div style="background:#0a0a0a;padding:20px 40px;text-align:center">
@@ -191,16 +191,11 @@ const diagnosticResults = (data, lang = 'en') => {
 
   <!-- ═══ HEADER ═══ -->
   <div style="background:#0a0a0a;padding:0">
-    <div style="padding:28px 48px 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
-      <table style="width:100%;border-collapse:collapse"><tr>
-        <td style="vertical-align:middle">
-          <div style="color:#ffffff;font-size:17px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase">VERTEX GROUP AFRICA</div>
-          <div style="color:#6b7280;font-size:10px;margin-top:3px;letter-spacing:0.1em;text-transform:uppercase">${isFr ? 'Moteur de diagnostic stratégique' : 'Strategic Diagnostic Engine'}</div>
-        </td>
-        <td style="text-align:right;vertical-align:middle">
-          <div style="display:inline-block;background:#0c94d8;color:#ffffff;font-size:9px;font-weight:800;padding:5px 12px;border-radius:2px;letter-spacing:0.1em;text-transform:uppercase">${isFr ? 'RAPPORT CONFIDENTIEL' : 'CONFIDENTIAL REPORT'}</div>
-        </td>
-      </tr></table>
+    <div style="padding:32px 48px 28px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.08)">
+      <div style="color:#ffffff;font-size:20px;font-weight:900;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:8px">VERTEX GROUP AFRICA</div>
+      <div style="width:40px;height:2px;background:#0c94d8;margin:0 auto 14px"></div>
+      <div style="color:#ffffff;font-size:20px;font-weight:300;font-style:italic;letter-spacing:0.03em;margin-bottom:12px">Your ambition. Our architecture.</div>
+      <div style="display:inline-block;background:#0c94d8;color:#ffffff;font-size:9px;font-weight:800;padding:5px 14px;border-radius:2px;letter-spacing:0.1em;text-transform:uppercase">${isFr ? 'RAPPORT CONFIDENTIEL' : 'CONFIDENTIAL REPORT'}</div>
     </div>
     <!-- Score hero -->
     <div style="padding:40px 48px;background:${scoreBg};border-top:4px solid ${scoreBorder}">
@@ -263,15 +258,15 @@ const diagnosticResults = (data, lang = 'en') => {
     <!-- CTA -->
     <div style="background:#eff8ff;border:1px solid #bfdbfe;border-radius:4px;padding:36px 40px;text-align:center;margin-bottom:8px">
       <div style="font-size:22px;font-weight:800;color:#0a0a0a;margin-bottom:10px;line-height:1.3">
-        ${isFr ? 'Transformez ce diagnostic en résultats concrets.' : 'Turn this diagnostic into concrete results.'}
+        ${isFr ? 'Votre ambition mérite une architecture solide.' : 'Your ambition deserves a solid architecture.'}
       </div>
       <p style="margin:0 0 28px;font-size:14px;color:#4b5563;line-height:1.7;max-width:480px;margin-left:auto;margin-right:auto">
         ${isFr
-          ? 'Nos consultants senior accompagnent les PME africaines vers une croissance mesurable. Réservez votre consultation stratégique gratuite de 60 minutes — sans engagement.'
-          : 'Our senior consultants guide African SMEs toward measurable growth. Book your free 60-minute strategy consultation — no commitment required.'}
+          ? 'Vertex Group Africa aide les PME à croître et à scaler en leur donnant accès aux ressources, aux partenariats stratégiques et aux leads commerciaux dont elles ont besoin pour être durables.'
+          : 'Vertex Group Africa helps SMEs grow and scale by giving them access to the resources, strategic partnerships, and sales leads they need to become sustainable.'}
       </p>
       <a href="https://vertexgroup.africa" style="display:inline-block;background:#0c94d8;color:#ffffff;text-decoration:none;padding:16px 44px;border-radius:4px;font-weight:800;font-size:14px;letter-spacing:0.06em;text-transform:uppercase">
-        ${isFr ? 'Réserver ma consultation gratuite →' : 'Book My Free Consultation →'}
+        ${isFr ? 'Voir nos plans →' : 'Explore our plans →'}
       </a>
       <p style="margin:16px 0 0;font-size:12px;color:#9ca3af">
         ${isFr ? 'Ou répondez directement à cet email — nous vous recontactons sous 24h.' : 'Or reply directly to this email — we will reach out within 24 hours.'}
@@ -352,9 +347,9 @@ const buildNewsletterHtml = (opts, lang = 'en') => {
     <!-- Masthead -->
     <div style="padding:36px 48px 32px;text-align:center">
       <div style="color:#ffffff;font-size:24px;font-weight:900;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:6px">VERTEX GROUP AFRICA</div>
-      <div style="width:48px;height:2px;background:#0c94d8;margin:0 auto 12px"></div>
-      <div style="color:#9ca3af;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">
-        ${isFr ? 'Intelligence · Stratégie · Croissance' : 'Intelligence · Strategy · Growth'}
+      <div style="width:48px;height:2px;background:#0c94d8;margin:0 auto 14px"></div>
+      <div style="color:#ffffff;font-size:18px;font-weight:300;font-style:italic;letter-spacing:0.04em;margin-bottom:6px">
+        Your ambition. Our architecture.
       </div>
     </div>
 
@@ -410,18 +405,18 @@ const buildNewsletterHtml = (opts, lang = 'en') => {
                 <p style="margin:0;font-size:12px;color:#4b5563;line-height:1.6">${isFr ? 'Obtenez une analyse complète de votre entreprise en 5 dimensions stratégiques — score inclus.' : 'Get a full 5-dimension strategic analysis of your business — with a score out of 100.'}</p>
               </div>
               <div style="border:1px solid #e5e5e3;border-radius:4px;padding:20px">
-                <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#0c94d8;margin-bottom:6px">${isFr ? 'PROGRAMME TTT' : 'TTT PROGRAMME'}</div>
+                <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#0c94d8;margin-bottom:6px">${isFr ? 'Renforcement des équipes vente' : 'Sales team empowerment'}</div>
                 <p style="margin:0;font-size:12px;color:#4b5563;line-height:1.6">${isFr ? 'Formation intensive pour dirigeants et équipes de vente africaines.' : 'Intensive training for African business leaders and sales teams.'}</p>
               </div>
             </td>
             <td style="width:50%;padding:0 0 0 8px;vertical-align:top">
               <div style="border:1px solid #e5e5e3;border-radius:4px;padding:20px;margin-bottom:12px">
-                <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#0c94d8;margin-bottom:6px">${isFr ? 'INCUBATION PME' : 'SME INCUBATION'}</div>
-                <p style="margin:0;font-size:12px;color:#4b5563;line-height:1.6">${isFr ? 'Accompagnement 90 jours avec un consultant dédié pour accélérer votre croissance.' : '90-day acceleration with a dedicated consultant to drive your growth.'}</p>
+                <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#0c94d8;margin-bottom:6px">${isFr ? 'Developement des PMEs et PMIs' : 'SMEs and SMIs development stategy'}</div>
+                <p style="margin:0;font-size:12px;color:#4b5563;line-height:1.6">${isFr ? 'Sprint de 90 jours avec un consultant dédié pour accélérer votre croissance.' : '90-day sprint with a dedicated consultant to drive your growth.'}</p>
               </div>
               <div style="border:1px solid #e5e5e3;border-radius:4px;padding:20px">
                 <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#0c94d8;margin-bottom:6px">${isFr ? 'ACCÈS AUX FINANCEMENTS' : 'DONOR MATCHING'}</div>
-                <p style="margin:0;font-size:12px;color:#4b5563;line-height:1.6">${isFr ? 'Mise en relation avec bailleurs, investisseurs et partenaires stratégiques.' : 'Connect with donors, investors, and strategic partners across Africa.'}</p>
+                <p style="margin:0;font-size:12px;color:#4b5563;line-height:1.6">${isFr ? 'strategis de scalling pour vos PMEs/PMIs' : 'Scalling strategies for your SMEs/SMIs'}</p>
               </div>
             </td>
           </tr>
@@ -437,19 +432,19 @@ const buildNewsletterHtml = (opts, lang = 'en') => {
       ${isFr ? 'PASSEZ À L\'ACTION' : 'TAKE ACTION'}
     </div>
     <div style="font-size:26px;font-weight:900;color:#ffffff;margin-bottom:14px;line-height:1.3">
-      ${isFr ? 'Votre entreprise est-elle prête<br>pour la prochaine étape ?' : 'Is your business ready<br>for the next level?'}
+      ${isFr ? 'Votre ambition.<br>Notre architecture.' : 'Your ambition.<br>Our architecture.'}
     </div>
     <p style="margin:0 0 32px;font-size:14px;color:#9ca3af;line-height:1.7;max-width:440px;margin-left:auto;margin-right:auto">
       ${isFr
-        ? 'Obtenez votre diagnostic gratuit en ligne et recevez un rapport complet sur la santé stratégique de votre entreprise.'
-        : 'Get your free diagnostic online and receive a full report on the strategic health of your business.'}
+        ? 'Nous aidons les PME africaines à croître et à scaler grâce à des ressources concrètes, des partenariats stratégiques et des leads commerciaux — à travers nos plans sur mesure.'
+        : 'We help African SMEs grow and scale through concrete resources, strategic partnerships, and sales leads — through our tailored plans.'}
     </p>
     <a href="https://vertexgroup.africa" style="display:inline-block;background:#0c94d8;color:#ffffff;text-decoration:none;padding:16px 48px;border-radius:4px;font-weight:800;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px">
-      ${isFr ? 'Démarrer mon diagnostic gratuit →' : 'Start My Free Diagnostic →'}
+      ${isFr ? 'Voir nos plans →' : 'Explore our plans →'}
     </a>
     <br>
     <a href="https://vertexgroup.africa" style="display:inline-block;border:1px solid rgba(255,255,255,0.2);color:#d1d5db;text-decoration:none;padding:12px 36px;border-radius:4px;font-weight:600;font-size:12px;letter-spacing:0.06em;text-transform:uppercase">
-      ${isFr ? 'Demander un devis' : 'Request a quote'}
+      ${isFr ? 'Démarrer mon diagnostic gratuit' : 'Start my free diagnostic'}
     </a>
   </div>
 
@@ -489,7 +484,7 @@ const buildNewsletterHtml = (opts, lang = 'en') => {
       </td>
       <td style="text-align:right;vertical-align:top">
         <div style="color:#6b7280;font-size:10px;line-height:1.8;text-align:right">
-          ${isFr ? 'Nigeria · Sénégal · RDC · Kenya<br>Ghana · Maroc' : 'Nigeria · Senegal · DRC · Kenya<br>Ghana · Morocco'}
+          ${isFr ? 'Nigeria · Sénégal · RDC · South Africa · Kenya<br>Ghana · Maroc' : 'Nigeria · Senegal · DRC · Kenya<br>Ghana · Morocco'}
         </div>
       </td>
     </tr></table>
