@@ -32,12 +32,6 @@ app.use(rateLimit({
   message: { success: false, message: 'Too many requests — try again later' },
 }));
 
-// Strict limiter for public form endpoints (anti-spam)
-const formLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 10,
-  message: { success: false, message: 'Too many submissions — please wait before trying again' },
-});
 
 // ── Body parsing ──────────────────────────────────────────────────────────────
 app.use(express.json({ limit: '1mb' }));
@@ -57,15 +51,18 @@ app.get('/health', (_req, res) => {
 });
 
 // ── API routes ────────────────────────────────────────────────────────────────
+// Note: formLimiter is passed into route files so it only applies to public
+// form endpoints (contact, quote, subscribe, diagnostic submit), not admin routes.
 app.use('/api/auth',        require('./routes/auth'));
-app.use('/api/leads',       formLimiter, require('./routes/leads'));
-app.use('/api/diagnostics', formLimiter, require('./routes/diagnostics'));
-app.use('/api/newsletter',  formLimiter, require('./routes/newsletter'));
+app.use('/api/leads',       require('./routes/leads'));
+app.use('/api/diagnostics', require('./routes/diagnostics'));
+app.use('/api/newsletter',  require('./routes/newsletter'));
 app.use('/api/clients',     require('./routes/clients'));
 app.use('/api/corporates',  require('./routes/corporates'));
 app.use('/api/donors',      require('./routes/donors'));
 app.use('/api/dashboard',   require('./routes/dashboard'));
 app.use('/api/users',       require('./routes/users'));
+app.use('/api/email',       require('./routes/email'));
 
 // ── 404 handler ───────────────────────────────────────────────────────────────
 app.use((_req, res) => {

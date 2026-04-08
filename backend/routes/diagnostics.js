@@ -1,8 +1,9 @@
-const router  = require('express').Router();
-const multer  = require('multer');
-const ctrl    = require('../controllers/diagnosticController');
-const upload  = require('../middleware/upload');
+const router      = require('express').Router();
+const multer      = require('multer');
+const ctrl        = require('../controllers/diagnosticController');
+const upload      = require('../middleware/upload');
 const { protect, authorize } = require('../middleware/auth');
+const formLimiter = require('../middleware/formLimiter');
 
 // Wrap multer so its errors return clean JSON instead of crashing
 function handleUpload(req, res, next) {
@@ -23,8 +24,8 @@ function handleUpload(req, res, next) {
   });
 }
 
-// Public
-router.post('/',          handleUpload, ctrl.submitDiagnostic);
+// Public (rate-limited)
+router.post('/',          formLimiter, handleUpload, ctrl.submitDiagnostic);
 router.get('/:id/result', ctrl.getDiagnosticResult);
 
 // Protected

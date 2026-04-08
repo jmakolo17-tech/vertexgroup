@@ -70,6 +70,44 @@ exports.submitQuote = async (req, res) => {
 
 // ── Protected: dashboard CRUD ─────────────────────────────────────────────────
 
+// POST /api/leads — manually create a lead from the dashboard
+exports.createLead = async (req, res) => {
+  try {
+    const { name, email, company, country, phone, service, plan, value, probability, stage, assignedTo, notes, language } = req.body;
+    if (!name || !email) {
+      return res.status(400).json({ success: false, message: 'Name and email are required' });
+    }
+
+    const lead = await Lead.create({
+      name, email, company, country, phone, service, plan,
+      value:       parseFloat(value)       || 0,
+      probability: parseFloat(probability) || 10,
+      stage:       stage || 'new',
+      assignedTo:  assignedTo || null,
+      language:    language || 'en',
+      type:        'contact',
+      source:      'dashboard',
+    });
+
+    if (notes) {
+      lead.notes.push({ text: notes, createdBy: req.user._id });
+      await lead.save();
+    }
+
+    await Notification.create({
+      type:  'new_lead',
+      title: `Lead added manually — ${name}${company ? ' · ' + company : ''}`,
+      body:  `Added by ${req.user.name}`,
+      relatedLead: lead._id,
+    });
+
+    const populated = await Lead.findById(lead._id).populate('assignedTo', 'name initials role');
+    res.status(201).json({ success: true, lead: populated });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
 // GET /api/leads
 exports.getLeads = async (req, res) => {
   try {
