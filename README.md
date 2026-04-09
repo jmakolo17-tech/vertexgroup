@@ -125,3 +125,4 @@ The frontend will automatically connect to `http://localhost:5000`.
 | `a.diallo@vertexgroup.africa` | `Vertex2025!` | Coach |
 
 > **Change all passwords immediately after first login.**
+# vertexgroup
