@@ -10,18 +10,36 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
-  --bg: #f8f9fb;
+  /* Layout */
+  --sidebar-w: 240px;
+  --radius: 10px;
+  --radius-sm: 7px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.09), 0 2px 6px rgba(0,0,0,0.04);
+
+  /* Surfaces */
+  --bg: #f5f6f8;
   --surface: #ffffff;
-  --surface2: #f1f3f7;
-  --surface3: #e8ebf2;
-  --border: rgba(0,0,0,0.08);
-  --border2: rgba(0,0,0,0.14);
-  --text: #0d1117;
+  --surface2: #f0f2f5;
+  --surface3: #e4e8ee;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.12);
+
+  /* Text */
+  --text: #0a0a0a;
   --text2: #5a6478;
-  --text3: #8b95a8;
-  --green: #0d9e6e;
-  --green-bg: #e6f7f2;
-  --green-text: #065c40;
+  --text3: #9199a8;
+
+  /* Brand — Vertex blue */
+  --accent: #0c94d8;
+  --accent-dark: #0a7eb8;
+  --accent-bg: rgba(12,148,216,0.09);
+  --accent-text: #0a7eb8;
+
+  /* Semantic colours */
+  --green: #16a34a;
+  --green-bg: #dcfce7;
+  --green-text: #14532d;
   --blue: #2563eb;
   --blue-bg: #eff4ff;
   --blue-text: #1d4ed8;
@@ -34,25 +52,21 @@
   --purple: #7c3aed;
   --purple-bg: #f5f3ff;
   --purple-text: #4c1d95;
-  --accent: #0d9e6e;
-  --sidebar-w: 224px;
-  --radius: 12px;
-  --radius-sm: 8px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.10), 0 2px 4px rgba(0,0,0,0.04);
 }
 [data-theme="dark"] {
-  --bg: #0d1117;
-  --surface: #161b22;
-  --surface2: #1c2230;
-  --surface3: #242d3e;
-  --border: rgba(255,255,255,0.08);
-  --border2: rgba(255,255,255,0.14);
-  --text: #e6edf3;
+  --bg: #0d0f12;
+  --surface: #13161c;
+  --surface2: #1a1f28;
+  --surface3: #222836;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8edf4;
   --text2: #8b95a8;
   --text3: #5a6478;
-  --green-bg: #0d2b21;
-  --green-text: #3dd68c;
+  --accent-bg: rgba(12,148,216,0.12);
+  --accent-text: #48b4e8;
+  --green-bg: #052e16;
+  --green-text: #4ade80;
   --blue-bg: #0d1f3c;
   --blue-text: #93c5fd;
   --amber-bg: #2d1d06;
@@ -61,8 +75,8 @@
   --red-text: #fca5a5;
   --purple-bg: #1e1040;
   --purple-text: #c4b5fd;
-  --shadow: 0 1px 3px rgba(0,0,0,0.3);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+  --shadow: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.5);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; font-family: 'Inter', sans-serif; font-size: 14px; }
@@ -80,17 +94,19 @@ body { background: var(--bg); color: var(--text); transition: background 0.2s, c
 }
 .login-bg-pattern {
   position: absolute; inset: 0;
-  background-image: radial-gradient(circle at 20% 80%, rgba(13,158,110,0.08) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, rgba(37,99,235,0.06) 0%, transparent 50%);
+  background-image:
+    radial-gradient(circle at 15% 85%, rgba(12,148,216,0.07) 0%, transparent 50%),
+    radial-gradient(circle at 85% 15%, rgba(12,148,216,0.05) 0%, transparent 50%),
+    linear-gradient(135deg, transparent 40%, rgba(12,148,216,0.02) 100%);
   pointer-events: none;
 }
 .login-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 48px 44px;
+  border-radius: 16px;
+  padding: 44px 40px;
   width: 420px;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
   position: relative;
   z-index: 1;
 }
@@ -98,12 +114,12 @@ body { background: var(--bg); color: var(--text); transition: background 0.2s, c
   display: flex; align-items: center; gap: 12px; margin-bottom: 32px;
 }
 .login-logo-icon {
-  width: 44px; height: 44px; background: var(--green); border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
+  width: 42px; height: 42px; background: #0a0a0a; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.login-logo-icon svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 2; }
-.login-logo-text { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
-.login-logo-sub { font-size: 12px; color: var(--text3); margin-top: 1px; }
+.login-logo-icon svg { width: 22px; height: 22px; }
+.login-logo-text { font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+.login-logo-sub { font-size: 11px; color: var(--text3); margin-top: 1px; letter-spacing: 0.02em; }
 .login-title { font-size: 24px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
 .login-sub { font-size: 14px; color: var(--text2); margin-bottom: 28px; }
 .form-group { margin-bottom: 16px; }
@@ -114,14 +130,15 @@ body { background: var(--bg); color: var(--text); transition: background 0.2s, c
   border-radius: var(--radius-sm); color: var(--text);
   transition: border-color 0.15s, box-shadow 0.15s; outline: none;
 }
-.form-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(13,158,110,0.12); }
+.form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(12,148,216,0.12); }
 .login-hint { font-size: 12px; color: var(--text3); margin-top: 5px; }
 .btn-login {
-  width: 100%; padding: 11px; background: var(--green); color: #fff;
+  width: 100%; padding: 12px; background: #0a0a0a; color: #fff;
   border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600;
-  cursor: pointer; margin-top: 8px; transition: opacity 0.15s;
+  cursor: pointer; margin-top: 8px; transition: background 0.15s;
+  letter-spacing: 0.01em;
 }
-.btn-login:hover { opacity: 0.9; }
+.btn-login:hover { background: #0c94d8; }
 .login-demo-users { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
 .demo-title { font-size: 12px; color: var(--text3); margin-bottom: 8px; }
 .demo-user {
@@ -145,57 +162,80 @@ body { background: var(--bg); color: var(--text); transition: background 0.2s, c
 
 /* SIDEBAR */
 .sidebar {
-  width: var(--sidebar-w); flex-shrink: 0; background: var(--surface);
-  border-right: 1px solid var(--border); display: flex; flex-direction: column;
+  width: var(--sidebar-w); flex-shrink: 0;
+  background: #0a0a0a;
+  border-right: none;
+  display: flex; flex-direction: column;
   overflow: hidden;
 }
-.sidebar-header { padding: 20px 16px 16px; border-bottom: 1px solid var(--border); }
-.sidebar-logo { display: flex; align-items: center; gap: 10px; }
+.sidebar-header {
+  padding: 22px 16px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.sidebar-logo { display: flex; align-items: center; gap: 11px; }
 .sidebar-logo-icon {
-  width: 36px; height: 36px; background: var(--green); border-radius: 10px;
+  width: 34px; height: 34px; background: #0c94d8; border-radius: 8px;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 .sidebar-logo-icon svg { width: 18px; height: 18px; }
-.sidebar-logo-name { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
-.sidebar-logo-sub { font-size: 10px; color: var(--text3); margin-top: 1px; }
-.sidebar-nav { flex: 1; padding: 12px 8px; overflow-y: auto; }
-.nav-section-label { font-size: 10px; font-weight: 600; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; padding: 8px 10px 4px; }
+.sidebar-logo-name {
+  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700;
+  color: #ffffff; letter-spacing: 0.01em; line-height: 1.2;
+}
+.sidebar-logo-sub { font-size: 9.5px; color: rgba(255,255,255,0.3); margin-top: 2px; letter-spacing: 0.06em; text-transform: uppercase; }
+.sidebar-nav { flex: 1; padding: 10px 8px; overflow-y: auto; }
+.sidebar-nav::-webkit-scrollbar { width: 0; }
+.nav-section-label {
+  font-size: 9.5px; font-weight: 600; color: rgba(255,255,255,0.22);
+  letter-spacing: 0.1em; text-transform: uppercase; padding: 12px 10px 4px;
+}
 .nav-item {
   display: flex; align-items: center; gap: 10px; padding: 9px 10px;
-  border-radius: var(--radius-sm); cursor: pointer; color: var(--text2);
-  font-size: 13px; font-weight: 500; margin-bottom: 2px; transition: all 0.12s;
+  border-radius: var(--radius-sm); cursor: pointer; color: rgba(255,255,255,0.5);
+  font-size: 12.5px; font-weight: 500; margin-bottom: 1px; transition: all 0.12s;
   position: relative;
 }
-.nav-item:hover { background: var(--surface2); color: var(--text); }
-.nav-item.active { background: var(--green-bg); color: var(--green-text); }
-.nav-item.active .nav-icon { color: var(--green); }
-.nav-icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.7; }
+.nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+.nav-item.active { background: rgba(12,148,216,0.15); color: #0c94d8; }
+.nav-item.active .nav-icon { color: #0c94d8; opacity: 1; }
+.nav-icon { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.6; }
+.nav-item:hover .nav-icon { opacity: 0.85; }
 .nav-item.active .nav-icon { opacity: 1; }
 .nav-badge {
-  margin-left: auto; min-width: 18px; height: 18px; padding: 0 5px;
+  margin-left: auto; min-width: 17px; height: 17px; padding: 0 5px;
   background: var(--red); color: #fff; border-radius: 100px;
-  font-size: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center;
+  font-size: 9.5px; font-weight: 700; display: flex; align-items: center; justify-content: center;
 }
-.nav-badge.green { background: var(--green); }
-.sidebar-footer { padding: 12px 8px; border-top: 1px solid var(--border); }
+.nav-badge.green { background: #0c94d8; }
+.sidebar-footer {
+  padding: 10px 8px 14px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
 .sidebar-user { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); }
 .user-avatar {
-  width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
-  justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0;
+  width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0;
+  background: rgba(12,148,216,0.2); color: #0c94d8;
 }
-.user-name { font-size: 13px; font-weight: 500; color: var(--text); }
-.user-role { font-size: 11px; color: var(--text3); }
-.logout-btn { width: 28px; height: 28px; margin-left: auto; border-radius: 8px; background: var(--surface2); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text3); transition: all 0.12s; flex-shrink: 0; }
-.logout-btn:hover { background: var(--red-bg); color: var(--red); }
+.user-name { font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.85); }
+.user-role { font-size: 10.5px; color: rgba(255,255,255,0.3); }
+.logout-btn {
+  width: 26px; height: 26px; margin-left: auto; border-radius: 7px;
+  background: rgba(255,255,255,0.06); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.3); transition: all 0.12s; flex-shrink: 0;
+}
+.logout-btn:hover { background: rgba(220,38,38,0.18); color: #fca5a5; }
 
 /* MAIN */
 .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 .topbar {
-  height: 58px; display: flex; align-items: center; gap: 12px;
+  height: 56px; display: flex; align-items: center; gap: 12px;
   padding: 0 24px; border-bottom: 1px solid var(--border);
   background: var(--surface); flex-shrink: 0;
+  box-shadow: 0 1px 0 var(--border);
 }
-.topbar-title { font-size: 16px; font-weight: 600; flex: 1; color: var(--text); }
+.topbar-title { font-size: 15px; font-weight: 600; flex: 1; color: var(--text); letter-spacing: -0.01em; }
 .search-box {
   display: flex; align-items: center; gap: 8px; background: var(--surface2);
   border: 1px solid var(--border); border-radius: var(--radius-sm);
@@ -204,13 +244,13 @@ body { background: var(--bg); color: var(--text); transition: background 0.2s, c
 .search-box input { background: none; border: none; outline: none; font-size: 13px; color: var(--text); width: 100%; }
 .search-box input::placeholder { color: var(--text3); }
 .topbar-btn {
-  padding: 7px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+  padding: 7px 14px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 500;
   cursor: pointer; border: 1px solid var(--border2); background: var(--surface);
-  color: var(--text); transition: all 0.12s;
+  color: var(--text2); transition: all 0.12s;
 }
-.topbar-btn:hover { background: var(--surface2); }
-.topbar-btn.primary { background: var(--green); color: #fff; border-color: transparent; }
-.topbar-btn.primary:hover { opacity: 0.9; }
+.topbar-btn:hover { background: var(--surface2); color: var(--text); }
+.topbar-btn.primary { background: #0a0a0a; color: #fff; border-color: transparent; }
+.topbar-btn.primary:hover { background: #0c94d8; }
 .theme-toggle {
   width: 34px; height: 34px; border-radius: var(--radius-sm); border: 1px solid var(--border2);
   background: var(--surface2); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2);
@@ -228,29 +268,36 @@ body { background: var(--bg); color: var(--text); transition: background 0.2s, c
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
 }
-.card-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
-.card-subtitle { font-size: 12px; color: var(--text3); font-weight: 400; }
+.card-title { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; letter-spacing: -0.01em; }
+.card-subtitle { font-size: 11.5px; color: var(--text3); font-weight: 400; }
 .metrics-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
-.metric-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; position: relative; overflow: hidden; }
-.metric-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius: var(--radius) var(--radius) 0 0; }
-.metric-card.green::before { background: var(--green); }
-.metric-card.blue::before { background: var(--blue); }
-.metric-card.amber::before { background: var(--amber); }
-.metric-card.red::before { background: var(--red); }
+.metric-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 18px; position: relative; overflow: hidden;
+}
+.metric-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+.metric-card.green::before  { background: var(--accent); }
+.metric-card.blue::before   { background: #2563eb; }
+.metric-card.amber::before  { background: var(--amber); }
+.metric-card.red::before    { background: var(--red); }
 .metric-card.purple::before { background: var(--purple); }
-.metric-label { font-size: 12px; color: var(--text3); margin-bottom: 6px; }
-.metric-val { font-size: 26px; font-weight: 600; color: var(--text); line-height: 1; margin-bottom: 6px; }
-.metric-delta { font-size: 12px; display: flex; align-items: center; gap: 4px; }
+.metric-label { font-size: 11.5px; color: var(--text3); margin-bottom: 8px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+.metric-val { font-size: 28px; font-weight: 700; color: var(--text); line-height: 1; margin-bottom: 6px; letter-spacing: -0.02em; }
+.metric-delta { font-size: 11.5px; display: flex; align-items: center; gap: 4px; }
 .delta-up { color: var(--green); }
 .delta-dn { color: var(--red); }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 
 table { width: 100%; border-collapse: collapse; }
-th { text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
-td { padding: 11px 12px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+th {
+  text-align: left; padding: 9px 14px; font-size: 10.5px; font-weight: 600;
+  color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em;
+  border-bottom: 1px solid var(--border); background: var(--surface2);
+}
+td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: var(--surface2); }
+tr:hover td { background: var(--surface2); transition: background 0.1s; }
 
 /* BADGES */
 .badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 100px; }
@@ -279,29 +326,39 @@ tr:hover td { background: var(--surface2); }
 .section.active { display: block; }
 
 /* MODAL */
-.modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; }
+.modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
 .modal-backdrop.show { display: flex; }
 .modal {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 16px; padding: 28px; width: 500px; max-width: 95vw;
-  box-shadow: var(--shadow-md); animation: modalIn 0.18s ease;
+  border-radius: 14px; padding: 28px; width: 500px; max-width: 95vw;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2), 0 4px 12px rgba(0,0,0,0.1);
+  animation: modalIn 0.16s ease;
 }
-@keyframes modalIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
-.modal-title { font-size: 17px; font-weight: 600; margin-bottom: 20px; color: var(--text); }
+@keyframes modalIn { from{opacity:0;transform:translateY(8px) scale(0.98)} to{opacity:1;transform:translateY(0) scale(1)} }
+.modal-title {
+  font-size: 16px; font-weight: 700; margin-bottom: 20px; color: var(--text);
+  letter-spacing: -0.01em; padding-bottom: 14px; border-bottom: 1px solid var(--border);
+}
 .modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
 .fgroup { margin-bottom: 14px; }
 .flabel { font-size: 12px; font-weight: 500; color: var(--text2); margin-bottom: 5px; display: block; }
 .finput {
-  width: 100%; padding: 9px 12px; background: var(--surface2); border: 1px solid var(--border2);
+  width: 100%; padding: 8px 11px; background: var(--surface2); border: 1px solid var(--border2);
   border-radius: var(--radius-sm); font-size: 13px; color: var(--text); font-family: inherit; outline: none;
 }
-.finput:focus { border-color: var(--green); }
+.finput:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 2px rgba(12,148,216,0.12); }
 .fg2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.btn { padding: 8px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border2); background: var(--surface); color: var(--text); transition: all 0.12s; }
-.btn:hover { background: var(--surface2); }
-.btn-green { background: var(--green); color: #fff; border-color: transparent; }
-.btn-green:hover { opacity: 0.9; }
+.btn {
+  padding: 7px 14px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 500;
+  cursor: pointer; border: 1px solid var(--border2); background: var(--surface);
+  color: var(--text2); transition: all 0.12s; display: inline-flex; align-items: center;
+}
+.btn:hover { background: var(--surface2); color: var(--text); }
+.btn-green { background: #0a0a0a; color: #fff; border-color: transparent; }
+.btn-green:hover { background: var(--accent); }
 .btn-red { background: var(--red); color: #fff; border-color: transparent; }
+.btn-red:hover { opacity: 0.9; }
 
 /* STEPS */
 .step-item { display: flex; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); margin-bottom: 6px; }
@@ -337,22 +394,154 @@ tr:hover td { background: var(--surface2); }
 /* CHART WRAPPER */
 .chart-wrap { position: relative; }
 
-/* INSIGHT GRID */
-.insight-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
-.insight-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
-.insight-flag { font-size: 20px; margin-bottom: 4px; }
-.insight-country { font-size: 11px; font-weight: 600; color: var(--green); margin-bottom: 8px; }
-.insight-num { font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
-.insight-label { font-size: 11px; color: var(--text3); margin-bottom: 8px; }
-.insight-desc { font-size: 11px; color: var(--text2); line-height: 1.5; }
+/* ── INSIGHTS PAGE ───────────────────────────────────────────────── */
+.ins-kpi-row { display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-bottom:20px; }
+@media(max-width:900px){ .ins-kpi-row { grid-template-columns:repeat(4,1fr); } }
+@media(max-width:600px){ .ins-kpi-row { grid-template-columns:repeat(2,1fr); } }
+.ins-kpi-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; position:relative; }
+.ins-kpi-val { font-size:24px; font-weight:700; color:var(--text); line-height:1.1; margin-bottom:2px; }
+.ins-kpi-lbl { font-size:11px; color:var(--text3); }
+.ins-kpi-live { position:absolute; top:10px; right:10px; width:6px; height:6px; border-radius:50%; background:var(--accent); animation:insPulse 2s infinite; }
+@keyframes insPulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(12,148,216,.4)} 50%{opacity:.7;box-shadow:0 0 0 5px rgba(12,148,216,0)} }
+.ins-toolbar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:16px; padding:12px 14px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); }
+.ins-toolbar-label { font-size:11px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:.07em; margin-right:4px; white-space:nowrap; }
+.ins-filter-select { font-size:12px; padding:5px 10px; border:1px solid var(--border2); border-radius:var(--radius-sm); background:var(--surface2); color:var(--text); outline:none; cursor:pointer; }
+.ins-filter-select:focus { border-color:var(--accent); }
+.ins-filter-btn { font-size:11px; font-weight:500; padding:5px 11px; border:1px solid var(--border2); border-radius:var(--radius-sm); background:var(--surface2); color:var(--text2); cursor:pointer; white-space:nowrap; }
+.ins-filter-btn.active { background:var(--accent-bg); color:var(--accent); border-color:var(--accent); font-weight:600; }
+.ins-filter-btn:hover:not(.active) { background:var(--surface3); }
+.ins-search { font-size:12px; padding:5px 10px; border:1px solid var(--border2); border-radius:var(--radius-sm); background:var(--surface2); color:var(--text); outline:none; width:160px; }
+.ins-search:focus { border-color:var(--accent); }
+.ins-spacer { flex:1; }
+.ins-export-btn { font-size:11px; font-weight:500; padding:5px 12px; border:1px solid var(--accent); border-radius:var(--radius-sm); background:var(--accent-bg); color:var(--accent); cursor:pointer; white-space:nowrap; }
+.ins-export-btn:hover { background:var(--accent); color:#fff; }
+
+.ins-charts-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.ins-charts-row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:14px; }
+.ins-chart-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:16px; }
+.ins-chart-title { font-size:12px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.ins-chart-sub { font-size:11px; color:var(--text3); margin-bottom:12px; }
+.ins-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+.ins-bar-lbl { font-size:11px; color:var(--text2); flex:0 0 110px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ins-bar-track { flex:1; height:6px; background:var(--surface3); border-radius:3px; overflow:hidden; }
+.ins-bar-fill { height:100%; border-radius:3px; transition:width .7s ease; }
+.ins-bar-val { font-size:11px; color:var(--text3); min-width:28px; text-align:right; font-variant-numeric:tabular-nums; }
+.ins-score-bands { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:8px; }
+.ins-score-band { text-align:center; padding:10px 6px; border-radius:var(--radius-sm); border:1px solid var(--border); }
+.ins-score-band-val { font-size:20px; font-weight:700; line-height:1; margin-bottom:2px; }
+.ins-score-band-lbl { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
+.ins-score-band-range { font-size:10px; color:var(--text3); margin-top:2px; }
+.ins-trend-bars { display:flex; align-items:flex-end; gap:3px; height:60px; margin:8px 0 4px; }
+.ins-trend-bar { flex:1; background:var(--accent-bg); border-radius:2px 2px 0 0; transition:background .2s; position:relative; cursor:default; min-height:3px; }
+.ins-trend-bar:hover { background:var(--accent); }
+.ins-trend-tip { position:absolute; bottom:calc(100% + 4px); left:50%; transform:translateX(-50%); background:var(--text); color:var(--surface); font-size:10px; padding:2px 5px; border-radius:3px; white-space:nowrap; display:none; pointer-events:none; }
+.ins-trend-bar:hover .ins-trend-tip { display:block; }
+.ins-trend-labels { display:flex; gap:3px; }
+.ins-trend-label { flex:1; font-size:9px; color:var(--text3); text-align:center; overflow:hidden; }
+.ins-data-table-wrap { overflow-x:auto; }
+.ins-data-table { width:100%; border-collapse:collapse; font-size:12px; }
+.ins-data-table th { padding:8px 10px; text-align:left; font-size:10px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:.07em; border-bottom:1px solid var(--border); white-space:nowrap; cursor:pointer; user-select:none; }
+.ins-data-table th:hover { color:var(--accent); }
+.ins-data-table th .sort-icon { margin-left:3px; opacity:.4; }
+.ins-data-table th.sorted .sort-icon { opacity:1; color:var(--accent); }
+.ins-data-table td { padding:9px 10px; border-bottom:1px solid var(--border); color:var(--text2); vertical-align:middle; }
+.ins-data-table tr:last-child td { border-bottom:none; }
+.ins-data-table tr:hover td { background:var(--surface2); }
+.ins-score-pill { display:inline-block; padding:2px 8px; border-radius:100px; font-size:10px; font-weight:700; }
+.ins-score-critical { background:var(--red-bg); color:var(--red-text); }
+.ins-score-developing { background:var(--amber-bg); color:var(--amber-text); }
+.ins-score-progressing { background:var(--blue-bg); color:var(--blue-text); }
+.ins-score-strong { background:var(--green-bg); color:var(--green-text); }
+.ins-market-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:8px; }
+.ins-market-card { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; transition:border-color .2s; }
+.ins-market-card:hover { border-color:var(--accent); }
+.ins-market-flag { font-size:22px; margin-bottom:6px; display:block; }
+.ins-market-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:1px; }
+.ins-market-region { font-size:10px; color:var(--accent); font-weight:600; text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px; }
+.ins-market-stat { font-size:11px; color:var(--text3); margin-bottom:6px; font-family:monospace; }
+.ins-market-insight { font-size:11px; color:var(--text2); line-height:1.55; margin-bottom:8px; }
+.ins-market-opp { font-size:11px; color:var(--accent); display:flex; gap:5px; align-items:flex-start; border-top:1px solid var(--border); padding-top:8px; margin-top:4px; }
+.ins-market-tags { display:flex; flex-wrap:wrap; gap:4px; }
+.ins-market-tag { font-size:10px; padding:2px 7px; border-radius:100px; background:var(--surface3); color:var(--text3); font-weight:500; }
+.ins-empty { text-align:center; padding:32px; color:var(--text3); font-size:12px; }
+.ins-kpi-sub { font-size:10px; color:var(--text3); margin-top:2px; }
+.ins-keyword-cloud { display:flex; flex-wrap:wrap; gap:6px; padding-top:4px; }
+.ins-keyword-tag { display:inline-flex; align-items:center; gap:4px; padding:3px 9px; border-radius:100px; background:var(--surface3); border:1px solid var(--border); font-size:11px; color:var(--text2); font-weight:500; }
+.ins-keyword-tag span { font-size:10px; color:var(--text3); }
+.ins-section-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px; }
+.ins-section-title { font-size:13px; font-weight:600; color:var(--text); }
+.ins-section-sub { font-size:11px; color:var(--text3); margin-top:1px; }
+
+/* LEADS PAGE */
+.lead-type-tag { display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;text-transform:uppercase;letter-spacing:.06em; }
+.lead-type-contact    { background:var(--blue-bg);color:var(--blue-text); }
+.lead-type-quote      { background:var(--purple-bg);color:var(--purple-text); }
+.lead-type-diagnostic { background:var(--amber-bg);color:var(--amber-text); }
+.lead-type-newsletter { background:var(--surface3);color:var(--text3); }
+.stage-pill { display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:100px;white-space:nowrap; }
+.stage-new           { background:var(--blue-bg);color:var(--blue-text); }
+.stage-contacted     { background:rgba(37,99,235,.12);color:#3b82f6; }
+.stage-qualified     { background:var(--amber-bg);color:var(--amber-text); }
+.stage-proposal_sent { background:var(--purple-bg);color:var(--purple-text); }
+.stage-negotiation   { background:rgba(245,158,11,.18);color:#f59e0b; }
+.stage-won           { background:rgba(12,148,216,.15);color:#0c94d8; }
+.stage-lost          { background:var(--red-bg);color:var(--red-text); }
+.lead-row-won td     { background:rgba(12,148,216,.04)!important; }
+.lead-row-won td:first-child { border-left:3px solid #0c94d8; }
+.lead-row-lost td    { opacity:.55; }
+.stage-progress { display:flex;align-items:center;gap:6px; }
+.stage-progress-track { flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden;min-width:40px; }
+.stage-progress-fill  { height:100%;border-radius:2px;transition:width .3s; }
+.action-cell { display:flex;gap:4px;align-items:center;flex-wrap:nowrap; }
+.act-btn { display:inline-flex;align-items:center;gap:3px;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:600;border:none;cursor:pointer;white-space:nowrap;transition:opacity .12s; }
+.act-btn:hover { opacity:.85; }
+.act-btn-won      { background:#0c94d8;color:#fff; }
+.act-btn-next     { background:var(--surface2);color:var(--text2);border:1px solid var(--border); }
+.act-btn-lost     { background:var(--red-bg);color:var(--red-text); }
+.act-btn-invoice  { background:#0a0a0a;color:#fff; }
+.act-btn-reset    { background:var(--surface2);color:var(--text3);border:1px solid var(--border); }
+.funnel-bar { display:flex;gap:0;align-items:stretch;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden; }
+.funnel-cell { flex:1;padding:14px 8px;text-align:center;border-right:1px solid var(--border);position:relative; }
+.funnel-cell:last-child { border-right:none; }
+.funnel-cell-num { font-size:22px;font-weight:700;line-height:1; }
+.funnel-cell-label { font-size:10px;color:var(--text3);margin:3px 0;text-transform:uppercase;letter-spacing:.06em; }
+.funnel-cell-bar { height:3px;border-radius:2px;margin-top:8px; }
+.leads-kpi-strip { display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px; }
+.leads-kpi { background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;position:relative;overflow:hidden; }
+.leads-kpi::before { content:'';position:absolute;top:0;left:0;right:0;height:2px; }
+.leads-kpi.blue::before  { background:#2563eb; }
+.leads-kpi.amber::before { background:var(--amber); }
+.leads-kpi.acc::before   { background:#0c94d8; }
+.leads-kpi.green::before { background:var(--green); }
+.leads-kpi.red::before   { background:var(--red); }
+.leads-kpi.purple::before{ background:var(--purple); }
+.leads-kpi-val { font-size:22px;font-weight:700;color:var(--text);line-height:1; }
+.leads-kpi-label { font-size:11px;color:var(--text3);margin-top:4px; }
 
 /* EMAIL */
-.email-from { font-size: 12px; color: var(--green); font-weight: 600; background: var(--green-bg); padding: 4px 10px; border-radius: 100px; display: inline-flex; align-items: center; gap: 5px; }
+.email-from { font-size: 12px; color: var(--accent); font-weight: 600; background: var(--accent-bg); padding: 4px 10px; border-radius: 100px; display: inline-flex; align-items: center; gap: 5px; }
 .sent-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
 .sent-row:last-child { border-bottom: none; }
+.attach-zone { border: 1px dashed var(--border); border-radius: var(--radius); padding: 10px 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text3); transition: border-color .2s; }
+.attach-zone:hover { border-color: var(--accent); color: var(--accent); }
+.attach-zone input[type=file] { display:none; }
+.attach-tag { display: inline-flex; align-items: center; gap: 5px; background: var(--surface-2,#2a2a2a); border-radius: 100px; padding: 3px 10px; font-size: 11px; color: var(--text2); }
+.attach-tag button { background: none; border: none; color: var(--text3); cursor: pointer; padding: 0; font-size: 13px; line-height: 1; }
+
+/* INVOICE */
+.inv-status { display: inline-block; padding: 2px 9px; border-radius: 100px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.inv-status.draft   { background: var(--border); color: var(--text3); }
+.inv-status.sent    { background: rgba(12,148,216,.15); color: #0c94d8; }
+.inv-status.paid    { background: rgba(22,163,74,.15); color: #16a34a; }
+.inv-status.overdue { background: rgba(220,38,38,.15); color: #dc2626; }
+.line-item-row { display: grid; grid-template-columns: 1fr 80px 110px 110px 32px; gap: 6px; align-items: center; margin-bottom: 6px; }
+.line-item-row .finput { margin-bottom: 0; }
+.inv-totals { margin-top: 12px; text-align: right; font-size: 13px; line-height: 2; }
+.inv-totals .total-line { font-size: 16px; font-weight: 700; color: var(--accent); }
+.modal.wide { max-width: 760px; width: 96vw; }
 
 /* SPINNER */
-.spinner { width: 20px; height: 20px; border: 2px solid var(--border2); border-top-color: var(--green); border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
+.spinner { width: 20px; height: 20px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* SCROLLBAR */
@@ -369,11 +558,15 @@ tr:hover td { background: var(--surface2); }
   <div class="login-card">
     <div class="login-logo">
       <div class="login-logo-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        <!-- Vertex "V" mark -->
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M2 4L11 18L20 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6 4L11 12L16 4" stroke="#0c94d8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
       <div>
-        <div class="login-logo-text">Vertex Africa</div>
-        <div class="login-logo-sub">Intelligence Platform</div>
+        <div class="login-logo-text">Vertex Group Africa</div>
+        <div class="login-logo-sub" style="letter-spacing:0.12em;font-size:10px">Intelligence Platform</div>
       </div>
     </div>
     <div class="login-title" data-i18n="login_title">Welcome back</div>
@@ -391,7 +584,7 @@ tr:hover td { background: var(--surface2); }
     <button class="btn-login" onclick="doLogin()" data-i18n="login_btn">Sign in →</button>
     <div class="login-demo-users">
       <div class="demo-title" data-i18n="login_demo_title">Demo accounts — click to auto-fill</div>
-      <div class="demo-user" onclick="fillDemo('admin@vertexgroup.africa','ChangeMe2025!','VA','Super Admin','#0d9e6e')">
+      <div class="demo-user" onclick="fillDemo('admin@vertexgroup.africa','ChangeMe2025!','VA','Super Admin','#0c94d8')">
         <div class="demo-avatar av-green" style="background:var(--green-bg);color:var(--green-text)">VA</div>
         <div class="demo-info"><div class="demo-name">Vertex Admin</div><div class="demo-role">admin@vertexgroup.africa</div></div>
         <span class="demo-badge" style="background:var(--green-bg);color:var(--green-text)">Super Admin</span>
@@ -419,11 +612,14 @@ tr:hover td { background: var(--surface2); }
   <div class="sidebar-header">
     <div class="sidebar-logo">
       <div class="sidebar-logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <svg width="18" height="18" viewBox="0 0 22 22" fill="none">
+          <path d="M2 4L11 18L20 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M6 4L11 12L16 4" stroke="rgba(255,255,255,0.45)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
       <div>
-        <div class="sidebar-logo-name">Vertex</div>
-        <div class="sidebar-logo-sub">Africa Platform</div>
+        <div class="sidebar-logo-name">Vertex Group</div>
+        <div class="sidebar-logo-sub">Africa · Intelligence</div>
       </div>
     </div>
   </div>
@@ -457,12 +653,16 @@ tr:hover td { background: var(--surface2); }
     <div class="nav-section-label" style="margin-top:8px" data-i18n="sec_intelligence">Intelligence</div>
     <div class="nav-item" onclick="nav(this,'insights')">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      <span data-i18n="nav_insights">Africa Insights</span>
+      <span data-i18n="nav_insights">Insights</span>
     </div>
     <div class="nav-section-label" style="margin-top:8px" data-i18n="sec_operations">Operations</div>
     <div class="nav-item" onclick="nav(this,'email')">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       <span data-i18n="nav_email">Email</span> <span class="nav-badge green">info@</span>
+    </div>
+    <div class="nav-item" onclick="nav(this,'invoices')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="13" y2="16"/></svg>
+      <span>Invoices</span> <span class="nav-badge" id="inv-nav-badge"></span>
     </div>
     <div class="nav-item" onclick="nav(this,'team')">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -579,6 +779,83 @@ tr:hover td { background: var(--surface2); }
     </div>
   </div>
 
+  <!-- ── CREATE / EDIT INVOICE MODAL ─────────────────────────────────────── -->
+  <div class="modal-backdrop" id="modal-invoice">
+    <div class="modal wide">
+      <div class="modal-title" id="inv-modal-title">New Invoice</div>
+
+      <!-- Client info -->
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:8px">Client details</div>
+      <div class="fg2">
+        <div class="fgroup"><label class="flabel">Client name *</label><input class="finput" id="inv-client-name" placeholder="Full name"></div>
+        <div class="fgroup"><label class="flabel">Email *</label><input class="finput" type="email" id="inv-client-email" placeholder="client@company.com"></div>
+      </div>
+      <div class="fg2">
+        <div class="fgroup"><label class="flabel">Company</label><input class="finput" id="inv-client-company" placeholder="Company name (optional)"></div>
+        <div class="fgroup"><label class="flabel">Country</label><input class="finput" id="inv-client-country" placeholder="Country"></div>
+      </div>
+      <div class="fgroup"><label class="flabel">Billing address</label><input class="finput" id="inv-client-address" placeholder="Street, City, Postal code"></div>
+
+      <!-- Line items -->
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin:16px 0 8px">Services / Line items</div>
+      <div style="display:grid;grid-template-columns:1fr 80px 110px 110px 32px;gap:6px;margin-bottom:4px">
+        <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase">Description</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;text-align:center">Qty</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;text-align:right">Unit price</div>
+        <div style="font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;text-align:right">Amount</div>
+        <div></div>
+      </div>
+      <div id="inv-items-container"></div>
+      <button class="btn" style="width:100%;margin-bottom:12px" onclick="addInvoiceItem()">+ Add line item</button>
+
+      <!-- Tax, currency, due date, notes -->
+      <div class="fg2">
+        <div class="fgroup"><label class="flabel">Currency</label>
+          <select class="finput" id="inv-currency">
+            <option value="USD">USD — US Dollar</option>
+            <option value="EUR">EUR — Euro</option>
+            <option value="GBP">GBP — British Pound</option>
+            <option value="ZAR">ZAR — South African Rand</option>
+            <option value="NGN">NGN — Nigerian Naira</option>
+            <option value="KES">KES — Kenyan Shilling</option>
+            <option value="XOF">XOF — CFA Franc (West Africa)</option>
+            <option value="MAD">MAD — Moroccan Dirham</option>
+          </select>
+        </div>
+        <div class="fgroup"><label class="flabel">Tax rate (%)</label><input class="finput" type="number" id="inv-tax" placeholder="0" min="0" max="100" oninput="recalcInvoice()"></div>
+      </div>
+      <div class="fg2">
+        <div class="fgroup"><label class="flabel">Due date</label><input class="finput" type="date" id="inv-due-date"></div>
+        <div class="fgroup"><label class="flabel">Service category (for quick fill)</label>
+          <select class="finput" onchange="prefillService(this.value)">
+            <option value="">— Quick add a service —</option>
+            <option value="growth_sprint">90-Day Growth Sprint</option>
+            <option value="market_entry">Market Entry Programme</option>
+            <option value="sales_system">Sales Conversion System</option>
+            <option value="advisory">Strategic Advisory (monthly)</option>
+            <option value="diagnostic">Business Diagnostic (Pro)</option>
+            <option value="pitch_deck">Pitch Deck & Investor Readiness</option>
+            <option value="ops_audit">Operations Audit</option>
+          </select>
+        </div>
+      </div>
+      <div class="fgroup"><label class="flabel">Notes (optional)</label><textarea class="finput" id="inv-notes" rows="2" placeholder="Payment terms, special instructions, etc."></textarea></div>
+
+      <!-- Totals preview -->
+      <div class="inv-totals" style="border-top:1px solid var(--border);padding-top:12px;margin-top:8px">
+        <div>Subtotal: <strong id="inv-subtotal">$0.00</strong></div>
+        <div id="inv-tax-line" style="display:none">Tax (<span id="inv-tax-pct">0</span>%): <strong id="inv-taxamt">$0.00</strong></div>
+        <div class="total-line">Total: <span id="inv-total">$0.00</span></div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('modal-invoice')">Cancel</button>
+        <button class="btn" onclick="saveInvoice('draft')" id="inv-save-draft-btn">Save as draft</button>
+        <button class="btn btn-green" onclick="saveInvoice('send')" id="inv-save-send-btn">Save &amp; send invoice</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-backdrop" id="modal-team">
     <div class="modal">
       <div class="modal-title" id="team-modal-title">Add team member</div>
@@ -640,40 +917,72 @@ tr:hover td { background: var(--surface2); }
 
   <!-- ── LEADS ─────────────────────────────────────────────────────────────── -->
   <div class="section" id="sec-leads">
-    <!-- Conversion funnel KPIs -->
-    <div id="leads-funnel" class="card" style="margin-bottom:16px;display:none">
-      <div class="card-title" id="t-funnel-title">Conversion Funnel</div>
-      <div id="funnel-body" style="display:flex;gap:0;align-items:stretch"></div>
+
+    <!-- KPI strip -->
+    <div class="leads-kpi-strip" id="leads-kpi-strip">
+      <div class="leads-kpi blue"><div class="leads-kpi-val" id="lkpi-total">—</div><div class="leads-kpi-label">Total leads</div></div>
+      <div class="leads-kpi blue"><div class="leads-kpi-val" id="lkpi-new">—</div><div class="leads-kpi-label">New</div></div>
+      <div class="leads-kpi amber"><div class="leads-kpi-val" id="lkpi-qualified">—</div><div class="leads-kpi-label">Qualified</div></div>
+      <div class="leads-kpi acc"><div class="leads-kpi-val" id="lkpi-won">—</div><div class="leads-kpi-label">Won</div></div>
+      <div class="leads-kpi green"><div class="leads-kpi-val" id="lkpi-conv">—</div><div class="leads-kpi-label">Conv. rate</div></div>
+      <div class="leads-kpi purple"><div class="leads-kpi-val" id="lkpi-value">—</div><div class="leads-kpi-label">Pipeline value</div></div>
     </div>
-    <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+
+    <!-- Funnel bar -->
+    <div id="leads-funnel" style="margin-bottom:14px;display:none">
+      <div class="funnel-bar" id="funnel-body"></div>
+    </div>
+
+    <!-- Toolbar -->
+    <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
       <div class="tabs" style="margin-bottom:0">
         <div class="tab active" onclick="filterLeadStage(this,'')" data-i18n="tab_all">All</div>
         <div class="tab" onclick="filterLeadStage(this,'new')" data-i18n="stage_new">New</div>
         <div class="tab" onclick="filterLeadStage(this,'contacted')" data-i18n="stage_contacted">Contacted</div>
         <div class="tab" onclick="filterLeadStage(this,'qualified')" data-i18n="stage_qualified">Qualified</div>
+        <div class="tab" onclick="filterLeadStage(this,'proposal_sent')">Proposal</div>
+        <div class="tab" onclick="filterLeadStage(this,'negotiation')">Negotiation</div>
         <div class="tab" onclick="filterLeadStage(this,'won')" data-i18n="stage_won">Won</div>
         <div class="tab" onclick="filterLeadStage(this,'lost')" data-i18n="stage_lost">Lost</div>
       </div>
-      <select class="finput" style="width:140px" id="lead-date-filter" onchange="loadLeads()">
-        <option value="" data-i18n="filter_all_time">All time</option>
-        <option value="today" data-i18n="filter_today">Today</option>
-        <option value="week" data-i18n="filter_week">This week</option>
-        <option value="month" data-i18n="filter_month">This month</option>
-      </select>
-      <input class="finput" style="flex:1;min-width:140px" id="lead-search" placeholder="Search leads…" oninput="searchLeads()">
+      <div style="display:flex;gap:8px;margin-left:auto;align-items:center">
+        <select class="finput" style="width:130px" id="lead-date-filter" onchange="loadLeads()">
+          <option value="" data-i18n="filter_all_time">All time</option>
+          <option value="today" data-i18n="filter_today">Today</option>
+          <option value="week" data-i18n="filter_week">This week</option>
+          <option value="month" data-i18n="filter_month">This month</option>
+        </select>
+        <div style="display:flex;gap:0;align-items:stretch">
+          <input class="finput" style="width:220px;border-radius:var(--radius-sm) 0 0 var(--radius-sm);border-right:none" id="lead-search" placeholder="Search name, email, company…" oninput="searchLeads()" onkeydown="if(event.key==='Enter')searchLeads()">
+          <button class="btn-green" style="border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:0 12px;cursor:pointer;border:none;display:flex;align-items:center" onclick="searchLeads()" title="Search">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="card" style="margin-bottom:16px;padding:0;overflow:hidden">
+
+    <!-- Table -->
+    <div class="card" style="padding:0;overflow:hidden">
       <table>
-        <thead><tr>
-          <th data-i18n="th_contact">Contact</th><th data-i18n="th_company">Company</th><th data-i18n="th_country">Country</th><th data-i18n="th_value">Value</th>
-          <th data-i18n="th_status">Status</th><th data-i18n="th_assigned">Assigned</th><th data-i18n="th_date">Date</th><th data-i18n="th_actions">Actions</th>
-        </tr></thead>
+        <thead>
+          <tr>
+            <th style="width:220px">Contact</th>
+            <th>Company / Source</th>
+            <th>Country</th>
+            <th>Pipeline value</th>
+            <th>Stage</th>
+            <th>Assigned</th>
+            <th>Date</th>
+            <th style="min-width:200px">Actions</th>
+          </tr>
+        </thead>
         <tbody id="leads-tbody">
-          <tr><td colspan="8" style="text-align:center;color:var(--text3);padding:32px">Loading…</td></tr>
+          <tr><td colspan="8" style="text-align:center;color:var(--text3);padding:40px">Loading…</td></tr>
         </tbody>
       </table>
     </div>
-    <div class="card" id="steps-card" style="display:none">
+
+    <div class="card" id="steps-card" style="display:none;margin-top:14px">
       <div class="card-title" id="steps-title">Sales steps</div>
       <div id="steps-body"></div>
     </div>
@@ -688,7 +997,7 @@ tr:hover td { background: var(--surface2); }
       <div class="card-title"><span data-i18n="chart_conv_by_sales">Conversion by salesperson</span> <span class="card-subtitle" data-i18n="chart_conv_sub">won / in progress / lost</span></div>
       <div class="chart-wrap" style="height:240px"><canvas id="c-sales"></canvas></div>
       <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--text3)">
-        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#0d9e6e;display:inline-block"></span>Won</span>
+        <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#0c94d8;display:inline-block"></span>Won</span>
         <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#2563eb;display:inline-block"></span>In progress</span>
         <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:#dc2626;display:inline-block"></span>Lost</span>
       </div>
@@ -747,7 +1056,7 @@ tr:hover td { background: var(--surface2); }
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:middle"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download PDF
           </button>
-          <button class="btn" onclick="sendDiagToClient()" id="btn-send-diag" style="border-color:var(--green);color:var(--green)">
+          <button class="btn" onclick="sendDiagToClient()" id="btn-send-diag" style="border-color:var(--accent);color:var(--accent)">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px;vertical-align:middle"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             Send to client
           </button>
@@ -881,19 +1190,194 @@ tr:hover td { background: var(--surface2); }
 
   <!-- ── INSIGHTS ───────────────────────────────────────────────────────────── -->
   <div class="section" id="sec-insights">
-    <div style="margin-bottom:16px;font-size:13px;color:var(--text2)">African SME market intelligence — Vertex Group Africa operating markets</div>
-    <div class="insight-grid">
-      <div class="insight-card"><div class="insight-flag">🇳🇬</div><div class="insight-country">Nigeria</div><div class="insight-num">41M</div><div class="insight-label">SMEs (SMEDAN 2024)</div><div class="insight-desc">88% informal · $150B GDP contribution · Mobile money penetration 47%</div></div>
-      <div class="insight-card"><div class="insight-flag">🇸🇳</div><div class="insight-country">Senegal</div><div class="insight-num">350k</div><div class="insight-label">Formal SMEs active</div><div class="insight-desc">40% GDP contribution · Strong agri-tech growth · Orange Money 62%</div></div>
-      <div class="insight-card"><div class="insight-flag">🇨🇩</div><div class="insight-country">DRC</div><div class="insight-num">4.2M</div><div class="insight-label">Micro & small enterprises</div><div class="insight-desc">93% informal · Agriculture 21% GDP · $1.1B fintech opportunity 2026</div></div>
-      <div class="insight-card"><div class="insight-flag">🇰🇪</div><div class="insight-country">Kenya</div><div class="insight-num">7.4M</div><div class="insight-label">SMEs (KNBS 2023)</div><div class="insight-desc">M-Pesa 83% adults · Silicon Savannah · Leading innovation hub</div></div>
-      <div class="insight-card"><div class="insight-flag">🇬🇭</div><div class="insight-country">Ghana</div><div class="insight-num">1.2M</div><div class="insight-label">Registered businesses</div><div class="insight-desc">SME GDP share 70% · AfCFTA gateway · $320M SME finance gap/yr</div></div>
-      <div class="insight-card"><div class="insight-flag">🇲🇦</div><div class="insight-country">Morocco</div><div class="insight-num">640k</div><div class="insight-label">SMEs (OMPIC 2024)</div><div class="insight-desc">95% of all enterprises · Green economy pivot · EU-Morocco €1.2B programme</div></div>
+
+    <!-- ── LIVE KPI STRIP ─────────────────────────────────── -->
+    <div class="ins-kpi-row" id="ins-kpi-row">
+      <div class="ins-kpi-card"><div class="ins-kpi-live"></div><div class="ins-kpi-val" id="ins-kpi-diags">—</div><div class="ins-kpi-lbl">Diagnostics submitted</div><div class="ins-kpi-sub" id="ins-kpi-diags-sub"></div></div>
+      <div class="ins-kpi-card"><div class="ins-kpi-val" id="ins-kpi-score">—</div><div class="ins-kpi-lbl">Avg. health score</div><div class="ins-kpi-sub" id="ins-kpi-score-sub"></div></div>
+      <div class="ins-kpi-card"><div class="ins-kpi-val" id="ins-kpi-countries">—</div><div class="ins-kpi-lbl">Countries represented</div></div>
+      <div class="ins-kpi-card"><div class="ins-kpi-val" id="ins-kpi-leads">—</div><div class="ins-kpi-lbl">Total leads</div><div class="ins-kpi-sub" id="ins-kpi-leads-sub"></div></div>
+      <div class="ins-kpi-card"><div class="ins-kpi-val" id="ins-kpi-subs">—</div><div class="ins-kpi-lbl">Newsletter subscribers</div><div class="ins-kpi-sub" id="ins-kpi-subs-sub"></div></div>
+      <div class="ins-kpi-card"><div class="ins-kpi-val" id="ins-kpi-conversion">—</div><div class="ins-kpi-lbl">Lead conversion rate</div><div class="ins-kpi-sub" id="ins-kpi-conversion-sub"></div></div>
+      <div class="ins-kpi-card"><div class="ins-kpi-val" id="ins-kpi-completed">—</div><div class="ins-kpi-lbl">Completed diagnostics</div><div class="ins-kpi-sub" id="ins-kpi-completed-sub"></div></div>
     </div>
+
+    <!-- ── TOOLBAR: FILTERS & SORT ────────────────────────── -->
+    <div class="ins-toolbar">
+      <span class="ins-toolbar-label">Filter</span>
+      <select class="ins-filter-select" id="ins-f-region" onchange="insApplyFilters()">
+        <option value="">All regions</option>
+        <option value="West Africa">West Africa</option>
+        <option value="East Africa">East Africa</option>
+        <option value="Southern Africa">Southern Africa</option>
+        <option value="North Africa">North Africa</option>
+        <option value="Central Africa">Central Africa</option>
+      </select>
+      <select class="ins-filter-select" id="ins-f-industry" onchange="insApplyFilters()">
+        <option value="">All industries</option>
+        <option value="Technology & Digital">Technology</option>
+        <option value="Financial Services">Financial Services</option>
+        <option value="Agriculture & Food">Agriculture</option>
+        <option value="Retail & Consumer">Retail</option>
+        <option value="Professional Services">Professional Services</option>
+        <option value="Healthcare">Healthcare</option>
+        <option value="Manufacturing">Manufacturing</option>
+        <option value="Education">Education</option>
+        <option value="Logistics & Supply Chain">Logistics</option>
+      </select>
+      <select class="ins-filter-select" id="ins-f-size" onchange="insApplyFilters()">
+        <option value="">All sizes</option>
+        <option value="1–10 employees">1–10 employees</option>
+        <option value="11–50 employees">11–50 employees</option>
+        <option value="51–200 employees">51–200 employees</option>
+        <option value="201–500 employees">201–500 employees</option>
+        <option value="500+ employees">500+ employees</option>
+      </select>
+      <select class="ins-filter-select" id="ins-f-score" onchange="insApplyFilters()">
+        <option value="">All scores</option>
+        <option value="critical">Critical (0–24)</option>
+        <option value="developing">Developing (25–49)</option>
+        <option value="progressing">Progressing (50–74)</option>
+        <option value="strong">Strong (75–100)</option>
+      </select>
+      <select class="ins-filter-select" id="ins-f-period" onchange="insApplyFilters()">
+        <option value="">All time</option>
+        <option value="7">Last 7 days</option>
+        <option value="30">Last 30 days</option>
+        <option value="90">Last 90 days</option>
+      </select>
+      <div class="ins-spacer"></div>
+      <input class="ins-search" id="ins-search" placeholder="Search country, industry…" oninput="insApplyFilters()">
+      <button class="ins-export-btn" onclick="insExportCSV()">⬇ Export CSV</button>
+    </div>
+
+    <!-- ── CHARTS ROW 1: Country + Industry ──────────────── -->
+    <div class="ins-charts-row">
+      <div class="ins-chart-card">
+        <div class="ins-chart-title">Diagnostics by country</div>
+        <div class="ins-chart-sub">Top markets by submission volume</div>
+        <div id="ins-chart-countries"><div class="ins-empty">Loading…</div></div>
+      </div>
+      <div class="ins-chart-card">
+        <div class="ins-chart-title">Industry breakdown</div>
+        <div class="ins-chart-sub">Avg. health score per sector</div>
+        <div id="ins-chart-industry"><div class="ins-empty">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- ── CHARTS ROW 2: Score dist + Company size + Trend ─ -->
+    <div class="ins-charts-row-3">
+      <div class="ins-chart-card">
+        <div class="ins-chart-title">Score distribution</div>
+        <div class="ins-chart-sub">Business health bands</div>
+        <div class="ins-score-bands" id="ins-score-bands"><div class="ins-empty">Loading…</div></div>
+      </div>
+      <div class="ins-chart-card">
+        <div class="ins-chart-title">Company size</div>
+        <div class="ins-chart-sub">Headcount of submitted businesses</div>
+        <div id="ins-chart-size"><div class="ins-empty">Loading…</div></div>
+      </div>
+      <div class="ins-chart-card">
+        <div class="ins-chart-title">Monthly activity</div>
+        <div class="ins-chart-sub">Diagnostic submissions over time</div>
+        <div class="ins-trend-bars" id="ins-trend-bars"><div class="ins-empty" style="width:100%">Loading…</div></div>
+        <div class="ins-trend-labels" id="ins-trend-labels"></div>
+      </div>
+    </div>
+
+    <!-- ── CHARTS ROW 3: Dimension scores + Lead types ───── -->
+    <div class="ins-charts-row">
+      <div class="ins-chart-card">
+        <div class="ins-chart-title">Avg. score by business dimension</div>
+        <div class="ins-chart-sub">Weakest dimensions first — where entrepreneurs need most help</div>
+        <div id="ins-chart-dims"><div class="ins-empty">Loading…</div></div>
+      </div>
+      <div class="ins-chart-card">
+        <div class="ins-chart-title">Demand signal — what businesses ask for</div>
+        <div class="ins-chart-sub">Lead types from website & engagement channels</div>
+        <div id="ins-chart-leads"><div class="ins-empty">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- ── CHARTS ROW 4: Revenue + Keywords + Lead Sources ─ -->
+    <div class="ins-charts-row-3">
+      <div class="ins-chart-card">
+        <div class="ins-chart-title">Revenue distribution</div>
+        <div class="ins-chart-sub">Annual revenue bands of submitted businesses</div>
+        <div id="ins-chart-revenue"><div class="ins-empty">Loading…</div></div>
+      </div>
+      <div class="ins-chart-card">
+        <div class="ins-chart-title">Top challenge keywords</div>
+        <div class="ins-chart-sub">Most common words from business challenge descriptions</div>
+        <div id="ins-chart-keywords"><div class="ins-empty">Loading…</div></div>
+      </div>
+      <div class="ins-chart-card">
+        <div class="ins-chart-title">Lead sources</div>
+        <div class="ins-chart-sub">Where leads are coming from</div>
+        <div id="ins-chart-sources"><div class="ins-empty">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- ── DIAGNOSTIC DATA TABLE ──────────────────────────── -->
+    <div class="card" style="margin-bottom:14px">
+      <div class="ins-section-header">
+        <div>
+          <div class="ins-section-title">Diagnostic submissions explorer</div>
+          <div class="ins-section-sub" id="ins-table-count">Loading records…</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select class="ins-filter-select" id="ins-sort-col" onchange="insApplyFilters()">
+            <option value="date">Sort: Date (newest)</option>
+            <option value="score_desc">Sort: Score (high→low)</option>
+            <option value="score_asc">Sort: Score (low→high)</option>
+            <option value="country">Sort: Country A–Z</option>
+            <option value="industry">Sort: Industry A–Z</option>
+          </select>
+        </div>
+      </div>
+      <div class="ins-data-table-wrap">
+        <table class="ins-data-table">
+          <thead>
+            <tr>
+              <th onclick="insSort('company')">Company <span class="sort-icon">↕</span></th>
+              <th onclick="insSort('country')">Country <span class="sort-icon">↕</span></th>
+              <th onclick="insSort('industry')">Industry <span class="sort-icon">↕</span></th>
+              <th onclick="insSort('employees')">Size <span class="sort-icon">↕</span></th>
+              <th onclick="insSort('revenue')">Revenue <span class="sort-icon">↕</span></th>
+              <th onclick="insSort('score')">Score <span class="sort-icon">↕</span></th>
+              <th onclick="insSort('date')">Submitted <span class="sort-icon">↕</span></th>
+            </tr>
+          </thead>
+          <tbody id="ins-table-body">
+            <tr><td colspan="7" class="ins-empty">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;flex-wrap:wrap;gap:8px">
+        <div style="font-size:11px;color:var(--text3)" id="ins-pagination-info"></div>
+        <div style="display:flex;gap:6px" id="ins-pagination-btns"></div>
+      </div>
+    </div>
+
+    <!-- ── AFRICAN MARKET INTELLIGENCE (STATIC) ──────────── -->
     <div class="card">
-      <div class="card-title">SME opportunity index by country</div>
-      <div class="chart-wrap" style="height:220px"><canvas id="c-insight"></canvas></div>
+      <div class="ins-section-header">
+        <div>
+          <div class="ins-section-title">African market intelligence</div>
+          <div class="ins-section-sub">Key SME ecosystems — for investor & partner briefings</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap" id="ins-market-tabs">
+          <button class="ins-filter-btn active" onclick="insMarketTab(this,'all')">All</button>
+          <button class="ins-filter-btn" onclick="insMarketTab(this,'West Africa')">West Africa</button>
+          <button class="ins-filter-btn" onclick="insMarketTab(this,'East Africa')">East Africa</button>
+          <button class="ins-filter-btn" onclick="insMarketTab(this,'Southern Africa')">Southern Africa</button>
+          <button class="ins-filter-btn" onclick="insMarketTab(this,'North Africa')">North Africa</button>
+          <button class="ins-filter-btn" onclick="insMarketTab(this,'Central Africa')">Central Africa</button>
+        </div>
+      </div>
+      <div class="ins-market-grid" id="ins-market-grid"></div>
     </div>
+
   </div>
 
   <!-- ── EMAIL ─────────────────────────────────────────────────────────────── -->
@@ -907,15 +1391,42 @@ tr:hover td { background: var(--surface2); }
     <div class="grid-2">
       <div class="card">
         <div class="card-title" data-i18n="email_compose_title">Compose email</div>
-        <div style="margin-bottom:12px"><div class="email-from"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>From: info@vertexgroup.africa</div></div>
-        <div class="fgroup"><label class="flabel">To</label><input class="finput" id="em-to2" placeholder="recipient@example.com"></div>
-        <div class="fgroup"><label class="flabel">Template</label><select class="finput" onchange="applyTemplate2(this.value)"><option value="">— or write custom —</option><option value="followup">Follow-up after diagnostic</option><option value="proposal">Send proposal</option><option value="donor">Donor outreach</option><option value="welcome">Welcome new client</option></select></div>
-        <div class="fgroup"><label class="flabel">Subject</label><input class="finput" id="em-sub2" placeholder="Subject..."></div>
-        <div class="fgroup"><label class="flabel">Message</label><textarea class="finput" id="em-body2" rows="6" placeholder="Write your message..."></textarea></div>
-        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px">
-          <button class="btn btn-green" onclick="sendEmail2()" id="em-send-btn2">Send from info@</button>
+        <div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div class="email-from"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>From: info@vertexgroup.africa</div>
+          <div style="font-size:11px;color:var(--text3)">Branded template applied automatically</div>
         </div>
-        <div id="email-ok" style="display:none;margin-top:8px;color:var(--green);font-size:13px;font-weight:500">Email queued — sending via info@vertexgroup.africa</div>
+        <div class="fg2">
+          <div class="fgroup"><label class="flabel">To *</label><input class="finput" id="em-to2" placeholder="recipient@example.com"></div>
+          <div class="fgroup"><label class="flabel">CC</label><input class="finput" id="em-cc2" placeholder="cc@example.com (optional)"></div>
+        </div>
+        <div class="fgroup"><label class="flabel">Template</label>
+          <select class="finput" onchange="applyTemplate2(this.value)" id="em-tpl2">
+            <option value="">— write custom —</option>
+            <option value="followup">Follow-up after diagnostic</option>
+            <option value="proposal">Send proposal</option>
+            <option value="welcome">Welcome new client</option>
+            <option value="invoice">Invoice follow-up</option>
+          </select>
+        </div>
+        <div class="fgroup"><label class="flabel">Subject *</label><input class="finput" id="em-sub2" placeholder="Subject..."></div>
+        <div class="fgroup"><label class="flabel">Message *</label><textarea class="finput" id="em-body2" rows="7" placeholder="Write your message here...&#10;&#10;Plain text or basic HTML is supported. The email will be wrapped in Vertex's branded template automatically."></textarea></div>
+        <!-- Attachment zone -->
+        <div class="fgroup">
+          <label class="flabel">Attachments</label>
+          <label class="attach-zone" for="em-files2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            Attach files (PDF, DOCX, XLSX, images — max 20 MB total)
+            <input type="file" id="em-files2" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif" onchange="updateAttachTags()">
+          </label>
+          <div id="em-attach-tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px"></div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+          <button class="btn" onclick="clearEmailCompose()">Clear</button>
+          <button class="btn btn-green" onclick="sendEmail2()" id="em-send-btn2">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:5px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Send from info@
+          </button>
+        </div>
       </div>
       <div class="card">
         <div class="card-title" data-i18n="recent_activity">Recent activity</div>
@@ -923,6 +1434,49 @@ tr:hover td { background: var(--surface2); }
           <div class="spinner" style="margin:auto;display:block;width:20px;height:20px"></div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ── INVOICES ─────────────────────────────────────────────────────────── -->
+  <div class="section" id="sec-invoices">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <div style="display:flex;gap:8px;align-items:center">
+        <select class="finput" style="width:130px" id="inv-status-filter" onchange="loadInvoices()">
+          <option value="">All statuses</option>
+          <option value="draft">Draft</option>
+          <option value="sent">Sent</option>
+          <option value="paid">Paid</option>
+          <option value="overdue">Overdue</option>
+        </select>
+        <span id="inv-count" style="font-size:12px;color:var(--text3)"></span>
+      </div>
+      <button class="btn btn-green" onclick="openCreateInvoiceModal()">+ New invoice</button>
+    </div>
+    <!-- Stats strip -->
+    <div class="metrics-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px">
+      <div class="metric-card"><div class="metric-label">Total invoices</div><div class="metric-val" id="inv-stat-total">—</div></div>
+      <div class="metric-card blue"><div class="metric-label">Sent / Pending</div><div class="metric-val" id="inv-stat-sent">—</div></div>
+      <div class="metric-card green"><div class="metric-label">Paid</div><div class="metric-val" id="inv-stat-paid">—</div></div>
+      <div class="metric-card amber"><div class="metric-label">Total value</div><div class="metric-val" id="inv-stat-value">—</div></div>
+    </div>
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Invoice #</th>
+            <th>Client</th>
+            <th>Company</th>
+            <th>Amount</th>
+            <th>Due date</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="inv-tbody">
+          <tr><td colspan="8" style="text-align:center;color:var(--text3);padding:32px">Loading invoices…</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -1022,7 +1576,7 @@ tr:hover td { background: var(--surface2); }
       <div class="card">
         <div style="font-weight:600;font-size:13px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between">
           <span data-i18n="nl_compose">Compose Newsletter</span>
-          <span id="nl-send-result" style="font-size:11px;color:var(--green)"></span>
+          <span id="nl-send-result" style="font-size:11px;color:var(--accent)"></span>
         </div>
 
         <div class="fgroup">
@@ -1040,7 +1594,7 @@ tr:hover td { background: var(--surface2); }
             <button class="btn btn-sm" onclick="nlInsert('<p>','</p>')" title="Paragraph">¶</button>
             <button class="btn btn-sm" onclick="nlInsert('<a href=&quot;https://vertexgroup.africa&quot;>','</a>')" title="Link">🔗</button>
             <button class="btn btn-sm" onclick="nlInsert('<ul><li>','</li></ul>')" title="List">≡</button>
-            <button class="btn btn-sm" onclick="nlInsert('{{name}}','')" title="Personalise with subscriber name" style="color:var(--green)">{{name}}</button>
+            <button class="btn btn-sm" onclick="nlInsert('{{name}}','')" title="Personalise with subscriber name" style="color:var(--accent)">{{name}}</button>
           </div>
           <textarea class="finput" id="nl-body" rows="12" placeholder="Write your newsletter content here. Use {{name}} to personalise. HTML is fully supported." style="font-family:monospace;font-size:12px;resize:vertical"></textarea>
         </div>
@@ -1064,7 +1618,7 @@ tr:hover td { background: var(--surface2); }
         <div style="border-top:1px solid var(--border);padding-top:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
           <div style="font-size:12px;color:var(--text3)">
             <span data-i18n="nl_will_send">Will send to</span>
-            <strong id="nl-recipient-count" style="color:var(--green)">—</strong>
+            <strong id="nl-recipient-count" style="color:var(--accent)">—</strong>
             <span data-i18n="nl_active_subs">active subscribers</span>
           </div>
           <button class="btn btn-primary" id="nl-send-btn" onclick="nlSendAll()" data-i18n="nl_send_all">Send to all subscribers</button>
@@ -1074,7 +1628,7 @@ tr:hover td { background: var(--surface2); }
         <div id="nl-sending-bar" style="display:none;margin-top:12px">
           <div style="font-size:12px;color:var(--text3);margin-bottom:6px" data-i18n="nl_sending">Sending…</div>
           <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden">
-            <div id="nl-progress-fill" style="height:100%;background:var(--green);width:0%;transition:width 0.5s"></div>
+            <div id="nl-progress-fill" style="height:100%;background:var(--accent);width:0%;transition:width 0.5s"></div>
           </div>
         </div>
       </div>
@@ -1107,10 +1661,10 @@ async function api(method, path, body) {
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 const TEMPLATES={
-  followup:{s:'Following up on your Business Diagnostic — Vertex Group Africa',b:'Dear [Name],\n\nThank you for completing your Business Diagnostic with Vertex Group Africa.\n\nWe have reviewed your results and would like to schedule a 30-minute call to walk you through our findings and tailored recommendations.\n\nPlease reply to this email or book a slot at your convenience.\n\nBest regards,\nThe Vertex Group Africa Team\ninfo@vertexgroup.africa'},
-  proposal:{s:'Your personalised proposal — Vertex Group Africa',b:'Dear [Name],\n\nPlease find attached our tailored proposal for [Service/Programme].\n\nWe believe this engagement will directly address your key priorities identified in the diagnostic.\n\nWe are available for a call to discuss the details.\n\nKind regards,\nVertex Group Africa'},
-  donor:{s:'Partnership opportunity — Vertex Group Africa',b:'Dear [Donor Name],\n\nWe are reaching out to explore a potential partnership in support of SME development across [Region].\n\nOur programme has supported 128 SMEs across 14 African countries with documented impact.\n\nWe would welcome the opportunity to present our impact report.\n\nBest regards,\nVertex Group Africa'},
-  welcome:{s:'Welcome to Vertex Group Africa!',b:'Dear [Name],\n\nWelcome to Vertex Group Africa! We are delighted to have you join our community.\n\nYour dedicated advisor will be in touch within 24 hours to schedule your onboarding call.\n\nFeel free to reach us at info@vertexgroup.africa.\n\nWarm regards,\nThe Vertex Group Africa Team'},
+  followup:{s:'Following up on your Business Diagnostic — Vertex Group Africa',b:'Dear [Name],\n\nThank you for completing your Business Diagnostic with Vertex Group Africa.\n\nWe have reviewed your results and would like to schedule a 30-minute call to walk you through our findings and tailor a roadmap for your business.\n\nPlease reply to this email or book a slot at your convenience — we look forward to speaking with you.\n\nBest regards,\nThe Vertex Group Africa Team\ninfo@vertexgroup.africa'},
+  proposal:{s:'Your personalised proposal — Vertex Group Africa',b:'Dear [Name],\n\nThank you for your interest in working with Vertex Group Africa.\n\nPlease find attached our tailored proposal for [Service / Programme]. This engagement has been designed to directly address the priorities identified in your diagnostic and accelerate the outcomes that matter most to your business.\n\nWe are available for a call to walk you through the details and answer any questions.\n\nLooking forward to building something great together.\n\nKind regards,\nVertex Group Africa'},
+  welcome:{s:'Welcome to Vertex Group Africa!',b:'Dear [Name],\n\nWelcome to Vertex Group Africa — we are delighted to have you on board.\n\nYour dedicated advisor will be in touch within 24 hours to schedule your onboarding call and align on next steps.\n\nIn the meantime, do not hesitate to reach us at info@vertexgroup.africa for anything you need.\n\nYour ambition. Our architecture.\n\nWarm regards,\nThe Vertex Group Africa Team'},
+  invoice:{s:'Invoice from Vertex Group Africa — [Invoice #]',b:'Dear [Name],\n\nPlease find attached your invoice from Vertex Group Africa.\n\nFor your records:\n• Invoice number: [Invoice #]\n• Amount due: [Amount]\n• Due date: [Due Date]\n\nPayment can be made via bank transfer to the details provided on the invoice.\n\nPlease do not hesitate to reach out if you have any questions.\n\nThank you for partnering with us.\n\nBest regards,\nVertex Group Africa\ninfo@vertexgroup.africa'},
 };
 
 let currentUser = null;
@@ -1135,10 +1689,10 @@ function stageBadge(stage) {
     qualified:     'badge-amber',
     proposal_sent: 'badge-purple',
     negotiation:   'badge-amber',
-    won:           'badge-green',
+    won:           'badge-blue',
     lost:          'badge-red',
   };
-  return `<span class="badge ${map[stage]||'badge-blue'}">${stage.replace('_',' ')}</span>`;
+  return `<span class="badge ${map[stage]||'badge-blue'}" style="${stage==='won'?'background:rgba(12,148,216,0.12);color:#0c94d8':''}">${stage.replace('_',' ')}</span>`;
 }
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
@@ -1392,7 +1946,7 @@ async function viewDiagnostic(id) {
       <div style="font-size:56px;font-weight:700;color:${scoreColor};line-height:1">${d.overallScore}</div>
       <div style="font-size:13px;color:var(--text2);margin-top:4px">${d.scoreLabel||''}</div>
     </div>` : ''}
-    ${d.executiveSummary ? `<div style="background:var(--surface2);border-left:3px solid var(--green);padding:12px 14px;border-radius:0 6px 6px 0;margin-bottom:14px;font-size:13px;line-height:1.7">${d.executiveSummary}</div>` : ''}
+    ${d.executiveSummary ? `<div style="background:var(--surface2);border-left:3px solid var(--accent);padding:12px 14px;border-radius:0 6px 6px 0;margin-bottom:14px;font-size:13px;line-height:1.7">${d.executiveSummary}</div>` : ''}
     ${dims ? `<div style="margin-bottom:16px"><div style="font-weight:600;margin-bottom:8px;font-size:13px">${window.LANG==='fr'?'Scores par dimension':'Dimension Scores'}</div>${dims}</div>` : ''}
     ${d.vertexRecommendation ? `<div style="padding:14px;background:var(--amber-bg);border-radius:8px;color:var(--amber-text);margin-bottom:12px">
       <div style="font-weight:600;margin-bottom:4px">💡 ${window.LANG==='fr'?'Recommandation Vertex':'Vertex Recommendation'}</div>
@@ -1412,123 +1966,234 @@ function generateDiagPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const W = 210, margin = 18;
+  // Palette: black [10,10,10], blue [12,148,216], white [255,255,255]
+  // Score colours: blue (strong), amber (medium), red (critical)
+  const scoreRgbFn = s => s >= 70 ? [12,148,216] : s >= 45 ? [217,119,6] : [220,38,38];
   let y = 0;
 
-  // Header bar
-  doc.setFillColor(13, 158, 110);
-  doc.rect(0, 0, W, 28, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(18); doc.setFont('helvetica', 'bold');
-  doc.text('VERTEX GROUP AFRICA', margin, 13);
-  doc.setFontSize(9); doc.setFont('helvetica', 'normal');
-  doc.text('Business Intelligence Platform — Powered by Vertex AI', margin, 20);
-  doc.text(`Generated: ${new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'long',year:'numeric'})}`, W - margin, 20, { align:'right' });
+  // ── Full-bleed header ───────────────────────────────────────────────────
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 0, W, 38, 'F');
 
-  // Title
-  y = 38;
+  // Brand name
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(16); doc.setFont('helvetica', 'bold');
+  doc.text('VERTEX GROUP AFRICA', margin, 13);
+
+  // Slogan — prominent, blue accent
+  doc.setFontSize(9); doc.setFont('helvetica', 'italic');
+  doc.setTextColor(12, 148, 216);
+  doc.text('Your ambition. Our architecture.', margin, 21);
+
+  // Sub-line and date
+  doc.setFontSize(7.5); doc.setFont('helvetica', 'normal');
+  doc.setTextColor(180, 180, 180);
+  doc.text('Business Intelligence Platform  ·  Powered by Vertex AI', margin, 28);
+  doc.text(`${new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'long',year:'numeric'})}`, W - margin, 28, { align:'right' });
+
+  // Blue accent bar at header bottom
+  doc.setFillColor(12, 148, 216);
+  doc.rect(0, 36, W, 2, 'F');
+
+  // ── Report title + company info ─────────────────────────────────────────
+  y = 48;
   doc.setTextColor(10, 10, 10);
   doc.setFontSize(15); doc.setFont('helvetica', 'bold');
   doc.text('Business Diagnostic Report', margin, y);
   y += 7;
   doc.setFontSize(11); doc.setFont('helvetica', 'normal');
-  doc.setTextColor(90, 100, 120);
+  doc.setTextColor(75, 85, 99);
   doc.text(`${d.company}  ·  ${d.name}`, margin, y);
   y += 5;
-  doc.setFontSize(9);
+  doc.setFontSize(8.5);
   doc.text(`${d.email}  |  ${d.industry||''}  |  ${d.country||''}`, margin, y);
-
-  // Divider
-  y += 6;
-  doc.setDrawColor(230, 230, 230); doc.setLineWidth(0.4);
+  y += 7;
+  doc.setDrawColor(220, 220, 220); doc.setLineWidth(0.3);
   doc.line(margin, y, W - margin, y);
 
-  // Score box
+  // ── Overall score ────────────────────────────────────────────────────────
   y += 8;
   if (d.overallScore != null) {
     const sc = d.overallScore;
-    const scoreRgb = sc >= 70 ? [13,158,110] : sc >= 45 ? [217,119,6] : [220,38,38];
-    doc.setFillColor(...scoreRgb);
-    doc.roundedRect(margin, y, 50, 24, 3, 3, 'F');
-    doc.setTextColor(255,255,255);
-    doc.setFontSize(26); doc.setFont('helvetica','bold');
-    doc.text(String(sc), margin + 25, y + 14, { align:'center' });
-    doc.setFontSize(8); doc.setFont('helvetica','normal');
-    doc.text('Overall Score /100', margin + 25, y + 20, { align:'center' });
+    const rgb = scoreRgbFn(sc);
+    // Score box
+    doc.setFillColor(...rgb);
+    doc.roundedRect(margin, y, 46, 22, 3, 3, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24); doc.setFont('helvetica', 'bold');
+    doc.text(String(sc), margin + 23, y + 13, { align:'center' });
+    doc.setFontSize(7); doc.setFont('helvetica', 'normal');
+    doc.text('Overall Score /100', margin + 23, y + 19, { align:'center' });
+    // Label + tier description beside box
     if (d.scoreLabel) {
-      doc.setTextColor(10,10,10);
-      doc.setFontSize(10); doc.setFont('helvetica','bold');
-      doc.text(d.scoreLabel, margin + 56, y + 10);
+      doc.setTextColor(10, 10, 10);
+      doc.setFontSize(10); doc.setFont('helvetica', 'bold');
+      doc.text(d.scoreLabel, margin + 52, y + 9);
     }
+    const tierDesc = sc >= 70 ? 'Strong foundation — ready to scale.'
+                   : sc >= 45 ? 'Growth potential identified — targeted action required.'
+                   : 'Critical gaps detected — immediate intervention advised.';
+    doc.setFontSize(8); doc.setFont('helvetica', 'normal'); doc.setTextColor(75,85,99);
+    doc.text(tierDesc, margin + 52, y + 16);
     y += 30;
   }
 
-  // Executive summary
+  // ── Executive summary ───────────────────────────────────────────────────
   if (d.executiveSummary) {
+    if (y > 240) { doc.addPage(); y = 20; }
     doc.setFillColor(245, 248, 252);
-    doc.setDrawColor(13, 158, 110); doc.setLineWidth(1);
-    const lines = doc.splitTextToSize(d.executiveSummary, W - margin * 2 - 6);
-    const bh = lines.length * 5 + 8;
+    doc.setDrawColor(12, 148, 216); doc.setLineWidth(1.2);
+    const lines = doc.splitTextToSize(d.executiveSummary, W - margin * 2 - 8);
+    const bh = lines.length * 5 + 10;
+    doc.rect(margin, y, W - margin*2, bh, 'F');
     doc.line(margin, y, margin, y + bh);
-    doc.setFillColor(245,252,248); doc.rect(margin, y, W - margin*2, bh, 'F');
-    doc.setTextColor(30,30,30); doc.setFontSize(9); doc.setFont('helvetica','normal');
-    doc.text(lines, margin + 5, y + 6);
-    y += bh + 6;
+    doc.setFontSize(7.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(12,148,216);
+    doc.text('EXECUTIVE SUMMARY', margin + 5, y + 5);
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(30, 30, 30); doc.setFontSize(8.5);
+    doc.text(lines, margin + 5, y + 11);
+    y += bh + 7;
   }
 
-  // Dimensions
+  // ── Dimension analysis ──────────────────────────────────────────────────
   if ((d.dimensions||[]).length) {
-    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(10,10,10);
-    doc.text('Dimension Analysis', margin, y); y += 5;
+    if (y > 240) { doc.addPage(); y = 20; }
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(10,10,10);
+    doc.text('Dimension Analysis', margin, y); y += 2;
+    doc.setDrawColor(12,148,216); doc.setLineWidth(0.6);
+    doc.line(margin, y, margin + 52, y); y += 6;
+
     d.dimensions.forEach(dim => {
-      if (y > 260) { doc.addPage(); y = 20; }
+      if (y > 258) { doc.addPage(); y = 20; }
       const sc = dim.score;
-      const rgb = sc >= 70 ? [13,158,110] : sc >= 45 ? [217,119,6] : [220,38,38];
-      doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(10,10,10);
-      doc.text(dim.title||dim.name||'', margin, y + 4);
-      doc.setFont('helvetica','normal'); doc.setTextColor(...rgb);
-      doc.text(`${sc}/100`, W - margin - 12, y + 4, {align:'right'});
-      // Bar
-      doc.setFillColor(230,235,242); doc.roundedRect(margin, y+6, W-margin*2-25, 3, 1, 1, 'F');
-      doc.setFillColor(...rgb); doc.roundedRect(margin, y+6, (W-margin*2-25)*(sc/100), 3, 1, 1, 'F');
-      if (dim.summary) {
-        const sl = doc.splitTextToSize(dim.summary, W - margin*2);
-        doc.setFontSize(8); doc.setTextColor(90,100,120); doc.text(sl, margin, y+14);
-        y += sl.length * 4 + 12;
-      } else { y += 14; }
+      const rgb = scoreRgbFn(sc);
+      const barW = W - margin * 2 - 28;
+
+      // Dimension row background
+      doc.setFillColor(250, 250, 250);
+      const summaryLines = dim.summary ? doc.splitTextToSize(dim.summary, barW + 20) : [];
+      const analysisLines = dim.analysis ? doc.splitTextToSize(dim.analysis, barW + 20) : [];
+      const recLines = (dim.recommendations||[]).slice(0,2);
+      const rowH = 14 + summaryLines.length * 4 + analysisLines.length * 4 + (recLines.length ? recLines.length * 4 + 4 : 0);
+      doc.setDrawColor(230,230,230); doc.setLineWidth(0.2);
+      doc.setFillColor(250,250,250);
+      doc.roundedRect(margin, y, W - margin*2, rowH, 2, 2, 'FD');
+      // Left accent
+      doc.setFillColor(...rgb);
+      doc.roundedRect(margin, y, 3, rowH, 1, 1, 'F');
+
+      // Title + score
+      doc.setFontSize(8.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(10,10,10);
+      doc.text(dim.title||dim.name||'', margin + 6, y + 6);
+      doc.setFont('helvetica', 'bold'); doc.setTextColor(...rgb);
+      doc.text(`${sc}/100`, W - margin - 3, y + 6, {align:'right'});
+
+      // Progress bar
+      doc.setFillColor(220, 225, 230);
+      doc.roundedRect(margin + 6, y + 8, barW, 2.5, 1, 1, 'F');
+      doc.setFillColor(...rgb);
+      doc.roundedRect(margin + 6, y + 8, barW * (sc / 100), 2.5, 1, 1, 'F');
+
+      let dy = y + 14;
+      if (summaryLines.length) {
+        doc.setFontSize(7.5); doc.setFont('helvetica', 'italic'); doc.setTextColor(50,50,50);
+        doc.text(summaryLines, margin + 6, dy); dy += summaryLines.length * 4;
+      }
+      if (analysisLines.length) {
+        doc.setFontSize(7.5); doc.setFont('helvetica', 'normal'); doc.setTextColor(75,85,99);
+        doc.text(analysisLines, margin + 6, dy); dy += analysisLines.length * 4;
+      }
+      if (recLines.length) {
+        dy += 1;
+        recLines.forEach(r => {
+          doc.setFontSize(7); doc.setFont('helvetica', 'normal'); doc.setTextColor(12,148,216);
+          doc.text(`→  ${r}`, margin + 8, dy); dy += 4;
+        });
+      }
+      y += rowH + 3;
     });
   }
 
-  // Recommendation
+  // ── Vertex recommendation ───────────────────────────────────────────────
   if (d.vertexRecommendation) {
     if (y > 240) { doc.addPage(); y = 20; }
-    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(10,10,10);
-    doc.text('Vertex Recommendation', margin, y); y += 6;
-    doc.setFillColor(254,243,199);
-    const rlines = doc.splitTextToSize(d.vertexRecommendation, W - margin*2 - 4);
-    doc.rect(margin, y, W-margin*2, rlines.length*5+8, 'F');
-    doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(60,40,0);
-    doc.text(rlines, margin+4, y+6); y += rlines.length*5+14;
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(10,10,10);
+    doc.text('Vertex Recommendation', margin, y); y += 2;
+    doc.setDrawColor(12,148,216); doc.setLineWidth(0.6);
+    doc.line(margin, y, margin + 58, y); y += 6;
+
+    doc.setFillColor(10, 10, 10);
+    const rlines = doc.splitTextToSize(d.vertexRecommendation, W - margin*2 - 8);
+    const rh = rlines.length * 5 + 12;
+    doc.roundedRect(margin, y, W - margin*2, rh, 3, 3, 'F');
+    doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(255,255,255);
+    doc.text(rlines, margin + 5, y + 8);
+    y += rh + 8;
   }
 
-  // CTA
+  // ── Services / growth pathway (sales section) ───────────────────────────
+  if (y > 230) { doc.addPage(); y = 20; }
+  doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(10,10,10);
+  doc.text('How Vertex Can Help', margin, y); y += 2;
+  doc.setDrawColor(12,148,216); doc.setLineWidth(0.6);
+  doc.line(margin, y, margin + 44, y); y += 6;
+
+  const services = [
+    { title: 'Strategic Growth Plans', desc: 'Tailored roadmaps to accelerate revenue, streamline operations, and unlock new markets.' },
+    { title: 'Resource Access', desc: 'Connect to funding, tools, and expert networks designed to help SMEs scale sustainably.' },
+    { title: 'Sales Leads & Partnerships', desc: 'Curated business connections and qualified leads that turn pipeline into revenue.' },
+    { title: 'Advisory & Coaching', desc: 'Dedicated advisors who work alongside your team to build execution capacity.' },
+  ];
+  const colW = (W - margin * 2 - 6) / 2;
+  let col = 0, rowStartY = y;
+  services.forEach((s, i) => {
+    const cx = margin + (col * (colW + 6));
+    const descLines = doc.splitTextToSize(s.desc, colW - 8);
+    const cardH = 8 + descLines.length * 4 + 6;
+    doc.setFillColor(245, 248, 252);
+    doc.setDrawColor(12,148,216); doc.setLineWidth(0.8);
+    doc.roundedRect(cx, rowStartY, colW, cardH, 2, 2, 'FD');
+    doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.setTextColor(12,148,216);
+    doc.text(s.title, cx + 4, rowStartY + 6);
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(50,50,50); doc.setFontSize(7.5);
+    doc.text(descLines, cx + 4, rowStartY + 12);
+    col++;
+    if (col === 2) { col = 0; rowStartY += cardH + 3; }
+  });
+  if (col !== 0) rowStartY += 22;
+  y = rowStartY + 4;
+
+  // ── CTA block ────────────────────────────────────────────────────────────
+  if (y > 250) { doc.addPage(); y = 20; }
+  doc.setFillColor(10, 10, 10);
+  doc.roundedRect(margin, y, W - margin*2, 28, 3, 3, 'F');
+  // Slogan
+  doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(255,255,255);
+  doc.text('Your ambition. Our architecture.', W/2, y + 9, { align:'center' });
+  // CTA text
   if (d.callToAction) {
-    if (y > 250) { doc.addPage(); y = 20; }
-    doc.setFillColor(13,158,110);
-    doc.roundedRect(margin, y, W-margin*2, 18, 3, 3, 'F');
-    doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
-    const ctalines = doc.splitTextToSize(d.callToAction, W-margin*2-8);
-    doc.text(ctalines, margin+4, y+7); y += 26;
+    const clines = doc.splitTextToSize(d.callToAction, W - margin*2 - 20);
+    doc.setFontSize(8); doc.setFont('helvetica', 'normal'); doc.setTextColor(180,180,180);
+    doc.text(clines, W/2, y + 16, { align:'center' });
   }
+  // Blue CTA pill
+  doc.setFillColor(12, 148, 216);
+  doc.roundedRect(W/2 - 34, y + 20, 68, 6, 2, 2, 'F');
+  doc.setFontSize(7.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(255,255,255);
+  doc.text('Visit vertexgroup.africa to explore our plans', W/2, y + 24, { align:'center' });
+  y += 36;
 
-  // Footer
+  // ── Footer on every page ─────────────────────────────────────────────────
   const totalPages = doc.internal.getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
-    doc.setFontSize(8); doc.setTextColor(150,160,175); doc.setFont('helvetica','normal');
+    doc.setFillColor(10, 10, 10);
+    doc.rect(0, 283, W, 14, 'F');
+    doc.setFontSize(7.5); doc.setTextColor(180, 180, 180); doc.setFont('helvetica', 'normal');
     doc.text('Vertex Group Africa  ·  info@vertexgroup.africa  ·  www.vertexgroup.africa', W/2, 290, {align:'center'});
-    doc.text(`Page ${i}/${totalPages}`, W-margin, 290, {align:'right'});
-    doc.setDrawColor(13,158,110); doc.setLineWidth(0.5);
-    doc.line(margin, 286, W-margin, 286);
+    doc.setTextColor(12, 148, 216);
+    doc.text(`Page ${i} / ${totalPages}`, W - margin, 290, {align:'right'});
+    doc.setTextColor(100, 100, 100);
+    doc.text('Your ambition. Our architecture.', margin, 290);
   }
 
   doc.save(`Vertex_Diagnostic_${d.company.replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.pdf`);
@@ -1895,8 +2560,11 @@ async function loadLeads(stage, search) {
 }
 
 function filterLeadStage(el, stage) {
-  el.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
+  if (el) {
+    const tabs = el.closest('.tabs');
+    if (tabs) tabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
   loadLeads(stage);
 }
 
@@ -1905,71 +2573,145 @@ function renderLeadsTable(leads) {
   if (!tbody) return;
   const noMsg = window.LANG==='fr' ? 'Aucun lead pour l\'instant.' : 'No leads yet — they appear here when visitors submit forms on the website.';
   if (!leads.length) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:32px">${noMsg}</td></tr>`;
-    // Show funnel (empty)
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:48px">${noMsg}</td></tr>`;
     renderLeadsFunnel([]);
+    renderLeadsKPIs([]);
     return;
   }
   renderLeadsFunnel(leads);
-  const stageConv = { new:10, contacted:25, qualified:45, proposal_sent:65, negotiation:80, won:100, lost:0 };
+  renderLeadsKPIs(leads);
+
+  const stagePct = { new:10, contacted:25, qualified:45, proposal_sent:65, negotiation:80, won:100, lost:0 };
+  const stageColors = { new:'#2563eb', contacted:'#3b82f6', qualified:'#d97706', proposal_sent:'#7c3aed', negotiation:'#f59e0b', won:'#0c94d8', lost:'#dc2626' };
+  const typeLabel = { contact:'Contact', quote:'Quote', diagnostic:'Diagnostic', newsletter:'Newsletter' };
+
   tbody.innerHTML = leads.map(l => {
-    const pct = stageConv[l.stage] || 10;
-    const barColor = l.stage==='won'?'#0d9e6e':l.stage==='lost'?'#dc2626':pct>=65?'#7c3aed':pct>=45?'#d97706':'#2563eb';
-    const actionBtns = l.stage !== 'won' && l.stage !== 'lost' ? `
-      <button class="btn" style="font-size:10px;padding:3px 7px;background:var(--green);color:#fff;border-color:transparent" onclick="updateLeadStage('${l._id}','won')" title="Mark Won">Won</button>
-      <button class="btn" style="font-size:10px;padding:3px 7px;background:var(--amber);color:#fff;border-color:transparent" onclick="updateLeadStage('${l._id}','negotiation')" title="In Progress">⏳</button>
-      <button class="btn" style="font-size:10px;padding:3px 7px;background:var(--red);color:#fff;border-color:transparent" onclick="updateLeadStage('${l._id}','lost')" title="Mark Lost">Lost</button>
-    ` : `<button class="btn" style="font-size:10px;padding:3px 7px" onclick="updateLeadStage('${l._id}','new')">Reset</button>`;
-    return `<tr>
-      <td><div style="display:flex;align-items:center;gap:9px">
-        <div class="av av-sm av-green">${(l.name||'?')[0].toUpperCase()}</div>
-        <div><div style="font-weight:500">${l.name}</div><div style="font-size:11px;color:var(--text3)">${l.email}</div></div>
-      </div></td>
-      <td style="font-size:12px">${l.company || '—'}</td>
-      <td style="font-size:12px">${l.country || '—'}</td>
-      <td style="font-weight:600;color:var(--green)">${l.value ? fmt(l.value) : '—'}</td>
-      <td>${stageBadge(l.stage)}</td>
-      <td style="font-size:12px">${l.assignedTo ? l.assignedTo.name.split(' ')[0] : '—'}</td>
-      <td style="color:var(--text3);font-size:11px">${timeAgo(l.createdAt)}</td>
-      <td><div style="display:flex;gap:3px;flex-wrap:wrap">${actionBtns}</div></td>
+    const pct   = stagePct[l.stage] || 10;
+    const color = stageColors[l.stage] || '#2563eb';
+    const isWon  = l.stage === 'won';
+    const isLost = l.stage === 'lost';
+    const isFr   = window.LANG === 'fr';
+
+    // Avatar colour based on stage
+    const avColors = { won:'av-blue', lost:'av-red', negotiation:'av-amber', proposal_sent:'av-purple', qualified:'av-amber', default:'av-blue' };
+    const avCls = avColors[l.stage] || avColors.default;
+
+    // Type tag
+    const typeCls = `lead-type-${l.type || 'contact'}`;
+    const typeTag = `<span class="lead-type-tag ${typeCls}">${typeLabel[l.type] || l.type}</span>`;
+
+    // Stage pill
+    const stageKey = l.stage.replace('_','-'); // CSS class safe
+    const stageText = l.stage.replace('_',' ');
+    const stagePill = `<div class="stage-progress">
+      <span class="stage-pill stage-${l.stage}">${stageText}</span>
+      <div class="stage-progress-track"><div class="stage-progress-fill" style="width:${pct}%;background:${color}"></div></div>
+    </div>`;
+
+    // Value
+    const valHtml = l.value
+      ? `<div style="font-weight:700;color:var(--text)">${l.currency||'USD'} ${Number(l.value).toLocaleString()}</div>${l.probability ? `<div style="font-size:10px;color:var(--text3)">${l.probability}% probability</div>` : ''}`
+      : `<span style="color:var(--text3)">—</span>`;
+
+    // Action buttons — context-aware per stage
+    const NEXT_STAGE = { new:'contacted', contacted:'qualified', qualified:'proposal_sent', proposal_sent:'negotiation', negotiation:'won' };
+    const NEXT_LABEL = { new:'Contacted', contacted:'Qualified', qualified:'Proposal sent', proposal_sent:'Negotiation', negotiation:'Won →' };
+    let actions = '';
+    if (isWon) {
+      actions = `
+        <button class="act-btn act-btn-invoice" onclick="openInvoiceFromLead(${JSON.stringify(l).replace(/"/g,'&quot;')})" title="Generate & send invoice">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="13" y2="16"/></svg>
+          Generate Invoice
+        </button>
+        <button class="act-btn act-btn-reset" onclick="updateLeadStage('${l._id}','new')" title="Reopen">Reopen</button>`;
+    } else if (isLost) {
+      actions = `<button class="act-btn act-btn-reset" onclick="updateLeadStage('${l._id}','new')" title="Reopen">Reopen</button>`;
+    } else {
+      const nextStage = NEXT_STAGE[l.stage];
+      const nextLabel = NEXT_LABEL[l.stage];
+      actions = `
+        ${nextStage ? `<button class="act-btn act-btn-next" onclick="updateLeadStage('${l._id}','${nextStage}')" title="Advance to ${nextLabel}">
+          ${nextLabel} →
+        </button>` : ''}
+        <button class="act-btn act-btn-won" onclick="updateLeadStage('${l._id}','won')" title="Mark Won">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          Won
+        </button>
+        <button class="act-btn act-btn-lost" onclick="updateLeadStage('${l._id}','lost')" title="Mark Lost">✕</button>`;
+    }
+
+    const rowCls = isWon ? 'lead-row-won' : isLost ? 'lead-row-lost' : '';
+
+    return `<tr class="${rowCls}">
+      <td>
+        <div style="display:flex;align-items:center;gap:9px">
+          <div class="av av-sm ${avCls}" style="${isWon?'border:2px solid #0c94d8':''}">${(l.name||'?')[0].toUpperCase()}</div>
+          <div>
+            <div style="font-weight:600;font-size:13px">${l.name}</div>
+            <div style="font-size:11px;color:var(--text3)">${l.email}</div>
+            <div style="margin-top:3px">${typeTag}${l.source && l.source !== 'website' ? `<span class="lead-type-tag lead-type-newsletter" style="margin-left:3px">${l.source}</span>` : ''}</div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div style="font-size:13px;font-weight:500">${l.company || '—'}</div>
+        ${l.service ? `<div style="font-size:11px;color:var(--text3);margin-top:2px">${l.service}</div>` : ''}
+        ${l.plan    ? `<div style="font-size:11px;color:var(--accent);margin-top:1px">${l.plan}</div>` : ''}
+      </td>
+      <td style="font-size:12px;color:var(--text2)">${l.country || '—'}</td>
+      <td>${valHtml}</td>
+      <td>${stagePill}</td>
+      <td style="font-size:12px;color:var(--text2)">${l.assignedTo ? l.assignedTo.name.split(' ')[0] : '—'}</td>
+      <td style="color:var(--text3);font-size:11px;white-space:nowrap">${timeAgo(l.createdAt)}</td>
+      <td><div class="action-cell">${actions}</div></td>
     </tr>`;
   }).join('');
 }
 
+function renderLeadsKPIs(leads) {
+  const total     = leads.length;
+  const newLeads  = leads.filter(l => l.stage === 'new').length;
+  const qualified = leads.filter(l => ['qualified','proposal_sent','negotiation'].includes(l.stage)).length;
+  const won       = leads.filter(l => l.stage === 'won').length;
+  const conv      = total > 0 ? Math.round(won / total * 100) : 0;
+  const pipeline  = leads.reduce((s, l) => s + (l.value || 0), 0);
+
+  document.getElementById('lkpi-total').textContent     = total;
+  document.getElementById('lkpi-new').textContent       = newLeads;
+  document.getElementById('lkpi-qualified').textContent = qualified;
+  document.getElementById('lkpi-won').textContent       = won;
+  document.getElementById('lkpi-conv').textContent      = `${conv}%`;
+  document.getElementById('lkpi-value').textContent     = pipeline >= 1000 ? `$${(pipeline/1000).toFixed(1)}k` : `$${pipeline}`;
+}
+
 function renderLeadsFunnel(leads) {
-  const el = document.getElementById('leads-funnel');
+  const el   = document.getElementById('leads-funnel');
   const body = document.getElementById('funnel-body');
   if (!el || !body) return;
+
   const stages = [
-    { key:'new',           label: window.LANG==='fr'?'Nouveaux':'New' },
-    { key:'contacted',     label: window.LANG==='fr'?'Contactés':'Contacted' },
-    { key:'qualified',     label: window.LANG==='fr'?'Qualifiés':'Qualified' },
-    { key:'proposal_sent', label: window.LANG==='fr'?'Proposition':'Proposal' },
-    { key:'negotiation',   label: window.LANG==='fr'?'Négociation':'Negotiation' },
-    { key:'won',           label: window.LANG==='fr'?'Gagnés':'Won' },
-    { key:'lost',          label: window.LANG==='fr'?'Perdus':'Lost' },
+    { key:'new',           label:'New',         color:'#2563eb' },
+    { key:'contacted',     label:'Contacted',    color:'#3b82f6' },
+    { key:'qualified',     label:'Qualified',    color:'#d97706' },
+    { key:'proposal_sent', label:'Proposal',     color:'#7c3aed' },
+    { key:'negotiation',   label:'Negotiation',  color:'#f59e0b' },
+    { key:'won',           label:'Won',          color:'#0c94d8' },
+    { key:'lost',          label:'Lost',         color:'#dc2626' },
   ];
   const counts = {};
   stages.forEach(s => { counts[s.key] = 0; });
   leads.forEach(l => { if (counts[l.stage] !== undefined) counts[l.stage]++; });
   const total = leads.length || 1;
-  const funnelStages = stages.filter(s => s.key !== 'lost');
-  const colors = { new:'#2563eb', contacted:'#60a5fa', qualified:'#d97706', proposal_sent:'#7c3aed', negotiation:'#f59e0b', won:'#0d9e6e' };
-  el.style.display = 'block';
-  const wonCount = counts['won'];
-  const convRate = total > 0 ? Math.round((wonCount / (total)) * 100) : 0;
-  body.innerHTML = funnelStages.map(s => {
+
+  el.style.display = leads.length ? 'block' : 'none';
+  body.innerHTML = stages.map(s => {
     const pct = Math.round((counts[s.key] / total) * 100);
-    return `<div style="flex:1;text-align:center;padding:10px 6px;border-right:1px solid var(--border)">
-      <div style="font-size:20px;font-weight:700;color:${colors[s.key]||'var(--text)'}">${counts[s.key]}</div>
-      <div style="font-size:10px;color:var(--text3);margin:2px 0">${s.label}</div>
-      <div style="height:3px;background:var(--surface3);border-radius:2px;margin-top:6px"><div style="height:100%;width:${pct}%;background:${colors[s.key]};border-radius:2px"></div></div>
+    return `<div class="funnel-cell" onclick="filterLeadStage(null,'${s.key}')" style="cursor:pointer" title="Filter: ${s.label}">
+      <div class="funnel-cell-num" style="color:${s.color}">${counts[s.key]}</div>
+      <div class="funnel-cell-label">${s.label}</div>
+      <div class="funnel-cell-bar" style="background:${s.color};opacity:.25;width:${Math.max(pct,4)}%"></div>
     </div>`;
-  }).join('') + `<div style="flex:1;text-align:center;padding:10px 6px">
-    <div style="font-size:20px;font-weight:700;color:var(--green)">${convRate}%</div>
-    <div style="font-size:10px;color:var(--text3);margin:2px 0">${window.LANG==='fr'?'Taux conv.':'Conv. Rate'}</div>
-    <div style="height:3px;background:var(--surface3);border-radius:2px;margin-top:6px"><div style="height:100%;width:${convRate}%;background:var(--green);border-radius:2px"></div></div>
-  </div>`;
+  }).join('');
 }
 
 async function updateLeadStage(id, stage) {
@@ -1977,6 +2719,40 @@ async function updateLeadStage(id, stage) {
   await loadLeads();
   await loadStats();
   if (chartsInit._ov) { chartsInit._ov = false; chartsInit.overview = false; renderOverview(); }
+  // Prompt invoice generation when deal is won
+  if (stage === 'won') {
+    const lead = liveLeads.find(l => l._id === id);
+    if (lead && confirm(`🎉 Deal won — ${lead.name} (${lead.company || lead.email}).\n\nGenerate and send an invoice now?`)) {
+      openInvoiceFromLead(lead);
+    }
+  }
+}
+
+function openInvoiceFromLead(lead) {
+  // Pre-fill invoice modal with lead data
+  const serviceMap = {
+    contact:    { desc: 'Consulting services — Vertex Group Africa',   price: 2000 },
+    quote:      { desc: 'Services as quoted — Vertex Group Africa',    price: lead.value || 2000 },
+    diagnostic: { desc: 'Business Diagnostic (Pro) — Vertex Group Africa', price: 800 },
+  };
+  const suggested = serviceMap[lead.type] || serviceMap.contact;
+
+  // Build a minimal invoice object to pre-fill the modal
+  const prefill = {
+    client: {
+      name:    lead.name    || '',
+      email:   lead.email   || '',
+      company: lead.company || '',
+      country: lead.country || '',
+      address: '',
+    },
+    currency: lead.currency || 'USD',
+    items:    [{ description: suggested.desc, quantity: 1, unitPrice: suggested.price }],
+  };
+
+  openCreateInvoiceModal(prefill);
+  // Show a hint
+  showToast(`Invoice pre-filled for ${lead.name}. Add line items and send.`, 'success');
 }
 
 async function searchLeads() {
@@ -2404,12 +3180,12 @@ const TRANSLATIONS = {
     // Nav items
     nav_overview: 'Overview', nav_leads: 'Leads & Quotes', nav_pipeline: 'Sales Pipeline',
     nav_diagnostics: 'Diagnostics', nav_corporates: 'Corporate Network', nav_donors: 'Donors & SMEs',
-    nav_insights: 'Africa Insights', nav_email: 'Email', nav_team: 'Team & Access', nav_notifs: 'Notifications',
+    nav_insights: 'Insights', nav_email: 'Email', nav_team: 'Team & Access', nav_notifs: 'Notifications',
     nav_newsletter: 'Newsletter',
     // Page titles (for topbar)
     overview: 'Overview', leads: 'Leads & Quotes', pipeline: 'Sales Pipeline',
     diagnostics: 'Diagnostics', corporates: 'Corporate Network', donors: 'Donors & SME Tracking',
-    insights: 'Africa Intelligence', email: 'Email — info@vertexgroup.africa',
+    insights: 'Insights', email: 'Email — info@vertexgroup.africa',
     team: 'Team & Access', notifs: 'Notifications', newsletter: 'Newsletter',
     // Topbar
     btn_add_lead: '+ Add lead', btn_compose: 'Compose email',
@@ -2494,12 +3270,12 @@ const TRANSLATIONS = {
     // Nav items
     nav_overview: 'Vue d\'ensemble', nav_leads: 'Leads & Devis', nav_pipeline: 'Pipeline Commercial',
     nav_diagnostics: 'Diagnostics', nav_corporates: 'Réseau Corporate', nav_donors: 'Donateurs & PME',
-    nav_insights: 'Intelligence Africaine', nav_email: 'Email', nav_team: 'Équipe & Accès', nav_notifs: 'Notifications',
+    nav_insights: 'Insights', nav_email: 'Email', nav_team: 'Équipe & Accès', nav_notifs: 'Notifications',
     nav_newsletter: 'Newsletter',
     // Page titles
     overview: 'Vue d\'ensemble', leads: 'Leads & Devis', pipeline: 'Pipeline Commercial',
     diagnostics: 'Diagnostics', corporates: 'Réseau Corporate', donors: 'Donateurs & PME',
-    insights: 'Intelligence Africaine', email: 'Email — info@vertexgroup.africa',
+    insights: 'Insights', email: 'Email — info@vertexgroup.africa',
     team: 'Équipe & Accès', notifs: 'Notifications', newsletter: 'Newsletter',
     // Topbar
     btn_add_lead: '+ Ajouter un lead', btn_compose: 'Rédiger un email',
@@ -2663,6 +3439,8 @@ function nav(el, id) {
   if(id==='team')        loadTeam();
   if(id==='newsletter')  { _nlPage=1; loadNewsletterSubscribers(); }
   if(id==='email')       { loadEmailSectionStats(); loadRecentActivity(); }
+  if(id==='invoices')    loadInvoices();
+  if(id==='insights')    loadInsights();
   if(!chartsInit[id]) { chartsInit[id]=true; setTimeout(()=>renderSection(id),150); }
 }
 
@@ -2750,7 +3528,7 @@ function renderPipeline() {
   new Chart(document.getElementById('c-sales'), {
     type:'bar',
     data:{ labels, datasets:[
-      {label:'Won',      data:won,  backgroundColor:'#0d9e6e',borderRadius:4,borderWidth:0},
+      {label:'Won',      data:won,  backgroundColor:'#0c94d8',borderRadius:4,borderWidth:0},
       {label:'Progress', data:prog, backgroundColor:'#2563eb',borderRadius:4,borderWidth:0},
       {label:'Lost',     data:lost, backgroundColor:'#dc2626',borderRadius:4,borderWidth:0},
     ]},
@@ -2760,9 +3538,381 @@ function renderPipeline() {
   });
 }
 
+// ── INSIGHTS PAGE ─────────────────────────────────────────────────────────────
+
+const INS_MARKETS = [
+  {flag:'🇳🇬',name:'Nigeria',region:'West Africa',stat:'41M SMEs · $150B GDP',insight:'Africa\'s largest SME ecosystem. Booming fintech and agri-tech. Lagos is the continent\'s venture capital hub.',opp:'Fintech infrastructure, agri-supply chain partnerships',tags:['Fintech','Agriculture','Consumer']},
+  {flag:'🇰🇪',name:'Kenya',region:'East Africa',stat:'7.4M SMEs · Silicon Savannah',insight:'East Africa\'s innovation engine. M-Pesa penetration at 83%. ICT and green-energy growing 12% YoY. Nairobi hosts 50+ accelerators.',opp:'Digital commerce, climate-tech, EAC cross-border trade',tags:['Tech','Green Energy','EAC']},
+  {flag:'🇿🇦',name:'South Africa',region:'Southern Africa',stat:'2.5M SMEs · 98% of all businesses',insight:'Most developed SME ecosystem on the continent. Township economy = $20B+ spending power. Highest consulting density.',opp:'Township markets, renewable energy, services exports',tags:['Services','Energy','Finance']},
+  {flag:'🇬🇭',name:'Ghana',region:'West Africa',stat:'1.2M registered SMEs · AfCFTA hub',insight:'Stable institutions and improving business climate. Major AfCFTA gateway. $320M annual SME finance gap as opportunity.',opp:'Trade facilitation, agro-processing, SME credit',tags:['Trade','Agriculture','Finance']},
+  {flag:'🇸🇳',name:'Senegal',region:'West Africa',stat:'350K formal SMEs · 40% of GDP',insight:'Gateway to Francophone West Africa. Digital adoption accelerating with Orange Money. Plan Sénégal Emergent driving investment.',opp:'Francophone entry, logistics, digital financial services',tags:['Logistics','Fintech','Francophone']},
+  {flag:'🇲🇦',name:'Morocco',region:'North Africa',stat:'640K SMEs · EU-Africa gateway',insight:'Africa\'s bridge to Europe. Green hydrogen attracting €7B+ investment. Industrial zones offer competitive manufacturing.',opp:'EU market access, renewable energy, nearshoring',tags:['Manufacturing','Green Energy','EU']},
+  {flag:'🇹🇿',name:'Tanzania',region:'East Africa',stat:'3M SMEs · Tourism & mining base',insight:'Rapid sector formalisation. EAC membership gives 280M consumers. Mining and tourism revenues funding secondary-city growth.',opp:'Tourism services, mining supply chain, formalisation consulting',tags:['Tourism','Mining','EAC']},
+  {flag:'🇷🇼',name:'Rwanda',region:'East Africa',stat:'250K SMEs · #5 ease of doing business',insight:'Africa\'s fastest-improving business climate. Kigali is a Tier-1 MICE hub. 4G at 85%. Govt targets 35% knowledge economy by 2035.',opp:'Tech services, MICE, Pan-African HQ base',tags:['Tech','MICE','Governance']},
+  {flag:'🇪🇹',name:'Ethiopia',region:'East Africa',stat:'1.5M SMEs · 108M consumers',insight:'Compelling consumer market. Addis Ababa is diplomatic capital and multinational HQ. Banking liberalisation opens financial services.',opp:'Consumer goods, manufacturing, financial services',tags:['Consumer','Manufacturing','Banking']},
+  {flag:'🇨🇮',name:'Côte d\'Ivoire',region:'West Africa',stat:'200K+ formal SMEs · Top cocoa exporter',insight:'WAEMU\'s largest economy. Abidjan is West Africa\'s financial capital. Africa\'s top agricultural exporter.',opp:'Agro-processing, trade finance, Francophone expansion',tags:['Agriculture','Trade','Francophone']},
+  {flag:'🇨🇩',name:'DRC',region:'Central Africa',stat:'4.2M micro & small enterprises',insight:'100M+ consumers and vast mineral wealth. Kinshasa is one of Africa\'s largest cities. Infrastructure investment accelerating.',opp:'Mining services, infrastructure, consumer FMCG',tags:['Mining','Consumer','Infrastructure']},
+  {flag:'🇺🇬',name:'Uganda',region:'East Africa',stat:'1.1M SMEs · 70% under-30',insight:'70% of population under 30. Kampala startup scene maturing. Oil revenues expected from 2026 reshaping public investment.',opp:'Youth enterprise, agri-tech, oil services',tags:['AgriTech','Youth','Oil']},
+];
+
+let insData = null;           // raw API response
+let insFiltered = [];         // current page of diagnostic rows
+let insFilteredSorted = [];   // alias — kept for legacy refs
+let insSortCol = 'createdAt'; // API sort field
+let insSortDir = 'desc';      // asc | desc
+let insPage = 1;
+let insTotal = 0;
+const insPageSize = 20;
+let insLoaded = false;
+let insDebounceTimer = null;
+
+// Build query-string from toolbar filter controls
+function insGetFilterParams() {
+  const region    = document.getElementById('ins-f-region')?.value    || '';
+  const industry  = document.getElementById('ins-f-industry')?.value  || '';
+  const size      = document.getElementById('ins-f-size')?.value      || '';
+  const scoreBand = document.getElementById('ins-f-score')?.value     || '';
+  const days      = document.getElementById('ins-f-period')?.value    || '';
+  const search    = document.getElementById('ins-search')?.value      || '';
+  const parts = [];
+  if (region)    parts.push('region='    + encodeURIComponent(region));
+  if (industry)  parts.push('industry='  + encodeURIComponent(industry));
+  if (size)      parts.push('size='      + encodeURIComponent(size));
+  if (scoreBand) parts.push('scoreBand=' + scoreBand);
+  if (days)      parts.push('days='      + days);
+  if (search)    parts.push('search='    + encodeURIComponent(search));
+  return parts.length ? '?' + parts.join('&') : '';
+}
+
+// Fetch table page from server and render
+async function insLoadTable(baseParams) {
+  const sortSel = document.getElementById('ins-sort-col')?.value || '';
+  const sortMap = {
+    date:       { sort: 'createdAt',    dir: 'desc' },
+    score_desc: { sort: 'overallScore', dir: 'desc' },
+    score_asc:  { sort: 'overallScore', dir: 'asc'  },
+    country:    { sort: 'country',      dir: 'asc'  },
+    industry:   { sort: 'industry',     dir: 'asc'  },
+  };
+  const { sort, dir } = sortMap[sortSel] || { sort: insSortCol, dir: insSortDir };
+  const sep = baseParams ? '&' : '?';
+  const qs = baseParams + sep + `page=${insPage}&limit=${insPageSize}&sort=${sort}&dir=${dir}`;
+  const res = await api('GET', '/api/insights/diagnostics' + qs);
+  if (res) {
+    insFiltered = res.diagnostics || [];
+    insFilteredSorted = insFiltered;
+    insTotal = res.total || 0;
+    insRenderTable(insFiltered, insTotal, res.pages);
+  }
+}
+
+async function loadInsights() {
+  if (insLoaded) return;
+  insLoaded = true;
+  insRenderMarkets('all');
+  try {
+    const params = insGetFilterParams();
+    const [analyticsRes, diagsRes] = await Promise.all([
+      api('GET', '/api/insights/analytics' + params),
+      api('GET', '/api/insights/diagnostics?page=1&limit=' + insPageSize + '&sort=createdAt&dir=desc'),
+    ]);
+    if (analyticsRes?.success) {
+      insData = analyticsRes.data;
+      insRenderKPIs(insData.overview);
+      insRenderCharts(insData);
+    }
+    if (diagsRes) {
+      insFiltered = diagsRes.diagnostics || [];
+      insFilteredSorted = insFiltered;
+      insTotal = diagsRes.total || 0;
+      insRenderTable(insFiltered, insTotal, diagsRes.pages);
+    }
+  } catch(e) {
+    console.warn('Insights load error', e);
+  }
+}
+
+function insRenderKPIs(ov) {
+  if (!ov) return;
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('ins-kpi-diags',          ov.totalDiagnostics ?? '—');
+  set('ins-kpi-diags-sub',      ov.pendingDiagnostics != null ? `${ov.pendingDiagnostics} pending` : '');
+  set('ins-kpi-score',          ov.avgScore ? ov.avgScore + '/100' : '—');
+  set('ins-kpi-score-sub',      ov.minScore != null && ov.maxScore != null ? `${ov.minScore}–${ov.maxScore} range` : '');
+  set('ins-kpi-countries',      ov.totalCountries ?? '—');
+  set('ins-kpi-leads',          ov.totalLeads ?? '—');
+  set('ins-kpi-leads-sub',      ov.wonLeads != null ? `${ov.wonLeads} won · ${ov.lostLeads ?? 0} lost` : '');
+  set('ins-kpi-subs',           ov.newsletterTotal ?? '—');
+  set('ins-kpi-subs-sub',       ov.newsletterActive != null ? `${ov.newsletterActive} active` : '');
+  set('ins-kpi-conversion',     ov.conversionRate != null ? ov.conversionRate + '%' : '—');
+  set('ins-kpi-conversion-sub', ov.wonLeads != null ? `${ov.wonLeads} deals won` : '');
+  set('ins-kpi-completed',      ov.completedDiagnostics ?? '—');
+  set('ins-kpi-completed-sub',  ov.totalDiagnostics ? Math.round((ov.completedDiagnostics / ov.totalDiagnostics) * 100) + '% completion' : '');
+}
+
+function insRenderCharts(d) {
+  // ── Country bars ─────────────────────────────────────────
+  const cEl = document.getElementById('ins-chart-countries');
+  if (d.countries?.length) {
+    const maxC = Math.max(...d.countries.map(c=>c.count), 1);
+    cEl.innerHTML = d.countries.slice(0,10).map(c=>`
+      <div class="ins-bar-row">
+        <div class="ins-bar-lbl" title="${c.country}">${c.country}</div>
+        <div class="ins-bar-track"><div class="ins-bar-fill" style="width:${Math.round(c.count/maxC*100)}%;background:var(--accent)"></div></div>
+        <div class="ins-bar-val">${c.count}</div>
+      </div>`).join('');
+  } else { cEl.innerHTML = '<div class="ins-empty">No data yet — diagnostics will appear here as businesses submit them.</div>'; }
+
+  // ── Industry bars (with avg score colour) ────────────────
+  const iEl = document.getElementById('ins-chart-industry');
+  if (d.industries?.length) {
+    const maxI = Math.max(...d.industries.map(i=>i.count), 1);
+    iEl.innerHTML = d.industries.slice(0,9).map(i=>{
+      const col = !i.avgScore ? 'var(--accent)' : i.avgScore>=75?'#16a34a':i.avgScore>=50?'var(--accent)':i.avgScore>=25?'var(--amber)':'var(--red)';
+      return `<div class="ins-bar-row">
+        <div class="ins-bar-lbl" title="${i.industry}">${i.industry}</div>
+        <div class="ins-bar-track"><div class="ins-bar-fill" style="width:${Math.round(i.count/maxI*100)}%;background:${col}"></div></div>
+        <div class="ins-bar-val">${i.count}${i.avgScore?` <span style="color:var(--text3);font-size:10px">·${i.avgScore}</span>`:''}</div>
+      </div>`;
+    }).join('');
+  } else { iEl.innerHTML = '<div class="ins-empty">No data yet.</div>'; }
+
+  // ── Score distribution bands ─────────────────────────────
+  const bands = d.scoreDistribution?.length ? d.scoreDistribution
+    : [{band:'0–24',label:'Critical',count:0},{band:'25–49',label:'Developing',count:0},{band:'50–74',label:'Progressing',count:0},{band:'75–100',label:'Strong',count:0}];
+  const bandCols = {Critical:'var(--red)',Developing:'var(--amber)',Progressing:'var(--accent)',Strong:'var(--green)'};
+  const bandBg   = {Critical:'var(--red-bg)',Developing:'var(--amber-bg)',Progressing:'var(--blue-bg)',Strong:'var(--green-bg)'};
+  document.getElementById('ins-score-bands').innerHTML = bands.map(b=>`
+    <div class="ins-score-band" style="background:${bandBg[b.label]||'var(--surface2)'}">
+      <div class="ins-score-band-val" style="color:${bandCols[b.label]||'var(--text)'}">${b.count}</div>
+      <div class="ins-score-band-lbl" style="color:${bandCols[b.label]||'var(--text3)'}">${b.label}</div>
+      <div class="ins-score-band-range">${b.band}</div>
+    </div>`).join('');
+
+  // ── Company size bars ────────────────────────────────────
+  const sEl = document.getElementById('ins-chart-size');
+  if (d.companySizes?.length) {
+    const maxS = Math.max(...d.companySizes.map(s=>s.count), 1);
+    sEl.innerHTML = d.companySizes.map(s=>`
+      <div class="ins-bar-row">
+        <div class="ins-bar-lbl" title="${s.size}">${s.size}</div>
+        <div class="ins-bar-track"><div class="ins-bar-fill" style="width:${Math.round(s.count/maxS*100)}%;background:#7c3aed"></div></div>
+        <div class="ins-bar-val">${s.count}</div>
+      </div>`).join('');
+  } else { sEl.innerHTML = '<div class="ins-empty">No data yet.</div>'; }
+
+  // ── Monthly trend ────────────────────────────────────────
+  const tEl = document.getElementById('ins-trend-bars');
+  const tlEl = document.getElementById('ins-trend-labels');
+  if (d.monthlyTrend?.length) {
+    const maxT = Math.max(...d.monthlyTrend.map(m=>m.count), 1);
+    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    tEl.innerHTML = d.monthlyTrend.map(m=>{
+      const h = Math.max(Math.round((m.count/maxT)*56), 3);
+      const mo = parseInt(m.month.split('-')[1]) - 1;
+      return `<div class="ins-trend-bar" style="height:${h}px"><div class="ins-trend-tip">${m.count} — ${MONTHS[mo]}</div></div>`;
+    }).join('');
+    tlEl.innerHTML = d.monthlyTrend.map(m=>{
+      const mo = parseInt(m.month.split('-')[1]) - 1;
+      return `<div class="ins-trend-label">${['J','F','M','A','M','J','J','A','S','O','N','D'][mo]}</div>`;
+    }).join('');
+  } else { tEl.innerHTML = '<div class="ins-empty" style="width:100%">No data yet.</div>'; }
+
+  // ── Dimension avg scores ──────────────────────────────────
+  const dEl = document.getElementById('ins-chart-dims');
+  if (d.dimensions?.length) {
+    dEl.innerHTML = d.dimensions.map(dim=>{
+      const col = dim.avgScore>=75?'#16a34a':dim.avgScore>=50?'var(--accent)':dim.avgScore>=25?'var(--amber)':'var(--red)';
+      return `<div class="ins-bar-row">
+        <div class="ins-bar-lbl" title="${dim.title||dim.id}">${dim.title||dim.id}</div>
+        <div class="ins-bar-track"><div class="ins-bar-fill" style="width:${dim.avgScore}%;background:${col}"></div></div>
+        <div class="ins-bar-val">${dim.avgScore}</div>
+      </div>`;
+    }).join('');
+  } else { dEl.innerHTML = '<div class="ins-empty">No completed diagnostics yet.</div>'; }
+
+  // ── Lead type demand signal ───────────────────────────────
+  const lEl = document.getElementById('ins-chart-leads');
+  const leadTypes = d.leadTypes?.length ? d.leadTypes
+    : [{type:'diagnostic',count:0},{type:'quote',count:0},{type:'contact',count:0},{type:'newsletter',count:0}];
+  const maxL = Math.max(...leadTypes.map(l=>l.count), 1);
+  const ltCols = {diagnostic:'var(--amber)',quote:'#7c3aed',contact:'var(--accent)',newsletter:'var(--green)'};
+  lEl.innerHTML = leadTypes.map(l=>`
+    <div class="ins-bar-row">
+      <div class="ins-bar-lbl" style="text-transform:capitalize">${l.type || 'unknown'}</div>
+      <div class="ins-bar-track"><div class="ins-bar-fill" style="width:${Math.round(l.count/maxL*100)}%;background:${ltCols[l.type]||'var(--accent)'}"></div></div>
+      <div class="ins-bar-val">${l.count}</div>
+    </div>`).join('');
+
+  // ── Revenue distribution ──────────────────────────────────
+  const revEl = document.getElementById('ins-chart-revenue');
+  if (revEl) {
+    if (d.revenues?.length) {
+      const maxR = Math.max(...d.revenues.map(r=>r.count), 1);
+      revEl.innerHTML = d.revenues.map(r=>`
+        <div class="ins-bar-row">
+          <div class="ins-bar-lbl" title="${r.band}">${r.band}</div>
+          <div class="ins-bar-track"><div class="ins-bar-fill" style="width:${Math.round(r.count/maxR*100)}%;background:#0d9e6e"></div></div>
+          <div class="ins-bar-val">${r.count}</div>
+        </div>`).join('');
+    } else { revEl.innerHTML = '<div class="ins-empty">No revenue data yet.</div>'; }
+  }
+
+  // ── Challenge keywords tag cloud ─────────────────────────
+  const kwEl = document.getElementById('ins-chart-keywords');
+  if (kwEl) {
+    if (d.challengeKeywords?.length) {
+      const maxKW = Math.max(...d.challengeKeywords.map(k=>k.count), 1);
+      kwEl.innerHTML = '<div class="ins-keyword-cloud">' +
+        d.challengeKeywords.map(k => {
+          const size = 10 + Math.round((k.count / maxKW) * 6);
+          return `<span class="ins-keyword-tag" style="font-size:${size}px">${k.word} <span>${k.count}</span></span>`;
+        }).join('') + '</div>';
+    } else { kwEl.innerHTML = '<div class="ins-empty">No challenge data yet.</div>'; }
+  }
+
+  // ── Lead sources ─────────────────────────────────────────
+  const srcEl = document.getElementById('ins-chart-sources');
+  if (srcEl) {
+    if (d.leadSources?.length) {
+      const maxSrc = Math.max(...d.leadSources.map(s=>s.count), 1);
+      const srcCols = {website:'var(--accent)',referral:'#7c3aed',event:'var(--amber)',cold:'var(--red)'};
+      srcEl.innerHTML = d.leadSources.map(s=>`
+        <div class="ins-bar-row">
+          <div class="ins-bar-lbl" style="text-transform:capitalize">${s.source || 'unknown'}</div>
+          <div class="ins-bar-track"><div class="ins-bar-fill" style="width:${Math.round(s.count/maxSrc*100)}%;background:${srcCols[s.source]||'var(--accent)'}"></div></div>
+          <div class="ins-bar-val">${s.count}</div>
+        </div>`).join('');
+    } else { srcEl.innerHTML = '<div class="ins-empty">No source data yet.</div>'; }
+  }
+}
+
+function insApplyFilters() {
+  clearTimeout(insDebounceTimer);
+  insDebounceTimer = setTimeout(async () => {
+    insPage = 1;
+    const params = insGetFilterParams();
+    try {
+      const [analyticsRes] = await Promise.all([
+        api('GET', '/api/insights/analytics' + params),
+        insLoadTable(params),
+      ]);
+      if (analyticsRes?.success) {
+        insData = analyticsRes.data;
+        insRenderKPIs(insData.overview);
+        insRenderCharts(insData);
+      }
+    } catch(e) {
+      console.warn('Insights filter error', e);
+    }
+  }, 300);
+}
+
+function insSort(col) {
+  const fieldMap = { company: 'company', country: 'country', industry: 'industry', employees: 'employees', revenue: 'revenue', score: 'overallScore', date: 'createdAt' };
+  const apiField = fieldMap[col] || col;
+  if (insSortCol === apiField) { insSortDir = insSortDir === 'asc' ? 'desc' : 'asc'; }
+  else { insSortCol = apiField; insSortDir = 'desc'; }
+  document.querySelectorAll('.ins-data-table th').forEach(th => {
+    th.classList.toggle('sorted', th.getAttribute('onclick') === `insSort('${col}')`);
+    const icon = th.querySelector('.sort-icon');
+    if (icon && th.classList.contains('sorted')) icon.textContent = insSortDir === 'asc' ? '↑' : '↓';
+    else if (icon) icon.textContent = '↕';
+  });
+  insPage = 1;
+  insLoadTable(insGetFilterParams());
+}
+
+function insRenderTable(rows, serverTotal, serverPages) {
+  const tbody    = document.getElementById('ins-table-body');
+  const count    = document.getElementById('ins-table-count');
+  const pageInfo = document.getElementById('ins-pagination-info');
+  const pageBtns = document.getElementById('ins-pagination-btns');
+
+  const total      = serverTotal ?? rows.length;
+  const totalPages = serverPages ?? Math.ceil(rows.length / insPageSize);
+
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="ins-empty">No records match your filters.</td></tr>';
+    if (count)    count.textContent = '0 records';
+    if (pageInfo) pageInfo.textContent = '';
+    if (pageBtns) pageBtns.innerHTML = '';
+    return;
+  }
+
+  const scoreClass = s => !s && s !== 0 ? '' : s>=75?'ins-score-strong':s>=50?'ins-score-progressing':s>=25?'ins-score-developing':'ins-score-critical';
+  const scoreLabel = s => !s && s !== 0 ? '—' : s>=75?'Strong':s>=50?'Progressing':s>=25?'Developing':'Critical';
+
+  tbody.innerHTML = rows.map(r => `
+    <tr>
+      <td style="font-weight:500;color:var(--text)">${r.company || '—'}</td>
+      <td>${r.country || '—'}</td>
+      <td>${r.industry || '—'}</td>
+      <td style="white-space:nowrap">${r.employees || '—'}</td>
+      <td style="white-space:nowrap">${r.revenue || '—'}</td>
+      <td>${r.overallScore != null
+        ? `<span class="ins-score-pill ${scoreClass(r.overallScore)}">${r.overallScore} · ${scoreLabel(r.overallScore)}</span>`
+        : '<span style="color:var(--text3);font-size:11px">Pending</span>'}</td>
+      <td style="white-space:nowrap;color:var(--text3)">${timeAgo(r.createdAt)}</td>
+    </tr>`).join('');
+
+  if (count)    count.textContent = `${total} record${total !== 1 ? 's' : ''} found`;
+  if (pageInfo) pageInfo.textContent = `Page ${insPage} of ${totalPages} · ${total} records`;
+
+  if (pageBtns) {
+    let btns = '';
+    if (insPage > 1)       btns += `<button class="btn btn-sm" onclick="insPageGo(${insPage-1})">← Prev</button>`;
+    btns += `<span style="font-size:11px;color:var(--text3);padding:0 6px">${insPage} / ${totalPages}</span>`;
+    if (insPage < totalPages) btns += `<button class="btn btn-sm" onclick="insPageGo(${insPage+1})">Next →</button>`;
+    pageBtns.innerHTML = btns;
+  }
+}
+
+function insPageGo(p) { insPage = p; insLoadTable(insGetFilterParams()); window.scrollTo(0, 0); }
+
+function insMarketTab(el, region) {
+  el.closest('#ins-market-tabs').querySelectorAll('.ins-filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  insRenderMarkets(region);
+}
+
+function insRenderMarkets(region) {
+  const grid = document.getElementById('ins-market-grid');
+  if (!grid) return;
+  const markets = region === 'all' ? INS_MARKETS : INS_MARKETS.filter(m => m.region === region);
+  grid.innerHTML = markets.map(m => `
+    <div class="ins-market-card">
+      <span class="ins-market-flag">${m.flag}</span>
+      <div class="ins-market-name">${m.name}</div>
+      <div class="ins-market-region">${m.region}</div>
+      <div class="ins-market-stat">${m.stat}</div>
+      <div class="ins-market-insight">${m.insight}</div>
+      <div class="ins-market-tags">${m.tags.map(t=>`<span class="ins-market-tag">${t}</span>`).join('')}</div>
+      <div class="ins-market-opp"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>${m.opp}</div>
+    </div>`).join('');
+}
+
+async function insExportCSV() {
+  try {
+    const params = insGetFilterParams();
+    const res = await fetch(API_BASE + '/api/insights/export' + params, {
+      headers: AUTH_TOKEN ? { Authorization: 'Bearer ' + AUTH_TOKEN } : {},
+    });
+    if (!res.ok) { toast('Export failed', 'error'); return; }
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `vertex-insights-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch(e) {
+    toast('Export failed', 'error');
+  }
+}
+
 function renderInsights() {
-  if(chartsInit._in) return; chartsInit._in=true;
-  new Chart(document.getElementById('c-insight'),{type:'bar',data:{labels:['Nigeria','Kenya','Senegal','Ghana','Morocco','DRC','Cote d\'Ivoire','Tanzania','Ethiopia'],datasets:[{data:[92,88,76,74,71,65,69,61,58],backgroundColor:['#0d9e6e','#0d9e6e','#2563eb','#2563eb','#2563eb','#d97706','#2563eb','#d97706','#d97706'],borderRadius:4,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8b95a8',autoSkip:false,maxRotation:30},grid:{display:false}},y:{max:100,ticks:{color:'#8b95a8'},grid:{color:'rgba(0,0,0,0.05)'}}}}});
+  // Charts are rendered by loadInsights() — nothing extra needed here
 }
 
 // ── UI HELPERS ────────────────────────────────────────────────────────────────
@@ -2780,31 +3930,486 @@ document.querySelectorAll('.modal-backdrop').forEach(m=>{
 });
 
 function applyTemplate(v)  { if(!v)return; document.getElementById('em-sub').value=TEMPLATES[v].s;  document.getElementById('em-body').value=TEMPLATES[v].b; }
-function applyTemplate2(v) { if(!v)return; document.getElementById('em-sub2').value=TEMPLATES[v].s; document.getElementById('em-body2').value=TEMPLATES[v].b; }
+function applyTemplate2(v) {
+  if (!v) return;
+  document.getElementById('em-sub2').value  = TEMPLATES[v].s;
+  document.getElementById('em-body2').value = TEMPLATES[v].b;
+}
 function sendEmailAction() { closeModal('modal-email'); }
+
+function updateAttachTags() {
+  const input = document.getElementById('em-files2');
+  const container = document.getElementById('em-attach-tags');
+  container.innerHTML = '';
+  Array.from(input.files).forEach((f, i) => {
+    const tag = document.createElement('span');
+    tag.className = 'attach-tag';
+    tag.innerHTML = `${f.name} <button onclick="removeAttach(${i})" title="Remove">×</button>`;
+    container.appendChild(tag);
+  });
+}
+function removeAttach(idx) {
+  const input = document.getElementById('em-files2');
+  const dt = new DataTransfer();
+  Array.from(input.files).forEach((f, i) => { if (i !== idx) dt.items.add(f); });
+  input.files = dt.files;
+  updateAttachTags();
+}
+function clearEmailCompose() {
+  ['em-to2','em-cc2','em-sub2','em-body2'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('em-tpl2').selectedIndex = 0;
+  const input = document.getElementById('em-files2');
+  input.value = '';
+  updateAttachTags();
+}
+
 async function sendEmail2() {
   const to      = document.getElementById('em-to2').value.trim();
   const subject = document.getElementById('em-sub2').value.trim();
   const body    = document.getElementById('em-body2').value.trim();
   if (!to || !subject || !body) {
-    showToast(window.LANG==='fr' ? 'Destinataire, objet et message requis.' : 'To, subject, and message are required.', 'error');
+    showToast('To, subject, and message are required.', 'error'); return;
+  }
+
+  const btn = document.getElementById('em-send-btn2');
+  btn.disabled = true; btn.innerHTML = 'Sending…';
+
+  const fd = new FormData();
+  fd.append('to', to);
+  fd.append('subject', subject);
+  fd.append('body', body);
+  const files = document.getElementById('em-files2').files;
+  Array.from(files).forEach(f => fd.append('attachments', f));
+
+  try {
+    const headers = {};
+    if (AUTH_TOKEN) headers['Authorization'] = 'Bearer ' + AUTH_TOKEN;
+    const res  = await fetch(API_BASE + '/api/email/send', { method: 'POST', headers, body: fd });
+    const data = await res.json();
+    if (data && data.success) {
+      showToast(`Email sent to ${to}`, 'success');
+      clearEmailCompose();
+      loadRecentActivity();
+    } else {
+      showToast(data?.message || 'Failed to send email.', 'error');
+    }
+  } catch(e) {
+    showToast(e.message || 'Network error.', 'error');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:5px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send from info@';
+}
+
+// ── INVOICES ──────────────────────────────────────────────────────────────────
+let _editingInvoiceId = null;
+const SERVICES = {
+  growth_sprint:  { desc: '90-Day Growth Sprint — Full strategic engagement',   price: 4500 },
+  market_entry:   { desc: 'Market Entry Programme — New market launch support', price: 6000 },
+  sales_system:   { desc: 'Sales Conversion System — Pipeline & close rate',    price: 3500 },
+  advisory:       { desc: 'Strategic Advisory — Monthly retainer',              price: 2000 },
+  diagnostic:     { desc: 'Business Diagnostic (Pro) — AI + Consultant review', price:  800 },
+  pitch_deck:     { desc: 'Pitch Deck & Investor Readiness Programme',          price: 2500 },
+  ops_audit:      { desc: 'Operations Audit & Process Optimisation',            price: 3000 },
+};
+
+function prefillService(val) {
+  if (!val || !SERVICES[val]) return;
+  addInvoiceItem(SERVICES[val].desc, 1, SERVICES[val].price);
+}
+
+function addInvoiceItem(desc = '', qty = 1, price = 0) {
+  const container = document.getElementById('inv-items-container');
+  const idx = container.children.length;
+  const row = document.createElement('div');
+  row.className = 'line-item-row';
+  row.dataset.idx = idx;
+  row.innerHTML = `
+    <input class="finput" placeholder="Service description" value="${desc}" oninput="recalcInvoice()">
+    <input class="finput" type="number" placeholder="1" value="${qty}" min="1" oninput="recalcInvoice()" style="text-align:center">
+    <input class="finput" type="number" placeholder="0.00" value="${price||''}" min="0" step="0.01" oninput="recalcInvoice()" style="text-align:right">
+    <input class="finput" readonly value="${price ? (qty*price).toFixed(2) : ''}" style="text-align:right;background:var(--surface-2,#1e1e1e);color:var(--text2)">
+    <button class="btn" style="padding:0 8px;min-width:32px;font-size:16px" onclick="removeInvoiceItem(this)" title="Remove">×</button>
+  `;
+  container.appendChild(row);
+  recalcInvoice();
+}
+
+function removeInvoiceItem(btn) {
+  btn.closest('.line-item-row').remove();
+  recalcInvoice();
+}
+
+function recalcInvoice() {
+  const rows = document.querySelectorAll('#inv-items-container .line-item-row');
+  let subtotal = 0;
+  rows.forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const qty   = parseFloat(inputs[1].value) || 0;
+    const price = parseFloat(inputs[2].value) || 0;
+    const amt   = qty * price;
+    inputs[3].value = amt > 0 ? amt.toFixed(2) : '';
+    subtotal += amt;
+  });
+  const taxRate  = parseFloat(document.getElementById('inv-tax').value) || 0;
+  const taxAmt   = subtotal * taxRate / 100;
+  const total    = subtotal + taxAmt;
+  const cur      = document.getElementById('inv-currency').value || 'USD';
+  const fmtAmt   = (n) => `${cur} ${n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  document.getElementById('inv-subtotal').textContent = fmtAmt(subtotal);
+  document.getElementById('inv-total').textContent    = fmtAmt(total);
+  const taxLine = document.getElementById('inv-tax-line');
+  if (taxRate > 0) {
+    taxLine.style.display = '';
+    document.getElementById('inv-tax-pct').textContent  = taxRate;
+    document.getElementById('inv-taxamt').textContent   = fmtAmt(taxAmt);
+  } else {
+    taxLine.style.display = 'none';
+  }
+}
+
+function openCreateInvoiceModal(invoice = null) {
+  _editingInvoiceId = invoice?._id || null;
+  document.getElementById('inv-modal-title').textContent = invoice ? `Edit Invoice ${invoice.invoiceNumber}` : 'New Invoice';
+  // Clear
+  ['inv-client-name','inv-client-email','inv-client-company','inv-client-country','inv-client-address','inv-notes'].forEach(id => {
+    document.getElementById(id).value = invoice?.client?.[id.replace('inv-client-','')] || '';
+  });
+  document.getElementById('inv-client-name').value    = invoice?.client?.name    || '';
+  document.getElementById('inv-client-email').value   = invoice?.client?.email   || '';
+  document.getElementById('inv-client-company').value = invoice?.client?.company || '';
+  document.getElementById('inv-client-country').value = invoice?.client?.country || '';
+  document.getElementById('inv-client-address').value = invoice?.client?.address || '';
+  document.getElementById('inv-tax').value     = invoice?.taxRate || '';
+  document.getElementById('inv-notes').value   = invoice?.notes   || '';
+  document.getElementById('inv-currency').value = invoice?.currency || 'USD';
+  if (invoice?.dueDate) {
+    document.getElementById('inv-due-date').value = new Date(invoice.dueDate).toISOString().slice(0,10);
+  } else {
+    document.getElementById('inv-due-date').value = '';
+  }
+  // Items
+  document.getElementById('inv-items-container').innerHTML = '';
+  const items = invoice?.items || [];
+  if (items.length) {
+    items.forEach(i => addInvoiceItem(i.description, i.quantity, i.unitPrice));
+  } else {
+    addInvoiceItem();
+  }
+  recalcInvoice();
+  openModal('modal-invoice');
+}
+
+function getInvoiceFormData() {
+  const rows = document.querySelectorAll('#inv-items-container .line-item-row');
+  const items = [];
+  rows.forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const desc  = inputs[0].value.trim();
+    const qty   = parseFloat(inputs[1].value) || 0;
+    const price = parseFloat(inputs[2].value) || 0;
+    if (desc && qty > 0) items.push({ description: desc, quantity: qty, unitPrice: price });
+  });
+  return {
+    client: {
+      name:    document.getElementById('inv-client-name').value.trim(),
+      email:   document.getElementById('inv-client-email').value.trim(),
+      company: document.getElementById('inv-client-company').value.trim(),
+      country: document.getElementById('inv-client-country').value.trim(),
+      address: document.getElementById('inv-client-address').value.trim(),
+    },
+    items,
+    taxRate:  parseFloat(document.getElementById('inv-tax').value) || 0,
+    currency: document.getElementById('inv-currency').value || 'USD',
+    dueDate:  document.getElementById('inv-due-date').value || null,
+    notes:    document.getElementById('inv-notes').value.trim(),
+  };
+}
+
+async function saveInvoice(action) {
+  const payload = getInvoiceFormData();
+  if (!payload.client.name || !payload.client.email) {
+    showToast('Client name and email are required.', 'error'); return;
+  }
+  if (!payload.items.length) {
+    showToast('Add at least one line item.', 'error'); return;
+  }
+
+  const draftBtn = document.getElementById('inv-save-draft-btn');
+  const sendBtn  = document.getElementById('inv-save-send-btn');
+  draftBtn.disabled = true; sendBtn.disabled = true;
+
+  let invoice;
+  if (_editingInvoiceId) {
+    const res = await api('PATCH', `/api/invoices/${_editingInvoiceId}`, payload);
+    if (!res?.success) { showToast(res?.message || 'Failed to update invoice.', 'error'); draftBtn.disabled=false; sendBtn.disabled=false; return; }
+    invoice = res.invoice;
+    showToast(`Invoice ${invoice.invoiceNumber} updated.`, 'success');
+  } else {
+    const res = await api('POST', '/api/invoices', payload);
+    if (!res?.success) { showToast(res?.message || 'Failed to create invoice.', 'error'); draftBtn.disabled=false; sendBtn.disabled=false; return; }
+    invoice = res.invoice;
+    showToast(`Invoice ${invoice.invoiceNumber} created.`, 'success');
+  }
+
+  closeModal('modal-invoice');
+  draftBtn.disabled = false; sendBtn.disabled = false;
+  loadInvoices();
+
+  if (action === 'send') {
+    await sendInvoicePDF(invoice);
+  }
+}
+
+async function sendInvoicePDF(invoice) {
+  // Generate PDF client-side, then send
+  let pdfBase64 = null;
+  try { pdfBase64 = generateInvoicePDFBase64(invoice); } catch(e) { console.warn('PDF gen failed:', e); }
+
+  const res = await api('POST', `/api/invoices/${invoice._id}/send`, { pdfBase64 });
+  if (res?.success) {
+    showToast(`Invoice ${invoice.invoiceNumber} sent to ${invoice.client.email}`, 'success');
+  } else {
+    showToast(res?.message || 'Failed to send invoice.', 'error');
+  }
+  loadInvoices();
+}
+
+async function markInvoicePaid(id) {
+  const res = await api('PATCH', `/api/invoices/${id}/status`, { status: 'paid' });
+  if (res?.success) { showToast('Invoice marked as paid.', 'success'); loadInvoices(); }
+  else showToast(res?.message || 'Failed.', 'error');
+}
+
+async function deleteInvoice(id, num) {
+  if (!confirm(`Delete invoice ${num}? This cannot be undone.`)) return;
+  const res = await api('DELETE', `/api/invoices/${id}`);
+  if (res?.success) { showToast('Invoice deleted.', 'success'); loadInvoices(); }
+  else showToast(res?.message || 'Failed.', 'error');
+}
+
+async function loadInvoices() {
+  const status = document.getElementById('inv-status-filter')?.value || '';
+  const qs = status ? `?status=${status}` : '';
+  const data = await api('GET', `/api/invoices${qs}`);
+  const tbody = document.getElementById('inv-tbody');
+  if (!tbody) return;
+  if (!data?.invoices?.length) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:32px">No invoices found.</td></tr>`;
+    updateInvoiceStats(data?.invoices || []);
     return;
   }
-  const btn = document.getElementById('em-send-btn2');
-  btn.disabled = true;
-  btn.textContent = window.LANG==='fr' ? 'Envoi…' : 'Sending…';
-  const data = await api('POST', '/api/email/send', { to, subject, body });
-  btn.disabled = false;
-  btn.textContent = window.LANG==='fr' ? 'Envoyer via info@' : 'Send from info@';
-  if (data && data.success) {
-    showToast(window.LANG==='fr' ? `Email envoyé à ${to}` : `Email sent to ${to}`, 'success');
-    document.getElementById('em-to2').value = '';
-    document.getElementById('em-sub2').value = '';
-    document.getElementById('em-body2').value = '';
-    loadRecentActivity();
-  } else {
-    showToast(data?.message || (window.LANG==='fr' ? 'Échec de l\'envoi.' : 'Failed to send email.'), 'error');
+  const statusLabel = (s) => `<span class="inv-status ${s}">${s}</span>`;
+  const fmt = (inv) => `${inv.currency || 'USD'} ${Number(inv.total).toLocaleString('en-US',{minimumFractionDigits:2})}`;
+  tbody.innerHTML = data.invoices.map(inv => `
+    <tr>
+      <td style="font-weight:700;color:var(--accent)">${inv.invoiceNumber}</td>
+      <td>${inv.client.name}</td>
+      <td style="color:var(--text2)">${inv.client.company || '—'}</td>
+      <td style="font-weight:600">${fmt(inv)}</td>
+      <td style="color:var(--text2)">${inv.dueDate ? new Date(inv.dueDate).toLocaleDateString('en-GB') : '—'}</td>
+      <td>${statusLabel(inv.status)}</td>
+      <td style="color:var(--text3)">${new Date(inv.createdAt).toLocaleDateString('en-GB')}</td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="btn" style="padding:3px 8px;font-size:11px" onclick="downloadInvoicePDF('${inv._id}')" title="Download PDF">PDF</button>
+          ${inv.status !== 'paid' ? `<button class="btn" style="padding:3px 8px;font-size:11px" onclick="sendInvoicePDF(${JSON.stringify(inv).replace(/"/g,'&quot;')})" title="Send email">Send</button>` : ''}
+          ${inv.status !== 'paid' ? `<button class="btn" style="padding:3px 8px;font-size:11px;color:#16a34a" onclick="markInvoicePaid('${inv._id}')" title="Mark paid">Paid</button>` : ''}
+          <button class="btn" style="padding:3px 8px;font-size:11px" onclick="openCreateInvoiceModal(${JSON.stringify(inv).replace(/"/g,'&quot;')})" title="Edit">Edit</button>
+          <button class="btn" style="padding:3px 8px;font-size:11px;color:#dc2626" onclick="deleteInvoice('${inv._id}','${inv.invoiceNumber}')" title="Delete">Del</button>
+        </div>
+      </td>
+    </tr>`).join('');
+  document.getElementById('inv-count').textContent = `${data.total} invoice${data.total !== 1 ? 's' : ''}`;
+  updateInvoiceStats(data.invoices);
+}
+
+function updateInvoiceStats(invoices) {
+  const total  = invoices.length;
+  const sent   = invoices.filter(i => i.status === 'sent').length;
+  const paid   = invoices.filter(i => i.status === 'paid').length;
+  const value  = invoices.reduce((s, i) => s + (i.total || 0), 0);
+  document.getElementById('inv-stat-total').textContent = total;
+  document.getElementById('inv-stat-sent').textContent  = sent;
+  document.getElementById('inv-stat-paid').textContent  = paid;
+  document.getElementById('inv-stat-value').textContent = `$${(value/1000).toFixed(1)}k`;
+  const badge = document.getElementById('inv-nav-badge');
+  if (badge) { badge.textContent = sent || ''; badge.style.display = sent ? '' : 'none'; }
+}
+
+async function downloadInvoicePDF(id) {
+  const res = await api('GET', `/api/invoices/${id}`);
+  if (!res?.invoice) { showToast('Invoice not found.', 'error'); return; }
+  generateInvoicePDFDownload(res.invoice);
+}
+
+function generateInvoicePDFBase64(invoice) {
+  const doc = buildInvoicePDF(invoice);
+  return doc.output('datauristring').split(',')[1];
+}
+function generateInvoicePDFDownload(invoice) {
+  const doc = buildInvoicePDF(invoice);
+  doc.save(`Invoice_${invoice.invoiceNumber}_${invoice.client.company || invoice.client.name}.pdf`);
+}
+
+function buildInvoicePDF(inv) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const W = 210, margin = 18;
+  const fmtAmt = (n) => `${inv.currency || 'USD'} ${Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  let y = 0;
+
+  // ── Header ──
+  doc.setFillColor(10, 10, 10);
+  doc.rect(0, 0, W, 36, 'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('VERTEX GROUP AFRICA', margin, 13);
+  doc.setFontSize(8); doc.setFont('helvetica','italic');
+  doc.setTextColor(12,148,216);
+  doc.text('Your ambition. Our architecture.', margin, 20);
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(22); doc.setFont('helvetica','bold');
+  doc.text('INVOICE', W - margin, 13, { align:'right' });
+  doc.setFontSize(10); doc.setFont('helvetica','normal');
+  doc.setTextColor(180,180,180);
+  doc.text(inv.invoiceNumber, W - margin, 21, { align:'right' });
+
+  // ── Blue meta bar ──
+  doc.setFillColor(12,148,216);
+  doc.rect(0, 36, W, 10, 'F');
+  doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
+  const issueDate = new Date(inv.createdAt || Date.now()).toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  const dueDate   = inv.dueDate ? new Date(inv.dueDate).toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}) : 'Upon receipt';
+  doc.text(`Issue date: ${issueDate}`, margin, 42);
+  doc.text(`Due date: ${dueDate}`, W/2, 42, {align:'center'});
+  doc.text(`Status: ${(inv.status||'sent').toUpperCase()}`, W - margin, 42, {align:'right'});
+
+  // ── Bill to / From ──
+  y = 56;
+  doc.setTextColor(150,150,150); doc.setFontSize(8); doc.setFont('helvetica','bold');
+  doc.text('BILLED TO', margin, y);
+  doc.text('FROM', W/2 + 10, y);
+  y += 5;
+  doc.setTextColor(10,10,10); doc.setFontSize(10); doc.setFont('helvetica','bold');
+  doc.text(inv.client.name, margin, y);
+  doc.text('Vertex Group Africa', W/2 + 10, y);
+  doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(75,85,99);
+  let cy = y + 5;
+  if (inv.client.company) { doc.text(inv.client.company, margin, cy); cy += 5; }
+  if (inv.client.address) { const al = doc.splitTextToSize(inv.client.address, 75); doc.text(al, margin, cy); cy += al.length*5; }
+  if (inv.client.country) { doc.text(inv.client.country, margin, cy); cy += 5; }
+  doc.setTextColor(12,148,216);
+  doc.text(inv.client.email, margin, cy);
+  doc.setTextColor(75,85,99); doc.setFontSize(8);
+  doc.text('info@vertexgroup.africa', W/2 + 10, y + 5);
+  doc.text('vertexgroup.africa', W/2 + 10, y + 10);
+
+  y = Math.max(cy + 8, y + 22);
+
+  // ── Items table header ──
+  doc.setFillColor(10,10,10);
+  doc.rect(margin, y, W - margin*2, 8, 'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(8); doc.setFont('helvetica','bold');
+  doc.text('DESCRIPTION', margin + 3, y + 5.5);
+  doc.text('QTY', margin + 100, y + 5.5, {align:'center'});
+  doc.text('UNIT PRICE', W - margin - 28, y + 5.5, {align:'right'});
+  doc.text('AMOUNT', W - margin - 2, y + 5.5, {align:'right'});
+  y += 10;
+
+  // ── Items ──
+  doc.setFont('helvetica','normal'); doc.setFontSize(9);
+  (inv.items || []).forEach((item, idx) => {
+    if (y > 255) { doc.addPage(); y = 20; }
+    doc.setFillColor(idx % 2 === 0 ? 250 : 255, idx % 2 === 0 ? 250 : 255, idx % 2 === 0 ? 250 : 255);
+    const descLines = doc.splitTextToSize(item.description, 90);
+    const rowH = descLines.length * 5 + 4;
+    doc.rect(margin, y, W - margin*2, rowH, 'F');
+    doc.setTextColor(20,20,20);
+    doc.text(descLines, margin + 3, y + 5);
+    doc.setTextColor(75,85,99);
+    doc.text(String(item.quantity), margin + 100, y + 5, {align:'center'});
+    doc.text(fmtAmt(item.unitPrice), W - margin - 28, y + 5, {align:'right'});
+    doc.setTextColor(10,10,10); doc.setFont('helvetica','bold');
+    doc.text(fmtAmt(item.amount), W - margin - 2, y + 5, {align:'right'});
+    doc.setFont('helvetica','normal');
+    y += rowH;
+  });
+
+  // ── Totals ──
+  y += 4;
+  const totalsX = W - margin - 70;
+  doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(75,85,99);
+  doc.text('Subtotal', totalsX, y);
+  doc.setTextColor(10,10,10); doc.setFont('helvetica','bold');
+  doc.text(fmtAmt(inv.subtotal), W - margin - 2, y, {align:'right'});
+  if (inv.taxRate) {
+    y += 6;
+    doc.setFont('helvetica','normal'); doc.setTextColor(75,85,99);
+    doc.text(`Tax (${inv.taxRate}%)`, totalsX, y);
+    doc.setTextColor(10,10,10); doc.setFont('helvetica','bold');
+    doc.text(fmtAmt(inv.taxAmount), W - margin - 2, y, {align:'right'});
   }
+  y += 8;
+  doc.setFillColor(10,10,10);
+  doc.roundedRect(totalsX - 4, y - 5, W - margin - totalsX + 6, 12, 2, 2, 'F');
+  doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
+  doc.text('TOTAL DUE', totalsX, y + 3);
+  doc.setTextColor(12,148,216); doc.setFontSize(12);
+  doc.text(fmtAmt(inv.total), W - margin - 2, y + 3, {align:'right'});
+
+  // ── Payment details ──
+  y += 18;
+  if (y > 230) { doc.addPage(); y = 20; }
+  doc.setFillColor(245,248,252);
+  doc.rect(margin, y, W - margin*2, 46, 'F');
+  doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(12,148,216);
+  doc.text('PAYMENT DETAILS', margin + 4, y + 7);
+  const bankRows = [
+    ['Account holder', 'Vertex Global Tech'],
+    ['Account number', '747833314790450'],
+    ['Account type',   'Checking'],
+    ['Routing number', '084009519'],
+    ['Bank',           'Column National Association'],
+    ['Bank address',   '108 W 13th St, Wilmington, DE 19801, United States'],
+    ['Swift / BIC',    'TRWIUS35XXX'],
+  ];
+  let by = y + 13;
+  bankRows.forEach(([label, val]) => {
+    doc.setFont('helvetica','normal'); doc.setTextColor(100,100,100);
+    doc.text(label, margin + 4, by);
+    doc.setFont('helvetica','bold'); doc.setTextColor(10,10,10);
+    doc.text(val, margin + 45, by);
+    by += 5;
+  });
+  y += 50;
+
+  // ── Notes ──
+  if (inv.notes) {
+    if (y > 245) { doc.addPage(); y = 20; }
+    doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(150,150,150);
+    doc.text('NOTES', margin, y);
+    y += 5;
+    const nl = doc.splitTextToSize(inv.notes, W - margin*2);
+    doc.setFont('helvetica','normal'); doc.setTextColor(75,85,99);
+    doc.text(nl, margin, y);
+    y += nl.length * 5 + 4;
+  }
+
+  // ── Footer on every page ──
+  const pages = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= pages; i++) {
+    doc.setPage(i);
+    doc.setFillColor(10,10,10);
+    doc.rect(0, 283, W, 14, 'F');
+    doc.setFontSize(7.5); doc.setFont('helvetica','normal'); doc.setTextColor(150,150,150);
+    doc.text('Vertex Group Africa  ·  info@vertexgroup.africa  ·  vertexgroup.africa', W/2, 290, {align:'center'});
+    doc.setTextColor(12,148,216);
+    doc.text(`Page ${i} / ${pages}`, W - margin, 290, {align:'right'});
+    doc.setTextColor(100,100,100);
+    doc.text('Your ambition. Our architecture.', margin, 290);
+  }
+
+  return doc;
 }
 
 // Auto-refresh stats every 60 seconds while dashboard is open

@@ -114,7 +114,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 /* SERVICES */
 .services-section{background:var(--offblack)}
 .services-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4rem;gap:2rem;flex-wrap:wrap}
-.services-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700)}
 .service-card{background:var(--offblack);padding:3rem;position:relative;overflow:hidden;transition:background 0.3s;cursor:default}
 .service-card::before{content:'';position:absolute;top:0;left:0;width:0;height:2px;background:var(--accent);transition:width 0.4s}
 .service-card:hover{background:#131311}
@@ -129,48 +129,67 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .service-outcome::before{content:'→';color:var(--accent);font-size:0.68rem}
 
 /* FORM */
-.form-panel{background:var(--offblack);border:1px solid var(--grey-700);padding:3rem}
-.form-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;margin-bottom:2rem}
-.form-group{display:flex;flex-direction:column;gap:0.45rem;margin-bottom:1.3rem}
-.form-group label{font-size:0.64rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--grey-500);font-family:'DM Mono',monospace}
-.form-group input,.form-group select,.form-group textarea{background:transparent;border:none;border-bottom:1px solid var(--grey-700);color:var(--white);padding:0.75rem 0;font-size:0.9rem;font-weight:300;outline:none;transition:border-color 0.2s;width:100%}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent)}
+.form-panel{background:var(--offblack);border:1px solid var(--grey-700);border-top:3px solid var(--cta);padding:2.5rem}
+.form-title{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;margin-bottom:0.4rem;line-height:1.25}
+.form-subtitle{font-size:0.75rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.06em;margin-bottom:2rem;line-height:1.5}
+.form-section-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--cta);border-bottom:1px solid var(--grey-700);padding-bottom:0.65rem;margin:1.8rem 0 1.25rem;display:flex;align-items:center;gap:0.7rem}
+.form-section-label::before{content:'';display:inline-block;width:5px;height:5px;background:var(--cta);border-radius:50%;flex-shrink:0}
+.form-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem}
+.form-group label{font-size:0.62rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--grey-500);font-family:'DM Mono',monospace}
+.form-group input,.form-group select,.form-group textarea{background:var(--grey-800);border:1px solid var(--grey-700);color:var(--white);padding:0.8rem 1rem;font-size:0.88rem;font-weight:300;outline:none;transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;width:100%;box-sizing:border-box}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--cta);background:rgba(12,148,216,0.04);box-shadow:0 0 0 3px rgba(12,148,216,0.07)}
 .form-group select option{background:#1a1a18;color:var(--white)}
-.form-group textarea{resize:none;min-height:80px}
-.file-zone{border:1px dashed var(--grey-700);padding:2rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;margin-bottom:1.3rem}
-.file-zone:hover,.file-zone.dragover{border-color:var(--accent);background:rgba(200,184,154,0.04)}
+.form-group textarea{resize:none;min-height:90px}
+.file-zone{border:1px dashed var(--grey-700);padding:2.5rem 2rem;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;margin-bottom:1.3rem;background:var(--grey-800)}
+.file-zone:hover,.file-zone.dragover{border-color:var(--cta);border-style:solid;background:rgba(12,148,216,0.05)}
 .file-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .file-zone-text{pointer-events:none}
-.file-zone-icon{font-size:1.4rem;margin-bottom:0.5rem;display:block}
+.file-zone-icon{font-size:1.3rem;margin-bottom:0.5rem;display:block;color:var(--cta)}
 .file-zone-main{font-size:0.82rem;color:var(--grey-300);font-weight:500;margin-bottom:0.2rem}
 .file-zone-sub{font-size:0.7rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.06em}
-.form-submit{width:100%;background:var(--cta);color:var(--white);border:none;padding:1.1rem 2rem;font-size:0.78rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background 0.25s,transform 0.2s,box-shadow 0.2s;margin-top:0.5rem}
-.form-submit:hover:not(:disabled){background:var(--cta-hover);transform:translateY(-2px);box-shadow:0 8px 24px var(--cta-glow)}
-.form-submit:disabled{opacity:0.5;cursor:not-allowed}
-.form-error{color:#e07070;font-size:0.75rem;font-family:'DM Mono',monospace;margin-top:0.3rem}
+.form-submit{width:100%;background:var(--cta);color:var(--white);border:none;padding:1.15rem 2rem;font-size:0.78rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;transition:background 0.25s,transform 0.2s,box-shadow 0.2s;margin-top:0.75rem}
+.form-submit:hover:not(:disabled){background:var(--cta-hover);transform:translateY(-2px);box-shadow:0 8px 28px var(--cta-glow)}
+.form-submit:disabled{opacity:0.45;cursor:not-allowed}
+.form-error{color:#e07070;font-size:0.72rem;font-family:'DM Mono',monospace;margin-top:0.25rem}
+.diag-step-item{display:flex;gap:1.5rem;padding:1.5rem 0;border-bottom:var(--rule)}
+.diag-step-item:first-child{padding-top:0}
+.diag-step-item:last-child{border-bottom:none}
+.diag-step-num-wrap{display:flex;flex-direction:column;align-items:center;gap:0;min-width:28px}
+.diag-step-num{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--cta);letter-spacing:0.15em;background:rgba(12,148,216,0.1);border:1px solid rgba(12,148,216,0.25);width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.diag-step-title{font-size:0.88rem;font-weight:500;margin-bottom:0.3rem;color:var(--white)}
+.diag-step-desc{font-size:0.78rem;color:var(--grey-500);line-height:1.65}
+.diag-stats-row{display:flex;gap:0;border:var(--rule);margin-top:2rem}
+.diag-stat{flex:1;padding:1.2rem 1.5rem;border-right:var(--rule);display:flex;flex-direction:column;gap:0.3rem}
+.diag-stat:last-child{border-right:none}
+.diag-stat-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--white);line-height:1}
+.diag-stat-lbl{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--grey-500)}
 
 /* PROCESSING */
-.processing-overlay{position:fixed;inset:0;background:rgba(10,10,10,0.97);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;padding:2rem}
-.processing-ring{width:70px;height:70px;border:1px solid var(--grey-700);border-top-color:var(--accent);border-radius:50%;animation:spin 1.2s linear infinite}
-.processing-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;text-align:center}
-.processing-timer{font-family:'DM Mono',monospace;font-size:2.5rem;color:var(--accent);letter-spacing:0.1em}
-.processing-steps{display:flex;flex-direction:column;gap:0.7rem;max-width:400px;width:100%}
-.proc-step{display:flex;align-items:center;gap:1rem;font-size:0.78rem;color:var(--grey-500);transition:color 0.4s}
-.proc-step.done{color:var(--white)}
-.proc-step.active{color:var(--accent)}
-.proc-step-dot{width:7px;height:7px;border-radius:50%;background:var(--grey-700);flex-shrink:0;transition:background 0.4s}
-.proc-step.done .proc-step-dot{background:var(--accent)}
-.proc-step.active .proc-step-dot{background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.processing-overlay{position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.8rem;padding:2rem}
+.processing-logo{display:flex;align-items:center;gap:0.8rem;margin-bottom:0.5rem}
+.processing-logo-text{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;letter-spacing:0.08em;color:var(--white)}
+.processing-ring{width:68px;height:68px;border:2px solid rgba(12,148,216,0.15);border-top-color:var(--cta);border-radius:50%;animation:spin 0.9s linear infinite}
+.processing-title{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;text-align:center;line-height:1.2}
+.processing-timer{font-family:'DM Mono',monospace;font-size:2.4rem;color:var(--cta);letter-spacing:0.12em}
+.processing-steps{display:flex;flex-direction:column;gap:0.55rem;max-width:420px;width:100%}
+.proc-step{display:flex;align-items:center;gap:1rem;font-size:0.77rem;color:var(--grey-700);transition:color 0.3s,opacity 0.3s}
+.proc-step.done{color:var(--grey-500)}
+.proc-step.active{color:var(--white)}
+.proc-step-dot{width:6px;height:6px;border-radius:50%;background:var(--grey-700);flex-shrink:0;transition:background 0.3s,box-shadow 0.3s}
+.proc-step.done .proc-step-dot{background:var(--cta);opacity:0.5}
+.proc-step.active .proc-step-dot{background:var(--cta);box-shadow:0 0 10px var(--cta)}
+.proc-progress-wrap{width:420px;max-width:90vw;height:1px;background:var(--grey-700);position:relative;overflow:hidden}
+.proc-progress-fill{position:absolute;left:0;top:0;height:100%;background:var(--cta);transition:width 1.8s ease;box-shadow:0 0 8px var(--cta)}
 
 /* REPORT */
 .report-page{min-height:100vh;padding-top:80px;background:var(--black)}
-.report-hero{padding:4rem 3rem;border-bottom:var(--rule);background:linear-gradient(180deg,rgba(200,184,154,0.06) 0%,transparent 100%)}
+.report-hero{padding:4rem 3rem;border-bottom:var(--rule);background:linear-gradient(180deg,rgba(12,148,216,0.05) 0%,transparent 100%)}
 .report-meta{display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem}
 .report-meta-item{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;color:var(--grey-500);text-transform:uppercase;display:flex;gap:0.5rem;align-items:center}
 .report-meta-item span{color:var(--accent)}
 .report-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:900;margin-bottom:1rem;line-height:1.1}
-.report-email-notice{display:flex;align-items:center;gap:0.8rem;background:rgba(200,184,154,0.08);border:1px solid rgba(200,184,154,0.2);padding:1rem 1.5rem;margin-top:1.5rem;font-size:0.83rem;color:var(--grey-300)}
-.report-email-notice strong{color:var(--accent)}
+.report-email-notice{display:flex;align-items:center;gap:0.8rem;background:rgba(12,148,216,0.06);border:1px solid rgba(12,148,216,0.2);padding:1rem 1.5rem;margin-top:1.5rem;font-size:0.83rem;color:var(--grey-300)}
+.report-email-notice strong{color:var(--cta)}
 .report-body{padding:3rem;display:grid;grid-template-columns:2fr 1fr;gap:3rem;align-items:start}
 .report-main{display:flex;flex-direction:column;gap:2rem}
 .report-section{border:1px solid var(--grey-700);overflow:hidden}
@@ -461,6 +480,109 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
   .sme-stat-grid{grid-template-columns:1fr 1fr}
 }
 
+/* INSIGHTS PAGE */
+.ins-hero{min-height:72vh;display:flex;flex-direction:column;justify-content:flex-end;padding:8rem 3rem 5rem;position:relative;overflow:hidden;background:var(--black)}
+.ins-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 80% 30%,rgba(12,148,216,0.06) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 15% 85%,rgba(12,148,216,0.03) 0%,transparent 60%)}
+.ins-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.018) 1px,transparent 1px);background-size:80px 80px}
+.ins-hero-label{font-family:'DM Mono',monospace;font-size:0.66rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--cta);margin-bottom:1.8rem;animation:fadeUp 0.8s 0.3s both}
+.ins-hero-h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,8vw,8rem);font-weight:900;line-height:0.92;letter-spacing:-0.03em;max-width:800px;animation:fadeUp 0.9s 0.5s both}
+.ins-hero-h1 em{font-style:italic;color:var(--cta)}
+.ins-hero-sub{margin-top:2.5rem;font-size:1rem;color:var(--grey-300);max-width:560px;line-height:1.82;animation:fadeUp 0.9s 0.7s both}
+.ins-hero-meta{margin-top:2.5rem;display:flex;gap:2.5rem;flex-wrap:wrap;animation:fadeUp 0.9s 0.9s both}
+.ins-hero-meta-item{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;color:var(--grey-500);text-transform:uppercase;display:flex;align-items:center;gap:0.5rem}
+.ins-hero-meta-item span{color:var(--cta);font-size:1.1rem;font-weight:600;font-family:'Playfair Display',serif;letter-spacing:0}
+/* Live KPI strip */
+.ins-kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid rgba(12,148,216,0.2);border-bottom:1px solid rgba(12,148,216,0.2);background:rgba(12,148,216,0.03)}
+.ins-kpi{padding:2rem 2rem;border-right:var(--rule);display:flex;flex-direction:column;gap:0.35rem;position:relative}
+.ins-kpi:last-child{border-right:none}
+.ins-kpi-num{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--white);line-height:1}
+.ins-kpi-lbl{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--grey-500)}
+.ins-kpi-live{position:absolute;top:1rem;right:1rem;width:6px;height:6px;border-radius:50%;background:var(--cta);animation:livePulse 2s infinite}
+@keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(12,148,216,0.4)}50%{opacity:0.7;box-shadow:0 0 0 6px rgba(12,148,216,0)}}
+/* Explorer section */
+.ins-explorer{padding:5rem 3rem;background:var(--offblack);border-top:var(--rule)}
+.ins-explorer-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;gap:2rem;flex-wrap:wrap}
+.ins-filters{display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.ins-filter-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.55rem 1.1rem;border:1px solid var(--grey-700);background:none;color:var(--grey-400);cursor:pointer;transition:all 0.2s}
+.ins-filter-btn:hover{border-color:var(--grey-400);color:var(--white)}
+.ins-filter-btn.active{border-color:var(--cta);color:var(--cta);background:rgba(12,148,216,0.08)}
+.ins-filter-select{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;padding:0.55rem 1rem;border:1px solid var(--grey-700);background:var(--grey-800);color:var(--grey-300);cursor:pointer;outline:none}
+.ins-filter-select:focus{border-color:var(--cta)}
+.ins-filter-select option{background:#1a1a18}
+.ins-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem}
+.ins-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem;margin-bottom:2rem}
+.ins-chart-card{border:1px solid var(--grey-700);padding:1.8rem;background:var(--black)}
+.ins-chart-title{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey-500);margin-bottom:1.5rem;display:flex;align-items:center;gap:0.7rem}
+.ins-chart-title::before{content:'';display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--cta);flex-shrink:0}
+.ins-bar-row{display:flex;align-items:center;gap:0.9rem;margin-bottom:0.85rem}
+.ins-bar-label{font-size:0.75rem;color:var(--grey-300);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 0 130px}
+.ins-bar-track{flex:1;height:6px;background:var(--grey-700);overflow:hidden;border-radius:0}
+.ins-bar-fill{height:100%;background:var(--cta);transition:width 0.8s ease;border-radius:0}
+.ins-bar-fill.green{background:#16a34a}
+.ins-bar-fill.amber{background:#d97706}
+.ins-bar-fill.red{background:#e07070}
+.ins-bar-pct{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--grey-500);flex-shrink:0;min-width:32px;text-align:right}
+.ins-score-dist{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--grey-700)}
+.ins-score-band{padding:1.4rem 1rem;background:var(--black);display:flex;flex-direction:column;gap:0.4rem;text-align:center}
+.ins-score-band-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;line-height:1}
+.ins-score-band-label{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--grey-500)}
+.ins-score-band-range{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--grey-700);margin-top:0.2rem}
+.ins-trend-row{display:flex;align-items:flex-end;gap:4px;height:64px;margin-top:1rem}
+.ins-trend-bar{flex:1;background:rgba(12,148,216,0.25);transition:height 0.6s ease;position:relative;cursor:default}
+.ins-trend-bar:hover{background:var(--cta)}
+.ins-trend-bar-tip{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:0.55rem;color:var(--cta);white-space:nowrap;display:none}
+.ins-trend-bar:hover .ins-trend-bar-tip{display:block}
+.ins-trend-months{display:flex;gap:4px;margin-top:0.4rem}
+.ins-trend-month{flex:1;font-family:'DM Mono',monospace;font-size:0.5rem;color:var(--grey-700);text-align:center;overflow:hidden;text-overflow:clip}
+.ins-empty{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--grey-700);font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;border:1px dashed var(--grey-700)}
+/* Market section */
+.ins-markets{padding:5rem 3rem;background:var(--black);border-top:var(--rule)}
+.ins-market-tabs{display:flex;gap:0;border-bottom:1px solid var(--grey-700);margin-bottom:3rem;flex-wrap:wrap}
+.ins-market-tab{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.8rem 1.5rem;border:none;background:none;color:var(--grey-500);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;margin-bottom:-1px}
+.ins-market-tab:hover{color:var(--grey-300)}
+.ins-market-tab.active{color:var(--cta);border-bottom-color:var(--cta)}
+.ins-market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.ins-market-card{border:1px solid var(--grey-700);padding:2rem;position:relative;overflow:hidden;transition:border-color 0.3s,transform 0.2s;cursor:pointer}
+.ins-market-card:hover{border-color:rgba(12,148,216,0.5);transform:translateY(-2px)}
+.ins-market-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cta),transparent);transform:scaleX(0);transform-origin:left;transition:transform 0.35s}
+.ins-market-card:hover::after{transform:scaleX(1)}
+.ins-market-flag{font-size:2.2rem;margin-bottom:0.8rem;display:block}
+.ins-market-country{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;margin-bottom:0.2rem}
+.ins-market-region{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;color:var(--cta);text-transform:uppercase;margin-bottom:0.7rem}
+.ins-market-stat{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--grey-500);letter-spacing:0.04em;margin-bottom:0.8rem}
+.ins-market-insight{font-size:0.82rem;color:var(--grey-300);line-height:1.72;margin-bottom:1rem}
+.ins-market-tags{display:flex;flex-wrap:wrap;gap:0.4rem}
+.ins-market-tag{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.06em;padding:0.2rem 0.55rem;border:1px solid var(--grey-700);color:var(--grey-500)}
+.ins-market-opp{background:rgba(12,148,216,0.06);border-top:1px solid var(--grey-700);margin:1rem -2rem -2rem;padding:1rem 2rem;font-size:0.78rem;color:var(--grey-400);line-height:1.55;display:flex;gap:0.6rem;align-items:flex-start}
+.ins-market-opp::before{content:'→';color:var(--cta);flex-shrink:0;font-size:0.7rem;margin-top:2px}
+/* Investor section */
+.ins-investor{padding:5rem 3rem;background:var(--offblack);border-top:var(--rule)}
+.ins-investor-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;margin-top:3rem}
+.ins-investor-card{border:1px solid var(--grey-700);padding:2rem;border-left:3px solid var(--cta)}
+.ins-investor-card-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;margin-bottom:0.4rem}
+.ins-investor-card-sub{font-size:0.78rem;color:var(--grey-500);font-family:'DM Mono',monospace;margin-bottom:1.2rem}
+.ins-investor-metrics{display:flex;flex-direction:column;gap:0.6rem}
+.ins-investor-metric{display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid var(--grey-700)}
+.ins-investor-metric:last-child{border-bottom:none}
+.ins-investor-metric-label{font-size:0.8rem;color:var(--grey-300)}
+.ins-investor-metric-val{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--cta)}
+/* Responsive */
+@media(max-width:900px){
+  .ins-hero{padding:7rem 1.5rem 4rem}
+  .ins-kpi-strip{grid-template-columns:repeat(2,1fr)}
+  .ins-kpi:nth-child(2){border-right:none}
+  .ins-explorer,.ins-markets,.ins-investor{padding:4rem 1.5rem}
+  .ins-grid-2,.ins-grid-3{grid-template-columns:1fr}
+  .ins-market-grid{grid-template-columns:1fr 1fr}
+  .ins-investor-grid{grid-template-columns:1fr;gap:2rem}
+  .ins-score-dist{grid-template-columns:repeat(2,1fr)}
+  .ins-bar-label{flex:0 0 100px}
+}
+@media(max-width:600px){
+  .ins-market-grid{grid-template-columns:1fr}
+  .ins-kpi-strip{grid-template-columns:1fr 1fr}
+  .ins-kpi:nth-child(even){border-right:none}
+}
 /* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes scrollPulse{0%,100%{opacity:0.3}50%{opacity:1}}
@@ -492,6 +614,10 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
   .report-sidebar{position:static}
   .footer{flex-direction:column;text-align:center;padding:2rem 1.5rem}
   .lang-notice{white-space:normal;left:1rem;right:1rem;transform:none;flex-wrap:wrap;justify-content:center}
+  .diag-stats-row{display:none}
+  .proc-progress-wrap{width:90vw}
+  .processing-steps{max-width:90vw}
+  .form-panel{padding:1.5rem}
 }
 </style>
 </head>
@@ -527,7 +653,7 @@ window.__T__ = {
     about_visual_tag:"Est. Sandton · Pan-African",
     // Services
     services_label:"What We Do",
-    services_title:"Four pillars.\nOne outcome: growth.",
+    services_title:"Six pillars.\nOne outcome: growth.",
     svc1_title:"OKR Development & Execution",
     svc1_desc:"We introduce Objectives & Key Results as a living management system — not a template exercise. Your leadership team gains clarity of direction, alignment across functions, and accountability structures that actually hold.",
     svc1_o1:"Executive OKR design & facilitation",svc1_o2:"Cross-functional alignment workshops",svc1_o3:"Quarterly review cadence implementation",
@@ -540,6 +666,12 @@ window.__T__ = {
     svc4_title:"Market Access Support",
     svc4_desc:"Entering a new African market is not simply a logistics challenge — it is a strategic one. Vertex provides the networks, intelligence, and local contextualisation to open doors and sustain presence.",
     svc4_o1:"Market readiness assessment",svc4_o2:"Partner & channel network access",svc4_o3:"Regulatory & cultural navigation",
+    svc5_title:"Innovation & Digital Transformation",
+    svc5_desc:"We help organisations navigate the shift to digital — from strategy to execution. Whether you are modernising legacy processes, building new digital products, or embedding technology into your growth model, our senior innovators and engineers guide the journey end to end.",
+    svc5_o1:"Digital transformation roadmapping",svc5_o2:"Product & tech innovation strategy",svc5_o3:"Senior software & IT talent placement",
+    svc6_title:"Accounting & Legal Advisory",
+    svc6_desc:"Operating across African markets requires navigating complex and rapidly-evolving regulatory environments. We support businesses with accounting guidance, corporate structuring, and legal compliance across the countries where we operate — so you can focus on growth, not bureaucracy.",
+    svc6_o1:"In-country compliance & regulatory guidance",svc6_o2:"Corporate structure & entity setup",svc6_o3:"Accounting frameworks & financial governance",
     // How we engage
     engage_label:"Our Approach",engage_title:"How an engagement works.",
     eng1_t:"Diagnosis",eng1_d:"We start with a deep audit of your business — strategy, operations, sales, and market position.",
@@ -557,15 +689,25 @@ window.__T__ = {
     step4_t:"Email",step4_d:"A copy is sent to your inbox within 45–60 minutes.",
     form_company:"Company Name *", form_name:"Your Name & Role *", form_email:"Email Address *",
     form_email_note:"(Report will be sent here)", form_industry:"Industry *",
+    form_country:"Country *",
     form_size:"Company Size", form_revenue:"Annual Revenue Range", form_challenge:"Primary Business Challenge *",
-    form_challenge_ph:"Describe your biggest challenge in as much detail as possible...",
-    form_goals:"Growth Goals (12–18 months)", form_goals_ph:"What does success look like for you?",
+    form_challenge_ph:"Describe the challenge holding your business back — be as specific as possible. The more context you give, the sharper and more actionable your results will be.",
+    form_goals:"Growth Goals (12–18 months)", form_goals_ph:"What does success look like for you in the next 12–18 months? (e.g. expand to new markets, double revenue, streamline operations)",
     form_upload:"Upload Business Profile or Documents",
     form_upload_sub:"PDF, DOCX, PPTX, TXT · Max 10MB · Optional but improves accuracy",
     form_submit:"Run Free AI Diagnosis →",
     form_processing:"Analysing your business...", form_disclaimer:"Your information is confidential. No spam.",
     form_required:"Please complete all required fields.",
     form_email_invalid:"Valid email required",
+    form_guide_title:"What makes a great diagnostic?",
+    form_guide_intro:"The more context you give, the sharper your results. Here's what to have ready:",
+    form_guide_items:[
+      "Your industry and the country where your business operates — scores are benchmarked against your local market.",
+      "Company size and revenue range — this calibrates expectations and reveals whether your growth is on track for your stage.",
+      "Your single biggest challenge right now — be specific. 'Sales are declining' is good; 'We lose deals at the proposal stage to cheaper competitors' is far better.",
+      "Your 12–18 month growth goals — knowing where you want to go shapes the recommendations you receive.",
+      "Any business document (pitch deck, business plan, financials) — optional, but significantly improves depth and accuracy."
+    ],
     // Processing
     proc_label:"VERTEX AI DIAGNOSTIC ENGINE",
     proc_title:"Analysing your business...",
@@ -617,6 +759,66 @@ window.__T__ = {
     diag_cta_em:"in under an hour.",
     diag_cta_sub:"Upload your business profile, share your email — our AI delivers a 360° diagnostic in 45–60 minutes. No commitment required.",
     diag_cta_btn:"Start Free Diagnosis",
+    // Insights page
+    ins_label:"Data & Intelligence",
+    ins_title_a:"African Business",
+    ins_title_b:"Insights",
+    ins_sub:"Real-time intelligence on SME demand, market conditions, and entrepreneur profiles across 25+ African markets — powered by Vertex Group's diagnostic platform.",
+    ins_live:"Live Platform Data",
+    ins_kpi_diags:"Diagnostics submitted",
+    ins_kpi_score:"Avg. business health score",
+    ins_kpi_countries:"Countries represented",
+    ins_kpi_subs:"Newsletter subscribers",
+    ins_kpi_leads:"Businesses engaged",
+    ins_explorer_title:"Data Explorer",
+    ins_explorer_sub:"Aggregated, anonymised insights from every business diagnostic submitted through our platform.",
+    ins_filter_all:"All regions",
+    ins_filter_wa:"West Africa",
+    ins_filter_ea:"East Africa",
+    ins_filter_sa:"Southern Africa",
+    ins_filter_na:"North Africa",
+    ins_filter_ca:"Central Africa",
+    ins_chart_countries:"Top markets by submissions",
+    ins_chart_industry:"Industry breakdown",
+    ins_chart_size:"Company size",
+    ins_chart_score_dist:"Score distribution",
+    ins_chart_trend:"Monthly activity",
+    ins_chart_dimensions:"Avg. scores by dimension",
+    ins_empty_state:"No data yet — be the first from your market to run a free diagnostic.",
+    ins_markets_title:"African Market Intelligence",
+    ins_markets_sub:"Deep-dive profiles on the highest-growth SME ecosystems across the continent.",
+    ins_tab_all:"All Markets",
+    ins_tab_wa:"West Africa",
+    ins_tab_ea:"East Africa",
+    ins_tab_sa:"Southern Africa",
+    ins_tab_na:"North Africa",
+    ins_tab_ca:"Central Africa",
+    ins_markets_data:[
+      {flag:"🇳🇬",country:"Nigeria",region:"West Africa",stat:"41M SMEs · $150B GDP contribution",insight:"Africa's largest SME ecosystem with 41M businesses spanning fintech, agri-tech, and consumer goods. Lagos remains a hub for venture activity while tier-2 cities present underserved opportunities.",opportunity:"Market entry partnerships in fintech infrastructure and agri-supply chains.",tags:["Fintech","Agriculture","Consumer"]},
+      {flag:"🇰🇪",country:"Kenya",region:"East Africa",stat:"7.4M SMEs · Silicon Savannah hub",insight:"East Africa's innovation engine. M-Pesa's deep penetration transforms payment infrastructure. Nairobi hosts 50+ accelerators. ICT and green-energy sectors growing at 12% YoY.",opportunity:"Digital commerce, climate-tech, and cross-border East African Community trade.",tags:["Tech","Green Energy","EAC Trade"]},
+      {flag:"🇿🇦",country:"South Africa",region:"Southern Africa",stat:"2.5M SMEs · 98% of all businesses",insight:"Most developed SME ecosystem on the continent with formal banking access. Township economy represents $20B+ annual spending power. Highest consulting infrastructure density.",opportunity:"Township market penetration, renewable energy transition, and services exports.",tags:["Services","Energy","Finance"]},
+      {flag:"🇬🇭",country:"Ghana",region:"West Africa",stat:"1.2M registered SMEs · AfCFTA gateway",insight:"Stable institutions and improving ease of doing business. Major AfCFTA trade hub position. $320M annual SME finance gap creates structured opportunity for financial players.",opportunity:"Trade facilitation, agro-processing, and SME credit products.",tags:["Trade","Agriculture","Finance"]},
+      {flag:"🇸🇳",country:"Senegal",region:"West Africa",stat:"350K formal SMEs · 40% of GDP",insight:"Gateway to Francophone West Africa. Digital adoption accelerating with Orange Money ecosystem. Government's Plan Sénégal Emergent driving infrastructure investment.",opportunity:"Francophone market entry, logistics, and digital financial services.",tags:["Logistics","Fintech","Francophone"]},
+      {flag:"🇲🇦",country:"Morocco",region:"North Africa",stat:"640K SMEs · EU-Africa gateway",insight:"Africa's bridge to European markets. Green hydrogen ambitions attracting €7B+ in investment. Industrial zones offer competitive manufacturing platforms for global exporters.",opportunity:"EU market access, renewable energy investment, and nearshoring services.",tags:["Manufacturing","Green Energy","EU Gateway"]},
+      {flag:"🇹🇿",country:"Tanzania",region:"East Africa",stat:"3M SMEs · Tourism & mining base",insight:"Rapid formalisation of the informal sector. EAC membership gives access to 280M consumers. Mining and tourism revenues funding infrastructure growth in secondary cities.",opportunity:"Tourism services, mining supply chain, and formalisation consulting.",tags:["Tourism","Mining","EAC"]},
+      {flag:"🇷🇼",country:"Rwanda",region:"East Africa",stat:"250K SMEs · Top 5 Ease of Doing Business",insight:"Africa's fastest-improving business climate. Kigali is a Tier-1 MICE destination. 4G penetration at 85%. Government targets 35% of GDP from the knowledge economy by 2035.",opportunity:"Tech services, MICE, and Pan-African headquarters base.",tags:["Tech","MICE","Governance"]},
+      {flag:"🇪🇹",country:"Ethiopia",region:"East Africa",stat:"1.5M SMEs · Fastest-growing economy",insight:"108M consumers make this one of Africa's most compelling consumer markets. Addis Ababa is a diplomatic capital and regional headquarters for multinationals. Recent liberalisation opens banking.",opportunity:"Consumer goods, manufacturing, and financial services rollout.",tags:["Consumer","Manufacturing","Banking"]},
+      {flag:"🇨🇮",country:"Côte d'Ivoire",region:"West Africa",stat:"200K+ formal SMEs · Cocoa powerhouse",insight:"WAEMU's largest economy. Abidjan is West Africa's financial capital. Cocoa, cashew, and rubber exports make it Africa's top agricultural exporter.",opportunity:"Agro-processing, trade finance, and Francophone regional expansion.",tags:["Agriculture","Trade","Francophone"]},
+      {flag:"🇨🇩",country:"DRC",region:"Central Africa",stat:"4.2M micro & small enterprises",insight:"Mineral wealth and 100M+ consumers define the DRC's long-term potential. Kinshasa is one of Africa's largest cities. Infrastructure investment from China and the West is accelerating.",opportunity:"Mining services, infrastructure, and consumer FMCG.",tags:["Mining","Consumer","Infrastructure"]},
+      {flag:"🇺🇬",country:"Uganda",region:"East Africa",stat:"1.1M SMEs · Young demographics",insight:"70% of Uganda's population is under 30. Kampala's startup scene is maturing. Oil revenues expected from 2026 will reshape public investment significantly.",opportunity:"Youth enterprise, agri-tech, and oil-services.",tags:["AgriTech","Youth","Oil & Gas"]},
+    ],
+    ins_investor_title:"For Investors & Partners",
+    ins_investor_sub:"Data-backed visibility into the state of African entrepreneurship — drawn from real businesses across 25+ markets.",
+    ins_inv_card1_title:"Demand Signal",
+    ins_inv_card1_sub:"What businesses are asking for",
+    ins_inv_card2_title:"Health by Sector",
+    ins_inv_card2_sub:"Where the strongest and weakest businesses are",
+    ins_inv_card3_title:"Why this data matters",
+    ins_inv_desc:"Every insight on this page comes from real businesses that have used Vertex Group's AI diagnostic — sharing their industry, size, revenue, and strategic challenges. This gives Vertex (and our partners) a live, bottom-up view of where African SMEs stand, what they need, and where the growth is.",
+    ins_inv_cta:"Request full investor data pack →",
+    ins_cta_title:"Add your business to the dataset.",
+    ins_cta_sub:"Run a free 360° diagnostic and contribute to the most comprehensive view of African entrepreneurship available.",
+    ins_cta_btn:"Get Free Diagnosis →",
     // Plans page
     plans_label:"Engagement Plans",
     plans_title:"Choose the plan that fits your ambition.",
@@ -682,7 +884,7 @@ window.__T__ = {
     sme_philosophy_quote:"\"The difference between working for someone and working with them is the difference between a transaction and a transformation.\"",
     sme_philosophy_sub:"Every strategy we build is shaped by your market realities, your team's capabilities, and the opportunities specific to your business. We bring the methodology. You bring the market knowledge. Together, we build the outcome.",
     sme_what_label:"What We Do With You",
-    sme_what_title:"Six ways we drive growth together",
+    sme_what_title:"Eight ways we drive growth together",
     sme_what_sub:"Our work with SMEs is never generic. Every engagement starts with a deep diagnostic of where your business stands — and builds a roadmap tailored to where you want to go.",
     sme_s1_title:"Market Access & Expansion",
     sme_s1_desc:"We help SMEs identify, enter, and capture new markets — whether within Africa or internationally. From feasibility analysis to go-to-market execution, we open doors that were previously inaccessible.",
@@ -702,6 +904,12 @@ window.__T__ = {
     sme_s6_title:"Capability & Team Development",
     sme_s6_desc:"Systems are only as strong as the people running them. We train, coach, and develop your team — building the internal capability to sustain growth long after our engagement ends.",
     sme_s6_tag:"TTT certified training programmes",
+    sme_s7_title:"Senior Tech & Digital Talent",
+    sme_s7_desc:"Access a curated network of senior software developers, digital architects, and IT innovators with proven African market experience. Whether you need a CTO-level advisor, a product team, or a specialist to lead your digital transformation — we connect you to the right profiles.",
+    sme_s7_tag:"Senior profiles · Vetted & ready to deploy",
+    sme_s8_title:"Accounting & Legal Advisory",
+    sme_s8_desc:"Expanding across African markets means navigating different tax regimes, corporate laws, and compliance requirements. We connect you with in-country accounting and legal expertise across the markets where we operate — so your business is structurally sound and fully compliant from day one.",
+    sme_s8_tag:"Multi-country · Compliance & governance",
     sme_insight_label:"African SME Landscape",
     sme_insight_title:"Understanding the market you're competing in",
     sme_insight_sub:"Africa's SME sector is the backbone of its economy — and one of the most underserved growth opportunities on the planet. Here's what the data tells us.",
@@ -771,7 +979,7 @@ window.__T__ = {
     about_presence:"Notre présence",
     about_visual_tag:"Fondé à Sandton · Pan-africain",
     services_label:"Ce que nous faisons",
-    services_title:"Quatre piliers.\nUn seul objectif : la croissance.",
+    services_title:"Six piliers.\nUn seul objectif : la croissance.",
     svc1_title:"Développement et exécution des OKR",
     svc1_desc:"Nous introduisons les Objectifs et Résultats Clés comme un système de management vivant — pas un simple exercice de modèle. Votre équipe dirigeante gagne en clarté, en alignement et en responsabilisation.",
     svc1_o1:"Conception et facilitation des OKR dirigeants",svc1_o2:"Ateliers d'alignement transversal",svc1_o3:"Cadence de revue trimestrielle",
@@ -784,6 +992,12 @@ window.__T__ = {
     svc4_title:"Accès au marché",
     svc4_desc:"Entrer sur un nouveau marché africain n'est pas qu'un défi logistique — c'est un défi stratégique. Vertex fournit les réseaux, le renseignement et la contextualisation locale pour ouvrir des portes.",
     svc4_o1:"Évaluation de la préparation au marché",svc4_o2:"Accès aux réseaux de partenaires",svc4_o3:"Navigation réglementaire et culturelle",
+    svc5_title:"Innovation & Transformation Digitale",
+    svc5_desc:"Nous accompagnons les organisations dans leur transition vers le numérique — de la stratégie à l'exécution. Qu'il s'agisse de moderniser des processus existants, de créer de nouveaux produits digitaux ou d'intégrer la technologie dans votre modèle de croissance, nos innovateurs et ingénieurs seniors guident chaque étape.",
+    svc5_o1:"Feuille de route de transformation digitale",svc5_o2:"Stratégie d'innovation produit & technologique",svc5_o3:"Placement de talents IT & logiciels seniors",
+    svc6_title:"Conseil Comptable & Juridique",
+    svc6_desc:"Opérer sur les marchés africains nécessite de naviguer dans des environnements réglementaires complexes et en constante évolution. Nous accompagnons les entreprises dans leur conformité comptable, leur structuration juridique et leur conformité réglementaire dans les pays où nous opérons — pour que vous puissiez vous concentrer sur la croissance.",
+    svc6_o1:"Conformité réglementaire en pays",svc6_o2:"Structuration juridique et création d'entités",svc6_o3:"Cadres comptables et gouvernance financière",
     engage_label:"Notre approche",engage_title:"Comment une mission fonctionne.",
     eng1_t:"Diagnostic",eng1_d:"Nous commençons par un audit approfondi de votre entreprise — stratégie, opérations, ventes et position sur le marché.",
     eng2_t:"Conception",eng2_d:"Nous co-créons un plan d'action sur 90 jours avec votre équipe dirigeante, ancré dans les OKR.",
@@ -799,15 +1013,25 @@ window.__T__ = {
     step4_t:"Email",step4_d:"Une copie est envoyée à votre boîte mail dans les 45–60 minutes.",
     form_company:"Nom de l'entreprise *", form_name:"Votre nom et rôle *", form_email:"Adresse e-mail *",
     form_email_note:"(Le rapport sera envoyé ici)", form_industry:"Secteur d'activité *",
+    form_country:"Pays *",
     form_size:"Taille de l'entreprise", form_revenue:"Fourchette de chiffre d'affaires annuel",
-    form_challenge:"Défi principal *", form_challenge_ph:"Décrivez votre plus grand défi en détail...",
-    form_goals:"Objectifs de croissance (12–18 mois)", form_goals_ph:"À quoi ressemble le succès pour vous ?",
+    form_challenge:"Défi principal *", form_challenge_ph:"Décrivez le défi qui freine votre entreprise — soyez aussi précis que possible. Plus vous donnez de contexte, plus vos résultats seront pertinents et actionnables.",
+    form_goals:"Objectifs de croissance (12–18 mois)", form_goals_ph:"À quoi ressemble le succès pour vous dans les 12–18 prochains mois ? (ex. : nouveaux marchés, doubler le chiffre d'affaires, optimiser les opérations)",
     form_upload:"Télécharger le profil d'entreprise",
     form_upload_sub:"PDF, DOCX, PPTX, TXT · Max 10 Mo · Optionnel mais améliore la précision",
     form_submit:"Lancer le diagnostic IA gratuit →",
     form_processing:"Analyse en cours...", form_disclaimer:"Vos informations sont confidentielles. Pas de spam.",
     form_required:"Veuillez compléter tous les champs obligatoires.",
     form_email_invalid:"Adresse e-mail valide requise",
+    form_guide_title:"Qu'est-ce qui fait un bon diagnostic ?",
+    form_guide_intro:"Plus vous donnez de contexte, plus vos résultats seront précis. Voici ce qu'il faut avoir sous la main :",
+    form_guide_items:[
+      "Votre secteur et le pays où opère votre entreprise — les scores sont comparés à votre marché local.",
+      "Taille de l'entreprise et fourchette de revenus — cela calibre les attentes et révèle si votre croissance est en phase avec votre stade.",
+      "Votre principal défi en ce moment — soyez précis. 'Les ventes baissent' est bien ; 'Nous perdons des contrats au stade de la proposition face à des concurrents moins chers' est bien meilleur.",
+      "Vos objectifs de croissance à 12–18 mois — savoir où vous voulez aller oriente les recommandations que vous recevrez.",
+      "Tout document d'entreprise (pitch deck, business plan, données financières) — optionnel, mais améliore significativement la profondeur et la précision."
+    ],
     proc_label:"MOTEUR DE DIAGNOSTIC IA VERTEX",
     proc_title:"Analyse de votre entreprise...",
     proc_steps:["Réception de votre profil d'entreprise...","Extraction des informations clés...","Analyse de la stratégie et du positionnement...","Évaluation des ventes et revenus...","Comparaison avec les pairs du secteur...","Identification des opportunités de croissance...","Évaluation des dimensions de l'entreprise...","Compilation du rapport de diagnostic 360°..."],
@@ -881,6 +1105,66 @@ window.__T__ = {
     social_instagram:"Instagram",
     social_linkedin:"LinkedIn",
     social_follow:"Suivez @vertexgroup.africa",
+    // Insights page FR
+    ins_label:"Données & Intelligence",
+    ins_title_a:"Insights sur le",
+    ins_title_b:"Business Africain",
+    ins_sub:"Intelligence en temps réel sur la demande des PMEs, les conditions de marché et les profils d'entrepreneurs dans 25+ marchés africains — alimentée par la plateforme de diagnostic Vertex Group.",
+    ins_live:"Données Plateforme en Direct",
+    ins_kpi_diags:"Diagnostics soumis",
+    ins_kpi_score:"Score santé moyen",
+    ins_kpi_countries:"Pays représentés",
+    ins_kpi_subs:"Abonnés newsletter",
+    ins_kpi_leads:"Entreprises engagées",
+    ins_explorer_title:"Explorateur de données",
+    ins_explorer_sub:"Insights agrégés et anonymisés de chaque diagnostic soumis via notre plateforme.",
+    ins_filter_all:"Toutes régions",
+    ins_filter_wa:"Afrique de l'Ouest",
+    ins_filter_ea:"Afrique de l'Est",
+    ins_filter_sa:"Afrique Australe",
+    ins_filter_na:"Afrique du Nord",
+    ins_filter_ca:"Afrique Centrale",
+    ins_chart_countries:"Marchés principaux",
+    ins_chart_industry:"Répartition sectorielle",
+    ins_chart_size:"Taille des entreprises",
+    ins_chart_score_dist:"Distribution des scores",
+    ins_chart_trend:"Activité mensuelle",
+    ins_chart_dimensions:"Scores moyens par dimension",
+    ins_empty_state:"Pas encore de données — soyez le premier de votre marché à lancer un diagnostic gratuit.",
+    ins_markets_title:"Intelligence Marchés Africains",
+    ins_markets_sub:"Profils approfondis des écosystèmes PME à plus forte croissance sur le continent.",
+    ins_tab_all:"Tous les marchés",
+    ins_tab_wa:"Afrique de l'Ouest",
+    ins_tab_ea:"Afrique de l'Est",
+    ins_tab_sa:"Afrique Australe",
+    ins_tab_na:"Afrique du Nord",
+    ins_tab_ca:"Afrique Centrale",
+    ins_markets_data:[
+      {flag:"🇳🇬",country:"Nigeria",region:"Afrique de l'Ouest",stat:"41M PMEs · 150Mds$ contribution au PIB",insight:"Le plus grand écosystème PME d'Afrique avec 41M entreprises couvrant fintech, agri-tech et biens de consommation. Lagos reste un hub pour l'activité venture.",opportunity:"Partenariats d'entrée marché en infrastructure fintech et chaînes d'approvisionnement agricoles.",tags:["Fintech","Agriculture","Consommation"]},
+      {flag:"🇰🇪",country:"Kenya",region:"Afrique de l'Est",stat:"7,4M PMEs · Silicon Savannah",insight:"Moteur d'innovation d'Afrique de l'Est. La pénétration profonde de M-Pesa transforme les paiements. Les secteurs TIC et énergie verte croissent de 12% par an.",opportunity:"Commerce digital, tech climatique et commerce transfrontalier dans la Communauté Africaine de l'Est.",tags:["Tech","Énergie verte","CAE"]},
+      {flag:"🇿🇦",country:"Afrique du Sud",region:"Afrique Australe",stat:"2,5M PMEs · 98% des entreprises",insight:"Écosystème PME le plus développé du continent avec accès bancaire formel. L'économie des townships représente plus de 20Mds$ de pouvoir d'achat annuel.",opportunity:"Pénétration du marché des townships, transition énergétique et exportation de services.",tags:["Services","Énergie","Finance"]},
+      {flag:"🇬🇭",country:"Ghana",region:"Afrique de l'Ouest",stat:"1,2M PMEs enregistrées · Hub ZLECAf",insight:"Institutions stables et amélioration de la facilité des affaires. Hub commercial ZLECAf majeur. Déficit de financement PME de 320M$ crée une opportunité structurée.",opportunity:"Facilitation du commerce, agro-transformation et produits de crédit PME.",tags:["Commerce","Agriculture","Finance"]},
+      {flag:"🇸🇳",country:"Sénégal",region:"Afrique de l'Ouest",stat:"350K PMEs formelles · 40% du PIB",insight:"Passerelle vers l'Afrique de l'Ouest francophone. Adoption numérique accélérée avec l'écosystème Orange Money. Le Plan Sénégal Émergent stimule les investissements.",opportunity:"Entrée marché francophone, logistique et services financiers numériques.",tags:["Logistique","Fintech","Francophone"]},
+      {flag:"🇲🇦",country:"Maroc",region:"Afrique du Nord",stat:"640K PMEs · Passerelle EU-Afrique",insight:"Le pont de l'Afrique vers les marchés européens. Les ambitions hydrogène vert attirent 7Mds€+ d'investissements. Les zones industrielles offrent des plateformes manufacturières compétitives.",opportunity:"Accès aux marchés UE, investissements en énergie renouvelable et services de nearshoring.",tags:["Industrie","Énergie verte","Passerelle EU"]},
+      {flag:"🇹🇿",country:"Tanzanie",region:"Afrique de l'Est",stat:"3M PMEs · Tourisme et mines",insight:"Formalisation rapide du secteur informel. L'appartenance à la CAE donne accès à 280M de consommateurs. Les revenus miniers et touristiques financent la croissance des villes secondaires.",opportunity:"Services touristiques, chaîne d'approvisionnement minière et conseil en formalisation.",tags:["Tourisme","Mines","CAE"]},
+      {flag:"🇷🇼",country:"Rwanda",region:"Afrique de l'Est",stat:"250K PMEs · Top 5 Climat des affaires",insight:"Climat des affaires s'améliorant le plus rapidement en Afrique. Kigali est une destination MICE de Tier-1. Pénétration 4G à 85%. Le gouvernement cible 35% du PIB pour l'économie du savoir d'ici 2035.",opportunity:"Services tech, MICE et siège régional panafricain.",tags:["Tech","MICE","Gouvernance"]},
+      {flag:"🇪🇹",country:"Éthiopie",region:"Afrique de l'Est",stat:"1,5M PMEs · Économie à croissance rapide",insight:"108M de consommateurs en font l'un des marchés les plus attractifs d'Afrique. Addis-Abeba est capitale diplomatique et siège régional de multinationales. La récente libéralisation ouvre les services bancaires.",opportunity:"Biens de consommation, fabrication et déploiement de services financiers.",tags:["Consommation","Industrie","Finance"]},
+      {flag:"🇨🇮",country:"Côte d'Ivoire",region:"Afrique de l'Ouest",stat:"200K+ PMEs formelles · Puissance cacao",insight:"Plus grande économie de l'UEMOA. Abidjan est la capitale financière de l'Afrique de l'Ouest. Exportateur agricole phare d'Afrique.",opportunity:"Agro-transformation, finance commerciale et expansion régionale francophone.",tags:["Agriculture","Commerce","Francophone"]},
+      {flag:"🇨🇩",country:"RDC",region:"Afrique Centrale",stat:"4,2M micro & petites entreprises",insight:"Richesses minières et 100M+ de consommateurs définissent le potentiel à long terme. Kinshasa est l'une des plus grandes villes d'Afrique. Les investissements en infrastructure s'accélèrent.",opportunity:"Services miniers, infrastructure et FMCG grand public.",tags:["Mines","Consommation","Infrastructure"]},
+      {flag:"🇺🇬",country:"Ouganda",region:"Afrique de l'Est",stat:"1,1M PMEs · Jeune démographie",insight:"70% de la population ougandaise a moins de 30 ans. La scène startup de Kampala se mûrit. Les revenus pétroliers attendus à partir de 2026 vont transformer les investissements publics.",opportunity:"Entreprise jeunesse, agri-tech et services pétroliers.",tags:["AgriTech","Jeunesse","Pétrole"]},
+    ],
+    ins_investor_title:"Pour les Investisseurs & Partenaires",
+    ins_investor_sub:"Visibilité appuyée par les données sur l'état de l'entrepreneuriat africain — tirée d'entreprises réelles dans 25+ marchés.",
+    ins_inv_card1_title:"Signal de Demande",
+    ins_inv_card1_sub:"Ce que les entreprises demandent",
+    ins_inv_card2_title:"Santé par Secteur",
+    ins_inv_card2_sub:"Où sont les entreprises les plus fortes et les plus faibles",
+    ins_inv_card3_title:"Pourquoi ces données importent",
+    ins_inv_desc:"Chaque insight sur cette page provient d'entreprises réelles ayant utilisé le diagnostic IA de Vertex Group — partageant leur secteur, taille, chiffre d'affaires et défis stratégiques. Cela donne à Vertex (et nos partenaires) une vue ascendante en temps réel de la situation des PMEs africaines.",
+    ins_inv_cta:"Demander le pack de données investisseur →",
+    ins_cta_title:"Ajoutez votre entreprise aux données.",
+    ins_cta_sub:"Lancez un diagnostic 360° gratuit et contribuez à la vue la plus complète de l'entrepreneuriat africain disponible.",
+    ins_cta_btn:"Obtenir un diagnostic gratuit →",
     // Plans page FR
     plans_label:"Nos offres d'engagement",
     plans_title:"Choisissez le plan qui correspond à votre ambition.",
@@ -929,7 +1213,7 @@ window.__T__ = {
     sme_philosophy_quote:"\"La différence entre travailler pour quelqu'un et travailler avec lui, c'est la différence entre une transaction et une transformation.\"",
     sme_philosophy_sub:"Chaque stratégie que nous construisons est façonnée par vos réalités de marché, les capacités de votre équipe et les opportunités propres à votre entreprise. Nous apportons la méthodologie. Vous apportez la connaissance du marché. Ensemble, nous construisons le résultat.",
     sme_what_label:"Ce que nous faisons avec vous",
-    sme_what_title:"Six leviers de croissance partagée",
+    sme_what_title:"Huit leviers de croissance partagée",
     sme_what_sub:"Notre travail avec les PME n'est jamais générique. Chaque mission commence par un diagnostic approfondi de votre situation — et construit une feuille de route adaptée à vos objectifs.",
     sme_s1_title:"Accès et expansion sur les marchés",
     sme_s1_desc:"Nous aidons les PME à identifier, pénétrer et conquérir de nouveaux marchés — en Afrique ou à l'international. De l'analyse de faisabilité à l'exécution commerciale, nous ouvrons les portes qui étaient jusque-là inaccessibles.",
@@ -949,6 +1233,12 @@ window.__T__ = {
     sme_s6_title:"Développement des capacités et des équipes",
     sme_s6_desc:"Les systèmes ne sont solides que si les personnes qui les dirigent le sont. Nous formons, coachons et développons votre équipe — en construisant la capacité interne nécessaire pour maintenir la croissance bien après la fin de notre mission.",
     sme_s6_tag:"Programmes de formation certifiés TTT",
+    sme_s7_title:"Talents Tech & Digitaux Seniors",
+    sme_s7_desc:"Accédez à un réseau sélectionné de développeurs logiciels seniors, d'architectes digitaux et d'innovateurs IT avec une expérience éprouvée sur les marchés africains. Qu'il vous faille un conseiller niveau DSI, une équipe produit ou un spécialiste pour piloter votre transformation digitale — nous vous connectons aux bons profils.",
+    sme_s7_tag:"Profils seniors · Vérifiés et prêts à déployer",
+    sme_s8_title:"Conseil Comptable & Juridique",
+    sme_s8_desc:"Se développer sur les marchés africains implique de naviguer dans différents régimes fiscaux, législations commerciales et exigences de conformité. Nous vous connectons à une expertise comptable et juridique locale dans les marchés où nous opérons — pour que votre entreprise soit structurellement solide et entièrement conforme dès le premier jour.",
+    sme_s8_tag:"Multi-pays · Conformité & gouvernance",
     sme_insight_label:"Paysage des PME africaines",
     sme_insight_title:"Comprendre le marché dans lequel vous évoluez",
     sme_insight_sub:"Le secteur des PME africaines est l'épine dorsale de son économie — et l'une des opportunités de croissance les plus sous-exploitées de la planète. Voici ce que les données nous disent.",
@@ -1461,6 +1751,8 @@ function ServicesGrid({ t }) {
     {n:'02',icon:'△',tk:'svc2_title',dk:'svc2_desc',ok:['svc2_o1','svc2_o2','svc2_o3']},
     {n:'03',icon:'⟨/⟩',tk:'svc3_title',dk:'svc3_desc',ok:['svc3_o1','svc3_o2','svc3_o3']},
     {n:'04',icon:'∞',tk:'svc4_title',dk:'svc4_desc',ok:['svc4_o1','svc4_o2','svc4_o3']},
+    {n:'05',icon:'⬡',tk:'svc5_title',dk:'svc5_desc',ok:['svc5_o1','svc5_o2','svc5_o3']},
+    {n:'06',icon:'§',tk:'svc6_title',dk:'svc6_desc',ok:['svc6_o1','svc6_o2','svc6_o3']},
   ];
   return (
     <div className="services-grid">
@@ -1888,7 +2180,7 @@ function ContactPage({ t }) {
 // ── DIAGNOSIS PAGE ────────────────────────────────────────────────
 function DiagnosisPage({ setPage, setReport, t }) {
   useReveal();
-  const [form, setForm] = useState({company:'',name:'',email:'',industry:'',size:'',challenge:'',goals:'',revenue:''});
+  const [form, setForm] = useState({company:'',name:'',email:'',country:'',industry:'',size:'',challenge:'',goals:'',revenue:''});
   const [file, setFile] = useState(null);
   const [errors, setErrors] = useState({});
   const [processing, setProcessing] = useState(false);
@@ -1905,12 +2197,14 @@ function DiagnosisPage({ setPage, setReport, t }) {
     ? ['1–10 employés','11–50 employés','51–200 employés','201–500 employés','500+ employés']
     : ['1–10 employees','11–50 employees','51–200 employees','201–500 employees','500+ employees'];
   const revenues = ['Under R1M / $50K','R1M–R5M / $50K–$250K','R5M–R20M / $250K–$1M','R20M–R100M / $1M–$5M','Over R100M / $5M+'];
+  const countries = ['Algeria','Angola','Benin','Botswana','Burkina Faso','Burundi','Cabo Verde','Cameroon','Central African Republic','Chad','Comoros','Congo (Brazzaville)','Congo (DRC)',"Côte d'Ivoire",'Djibouti','Egypt','Equatorial Guinea','Eritrea','Eswatini','Ethiopia','Gabon','Gambia','Ghana','Guinea','Guinea-Bissau','Kenya','Lesotho','Liberia','Libya','Madagascar','Malawi','Mali','Mauritania','Mauritius','Morocco','Mozambique','Namibia','Niger','Nigeria','Rwanda','São Tomé & Príncipe','Senegal','Seychelles','Sierra Leone','Somalia','South Africa','South Sudan','Sudan','Tanzania','Togo','Tunisia','Uganda','Zambia','Zimbabwe','Other (outside Africa)'];
 
   const validate = () => {
     const e = {};
     if (!form.company) e.company = '*';
     if (!form.name) e.name = '*';
     if (!form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = t.form_email_invalid;
+    if (!form.country) e.country = '*';
     if (!form.industry) e.industry = '*';
     if (!form.challenge) e.challenge = '*';
     setErrors(e);
@@ -2018,39 +2312,57 @@ function DiagnosisPage({ setPage, setReport, t }) {
 
       {processing && (
         <div className="processing-overlay">
+          {/* Vertex brand mark */}
+          <div className="processing-logo">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+              <path d="M2 4L11 18L20 4" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M6 4L11 12L16 4" stroke="#0c94d8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className="processing-logo-text">Vertex Group Africa</span>
+          </div>
           <div className="processing-ring"/>
-          <div>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',letterSpacing:'0.2em',color:'var(--accent)',textAlign:'center',marginBottom:'0.8rem'}}>{t.proc_label}</div>
+          <div style={{textAlign:'center'}}>
+            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.6rem',letterSpacing:'0.22em',color:'var(--cta)',marginBottom:'0.75rem'}}>{t.proc_label}</div>
             <div className="processing-title">{t.proc_title}</div>
           </div>
           <div className="processing-timer">{timeStr(timer)}</div>
           <div className="processing-steps">
             {t.proc_steps.map((s,i) => (
               <div key={i} className={`proc-step ${procStep>i?'done':procStep===i?'active':''}`}>
-                <div className="proc-step-dot"/><span>{s}</span>
+                <div className="proc-step-dot"/>
+                <span>{procStep>i ? '✓ ' : ''}{s}</span>
               </div>
             ))}
           </div>
-          <p style={{color:'var(--grey-300)',fontSize:'0.82rem',textAlign:'center',maxWidth:380,lineHeight:1.65}}>{t.proc_sub}</p>
+          <div className="proc-progress-wrap">
+            <div className="proc-progress-fill" style={{width:`${Math.min(100,Math.round((procStep/t.proc_steps.length)*100))}%`}}/>
+          </div>
+          <p style={{color:'var(--grey-500)',fontSize:'0.8rem',textAlign:'center',maxWidth:380,lineHeight:1.65,fontFamily:'DM Mono,monospace'}}>{t.proc_sub}</p>
         </div>
       )}
 
       {/* Hero */}
       <div style={{padding:'5rem 3rem 4rem',borderBottom:'var(--rule)',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'5rem',alignItems:'center'}}>
         <div>
-          <div className="section-label">{t.diag_label}</div>
-          <h1 className="section-title" style={{maxWidth:480}}>{t.diag_title.split('.')[0]}.<br/><em style={{fontStyle:'italic',color:'var(--accent)'}}>{t.diag_title.split('.')[1]?.trim()}</em></h1>
-          <p style={{color:'var(--grey-300)',marginTop:'1.5rem',fontSize:'0.93rem',lineHeight:1.8,maxWidth:440}}>{t.diag_sub}</p>
-          <div style={{display:'flex',gap:'0.8rem',flexWrap:'wrap',marginTop:'1.5rem'}}>
-            <span style={{padding:'0.45rem 1rem',fontSize:'0.68rem',fontWeight:500,letterSpacing:'0.1em',textTransform:'uppercase',fontFamily:'DM Mono,monospace',background:'var(--accent)',color:'var(--black)'}}>{t.badge_free}</span>
-            <span style={{padding:'0.45rem 1rem',fontSize:'0.68rem',letterSpacing:'0.1em',textTransform:'uppercase',fontFamily:'DM Mono,monospace',border:'1px solid var(--grey-700)',color:'var(--grey-300)'}}>{t.badge_pro}</span>
+          <div className="section-label" style={{color:'var(--cta)'}}>{t.diag_label}</div>
+          <h1 className="section-title" style={{maxWidth:500}}>{t.diag_title.split('.')[0]}.<br/><em style={{fontStyle:'italic',color:'var(--cta)'}}>{t.diag_title.split('.')[1]?.trim()}</em></h1>
+          <p style={{color:'var(--grey-300)',marginTop:'1.5rem',fontSize:'0.93rem',lineHeight:1.82,maxWidth:440}}>{t.diag_sub}</p>
+          <div style={{display:'flex',gap:'0.8rem',flexWrap:'wrap',marginTop:'2rem'}}>
+            <span style={{padding:'0.5rem 1.1rem',fontSize:'0.67rem',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',fontFamily:'DM Mono,monospace',background:'var(--cta)',color:'var(--white)'}}>{t.badge_free}</span>
+            <span style={{padding:'0.5rem 1.1rem',fontSize:'0.67rem',letterSpacing:'0.1em',textTransform:'uppercase',fontFamily:'DM Mono,monospace',border:'1px solid var(--grey-700)',color:'var(--grey-300)'}}>{t.badge_pro}</span>
+          </div>
+          <div className="diag-stats-row">
+            <div className="diag-stat"><div className="diag-stat-num">500+</div><div className="diag-stat-lbl">{isFr?'Diagnostics':'Diagnostics run'}</div></div>
+            <div className="diag-stat"><div className="diag-stat-num">25</div><div className="diag-stat-lbl">{isFr?'Pays couverts':'Countries'}</div></div>
+            <div className="diag-stat"><div className="diag-stat-num">≤1h</div><div className="diag-stat-lbl">{isFr?'Délai de livraison':'Delivery time'}</div></div>
           </div>
         </div>
-        <div style={{display:'flex',flexDirection:'column',gap:'0'}}>
+        <div>
+          <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.6rem',letterSpacing:'0.2em',color:'var(--grey-500)',textTransform:'uppercase',marginBottom:'1.5rem'}}>{isFr?'Comment ça marche':'How it works'}</div>
           {[[t.step1_t,t.step1_d,'01'],[t.step2_t,t.step2_d,'02'],[t.step3_t,t.step3_d,'03'],[t.step4_t,t.step4_d,'04']].map(([tt,dd,n]) => (
-            <div key={n} style={{display:'flex',gap:'1.2rem',padding:'1.2rem 0',borderBottom:'var(--rule)'}}>
-              <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',color:'var(--accent)',letterSpacing:'0.15em',minWidth:24,marginTop:3}}>{n}</div>
-              <div><div style={{fontSize:'0.88rem',fontWeight:500,marginBottom:'0.25rem'}}>{tt}</div><div style={{fontSize:'0.78rem',color:'var(--grey-500)',lineHeight:1.6}}>{dd}</div></div>
+            <div key={n} className="diag-step-item">
+              <div className="diag-step-num">{n}</div>
+              <div><div className="diag-step-title">{tt}</div><div className="diag-step-desc">{dd}</div></div>
             </div>
           ))}
         </div>
@@ -2059,8 +2371,27 @@ function DiagnosisPage({ setPage, setReport, t }) {
       {/* Form */}
       <div style={{padding:'4rem 3rem',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'4rem',alignItems:'start'}}>
         <div className="form-panel">
-          <div className="form-title">{t.diag_label}</div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0 2rem'}}>
+          <div className="form-title">{isFr ? 'Lancez votre diagnostic' : 'Start your diagnosis'}</div>
+          <div className="form-subtitle">{isFr ? 'Résultats en 45–60 min · Confidentiel · Gratuit' : 'Results in 45–60 min · Confidential · Free'}</div>
+
+          {/* Guidance block */}
+          <div style={{background:'rgba(12,148,216,0.05)',border:'1px solid rgba(12,148,216,0.2)',borderLeft:'3px solid var(--cta)',padding:'1.2rem 1.4rem',marginBottom:'0.5rem'}}>
+            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.6rem',letterSpacing:'0.2em',color:'var(--cta)',marginBottom:'0.6rem',display:'flex',alignItems:'center',gap:'0.6rem'}}>
+              <span style={{width:5,height:5,borderRadius:'50%',background:'var(--cta)',display:'inline-block',flexShrink:0}}/>
+              {t.form_guide_title}
+            </div>
+            <p style={{fontSize:'0.77rem',color:'var(--grey-400)',marginBottom:'0.75rem',lineHeight:1.6}}>{t.form_guide_intro}</p>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.35rem 1rem'}}>
+              {t.form_guide_items.map((item,i) => (
+                <div key={i} style={{display:'flex',gap:'0.5rem',alignItems:'flex-start',fontSize:'0.74rem',color:'var(--grey-400)',lineHeight:1.5}}>
+                  <span style={{color:'var(--cta)',flexShrink:0,marginTop:2,fontSize:'0.6rem'}}>→</span><span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="form-section-label">{isFr ? 'Identité' : 'Your identity'}</div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0 1.5rem'}}>
             {[['company',t.form_company,'text'],['name',t.form_name,'text']].map(([k,l,tp]) => (
               <div key={k} className="form-group">
                 <label>{l}</label>
@@ -2070,11 +2401,21 @@ function DiagnosisPage({ setPage, setReport, t }) {
             ))}
           </div>
           <div className="form-group">
-            <label>{t.form_email} <span style={{color:'var(--accent)',fontSize:'0.6rem'}}>{t.form_email_note}</span></label>
+            <label>{t.form_email} <span style={{color:'var(--cta)',fontSize:'0.6rem',fontFamily:'DM Mono,monospace'}}>{t.form_email_note}</span></label>
             <input type="email" placeholder="you@company.com" value={form.email} onChange={e => ff('email',e.target.value)}/>
             {errors.email && <div className="form-error">{errors.email}</div>}
           </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0 2rem'}}>
+
+          <div className="form-section-label">{isFr ? 'Votre entreprise' : 'Your business'}</div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0 1.5rem'}}>
+            <div className="form-group">
+              <label>{t.form_country}</label>
+              <select value={form.country} onChange={e => ff('country',e.target.value)}>
+                <option value="">—</option>
+                {countries.map(c => <option key={c}>{c}</option>)}
+              </select>
+              {errors.country && <div className="form-error">{errors.country}</div>}
+            </div>
             <div className="form-group">
               <label>{t.form_industry}</label>
               <select value={form.industry} onChange={e => ff('industry',e.target.value)}>
@@ -2083,6 +2424,8 @@ function DiagnosisPage({ setPage, setReport, t }) {
               </select>
               {errors.industry && <div className="form-error">{errors.industry}</div>}
             </div>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0 1.5rem'}}>
             <div className="form-group">
               <label>{t.form_size}</label>
               <select value={form.size} onChange={e => ff('size',e.target.value)}>
@@ -2090,14 +2433,16 @@ function DiagnosisPage({ setPage, setReport, t }) {
                 {sizes.map(s => <option key={s}>{s}</option>)}
               </select>
             </div>
+            <div className="form-group">
+              <label>{t.form_revenue}</label>
+              <select value={form.revenue} onChange={e => ff('revenue',e.target.value)}>
+                <option value="">—</option>
+                {revenues.map(s => <option key={s}>{s}</option>)}
+              </select>
+            </div>
           </div>
-          <div className="form-group">
-            <label>{t.form_revenue}</label>
-            <select value={form.revenue} onChange={e => ff('revenue',e.target.value)}>
-              <option value="">—</option>
-              {revenues.map(s => <option key={s}>{s}</option>)}
-            </select>
-          </div>
+
+          <div className="form-section-label">{isFr ? 'Vos défis' : 'Your challenges'}</div>
           <div className="form-group">
             <label>{t.form_challenge}</label>
             <textarea rows={3} placeholder={t.form_challenge_ph} value={form.challenge} onChange={e => ff('challenge',e.target.value)}/>
@@ -2107,43 +2452,70 @@ function DiagnosisPage({ setPage, setReport, t }) {
             <label>{t.form_goals}</label>
             <textarea rows={2} placeholder={t.form_goals_ph} value={form.goals} onChange={e => ff('goals',e.target.value)}/>
           </div>
+
+          <div className="form-section-label">{isFr ? 'Document (optionnel)' : 'Supporting document (optional)'}</div>
           <div className={`file-zone ${drag?'dragover':''}`}
             onDragOver={e => {e.preventDefault();setDrag(true)}}
             onDragLeave={() => setDrag(false)}
             onDrop={e => {e.preventDefault();setDrag(false);const f=e.dataTransfer.files[0];if(f)setFile(f);}}>
             <input type="file" accept=".pdf,.docx,.pptx,.doc,.txt" onChange={e => setFile(e.target.files[0])}/>
             <div className="file-zone-text">
-              <span className="file-zone-icon">⬆</span>
+              <span className="file-zone-icon">↑</span>
               <div className="file-zone-main">{file ? file.name : t.form_upload}</div>
               <div className="file-zone-sub">{t.form_upload_sub}</div>
             </div>
           </div>
           <button className="form-submit" onClick={runDiagnosis} disabled={processing}>{processing ? t.form_processing : t.form_submit}</button>
-          <div style={{marginTop:'1rem',fontSize:'0.7rem',color:'var(--grey-500)',fontFamily:'DM Mono,monospace',lineHeight:1.6,textAlign:'center'}}>{t.form_disclaimer}</div>
+          <div style={{marginTop:'0.8rem',fontSize:'0.68rem',color:'var(--grey-500)',fontFamily:'DM Mono,monospace',lineHeight:1.6,textAlign:'center',display:'flex',alignItems:'center',justifyContent:'center',gap:'0.5rem'}}>
+            <span style={{color:'var(--cta)',fontSize:'0.7rem'}}>🔒</span>{t.form_disclaimer}
+          </div>
         </div>
 
         {/* Sidebar */}
-        <div style={{display:'flex',flexDirection:'column',gap:'1.5rem'}}>
-          <div style={{border:'1px solid var(--grey-700)',padding:'2rem'}}>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',letterSpacing:'0.2em',color:'var(--accent)',marginBottom:'1.2rem'}}>{t.what_youll_get}</div>
-            {t.items_youll_get.map(item => (
-              <div key={item} style={{display:'flex',gap:'0.8rem',alignItems:'flex-start',marginBottom:'0.8rem',fontSize:'0.82rem',color:'var(--grey-300)'}}>
-                <span style={{color:'var(--accent)',marginTop:2}}>✓</span>{item}
+        <div style={{display:'flex',flexDirection:'column',gap:'1.5rem',position:'sticky',top:'100px'}}>
+          {/* What you'll get */}
+          <div style={{border:'1px solid var(--grey-700)',borderTop:'3px solid var(--cta)',padding:'2rem',background:'var(--offblack)'}}>
+            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.58rem',letterSpacing:'0.22em',color:'var(--cta)',marginBottom:'1.4rem',display:'flex',alignItems:'center',gap:'0.6rem'}}>
+              <span style={{width:5,height:5,borderRadius:'50%',background:'var(--cta)',display:'inline-block'}}/>
+              {t.what_youll_get}
+            </div>
+            {t.items_youll_get.map((item,i) => (
+              <div key={item} style={{display:'flex',gap:'0.9rem',alignItems:'flex-start',marginBottom:'0.85rem',fontSize:'0.82rem',color:'var(--grey-300)',lineHeight:1.55}}>
+                <span style={{width:18,height:18,border:'1px solid rgba(12,148,216,0.4)',background:'rgba(12,148,216,0.08)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,marginTop:1,fontSize:'0.6rem',color:'var(--cta)'}}>✓</span>
+                {item}
               </div>
             ))}
           </div>
+
+          {/* Freemium */}
           <div style={{border:'1px solid var(--grey-700)',padding:'2rem',background:'var(--offblack)'}}>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',letterSpacing:'0.2em',color:'var(--accent)',marginBottom:'1.2rem'}}>{t.freemium_label}</div>
-            <div style={{fontSize:'0.85rem',color:'var(--grey-300)',lineHeight:1.75}}>
-              <span dangerouslySetInnerHTML={{__html:t.freemium_free}}/><br/><br/>
-              <span dangerouslySetInnerHTML={{__html:t.freemium_pro}}/>
+            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.58rem',letterSpacing:'0.22em',color:'var(--grey-500)',marginBottom:'1.2rem'}}>{t.freemium_label}</div>
+            <div style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
+              <div style={{display:'flex',gap:'0.8rem',alignItems:'flex-start'}}>
+                <span style={{background:'var(--cta)',color:'var(--white)',fontSize:'0.58rem',padding:'0.2rem 0.45rem',fontFamily:'DM Mono,monospace',letterSpacing:'0.06em',flexShrink:0,marginTop:2}}>{isFr?'GRATUIT':'FREE'}</span>
+                <span style={{fontSize:'0.82rem',color:'var(--grey-300)',lineHeight:1.65}} dangerouslySetInnerHTML={{__html:t.freemium_free.replace('<strong>Free tier:</strong>','').replace('<strong>Niveau gratuit :</strong>','').trim()}}/>
+              </div>
+              <div style={{display:'flex',gap:'0.8rem',alignItems:'flex-start'}}>
+                <span style={{border:'1px solid var(--grey-700)',color:'var(--grey-400)',fontSize:'0.58rem',padding:'0.2rem 0.45rem',fontFamily:'DM Mono,monospace',letterSpacing:'0.06em',flexShrink:0,marginTop:2}}>{isFr?'PRO':'PRO'}</span>
+                <span style={{fontSize:'0.82rem',color:'var(--grey-300)',lineHeight:1.65}} dangerouslySetInnerHTML={{__html:t.freemium_pro.replace('<strong>Pro engagement:</strong>','').replace('<strong>Engagement pro :</strong>','').trim()}}/>
+              </div>
             </div>
           </div>
-          <div style={{padding:'2rem',background:'var(--white)',color:'var(--black)'}}>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',letterSpacing:'0.15em',color:'var(--accent-dark)',marginBottom:'0.8rem'}}>{t.from_clients}</div>
-            <p style={{fontFamily:'Playfair Display,serif',fontSize:'1rem',fontStyle:'italic',lineHeight:1.6,marginBottom:'1rem'}}>{t.client_quote}</p>
-            <div style={{fontSize:'0.72rem',fontWeight:500}}>Sanjay Pillay</div>
-            <div style={{fontSize:'0.65rem',color:'var(--grey-500)',fontFamily:'DM Mono,monospace'}}>MD · Meridian Retail</div>
+
+          {/* Testimonial */}
+          <div style={{padding:'2rem',background:'var(--white)',color:'var(--black)',position:'relative',overflow:'hidden'}}>
+            <div style={{position:'absolute',top:'-0.5rem',left:'1.5rem',fontFamily:'Playfair Display,serif',fontSize:'5rem',fontWeight:900,color:'rgba(12,148,216,0.12)',lineHeight:1,userSelect:'none',pointerEvents:'none'}}>"</div>
+            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.58rem',letterSpacing:'0.18em',color:'var(--cta)',marginBottom:'1.2rem',position:'relative'}}>{t.from_clients}</div>
+            <p style={{fontFamily:'Playfair Display,serif',fontSize:'0.98rem',fontStyle:'italic',lineHeight:1.68,marginBottom:'1.5rem',color:'#1a1a18',position:'relative'}}>{t.client_quote.replace(/^"|"$/g,'')}</p>
+            <div style={{display:'flex',alignItems:'center',gap:'0.8rem',borderTop:'1px solid rgba(0,0,0,0.08)',paddingTop:'1rem'}}>
+              <div style={{width:32,height:32,background:'#0a0a0a',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                <span style={{color:'var(--cta)',fontFamily:'Playfair Display,serif',fontSize:'0.8rem',fontWeight:700}}>S</span>
+              </div>
+              <div>
+                <div style={{fontSize:'0.75rem',fontWeight:600,color:'#1a1a18'}}>Sanjay Pillay</div>
+                <div style={{fontSize:'0.65rem',color:'#787774',fontFamily:'DM Mono,monospace',letterSpacing:'0.04em'}}>MD · Meridian Retail</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2409,6 +2781,8 @@ function SMEPage({ setPage, t }) {
             [t.sme_s4_title, t.sme_s4_desc, t.sme_s4_tag],
             [t.sme_s5_title, t.sme_s5_desc, t.sme_s5_tag],
             [t.sme_s6_title, t.sme_s6_desc, t.sme_s6_tag],
+            [t.sme_s7_title, t.sme_s7_desc, t.sme_s7_tag],
+            [t.sme_s8_title, t.sme_s8_desc, t.sme_s8_tag],
           ].map(([title, desc, tag], i) => (
             <div key={i} className="sme-service-card reveal">
               <div className="sme-service-num">0{i+1}</div>
@@ -2582,7 +2956,7 @@ function App() {
           <div>
             <div className="footer-col-title">{isFr ? 'Navigation' : 'Navigation'}</div>
             <ul className="footer-col-links">
-              {[['home',t.nav_about],['services',t.nav_services],['success',t.nav_results],['plans',t.nav_plans],['diagnosis',t.nav_diagnosis],['contact',t.nav_contact]].map(([p,l]) => (
+              {[['home',t.nav_about],['services',t.nav_services],['sme',t.nav_sme],['success',t.nav_results],['plans',t.nav_plans],['diagnosis',t.nav_diagnosis],['contact',t.nav_contact]].map(([p,l]) => (
                 <li key={p}><button onClick={() => go(p)}>{l}</button></li>
               ))}
             </ul>

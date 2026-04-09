@@ -64,7 +64,7 @@ const diagnosticConfirmation = (data, lang = 'en') => {
       <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;background:#ffffff">
         <div style="background:#0a0a0a;padding:24px 40px;text-align:center">
           <div style="color:#ffffff;font-size:20px;font-weight:800;letter-spacing:0.12em">VERTEX GROUP AFRICA</div>
-          <div style="color:#9ca3af;font-size:11px;margin-top:4px;letter-spacing:0.08em">${isFr ? 'INTELLIGENCE STRATÉGIQUE' : 'STRATEGIC INTELLIGENCE'}</div>
+          <div style="color:#9ca3af;font-size:11px;margin-top:4px;letter-spacing:0.08em">${isFr ? 'Votre ambition. Notre architecture' : 'Your ambition. Our architecture'}</div>
         </div>
         <div style="padding:40px">
           <h2 style="color:#0a0a0a;font-size:22px;font-weight:700;margin:0 0 16px">${isFr ? 'Nous avons bien reçu votre demande.' : 'We have received your request.'}</h2>
@@ -98,7 +98,7 @@ const newsletterConfirmation = (data, lang = 'en') => {
       <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;background:#ffffff">
         <div style="background:#0a0a0a;padding:24px 40px;text-align:center">
           <div style="color:#ffffff;font-size:20px;font-weight:800;letter-spacing:0.12em">VERTEX GROUP AFRICA</div>
-          <div style="color:#9ca3af;font-size:11px;margin-top:4px;letter-spacing:0.08em">${isFr ? 'INTELLIGENCE STRATÉGIQUE' : 'STRATEGIC INTELLIGENCE'}</div>
+          <div style="color:#9ca3af;font-size:11px;margin-top:4px;letter-spacing:0.08em">${isFr ? 'Votre ambition. Notre architecture' : 'Your ambition. Our architecture'}</div>
         </div>
         <div style="padding:40px">
           <h2 style="color:#0a0a0a;font-size:22px;font-weight:700;margin:0 0 16px">${isFr ? 'Abonnement confirmé.' : 'Subscription confirmed.'}</h2>
@@ -137,7 +137,6 @@ const diagnosticResults = (data, lang = 'en') => {
 
   const dimensionBlocks = (data.dimensions || []).map(d => {
     const dc = dimColor(d.score);
-    const db = dimBg(d.score);
     return `
     <div style="margin-bottom:24px;background:#fafafa;border-radius:4px;border-left:4px solid ${dc};padding:20px 24px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
@@ -415,7 +414,7 @@ const buildNewsletterHtml = (opts, lang = 'en') => {
                 <p style="margin:0;font-size:12px;color:#4b5563;line-height:1.6">${isFr ? 'Sprint de 90 jours avec un consultant dédié pour accélérer votre croissance.' : '90-day sprint with a dedicated consultant to drive your growth.'}</p>
               </div>
               <div style="border:1px solid #e5e5e3;border-radius:4px;padding:20px">
-                <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#0c94d8;margin-bottom:6px">${isFr ? 'ACCÈS AUX FINANCEMENTS' : 'DONOR MATCHING'}</div>
+                <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#0c94d8;margin-bottom:6px">${isFr ? 'STRATEGIE' : 'STRATEGY'}</div>
                 <p style="margin:0;font-size:12px;color:#4b5563;line-height:1.6">${isFr ? 'strategis de scalling pour vos PMEs/PMIs' : 'Scalling strategies for your SMEs/SMIs'}</p>
               </div>
             </td>
@@ -504,4 +503,217 @@ const buildNewsletterHtml = (opts, lang = 'en') => {
 </html>`;
 };
 
-module.exports = { sendEmail, newLeadNotification, diagnosticConfirmation, newsletterConfirmation, diagnosticResults, buildNewsletterHtml };
+// ── DASHBOARD AD-HOC EMAIL TEMPLATE ──────────────────────────────────────────
+/**
+ * Wraps a plain-text or HTML body written in the dashboard compose box
+ * into a full branded HTML email shell.
+ *
+ * @param {object} opts - { subject, bodyHtml, senderName }
+ */
+const buildDashboardEmailHtml = (opts) => {
+  const date = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+  // Convert plain-text line breaks to <br> if no HTML tags present
+  const body = /<[a-z][\s\S]*>/i.test(opts.bodyHtml)
+    ? opts.bodyHtml
+    : opts.bodyHtml.replace(/\n/g, '<br>');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${opts.subject}</title></head>
+<body style="margin:0;padding:0;background:#f4f4f4;-webkit-font-smoothing:antialiased">
+<div style="max-width:620px;margin:0 auto;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
+
+  <!-- Header -->
+  <div style="background:#0a0a0a;padding:28px 40px;text-align:center">
+    <div style="color:#ffffff;font-size:18px;font-weight:900;letter-spacing:0.16em;text-transform:uppercase">VERTEX GROUP AFRICA</div>
+    <div style="width:36px;height:2px;background:#0c94d8;margin:10px auto 0"></div>
+    <div style="color:#9ca3af;font-size:10px;margin-top:8px;letter-spacing:0.1em;text-transform:uppercase">Your ambition. Our architecture.</div>
+  </div>
+
+  <!-- Subject banner -->
+  <div style="background:#0c94d8;padding:12px 40px">
+    <div style="color:#ffffff;font-size:13px;font-weight:700;letter-spacing:0.04em">${opts.subject}</div>
+  </div>
+
+  <!-- Body -->
+  <div style="background:#ffffff;padding:40px">
+    <div style="color:#1a1a1a;font-size:15px;line-height:1.8">${body}</div>
+  </div>
+
+  <!-- Signature -->
+  <div style="background:#f9f9f9;border-top:1px solid #e5e5e5;padding:24px 40px">
+    <div style="display:flex;align-items:flex-start;gap:16px">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#0a0a0a">${opts.senderName || 'Vertex Group Africa Team'}</div>
+        <div style="font-size:12px;color:#6b7280;margin-top:2px">Vertex Group Africa</div>
+        <div style="margin-top:8px;font-size:11px;color:#9ca3af;line-height:1.8">
+          <a href="mailto:info@vertexgroup.africa" style="color:#0c94d8;text-decoration:none">info@vertexgroup.africa</a><br>
+          <a href="https://vertexgroup.africa" style="color:#0c94d8;text-decoration:none">vertexgroup.africa</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="background:#0a0a0a;padding:18px 40px;text-align:center">
+    <div style="color:#6b7280;font-size:10px;line-height:1.8">
+      Vertex Group Africa · info@vertexgroup.africa · vertexgroup.africa<br>
+      <span style="color:#4b5563">${date}</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>`;
+};
+
+// ── INVOICE EMAIL TEMPLATE ────────────────────────────────────────────────────
+/**
+ * Professional invoice delivery email. The PDF is attached separately.
+ *
+ * @param {object} invoice - Mongoose Invoice document
+ */
+const invoiceEmail = (invoice) => {
+  const fmt = (n) => `${invoice.currency || 'USD'} ${Number(n).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+  const due = invoice.dueDate
+    ? new Date(invoice.dueDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })
+    : 'Upon receipt';
+
+  const itemRows = (invoice.items || []).map(i => `
+    <tr>
+      <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;color:#1a1a1a">${i.description}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;color:#4b5563;text-align:center">${i.quantity}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;color:#4b5563;text-align:right">${fmt(i.unitPrice)}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid #f0f0f0;font-size:13px;font-weight:600;color:#0a0a0a;text-align:right">${fmt(i.amount)}</td>
+    </tr>`).join('');
+
+  return {
+    to:      invoice.client.email,
+    subject: `Invoice ${invoice.invoiceNumber} from Vertex Group Africa`,
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Invoice ${invoice.invoiceNumber}</title></head>
+<body style="margin:0;padding:0;background:#f4f4f4">
+<div style="max-width:660px;margin:0 auto;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
+
+  <!-- Header -->
+  <div style="background:#0a0a0a;padding:32px 48px">
+    <table style="width:100%;border-collapse:collapse">
+      <tr>
+        <td>
+          <div style="color:#ffffff;font-size:20px;font-weight:900;letter-spacing:0.16em">VERTEX GROUP AFRICA</div>
+          <div style="color:#0c94d8;font-size:10px;margin-top:6px;letter-spacing:0.1em;text-transform:uppercase">Your ambition. Our architecture.</div>
+        </td>
+        <td style="text-align:right;vertical-align:top">
+          <div style="color:#ffffff;font-size:22px;font-weight:900;letter-spacing:0.06em">INVOICE</div>
+          <div style="color:#9ca3af;font-size:12px;margin-top:4px">${invoice.invoiceNumber}</div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Invoice meta -->
+  <div style="background:#0c94d8;padding:14px 48px">
+    <table style="width:100%;border-collapse:collapse">
+      <tr>
+        <td style="color:#ffffff;font-size:12px"><strong>Issue date:</strong> ${new Date(invoice.createdAt || Date.now()).toLocaleDateString('en-GB', {day:'2-digit',month:'long',year:'numeric'})}</td>
+        <td style="color:#ffffff;font-size:12px;text-align:center"><strong>Due date:</strong> ${due}</td>
+        <td style="color:#ffffff;font-size:12px;text-align:right"><strong>Status:</strong> ${(invoice.status || 'sent').toUpperCase()}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Bill to -->
+  <div style="background:#ffffff;padding:32px 48px 0">
+    <table style="width:100%;border-collapse:collapse">
+      <tr>
+        <td style="vertical-align:top;width:50%">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#9ca3af;margin-bottom:8px">Billed to</div>
+          <div style="font-size:14px;font-weight:700;color:#0a0a0a">${invoice.client.name}</div>
+          ${invoice.client.company ? `<div style="font-size:13px;color:#4b5563">${invoice.client.company}</div>` : ''}
+          ${invoice.client.address ? `<div style="font-size:12px;color:#6b7280;margin-top:4px">${invoice.client.address}</div>` : ''}
+          ${invoice.client.country ? `<div style="font-size:12px;color:#6b7280">${invoice.client.country}</div>` : ''}
+          <div style="font-size:12px;color:#0c94d8;margin-top:4px">${invoice.client.email}</div>
+        </td>
+        <td style="vertical-align:top;text-align:right;width:50%">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#9ca3af;margin-bottom:8px">From</div>
+          <div style="font-size:14px;font-weight:700;color:#0a0a0a">Vertex Group Africa</div>
+          <div style="font-size:12px;color:#6b7280;margin-top:4px;line-height:1.8">
+            info@vertexgroup.africa<br>vertexgroup.africa
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Line items -->
+  <div style="background:#ffffff;padding:24px 48px">
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr style="background:#0a0a0a">
+          <th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:#ffffff;text-transform:uppercase;letter-spacing:0.08em">Description</th>
+          <th style="padding:10px 12px;text-align:center;font-size:11px;font-weight:700;color:#ffffff;text-transform:uppercase;letter-spacing:0.08em">Qty</th>
+          <th style="padding:10px 12px;text-align:right;font-size:11px;font-weight:700;color:#ffffff;text-transform:uppercase;letter-spacing:0.08em">Unit price</th>
+          <th style="padding:10px 12px;text-align:right;font-size:11px;font-weight:700;color:#ffffff;text-transform:uppercase;letter-spacing:0.08em">Amount</th>
+        </tr>
+      </thead>
+      <tbody>${itemRows}</tbody>
+    </table>
+
+    <!-- Totals -->
+    <table style="width:100%;border-collapse:collapse;margin-top:16px">
+      <tr>
+        <td style="width:55%"></td>
+        <td style="padding:6px 12px;font-size:13px;color:#4b5563;text-align:right">Subtotal</td>
+        <td style="padding:6px 12px;font-size:13px;font-weight:600;color:#0a0a0a;text-align:right;white-space:nowrap">${fmt(invoice.subtotal)}</td>
+      </tr>
+      ${invoice.taxRate ? `
+      <tr>
+        <td></td>
+        <td style="padding:6px 12px;font-size:13px;color:#4b5563;text-align:right">Tax (${invoice.taxRate}%)</td>
+        <td style="padding:6px 12px;font-size:13px;font-weight:600;color:#0a0a0a;text-align:right;white-space:nowrap">${fmt(invoice.taxAmount)}</td>
+      </tr>` : ''}
+      <tr style="background:#0a0a0a">
+        <td></td>
+        <td style="padding:10px 12px;font-size:14px;font-weight:700;color:#ffffff;text-align:right">TOTAL DUE</td>
+        <td style="padding:10px 12px;font-size:16px;font-weight:900;color:#0c94d8;text-align:right;white-space:nowrap">${fmt(invoice.total)}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Payment details -->
+  <div style="background:#f9f9f9;border:1px solid #e5e5e5;margin:0 48px;border-radius:4px;padding:24px">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#0c94d8;margin-bottom:12px">Payment details</div>
+    <table style="border-collapse:collapse;width:100%">
+      <tr><td style="padding:3px 0;font-size:12px;color:#6b7280;width:140px">Account holder</td><td style="padding:3px 0;font-size:12px;font-weight:600;color:#0a0a0a">Vertex Global Tech</td></tr>
+      <tr><td style="padding:3px 0;font-size:12px;color:#6b7280">Account number</td><td style="padding:3px 0;font-size:12px;font-weight:600;color:#0a0a0a">747833314790450</td></tr>
+      <tr><td style="padding:3px 0;font-size:12px;color:#6b7280">Account type</td><td style="padding:3px 0;font-size:12px;font-weight:600;color:#0a0a0a">Checking</td></tr>
+      <tr><td style="padding:3px 0;font-size:12px;color:#6b7280">Routing number</td><td style="padding:3px 0;font-size:12px;font-weight:600;color:#0a0a0a">084009519</td></tr>
+      <tr><td style="padding:3px 0;font-size:12px;color:#6b7280">Bank</td><td style="padding:3px 0;font-size:12px;font-weight:600;color:#0a0a0a">Column National Association</td></tr>
+      <tr><td style="padding:3px 0;font-size:12px;color:#6b7280">Bank address</td><td style="padding:3px 0;font-size:12px;font-weight:600;color:#0a0a0a">108 W 13th St, Wilmington, DE 19801, United States</td></tr>
+      <tr><td style="padding:3px 0;font-size:12px;color:#6b7280">Swift / BIC</td><td style="padding:3px 0;font-size:12px;font-weight:600;color:#0a0a0a">TRWIUS35XXX</td></tr>
+    </table>
+  </div>
+
+  ${invoice.notes ? `
+  <!-- Notes -->
+  <div style="background:#ffffff;padding:16px 48px">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#9ca3af;margin-bottom:6px">Notes</div>
+    <div style="font-size:13px;color:#4b5563;line-height:1.7">${invoice.notes}</div>
+  </div>` : ''}
+
+  <!-- Footer -->
+  <div style="background:#0a0a0a;padding:20px 48px;text-align:center;margin-top:24px">
+    <div style="color:#6b7280;font-size:10px;line-height:1.8">
+      Vertex Group Africa · info@vertexgroup.africa · vertexgroup.africa<br>
+      <span style="color:#4b5563">Thank you for your business.</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>`,
+  };
+};
+
+module.exports = { sendEmail, newLeadNotification, diagnosticConfirmation, newsletterConfirmation, diagnosticResults, buildNewsletterHtml, buildDashboardEmailHtml, invoiceEmail };
