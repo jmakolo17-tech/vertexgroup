@@ -8,6 +8,7 @@
 <script src="config.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
 :root {
   /* Layout */
@@ -4760,28 +4761,50 @@ async function deleteForm(id) {
   } catch(e) { alert('Failed to delete form.'); }
 }
 
-// ── Submissions viewer ────────────────────────────────────────────────────────
+// ── Submissions viewer (Google Forms style) ───────────────────────────────────
+
+let _currentSubsFormId    = null;
+let _currentSubsFormTitle = null;
+let _currentSubsData      = null; // { form, submissions }
 
 async function openViewSubmissionsModal(formId, formTitle) {
+  _currentSubsFormId    = formId;
+  _currentSubsFormTitle = formTitle;
+  _currentSubsData      = null;
+
   const modal = document.getElementById('forms-modal-inner');
   modal.innerHTML = `
-    <div class="modal" style="max-width:900px;width:100%;max-height:90vh;overflow-y:auto">
+    <div class="modal" style="max-width:960px;width:100%;max-height:92vh;overflow-y:auto">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <div class="modal-title" style="margin-bottom:0;border-bottom:none;padding-bottom:0">Submissions — ${esc(formTitle)}</div>
+        <div class="modal-title" style="margin-bottom:0;border-bottom:none;padding-bottom:0">${esc(formTitle)}</div>
         <button class="btn" onclick="closeModal('modal-forms-builder')" style="padding:4px 9px;font-size:14px;border:none">✕</button>
       </div>
-      <hr style="border:none;border-top:1px solid var(--border);margin:14px 0 16px"/>
-      <div>
-        <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
-          <button class="btn btn-green" style="font-size:12px;padding:6px 14px" onclick="exportFormSubmissions('${formId}','${esc(formTitle)}')">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Export CSV
-          </button>
-        </div>
-        <div id="subs-content">
-          <div style="text-align:center;color:var(--text3);padding:40px">Loading submissions…</div>
-        </div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:12px 0 16px"/>
+
+      <!-- Tab bar -->
+      <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px">
+        <button id="tab-summary" class="subs-tab active" onclick="switchSubsTab('summary')"
+          style="padding:8px 20px;font-size:13px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--accent);border-bottom:2px solid var(--accent)">
+          Summary
+        </button>
+        <button id="tab-responses" class="subs-tab" onclick="switchSubsTab('responses')"
+          style="padding:8px 20px;font-size:13px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent">
+          Individual responses
+        </button>
       </div>
+
+      <!-- Export bar -->
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:20px">
+        <button class="btn" onclick="exportFormXLSX()" style="font-size:12px;padding:6px 14px;display:flex;align-items:center;gap:5px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export spreadsheet
+        </button>
+      </div>
+
+      <div id="subs-content">
+        <div style="text-align:center;color:var(--text3);padding:40px">Loading responses…</div>
+      </div>
+
       <div class="modal-footer">
         <button class="btn" onclick="closeModal('modal-forms-builder')">Close</button>
       </div>
@@ -4789,74 +4812,266 @@ async function openViewSubmissionsModal(formId, formTitle) {
   openModal('modal-forms-builder');
 
   try {
-    const r = await api('GET', `/api/forms/${formId}/submissions`);
-    renderSubmissions(r.submissions || [], r.total || 0, formId);
+    const [formR, subsR] = await Promise.all([
+      api('GET', `/api/forms/${formId}`),
+      api('GET', `/api/forms/${formId}/submissions?limit=500`),
+    ]);
+    _currentSubsData = { form: formR.form, submissions: subsR.submissions || [] };
+    renderSubsSummary(_currentSubsData);
   } catch(e) {
     const el = document.getElementById('subs-content');
-    if (el) el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:32px">Failed to load submissions.</div>`;
+    if (el) el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:32px">Failed to load responses.</div>`;
   }
 }
 
-function renderSubmissions(subs, total, formId) {
+function switchSubsTab(tab) {
+  ['summary','responses'].forEach(t => {
+    const btn = document.getElementById(`tab-${t}`);
+    if (!btn) return;
+    const active = t === tab;
+    btn.style.color       = active ? 'var(--accent)' : 'var(--text2)';
+    btn.style.borderBottom= active ? '2px solid var(--accent)' : '2px solid transparent';
+  });
+  if (!_currentSubsData) return;
+  if (tab === 'summary')   renderSubsSummary(_currentSubsData);
+  if (tab === 'responses') renderSubsIndividual(_currentSubsData);
+}
+
+// ── Summary tab (Google Forms style) ─────────────────────────────────────────
+function renderSubsSummary({ form, submissions }) {
   const el = document.getElementById('subs-content');
   if (!el) return;
-  if (!subs.length) {
-    el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:40px">No submissions yet.</div>`;
+
+  const total = submissions.length;
+  if (!total) {
+    el.innerHTML = `<div style="text-align:center;padding:60px;color:var(--text3)">
+      <div style="font-size:40px;margin-bottom:12px">📋</div>
+      <div style="font-size:16px;font-weight:600;color:var(--text2);margin-bottom:6px">No responses yet</div>
+      <div style="font-size:13px">Share the form link to start collecting responses.</div>
+    </div>`;
     return;
   }
-  // Collect all keys from data
-  const allKeys = [...new Set(subs.flatMap(s => Object.keys(s.data || {})))];
 
-  function renderCellValue(val) {
+  const lastDate = new Date(Math.max(...submissions.map(s => new Date(s.createdAt)))).toLocaleDateString();
+  const fields   = (form.fields || []).sort((a, b) => a.order - b.order);
+
+  // Build answer maps per field
+  const fieldAnswers = {};
+  fields.forEach(f => {
+    fieldAnswers[f.label] = submissions.map(s => s.data[f.label]).filter(v => v !== undefined && v !== null && v !== '');
+  });
+
+  // Header stats
+  let html = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">
+      <div class="metric-card">
+        <div class="metric-label">Total responses</div>
+        <div class="metric-val" style="font-size:28px">${total}</div>
+      </div>
+      <div class="metric-card green">
+        <div class="metric-label">Last response</div>
+        <div class="metric-val" style="font-size:16px">${lastDate}</div>
+      </div>
+      <div class="metric-card blue">
+        <div class="metric-label">Questions</div>
+        <div class="metric-val" style="font-size:28px">${fields.length}</div>
+      </div>
+    </div>`;
+
+  // Per-question cards
+  fields.forEach(f => {
+    const answers = fieldAnswers[f.label] || [];
+    html += `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:600;color:var(--text1);margin-bottom:4px">${esc(f.label)}</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px">${f.type} · ${answers.length} response${answers.length !== 1 ? 's' : ''}</div>
+      ${buildQuestionSummary(f, answers)}
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function buildQuestionSummary(field, answers) {
+  if (!answers.length) return `<div style="color:var(--text3);font-size:12px">No responses for this question.</div>`;
+
+  // Select / multiple-choice → bar chart
+  if (field.type === 'select') {
+    const counts = {};
+    answers.forEach(a => { const k = String(a); counts[k] = (counts[k] || 0) + 1; });
+    const max = Math.max(...Object.values(counts));
+    const total = answers.length;
+    return Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([opt, cnt]) => {
+      const pct = Math.round((cnt / total) * 100);
+      const barPct = Math.round((cnt / max) * 100);
+      return `<div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+          <span style="color:var(--text1)">${esc(opt)}</span>
+          <span style="color:var(--text3)">${cnt} (${pct}%)</span>
+        </div>
+        <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+          <div style="width:${barPct}%;height:100%;background:var(--accent);border-radius:4px;transition:width .4s"></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Checkbox → Yes/No bar
+  if (field.type === 'checkbox') {
+    const yes = answers.filter(a => a === true || a === 'true').length;
+    const no  = answers.length - yes;
+    const pctY = Math.round((yes / answers.length) * 100);
+    const pctN = 100 - pctY;
+    return `
+      <div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+          <span style="color:var(--green-text)">✓ Yes</span><span style="color:var(--text3)">${yes} (${pctY}%)</span>
+        </div>
+        <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+          <div style="width:${pctY}%;height:100%;background:var(--green-text);border-radius:4px"></div>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+          <span style="color:var(--text3)">✗ No</span><span style="color:var(--text3)">${no} (${pctN}%)</span>
+        </div>
+        <div style="height:8px;background:var(--border);border-radius:4px;overflow:hidden">
+          <div style="width:${pctN}%;height:100%;background:var(--border2);border-radius:4px"></div>
+        </div>
+      </div>`;
+  }
+
+  // File attachments → list
+  if (field.type === 'file') {
+    return answers.map(v => {
+      if (v && typeof v === 'object' && v.base64) {
+        const sz = v.sizeKb ? ` · ${v.sizeKb} KB` : '';
+        return `<a href="data:${esc(v.type)};base64,${v.base64}" download="${esc(v.name)}"
+          style="display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-size:12px;text-decoration:none;margin:2px 6px 2px 0">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          ${esc(v.name)}${sz}
+        </a>`;
+      }
+      return '';
+    }).join('');
+  }
+
+  // Text, email, phone, number, date, textarea → scrollable list
+  const items = answers.slice(0, 50);
+  return `<div style="max-height:180px;overflow-y:auto;display:flex;flex-direction:column;gap:6px">
+    ${items.map(a => `<div style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:7px 11px;font-size:13px;color:var(--text1);word-break:break-word">${esc(String(a))}</div>`).join('')}
+    ${answers.length > 50 ? `<div style="font-size:11px;color:var(--text3);text-align:center;padding:4px">… and ${answers.length - 50} more — export to see all</div>` : ''}
+  </div>`;
+}
+
+// ── Individual responses tab ───────────────────────────────────────────────────
+function renderSubsIndividual({ form, submissions }) {
+  const el = document.getElementById('subs-content');
+  if (!el) return;
+  if (!submissions.length) {
+    el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:40px">No responses yet.</div>`;
+    return;
+  }
+
+  const fields  = (form.fields || []).sort((a, b) => a.order - b.order);
+  const allKeys = fields.map(f => f.label);
+
+  // Also pick up any extra keys not in the form definition (edge cases)
+  const extraKeys = [...new Set(submissions.flatMap(s => Object.keys(s.data || {})))].filter(k => !allKeys.includes(k));
+  const keys = [...allKeys, ...extraKeys];
+
+  function cellHtml(val) {
     if (val && typeof val === 'object' && val.base64 && val.name) {
-      // File attachment
-      const icon = val.type?.startsWith('image/') ? '🖼' : '📎';
-      const size = val.sizeKb ? ` (${val.sizeKb} KB)` : '';
+      const sz = val.sizeKb ? ` (${val.sizeKb} KB)` : '';
       return `<a href="data:${esc(val.type)};base64,${val.base64}" download="${esc(val.name)}"
-               style="color:var(--accent);font-size:12px;display:inline-flex;align-items:center;gap:4px;text-decoration:none;white-space:nowrap"
-               title="Download ${esc(val.name)}">
-               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-               ${esc(val.name)}${size}
-             </a>`;
+               style="color:var(--accent);font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:4px">
+               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+               ${esc(val.name)}${sz}</a>`;
     }
-    if (typeof val === 'boolean') return val ? '✓ Yes' : '✗ No';
-    return `<span style="max-width:220px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(String(val??''))}">${esc(String(val??''))}</span>`;
+    if (typeof val === 'boolean') return val ? '<span style="color:var(--green-text)">✓ Yes</span>' : '<span style="color:var(--text3)">✗ No</span>';
+    if (val === null || val === undefined || val === '') return '<span style="color:var(--text3)">—</span>';
+    return `<span title="${esc(String(val))}" style="max-width:200px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(String(val))}</span>`;
   }
 
   el.innerHTML = `
-    <div style="font-size:12px;color:var(--text3);margin-bottom:10px">${total} submission${total !== 1 ? 's' : ''}</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:12px">${submissions.length} response${submissions.length !== 1 ? 's' : ''}</div>
     <div style="overflow-x:auto">
       <table>
         <thead>
           <tr>
-            <th style="white-space:nowrap">Submitted at</th>
-            ${allKeys.map(k=>`<th style="white-space:nowrap">${esc(k)}</th>`).join('')}
+            <th style="white-space:nowrap">#</th>
+            <th style="white-space:nowrap">Submitted</th>
+            ${keys.map(k => `<th style="white-space:nowrap">${esc(k)}</th>`).join('')}
           </tr>
         </thead>
         <tbody>
-          ${subs.map(s=>`<tr>
+          ${submissions.map((s, i) => `<tr>
+            <td style="color:var(--text3);font-size:12px">${i + 1}</td>
             <td style="font-size:12px;color:var(--text3);white-space:nowrap">${new Date(s.createdAt).toLocaleString()}</td>
-            ${allKeys.map(k=>`<td style="font-size:13px">${renderCellValue(s.data[k])}</td>`).join('')}
+            ${keys.map(k => `<td style="font-size:13px">${cellHtml(s.data[k])}</td>`).join('')}
           </tr>`).join('')}
         </tbody>
       </table>
     </div>`;
 }
 
-async function exportFormSubmissions(formId, title) {
-  try {
-    const token = localStorage.getItem('vertex_token');
-    const r = await fetch(`${window.VERTEX_API_BASE}/api/forms/${formId}/submissions/export`, {
-      headers: { Authorization: `Bearer ${token}` }
+// ── XLSX export ───────────────────────────────────────────────────────────────
+async function exportFormXLSX() {
+  if (!_currentSubsData) return;
+  if (typeof XLSX === 'undefined') { alert('Spreadsheet library not loaded — please refresh and try again.'); return; }
+
+  const { form, submissions } = _currentSubsData;
+  if (!submissions.length) { alert('No responses to export.'); return; }
+
+  const fields  = (form.fields || []).sort((a, b) => a.order - b.order);
+  const allKeys = [...new Set([...fields.map(f => f.label), ...submissions.flatMap(s => Object.keys(s.data || {}))])];
+
+  // Build rows
+  const header = ['#', 'Submitted At', ...allKeys];
+  const rows   = submissions.map((s, i) => {
+    const row = [i + 1, new Date(s.createdAt).toLocaleString()];
+    allKeys.forEach(k => {
+      const v = s.data[k];
+      if (v && typeof v === 'object' && v.name) row.push(`[File: ${v.name}]`);
+      else if (typeof v === 'boolean')           row.push(v ? 'Yes' : 'No');
+      else                                        row.push(v ?? '');
     });
-    if (!r.ok) throw new Error('Export failed');
-    const blob = await r.blob();
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `submissions-${title.replace(/[^a-z0-9]/gi,'-').toLowerCase()}.csv`;
-    a.click();
-  } catch(e) { alert('Export failed.'); }
+    return row;
+  });
+
+  const ws = XLSX.utils.aoa_to_sheet([header, ...rows]);
+
+  // Auto column widths
+  const colWidths = header.map((h, i) => {
+    const max = Math.max(String(h).length, ...rows.map(r => String(r[i] || '').length));
+    return { wch: Math.min(max + 2, 50) };
+  });
+  ws['!cols'] = colWidths;
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Responses');
+
+  // Summary sheet
+  const summaryRows = [['Question', 'Type', 'Responses', 'Top Answer']];
+  fields.forEach(f => {
+    const answers = submissions.map(s => s.data[f.label]).filter(v => v !== null && v !== undefined && v !== '');
+    let topAnswer = '';
+    if (f.type === 'select') {
+      const counts = {};
+      answers.forEach(a => { const k = String(a); counts[k] = (counts[k] || 0) + 1; });
+      topAnswer = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]?.[0] || '';
+    } else if (f.type !== 'file') {
+      topAnswer = String(answers[0] || '').slice(0, 100);
+    }
+    summaryRows.push([f.label, f.type, answers.length, topAnswer]);
+  });
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryRows);
+  wsSummary['!cols'] = [{ wch: 30 }, { wch: 12 }, { wch: 12 }, { wch: 40 }];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+  const filename = `${(_currentSubsFormTitle || 'form').replace(/[^a-z0-9]/gi, '-').toLowerCase()}-responses.xlsx`;
+  XLSX.writeFile(wb, filename);
 }
+
 
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');

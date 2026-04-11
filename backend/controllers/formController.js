@@ -127,7 +127,7 @@ exports.exportSubmissions = async (req, res) => {
 exports.getPublicForm = async (req, res) => {
   try {
     const form = await Form.findOne({ slug: req.params.slug })
-      .select('title description activityType instructions fields status closedMessage');
+      .select('title description activityType instructions fields status closedMessage slug');
     if (!form) return res.status(404).json({ success: false, message: 'Form not found' });
     res.json({ success: true, form });
   } catch (err) {

@@ -412,11 +412,14 @@
   <!-- Success state (after submit) -->
   <div class="state-box success" id="state-success" style="display:none">
     <div class="icon">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0d9e6e" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0d9e6e" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
     </div>
-    <div style="font-size:21px;font-weight:700;color:var(--text1);font-family:'Playfair Display',serif">Response submitted!</div>
-    <div id="success-msg" style="max-width:400px">Thank you — your response has been recorded and our team will follow up if needed.</div>
-    <a href="https://vertexgroup.africa" style="color:var(--accent);font-size:13px;margin-top:10px">← Back to vertexgroup.africa</a>
+    <div style="font-size:26px;font-weight:700;color:var(--text1);font-family:'Playfair Display',serif">Response submitted!</div>
+    <div id="success-msg" style="max-width:420px;font-size:15px;line-height:1.6;color:var(--text2)">Your response has been recorded. Thank you for taking the time to complete this form — our team will follow up with you if needed.</div>
+    <a href="https://vertexgroup.africa" style="color:var(--accent);font-size:13px;margin-top:12px;display:inline-flex;align-items:center;gap:5px">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to vertexgroup.africa
+    </a>
   </div>
 
   <!-- Form content -->
@@ -708,8 +711,11 @@
     btn.disabled = true;
     label.textContent = 'Submitting…';
 
+    // Use slug from formData or fall back to URL slug
+    const slug = formData.slug || getSlug();
+
     try {
-      const r = await fetch(`${API}/api/forms/public/${formData.slug}/submit`, {
+      const r = await fetch(`${API}/api/forms/public/${slug}/submit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data }),
