@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Vertex Group Africa — Form</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230c94d8'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='serif' font-weight='bold' font-size='18' fill='white'>V</text></svg>"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="config.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:    #0c94d8;
+      --accent-dk: #0878b4;
+      --bg:        #0a0e1a;
+      --bg2:       #111827;
+      --bg3:       #1a2234;
+      --border:    rgba(255,255,255,0.08);
+      --text1:     #f0f4ff;
+      --text2:     #9ca8be;
+      --text3:     #5a6580;
+      --green:     #0d9e6e;
+      --red:       #e74c3c;
+      --radius:    10px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text1);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 34px; height: 34px;
+      background: var(--accent);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-mark svg { fill: #fff; }
+    .logo-text-main {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text1);
+      letter-spacing: 0.3px;
+    }
+    .logo-text-sub {
+      font-size: 11px;
+      color: var(--text2);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+    .header-tagline {
+      font-size: 12px;
+      color: var(--text3);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Layout ── */
+    .page-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 20px 80px;
+    }
+
+    /* ── Loading / Error / Success states ── */
+    .state-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+      gap: 16px;
+      color: var(--text2);
+      font-size: 15px;
+      text-align: center;
+    }
+    .state-box .icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .state-box.loading .icon { background: rgba(12,148,216,.1); }
+    .state-box.success .icon { background: rgba(13,158,110,.15); }
+    .state-box.error   .icon { background: rgba(231,76,60,.12); }
+    .spinner {
+      width: 26px; height: 26px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Form card ── */
+    .form-card {
+      width: 100%;
+      max-width: 660px;
+    }
+
+    /* Activity badge */
+    .activity-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(12,148,216,.12);
+      border: 1px solid rgba(12,148,216,.25);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+
+    /* Form header */
+    .form-header {
+      margin-bottom: 28px;
+    }
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text1);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .form-description {
+      font-size: 15px;
+      color: var(--text2);
+      line-height: 1.65;
+    }
+
+    /* Instructions box */
+    .instructions-box {
+      background: rgba(12,148,216,.07);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 14px 18px;
+      margin-bottom: 28px;
+      font-size: 14px;
+      color: var(--text1);
+      line-height: 1.6;
+    }
+    .instructions-box .ins-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 28px 0;
+    }
+
+    /* Fields */
+    .fields-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
+    .field-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text1);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .req-star { color: var(--accent); }
+    .field-input,
+    .field-select,
+    .field-textarea {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text1);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 11px 14px;
+      width: 100%;
+      transition: border-color .2s;
+      outline: none;
+    }
+    .field-input:focus,
+    .field-select:focus,
+    .field-textarea:focus {
+      border-color: var(--accent);
+      background: rgba(12,148,216,.04);
+    }
+    .field-input::placeholder,
+    .field-textarea::placeholder { color: var(--text3); }
+    .field-select option { background: var(--bg3); color: var(--text1); }
+    .field-textarea { resize: vertical; min-height: 100px; }
+
+    /* Checkbox */
+    .field-checkbox-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .field-checkbox-wrap input[type="checkbox"] {
+      width: 16px; height: 16px;
+      margin-top: 2px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .field-checkbox-label { font-size: 14px; color: var(--text2); line-height: 1.5; }
+
+    /* File input */
+    .field-file-wrap {
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      color: var(--text3);
+      font-size: 13px;
+      cursor: pointer;
+      transition: border-color .2s;
+    }
+    .field-file-wrap:hover { border-color: var(--accent); color: var(--text2); }
+    .field-file-wrap input[type="file"] { display: none; }
+
+    /* Validation errors */
+    .field-error {
+      font-size: 12px;
+      color: var(--red);
+      margin-top: 2px;
+    }
+    .field-input.invalid,
+    .field-select.invalid,
+    .field-textarea.invalid {
+      border-color: var(--red);
+    }
+
+    /* Submit button */
+    .submit-row {
+      margin-top: 32px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .btn-submit {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 13px 36px;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-submit:hover:not(:disabled) { background: var(--accent-dk); }
+    .btn-submit:active:not(:disabled) { transform: scale(.98); }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; }
+
+    /* Form submit error banner */
+    .submit-error {
+      margin-top: 16px;
+      background: rgba(231,76,60,.1);
+      border: 1px solid rgba(231,76,60,.3);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      color: #ff6b6b;
+      font-size: 13px;
+      display: none;
+    }
+
+    /* Progress bar */
+    .progress-bar-wrap {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width .3s ease;
+      width: 0%;
+    }
+
+    /* Footer */
+    .site-footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .footer-text {
+      font-size: 12px;
+      color: var(--text3);
+    }
+    .footer-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 12px;
+    }
+    .footer-link:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .site-header { padding: 14px 20px; }
+      .header-tagline { display: none; }
+      .form-title { font-size: 26px; }
+      .page-wrap { padding: 32px 16px 60px; }
+      .site-footer { padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ────────────────────────────────────────────────────────────────── -->
+<header class="site-header">
+  <a class="header-logo" href="https://vertexgroup.africa">
+    <div class="logo-mark">
+      <svg width="18" height="18" viewBox="0 0 24 24"><polygon points="12 2 22 20 2 20"/></svg>
+    </div>
+    <div>
+      <div class="logo-text-main">Vertex Group</div>
+      <div class="logo-text-sub">Africa</div>
+    </div>
+  </a>
+  <div class="header-tagline">Your ambition. Our architecture.</div>
+</header>
+
+<!-- ── Page content ───────────────────────────────────────────────────────────── -->
+<div class="page-wrap" id="page-wrap">
+
+  <!-- Loading state -->
+  <div class="state-box loading" id="state-loading">
+    <div class="icon"><div class="spinner"></div></div>
+    <div>Loading form…</div>
+  </div>
+
+  <!-- Error state -->
+  <div class="state-box error" id="state-error" style="display:none">
+    <div class="icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+    </div>
+    <div style="font-size:17px;font-weight:600;color:var(--text1)" id="err-title">Form not found</div>
+    <div id="err-msg">This form is unavailable or the link is invalid.</div>
+    <a href="https://vertexgroup.africa" style="color:var(--accent);font-size:13px;margin-top:6px">← Back to vertexgroup.africa</a>
+  </div>
+
+  <!-- Success state (after submit) -->
+  <div class="state-box success" id="state-success" style="display:none">
+    <div class="icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0d9e6e" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </div>
+    <div style="font-size:21px;font-weight:700;color:var(--text1);font-family:'Playfair Display',serif">Response submitted!</div>
+    <div id="success-msg" style="max-width:400px">Thank you — your response has been recorded and our team will follow up if needed.</div>
+    <a href="https://vertexgroup.africa" style="color:var(--accent);font-size:13px;margin-top:10px">← Back to vertexgroup.africa</a>
+  </div>
+
+  <!-- Form content -->
+  <div class="form-card" id="form-content" style="display:none">
+
+    <!-- Activity badge -->
+    <div class="activity-badge" id="activity-badge" style="display:none">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span id="activity-text"></span>
+    </div>
+
+    <div class="form-header">
+      <h1 class="form-title" id="form-title"></h1>
+      <p class="form-description" id="form-description"></p>
+    </div>
+
+    <!-- Instructions -->
+    <div class="instructions-box" id="instructions-box" style="display:none">
+      <div class="ins-label">Instructions</div>
+      <div id="instructions-text"></div>
+    </div>
+
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill"></div></div>
+
+    <hr class="divider"/>
+
+    <form id="public-form" onsubmit="submitForm(event)" novalidate>
+      <div class="fields-container" id="fields-container"></div>
+
+      <div class="submit-error" id="submit-error"></div>
+
+      <div class="submit-row">
+        <button type="submit" class="btn-submit" id="submit-btn">
+          <span id="submit-label">Submit Response</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<!-- ── Footer ─────────────────────────────────────────────────────────────────── -->
+<footer class="site-footer">
+  <span class="footer-text">© 2025 Vertex Group Africa. All rights reserved.</span>
+  <a class="footer-link" href="https://vertexgroup.africa">vertexgroup.africa</a>
+</footer>
+
+<script>
+  const API = window.VERTEX_API_BASE || 'https://vertex-africa-api.onrender.com';
+
+  // Get slug from URL: /forms/{slug} or ?form={slug}
+  function getSlug() {
+    const path = window.location.pathname;
+    const m = path.match(/\/forms\/([^/?#]+)/);
+    if (m) return m[1];
+    const p = new URLSearchParams(window.location.search);
+    return p.get('form') || p.get('slug') || '';
+  }
+
+  let formData = null;
+
+  async function loadForm() {
+    const slug = getSlug();
+    if (!slug) return showError('No form specified', 'Please use a valid form link.');
+
+    try {
+      const r = await fetch(`${API}/api/forms/public/${slug}`);
+      const j = await r.json();
+      if (!r.ok || !j.success) return showError('Form unavailable', j.message || 'This form could not be loaded.');
+      formData = j.form;
+      renderForm(formData);
+    } catch (e) {
+      showError('Connection error', 'Unable to reach the server. Please try again.');
+    }
+  }
+
+  function renderForm(form) {
+    document.title = `${form.title} — Vertex Group Africa`;
+
+    if (form.status === 'closed') {
+      return showError('Form closed', form.closedMessage || 'This form is no longer accepting responses.');
+    }
+    if (form.status === 'draft') {
+      return showError('Not available', 'This form is not yet published.');
+    }
+
+    document.getElementById('form-title').textContent       = form.title;
+    document.getElementById('form-description').textContent = form.description || '';
+
+    if (form.activityType) {
+      document.getElementById('activity-badge').style.display = '';
+      document.getElementById('activity-text').textContent    = form.activityType;
+    }
+
+    if (form.instructions) {
+      document.getElementById('instructions-box').style.display = '';
+      document.getElementById('instructions-text').textContent  = form.instructions;
+    }
+
+    renderFields(form.fields || []);
+    updateProgress();
+
+    document.getElementById('state-loading').style.display = 'none';
+    document.getElementById('form-content').style.display  = '';
+  }
+
+  function renderFields(fields) {
+    const container = document.getElementById('fields-container');
+    container.innerHTML = '';
+    fields.sort((a, b) => a.order - b.order).forEach(field => {
+      const div = document.createElement('div');
+      div.className = 'field-group';
+      div.innerHTML = buildField(field);
+      container.appendChild(div);
+    });
+    // Attach progress listeners
+    container.querySelectorAll('input,select,textarea').forEach(el => {
+      el.addEventListener('input', updateProgress);
+      el.addEventListener('change', updateProgress);
+    });
+  }
+
+  function buildField(f) {
+    const req  = f.required ? '<span class="req-star">*</span>' : '';
+    const id   = `field-${f._id}`;
+    const name = f.label;
+
+    if (f.type === 'textarea') {
+      return `<label class="field-label" for="${id}">${esc(f.label)} ${req}</label>
+        <textarea class="field-textarea" id="${id}" name="${esc(name)}" placeholder="${esc(f.placeholder||'')}" ${f.required?'required':''}></textarea>`;
+    }
+    if (f.type === 'select') {
+      const opts = (f.options||[]).map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('');
+      return `<label class="field-label" for="${id}">${esc(f.label)} ${req}</label>
+        <select class="field-select" id="${id}" name="${esc(name)}" ${f.required?'required':''}>
+          <option value="">— Select an option —</option>${opts}
+        </select>`;
+    }
+    if (f.type === 'checkbox') {
+      return `<label class="field-checkbox-wrap">
+        <input type="checkbox" id="${id}" name="${esc(name)}" ${f.required?'required':''}/>
+        <span class="field-checkbox-label">${esc(f.label)} ${req}</span>
+      </label>`;
+    }
+    if (f.type === 'file') {
+      return `<label class="field-label">${esc(f.label)} ${req}</label>
+        <div class="field-file-wrap" onclick="document.getElementById('${id}').click()">
+          <input type="file" id="${id}" name="${esc(name)}"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:6px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div>Click to upload a file</div>
+        </div>`;
+    }
+    // Default: text, email, phone, number, date
+    const inputType = f.type === 'phone' ? 'tel' : (f.type === 'text' ? 'text' : f.type);
+    return `<label class="field-label" for="${id}">${esc(f.label)} ${req}</label>
+      <input class="field-input" type="${inputType}" id="${id}" name="${esc(name)}" placeholder="${esc(f.placeholder||'')}" ${f.required?'required':''}/>`;
+  }
+
+  function updateProgress() {
+    const fields = (formData?.fields || []).filter(f => f.type !== 'file');
+    if (!fields.length) { document.getElementById('progress-fill').style.width = '100%'; return; }
+    let filled = 0;
+    fields.forEach(f => {
+      const el = document.getElementById(`field-${f._id}`);
+      if (!el) return;
+      if (f.type === 'checkbox') { if (el.checked) filled++; }
+      else if (el.value && el.value.trim()) filled++;
+    });
+    const pct = Math.round((filled / fields.length) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }
+
+  async function submitForm(e) {
+    e.preventDefault();
+    const btn   = document.getElementById('submit-btn');
+    const label = document.getElementById('submit-label');
+    const errEl = document.getElementById('submit-error');
+    errEl.style.display = 'none';
+
+    // Collect values
+    const data = {};
+    let valid = true;
+    (formData.fields || []).forEach(f => {
+      const el = document.getElementById(`field-${f._id}`);
+      if (!el) return;
+      let val;
+      if (f.type === 'checkbox') val = el.checked;
+      else if (f.type === 'file') val = el.files[0]?.name || '';
+      else val = el.value.trim();
+      data[f.label] = val;
+      // Clear previous errors
+      el.classList.remove('invalid');
+      const prev = el.parentElement.querySelector('.field-error');
+      if (prev) prev.remove();
+      // Validate required
+      if (f.required && (val === '' || val === false)) {
+        el.classList.add('invalid');
+        const errSpan = document.createElement('div');
+        errSpan.className = 'field-error';
+        errSpan.textContent = 'This field is required.';
+        el.parentElement.appendChild(errSpan);
+        valid = false;
+      }
+    });
+
+    if (!valid) return;
+
+    btn.disabled = true;
+    label.textContent = 'Submitting…';
+
+    try {
+      const r = await fetch(`${API}/api/forms/public/${formData.slug}/submit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data }),
+      });
+      const j = await r.json();
+      if (r.ok && j.success) {
+        document.getElementById('form-content').style.display = 'none';
+        document.getElementById('state-success').style.display = '';
+      } else {
+        errEl.textContent = j.message || 'Submission failed. Please try again.';
+        errEl.style.display = '';
+        btn.disabled = false;
+        label.textContent = 'Submit Response';
+      }
+    } catch (err) {
+      errEl.textContent = 'Network error — please check your connection and try again.';
+      errEl.style.display = '';
+      btn.disabled = false;
+      label.textContent = 'Submit Response';
+    }
+  }
+
+  function showError(title, msg) {
+    document.getElementById('state-loading').style.display = 'none';
+    document.getElementById('err-title').textContent = title;
+    document.getElementById('err-msg').textContent   = msg;
+    document.getElementById('state-error').style.display = '';
+  }
+
+  function esc(s) {
+    return String(s||'')
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+  loadForm();
+</script>
+</body>
+</html>

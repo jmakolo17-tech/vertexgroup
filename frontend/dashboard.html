@@ -664,6 +664,10 @@ tr:hover td { background: var(--surface2); transition: background 0.1s; }
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="13" y2="16"/></svg>
       <span>Invoices</span> <span class="nav-badge" id="inv-nav-badge"></span>
     </div>
+    <div class="nav-item" onclick="nav(this,'forms')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      <span>Forms</span> <span class="nav-badge" id="forms-nav-badge"></span>
+    </div>
     <div class="nav-item" onclick="nav(this,'team')">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <span data-i18n="nav_team">Team & Access</span>
@@ -854,6 +858,11 @@ tr:hover td { background: var(--surface2); transition: background 0.1s; }
         <button class="btn btn-green" onclick="saveInvoice('send')" id="inv-save-send-btn">Save &amp; send invoice</button>
       </div>
     </div>
+  </div>
+
+  <!-- ── FORMS dynamic modal ── -->
+  <div class="modal-backdrop" id="modal-forms-builder" onclick="if(event.target===this)closeModal('modal-forms-builder')">
+    <div id="forms-modal-inner" style="width:100%;max-width:800px;max-height:90vh;overflow-y:auto"></div>
   </div>
 
   <div class="modal-backdrop" id="modal-team">
@@ -1475,6 +1484,47 @@ tr:hover td { background: var(--surface2); transition: background 0.1s; }
         </thead>
         <tbody id="inv-tbody">
           <tr><td colspan="8" style="text-align:center;color:var(--text3);padding:32px">Loading invoices…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── FORMS ─────────────────────────────────────────────────────────────── -->
+  <div class="section" id="sec-forms">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <div style="display:flex;gap:8px;align-items:center">
+        <select class="finput" style="width:130px" id="forms-status-filter" onchange="loadForms()">
+          <option value="">All statuses</option>
+          <option value="active">Active</option>
+          <option value="draft">Draft</option>
+          <option value="closed">Closed</option>
+        </select>
+        <span id="forms-count" style="font-size:12px;color:var(--text3)"></span>
+      </div>
+      <button class="btn btn-green" onclick="openCreateFormModal()">+ New form</button>
+    </div>
+    <!-- Stats strip -->
+    <div class="metrics-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px">
+      <div class="metric-card"><div class="metric-label">Total forms</div><div class="metric-val" id="forms-stat-total">—</div></div>
+      <div class="metric-card green"><div class="metric-label">Active</div><div class="metric-val" id="forms-stat-active">—</div></div>
+      <div class="metric-card blue"><div class="metric-label">Draft</div><div class="metric-val" id="forms-stat-draft">—</div></div>
+      <div class="metric-card amber"><div class="metric-label">Total submissions</div><div class="metric-val" id="forms-stat-submissions">—</div></div>
+    </div>
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Activity type</th>
+            <th>Status</th>
+            <th>Submissions</th>
+            <th>Public link</th>
+            <th>Created</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="forms-tbody">
+          <tr><td colspan="7" style="text-align:center;color:var(--text3);padding:32px">Loading forms…</td></tr>
         </tbody>
       </table>
     </div>
@@ -3441,6 +3491,7 @@ function nav(el, id) {
   if(id==='email')       { loadEmailSectionStats(); loadRecentActivity(); }
   if(id==='invoices')    loadInvoices();
   if(id==='insights')    loadInsights();
+  if(id==='forms')       loadForms();
   if(!chartsInit[id]) { chartsInit[id]=true; setTimeout(()=>renderSection(id),150); }
 }
 
@@ -4410,6 +4461,340 @@ function buildInvoicePDF(inv) {
   }
 
   return doc;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// FORMS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+let _formsData = [];
+
+async function loadForms() {
+  const status = document.getElementById('forms-status-filter')?.value || '';
+  const qs = status ? `?status=${status}` : '';
+  try {
+    const r = await api('GET', `/api/forms${qs}`);
+    _formsData = r.forms || [];
+    renderFormsList(_formsData, r.total || 0);
+    updateFormsStats(_formsData);
+  } catch(e) {
+    const tb = document.getElementById('forms-tbody');
+    if (tb) tb.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:24px">Failed to load forms</td></tr>`;
+  }
+}
+
+function updateFormsStats(forms) {
+  const active = forms.filter(f => f.status === 'active').length;
+  const draft  = forms.filter(f => f.status === 'draft').length;
+  const subs   = forms.reduce((s, f) => s + (f.submissionCount || 0), 0);
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('forms-stat-total',       forms.length);
+  set('forms-stat-active',      active);
+  set('forms-stat-draft',       draft);
+  set('forms-stat-submissions', subs);
+  const cnt = document.getElementById('forms-count');
+  if (cnt) cnt.textContent = `${forms.length} form${forms.length !== 1 ? 's' : ''}`;
+  const badge = document.getElementById('forms-nav-badge');
+  if (badge) badge.textContent = active > 0 ? active : '';
+}
+
+function renderFormsList(forms, total) {
+  const tb = document.getElementById('forms-tbody');
+  if (!tb) return;
+  if (!forms.length) {
+    tb.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:32px">No forms yet. Click <strong>+ New form</strong> to create your first one.</td></tr>`;
+    return;
+  }
+  const publicBase = 'https://vertexgroup.africa/forms/';
+  tb.innerHTML = forms.map(f => {
+    const statusClass = f.status === 'active' ? 'badge-green' : f.status === 'closed' ? 'badge-red' : 'badge-amber';
+    const link = `${publicBase}${f.slug}`;
+    return `<tr>
+      <td style="font-weight:600;color:var(--text1)">${esc(f.title)}</td>
+      <td style="color:var(--text2)">${esc(f.activityType || '—')}</td>
+      <td><span class="badge ${statusClass}">${f.status}</span></td>
+      <td style="text-align:center">${f.submissionCount || 0}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px">
+          <a href="${link}" target="_blank" style="color:var(--accent);font-size:12px;font-family:monospace;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block" title="${link}">/forms/${esc(f.slug)}</a>
+          <button class="btn" style="padding:3px 8px;font-size:11px" onclick="copyFormLink('${esc(f.slug)}')" title="Copy link">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+      </td>
+      <td style="color:var(--text3);font-size:12px">${new Date(f.createdAt).toLocaleDateString()}</td>
+      <td>
+        <div style="display:flex;gap:4px;justify-content:flex-end">
+          <button class="btn" onclick="openViewSubmissionsModal('${f._id}','${esc(f.title)}')" title="View submissions" style="padding:4px 8px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="btn" onclick="openEditFormModal('${f._id}')" title="Edit form" style="padding:4px 8px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="btn btn-red" onclick="deleteForm('${f._id}')" title="Delete form" style="padding:4px 8px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function copyFormLink(slug) {
+  const url = `https://vertexgroup.africa/forms/${slug}`;
+  navigator.clipboard.writeText(url).then(() => {
+    toast('Link copied to clipboard!');
+  });
+}
+
+// ── Form builder modal ────────────────────────────────────────────────────────
+
+let _formBuilderFields = [];
+let _editFormId = null;
+
+function openCreateFormModal() {
+  _editFormId = null;
+  _formBuilderFields = [];
+  showFormBuilderModal({ title:'', description:'', activityType:'', instructions:'', status:'draft', closedMessage:'' });
+}
+
+async function openEditFormModal(id) {
+  try {
+    const r = await api('GET', `/api/forms/${id}`);
+    _editFormId = id;
+    _formBuilderFields = (r.form.fields || []).map(f => ({ ...f }));
+    showFormBuilderModal(r.form);
+  } catch(e) { alert('Failed to load form data.'); }
+}
+
+function showFormBuilderModal(form) {
+  const isEdit = !!_editFormId;
+  const modal = document.getElementById('forms-modal-inner');
+  modal.innerHTML = `
+    <div class="modal" style="max-width:780px;width:100%;max-height:90vh;overflow-y:auto">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="modal-title" style="margin-bottom:0;border-bottom:none;padding-bottom:0">${isEdit ? 'Edit form' : 'Create new form'}</div>
+        <button class="btn" onclick="closeModal('modal-forms-builder')" style="padding:4px 9px;font-size:14px;border:none">✕</button>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:14px 0 16px"/>
+      <div style="display:flex;flex-direction:column;gap:16px">
+
+        <!-- Basic info -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="fgroup" style="grid-column:1/-1">
+            <label class="flabel">Form title <span style="color:var(--accent)">*</span></label>
+            <input class="finput" id="fb-title" value="${esc(form.title||'')}" placeholder="e.g. Job Application — Senior Developer"/>
+          </div>
+          <div class="fgroup">
+            <label class="flabel">Activity type</label>
+            <input class="finput" id="fb-activity" value="${esc(form.activityType||'')}" placeholder="e.g. Job Application, Event Registration"/>
+          </div>
+          <div class="fgroup">
+            <label class="flabel">Status</label>
+            <select class="finput" id="fb-status">
+              <option value="draft"  ${form.status==='draft'  ?'selected':''}>Draft</option>
+              <option value="active" ${form.status==='active' ?'selected':''}>Active (accepting responses)</option>
+              <option value="closed" ${form.status==='closed' ?'selected':''}>Closed</option>
+            </select>
+          </div>
+          <div class="fgroup" style="grid-column:1/-1">
+            <label class="flabel">Description</label>
+            <textarea class="finput" id="fb-description" rows="2" placeholder="Brief description — shown at top of public form">${esc(form.description||'')}</textarea>
+          </div>
+          <div class="fgroup" style="grid-column:1/-1">
+            <label class="flabel">Instructions <span style="color:var(--text3);font-weight:400">(shown in a highlighted box)</span></label>
+            <textarea class="finput" id="fb-instructions" rows="2" placeholder="Optional step-by-step instructions for respondents">${esc(form.instructions||'')}</textarea>
+          </div>
+          <div class="fgroup" style="grid-column:1/-1">
+            <label class="flabel">Closed message <span style="color:var(--text3);font-weight:400">(displayed when form is closed)</span></label>
+            <input class="finput" id="fb-closed-msg" value="${esc(form.closedMessage||'')}" placeholder="This form is no longer accepting responses."/>
+          </div>
+        </div>
+
+        <!-- Field builder -->
+        <div style="border-top:1px solid var(--border);padding-top:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div style="font-weight:600;font-size:14px">Form fields</div>
+            <button class="btn btn-green" style="font-size:12px;padding:6px 12px" onclick="addFormField()">+ Add field</button>
+          </div>
+          <div id="fb-fields-list" style="display:flex;flex-direction:column;gap:8px"></div>
+          <div id="fb-fields-empty" style="text-align:center;color:var(--text3);font-size:13px;padding:20px;display:${_formBuilderFields.length?'none':'block'}">
+            No fields yet. Add your first field above.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('modal-forms-builder')">Cancel</button>
+        <button class="btn btn-green" onclick="saveForm()">${isEdit ? 'Save changes' : 'Create form'}</button>
+      </div>
+    </div>`;
+  openModal('modal-forms-builder');
+  renderBuilderFields();
+}
+
+function renderBuilderFields() {
+  const list  = document.getElementById('fb-fields-list');
+  const empty = document.getElementById('fb-fields-empty');
+  if (!list) return;
+  if (!_formBuilderFields.length) {
+    list.innerHTML = '';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+  list.innerHTML = _formBuilderFields.map((f, i) => `
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;display:grid;grid-template-columns:1fr 120px 80px auto auto;gap:8px;align-items:center">
+      <input class="finput" style="font-size:13px" value="${esc(f.label)}" placeholder="Field label" oninput="_formBuilderFields[${i}].label=this.value"/>
+      <select class="finput" style="font-size:12px" onchange="_formBuilderFields[${i}].type=this.value;renderBuilderFields()">
+        ${['text','email','phone','number','textarea','select','checkbox','date','file'].map(t=>`<option value="${t}" ${f.type===t?'selected':''}>${t}</option>`).join('')}
+      </select>
+      <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2);cursor:pointer">
+        <input type="checkbox" ${f.required?'checked':''} onchange="_formBuilderFields[${i}].required=this.checked" style="accent-color:var(--accent)"/> Required
+      </label>
+      ${f.type==='select' ? `<input class="finput" style="font-size:12px" value="${esc((f.options||[]).join(', '))}" placeholder="Opt1, Opt2, Opt3" oninput="_formBuilderFields[${i}].options=this.value.split(',').map(s=>s.trim()).filter(Boolean)" title="Comma-separated options"/>` : `<div></div>`}
+      <button class="btn red" style="padding:4px 8px" onclick="removeFormField(${i})" title="Remove">✕</button>
+    </div>
+  `).join('');
+}
+
+function addFormField() {
+  _formBuilderFields.push({ label: '', type: 'text', required: false, placeholder: '', options: [], order: _formBuilderFields.length });
+  renderBuilderFields();
+}
+
+function removeFormField(i) {
+  _formBuilderFields.splice(i, 1);
+  renderBuilderFields();
+}
+
+async function saveForm() {
+  const title = document.getElementById('fb-title')?.value?.trim();
+  if (!title) { alert('Please enter a form title.'); return; }
+
+  const payload = {
+    title,
+    description:   document.getElementById('fb-description')?.value?.trim()    || '',
+    activityType:  document.getElementById('fb-activity')?.value?.trim()        || '',
+    instructions:  document.getElementById('fb-instructions')?.value?.trim()    || '',
+    closedMessage: document.getElementById('fb-closed-msg')?.value?.trim()      || '',
+    status:        document.getElementById('fb-status')?.value                  || 'draft',
+    fields: _formBuilderFields.map((f, i) => ({ ...f, order: i })),
+  };
+
+  try {
+    if (_editFormId) {
+      await api('PATCH', `/api/forms/${_editFormId}`, payload);
+    } else {
+      await api('POST', '/api/forms', payload);
+    }
+    closeModal('modal-forms-builder');
+    loadForms();
+    toast(_editFormId ? 'Form updated.' : 'Form created!');
+  } catch(e) {
+    alert(e.message || 'Failed to save form.');
+  }
+}
+
+async function deleteForm(id) {
+  if (!confirm('Delete this form and all its submissions? This cannot be undone.')) return;
+  try {
+    await api('DELETE', `/api/forms/${id}`);
+    loadForms();
+    toast('Form deleted.');
+  } catch(e) { alert('Failed to delete form.'); }
+}
+
+// ── Submissions viewer ────────────────────────────────────────────────────────
+
+async function openViewSubmissionsModal(formId, formTitle) {
+  const modal = document.getElementById('forms-modal-inner');
+  modal.innerHTML = `
+    <div class="modal" style="max-width:900px;width:100%;max-height:90vh;overflow-y:auto">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="modal-title" style="margin-bottom:0;border-bottom:none;padding-bottom:0">Submissions — ${esc(formTitle)}</div>
+        <button class="btn" onclick="closeModal('modal-forms-builder')" style="padding:4px 9px;font-size:14px;border:none">✕</button>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:14px 0 16px"/>
+      <div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+          <button class="btn btn-green" style="font-size:12px;padding:6px 14px" onclick="exportFormSubmissions('${formId}','${esc(formTitle)}')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+        </div>
+        <div id="subs-content">
+          <div style="text-align:center;color:var(--text3);padding:40px">Loading submissions…</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('modal-forms-builder')">Close</button>
+      </div>
+    </div>`;
+  openModal('modal-forms-builder');
+
+  try {
+    const r = await api('GET', `/api/forms/${formId}/submissions`);
+    renderSubmissions(r.submissions || [], r.total || 0, formId);
+  } catch(e) {
+    const el = document.getElementById('subs-content');
+    if (el) el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:32px">Failed to load submissions.</div>`;
+  }
+}
+
+function renderSubmissions(subs, total, formId) {
+  const el = document.getElementById('subs-content');
+  if (!el) return;
+  if (!subs.length) {
+    el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:40px">No submissions yet.</div>`;
+    return;
+  }
+  // Collect all keys from data
+  const allKeys = [...new Set(subs.flatMap(s => Object.keys(s.data || {})))];
+  el.innerHTML = `
+    <div style="font-size:12px;color:var(--text3);margin-bottom:10px">${total} submission${total !== 1 ? 's' : ''}</div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th style="white-space:nowrap">Submitted at</th>
+            ${allKeys.map(k=>`<th style="white-space:nowrap">${esc(k)}</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+          ${subs.map(s=>`<tr>
+            <td style="font-size:12px;color:var(--text3);white-space:nowrap">${new Date(s.createdAt).toLocaleString()}</td>
+            ${allKeys.map(k=>`<td style="font-size:13px">${esc(String(s.data[k]??''))}</td>`).join('')}
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+async function exportFormSubmissions(formId, title) {
+  try {
+    const token = localStorage.getItem('vertex_token');
+    const r = await fetch(`${window.VERTEX_API_BASE}/api/forms/${formId}/submissions/export`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!r.ok) throw new Error('Export failed');
+    const blob = await r.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `submissions-${title.replace(/[^a-z0-9]/gi,'-').toLowerCase()}.csv`;
+    a.click();
+  } catch(e) { alert('Export failed.'); }
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#0d9e6e;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.3)';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
 }
 
 // Auto-refresh stats every 60 seconds while dashboard is open

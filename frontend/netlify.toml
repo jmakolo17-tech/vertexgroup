@@ -1,0 +1,15 @@
+[build]
+  publish = "."
+
+[build.processing]
+  skip_processing = true
+
+[[redirects]]
+  from = "/dashboard"
+  to = "/dashboard.html"
+  status = 200
+
+[[redirects]]
+  from = "/forms/*"
+  to = "/form.html"
+  status = 200
