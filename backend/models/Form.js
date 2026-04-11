@@ -23,21 +23,21 @@ const formSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Auto-generate slug from title before save
-formSchema.pre('save', async function (next) {
-  if (!this.isModified('title') && this.slug) return next();
+formSchema.pre('save', async function () {
+  if (!this.isModified('title') && this.slug) return;
   const base = this.title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .trim()
     .replace(/\s+/g, '-')
-    .substring(0, 60);
+    .substring(0, 60) || 'form';
   let slug = base;
   let n = 1;
-  while (await mongoose.model('Form').findOne({ slug, _id: { $ne: this._id } })) {
+  // Use this.constructor to safely reference the model before export
+  while (await this.constructor.findOne({ slug, _id: { $ne: this._id } })) {
     slug = `${base}-${n++}`;
   }
   this.slug = slug;
-  next();
 });
 
 module.exports = mongoose.model('Form', formSchema);

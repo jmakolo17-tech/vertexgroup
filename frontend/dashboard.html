@@ -4695,6 +4695,9 @@ async function saveForm() {
       toast('Form updated.');
     } else {
       const r = await api('POST', '/api/forms', payload);
+      if (!r || !r.success || !r.form) {
+        throw new Error(r?.message || 'Form created but no data returned — please reload the Forms page.');
+      }
       loadForms();
       showFormCreatedSuccess(r.form);
     }
