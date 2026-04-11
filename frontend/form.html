@@ -244,15 +244,39 @@
     .field-file-wrap {
       border: 1px dashed var(--border);
       border-radius: var(--radius);
-      padding: 20px;
+      padding: 24px 20px;
       text-align: center;
       color: var(--text3);
       font-size: 13px;
       cursor: pointer;
-      transition: border-color .2s;
+      transition: border-color .2s, background .2s;
+      position: relative;
     }
-    .field-file-wrap:hover { border-color: var(--accent); color: var(--text2); }
+    .field-file-wrap:hover { border-color: var(--accent); color: var(--text2); background: rgba(12,148,216,.03); }
+    .field-file-wrap.has-file { border-color: var(--green); background: rgba(13,158,110,.05); color: var(--text2); }
     .field-file-wrap input[type="file"] { display: none; }
+    .file-preview {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(12,148,216,.08);
+      border: 1px solid rgba(12,148,216,.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    .file-preview-name { flex: 1; color: var(--text1); font-weight: 500; word-break: break-all; }
+    .file-preview-size { color: var(--text3); font-size: 11px; white-space: nowrap; }
+    .file-remove {
+      background: none; border: none; color: var(--text3); cursor: pointer;
+      font-size: 15px; padding: 0 2px; line-height: 1;
+    }
+    .file-remove:hover { color: var(--red); }
+    .upload-progress {
+      height: 3px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden; display: none;
+    }
+    .upload-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .2s; width: 0%; }
 
     /* Validation errors */
     .field-error {
@@ -540,11 +564,14 @@
     }
     if (f.type === 'file') {
       return `<label class="field-label">${esc(f.label)} ${req}</label>
-        <div class="field-file-wrap" onclick="document.getElementById('${id}').click()">
-          <input type="file" id="${id}" name="${esc(name)}"/>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:6px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <div>Click to upload a file</div>
-        </div>`;
+        <div class="field-file-wrap" id="wrap-${id}" onclick="document.getElementById('${id}').click()">
+          <input type="file" id="${id}" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" onchange="onFileSelected('${id}')" onclick="event.stopPropagation()"/>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:8px;opacity:.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div id="wrap-label-${id}" style="font-weight:500">Click to upload a file</div>
+          <div style="font-size:11px;margin-top:4px;opacity:.7">Max 8 MB — images, PDF, Word, Excel, ZIP</div>
+          <div class="upload-progress" id="prog-${id}"><div class="upload-progress-fill" id="prog-fill-${id}"></div></div>
+        </div>
+        <div id="preview-${id}"></div>`;
     }
     // Default: text, email, phone, number, date
     const inputType = f.type === 'phone' ? 'tel' : (f.type === 'text' ? 'text' : f.type);
@@ -552,14 +579,89 @@
       <input class="field-input" type="${inputType}" id="${id}" name="${esc(name)}" placeholder="${esc(f.placeholder||'')}" ${f.required?'required':''}/>`;
   }
 
+  // Track selected files per field: { fieldId: { name, type, sizeKb, base64 } }
+  const _fileCache = {};
+
+  function onFileSelected(fieldId) {
+    const input = document.getElementById(fieldId);
+    const wrap  = document.getElementById(`wrap-${fieldId}`);
+    const preview = document.getElementById(`preview-${fieldId}`);
+    const prog  = document.getElementById(`prog-${fieldId}`);
+    const progFill = document.getElementById(`prog-fill-${fieldId}`);
+    const lblEl = document.getElementById(`wrap-label-${fieldId}`);
+    const file  = input.files[0];
+
+    if (!file) return;
+    const MAX = 8 * 1024 * 1024; // 8 MB
+    if (file.size > MAX) {
+      preview.innerHTML = `<div class="field-error">File too large — maximum 8 MB.</div>`;
+      input.value = '';
+      delete _fileCache[fieldId];
+      return;
+    }
+
+    // Show progress
+    prog.style.display = 'block';
+    progFill.style.width = '0%';
+    wrap.classList.remove('has-file');
+    if (lblEl) lblEl.textContent = 'Reading file…';
+
+    const reader = new FileReader();
+    reader.onprogress = (e) => {
+      if (e.lengthComputable) progFill.style.width = Math.round((e.loaded / e.total) * 100) + '%';
+    };
+    reader.onload = (e) => {
+      progFill.style.width = '100%';
+      setTimeout(() => { prog.style.display = 'none'; progFill.style.width = '0%'; }, 400);
+      const base64 = e.target.result.split(',')[1];
+      _fileCache[fieldId] = {
+        name:    file.name,
+        type:    file.type,
+        sizeKb:  Math.round(file.size / 1024),
+        base64,
+      };
+      wrap.classList.add('has-file');
+      if (lblEl) lblEl.textContent = 'File selected';
+      const sizeStr = file.size > 1048576
+        ? (file.size / 1048576).toFixed(1) + ' MB'
+        : Math.round(file.size / 1024) + ' KB';
+      preview.innerHTML = `<div class="file-preview">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--accent)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span class="file-preview-name">${esc(file.name)}</span>
+        <span class="file-preview-size">${sizeStr}</span>
+        <button class="file-remove" onclick="removeFile('${fieldId}')" title="Remove file" type="button">✕</button>
+      </div>`;
+      updateProgress();
+    };
+    reader.onerror = () => {
+      preview.innerHTML = `<div class="field-error">Could not read file. Please try again.</div>`;
+      prog.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removeFile(fieldId) {
+    const input   = document.getElementById(fieldId);
+    const wrap    = document.getElementById(`wrap-${fieldId}`);
+    const preview = document.getElementById(`preview-${fieldId}`);
+    const lblEl   = document.getElementById(`wrap-label-${fieldId}`);
+    input.value = '';
+    delete _fileCache[fieldId];
+    wrap.classList.remove('has-file');
+    if (lblEl) lblEl.textContent = 'Click to upload a file';
+    preview.innerHTML = '';
+    updateProgress();
+  }
+
   function updateProgress() {
-    const fields = (formData?.fields || []).filter(f => f.type !== 'file');
+    const fields = (formData?.fields || []);
     if (!fields.length) { document.getElementById('progress-fill').style.width = '100%'; return; }
     let filled = 0;
     fields.forEach(f => {
       const el = document.getElementById(`field-${f._id}`);
       if (!el) return;
       if (f.type === 'checkbox') { if (el.checked) filled++; }
+      else if (f.type === 'file') { if (_fileCache[`field-${f._id}`]) filled++; }
       else if (el.value && el.value.trim()) filled++;
     });
     const pct = Math.round((filled / fields.length) * 100);
@@ -577,24 +679,26 @@
     const data = {};
     let valid = true;
     (formData.fields || []).forEach(f => {
-      const el = document.getElementById(`field-${f._id}`);
+      const id = `field-${f._id}`;
+      const el = document.getElementById(id);
       if (!el) return;
       let val;
       if (f.type === 'checkbox') val = el.checked;
-      else if (f.type === 'file') val = el.files[0]?.name || '';
+      else if (f.type === 'file') val = _fileCache[id] || null;
       else val = el.value.trim();
       data[f.label] = val;
       // Clear previous errors
       el.classList.remove('invalid');
-      const prev = el.parentElement.querySelector('.field-error');
+      const prev = el.closest('.field-group')?.querySelector('.field-error');
       if (prev) prev.remove();
       // Validate required
-      if (f.required && (val === '' || val === false)) {
-        el.classList.add('invalid');
+      const isEmpty = val === '' || val === null || val === undefined || val === false;
+      if (f.required && isEmpty) {
+        if (f.type !== 'file') el.classList.add('invalid');
         const errSpan = document.createElement('div');
         errSpan.className = 'field-error';
         errSpan.textContent = 'This field is required.';
-        el.parentElement.appendChild(errSpan);
+        el.closest('.field-group')?.appendChild(errSpan);
         valid = false;
       }
     });

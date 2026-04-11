@@ -4554,7 +4554,13 @@ let _editFormId = null;
 
 function openCreateFormModal() {
   _editFormId = null;
-  _formBuilderFields = [];
+  _formBuilderFields = [
+    { label: 'Full Name',             type: 'text',     required: true,  placeholder: 'e.g. Jean-Marc Dupont', options: [], order: 0 },
+    { label: 'Email Address',         type: 'email',    required: true,  placeholder: 'you@example.com',        options: [], order: 1 },
+    { label: 'Phone Number',          type: 'phone',    required: false, placeholder: '+1 234 567 8900',         options: [], order: 2 },
+    { label: 'Company / Organisation',type: 'text',     required: false, placeholder: 'Your company name',       options: [], order: 3 },
+    { label: 'Message',               type: 'textarea', required: false, placeholder: 'Additional details…',     options: [], order: 4 },
+  ];
   showFormBuilderModal({ title:'', description:'', activityType:'', instructions:'', status:'draft', closedMessage:'' });
 }
 
@@ -4652,7 +4658,7 @@ function renderBuilderFields() {
         <input type="checkbox" ${f.required?'checked':''} onchange="_formBuilderFields[${i}].required=this.checked" style="accent-color:var(--accent)"/> Required
       </label>
       ${f.type==='select' ? `<input class="finput" style="font-size:12px" value="${esc((f.options||[]).join(', '))}" placeholder="Opt1, Opt2, Opt3" oninput="_formBuilderFields[${i}].options=this.value.split(',').map(s=>s.trim()).filter(Boolean)" title="Comma-separated options"/>` : `<div></div>`}
-      <button class="btn red" style="padding:4px 8px" onclick="removeFormField(${i})" title="Remove">✕</button>
+      <button class="btn btn-red" style="padding:4px 8px" onclick="removeFormField(${i})" title="Remove">✕</button>
     </div>
   `).join('');
 }
@@ -4684,15 +4690,62 @@ async function saveForm() {
   try {
     if (_editFormId) {
       await api('PATCH', `/api/forms/${_editFormId}`, payload);
+      closeModal('modal-forms-builder');
+      loadForms();
+      toast('Form updated.');
     } else {
-      await api('POST', '/api/forms', payload);
+      const r = await api('POST', '/api/forms', payload);
+      loadForms();
+      showFormCreatedSuccess(r.form);
     }
-    closeModal('modal-forms-builder');
-    loadForms();
-    toast(_editFormId ? 'Form updated.' : 'Form created!');
   } catch(e) {
     alert(e.message || 'Failed to save form.');
   }
+}
+
+function showFormCreatedSuccess(form) {
+  const link = `https://vertexgroup.africa/forms/${form.slug}`;
+  const modal = document.getElementById('forms-modal-inner');
+  modal.innerHTML = `
+    <div class="modal" style="max-width:540px;width:100%;text-align:center">
+      <div style="margin-bottom:20px">
+        <div style="width:56px;height:56px;border-radius:50%;background:rgba(13,158,110,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0d9e6e" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:6px">${esc(form.title)}</div>
+        <div style="font-size:13px;color:var(--text2)">Your form has been created. Share the link below with respondents.</div>
+      </div>
+
+      <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:14px 16px;margin-bottom:20px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--accent);margin-bottom:8px">Public link</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input id="form-link-display" class="finput" value="${link}" readonly style="font-family:monospace;font-size:12px;flex:1;background:var(--bg2)"/>
+          <button class="btn btn-green" onclick="copyFormLinkFromSuccess()" style="white-space:nowrap;padding:7px 14px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy
+          </button>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text3)">
+          Status: <span style="color:${form.status==='active'?'var(--green-text)':'var(--amber-text)'}">${form.status}</span>
+          ${form.status==='draft'?' · Set to <strong>Active</strong> to start receiving responses':''}
+        </div>
+      </div>
+
+      <div class="modal-footer" style="justify-content:center;gap:10px">
+        <a href="${link}" target="_blank" class="btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:6px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Preview form
+        </a>
+        <button class="btn" onclick="openEditFormModal('${form._id}')">Edit form</button>
+        <button class="btn btn-green" onclick="closeModal('modal-forms-builder')">Done</button>
+      </div>
+    </div>`;
+}
+
+function copyFormLinkFromSuccess() {
+  const el = document.getElementById('form-link-display');
+  if (!el) return;
+  navigator.clipboard.writeText(el.value).then(() => toast('Link copied!'));
 }
 
 async function deleteForm(id) {
@@ -4750,6 +4803,23 @@ function renderSubmissions(subs, total, formId) {
   }
   // Collect all keys from data
   const allKeys = [...new Set(subs.flatMap(s => Object.keys(s.data || {})))];
+
+  function renderCellValue(val) {
+    if (val && typeof val === 'object' && val.base64 && val.name) {
+      // File attachment
+      const icon = val.type?.startsWith('image/') ? '🖼' : '📎';
+      const size = val.sizeKb ? ` (${val.sizeKb} KB)` : '';
+      return `<a href="data:${esc(val.type)};base64,${val.base64}" download="${esc(val.name)}"
+               style="color:var(--accent);font-size:12px;display:inline-flex;align-items:center;gap:4px;text-decoration:none;white-space:nowrap"
+               title="Download ${esc(val.name)}">
+               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+               ${esc(val.name)}${size}
+             </a>`;
+    }
+    if (typeof val === 'boolean') return val ? '✓ Yes' : '✗ No';
+    return `<span style="max-width:220px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(String(val??''))}">${esc(String(val??''))}</span>`;
+  }
+
   el.innerHTML = `
     <div style="font-size:12px;color:var(--text3);margin-bottom:10px">${total} submission${total !== 1 ? 's' : ''}</div>
     <div style="overflow-x:auto">
@@ -4763,7 +4833,7 @@ function renderSubmissions(subs, total, formId) {
         <tbody>
           ${subs.map(s=>`<tr>
             <td style="font-size:12px;color:var(--text3);white-space:nowrap">${new Date(s.createdAt).toLocaleString()}</td>
-            ${allKeys.map(k=>`<td style="font-size:13px">${esc(String(s.data[k]??''))}</td>`).join('')}
+            ${allKeys.map(k=>`<td style="font-size:13px">${renderCellValue(s.data[k])}</td>`).join('')}
           </tr>`).join('')}
         </tbody>
       </table>
