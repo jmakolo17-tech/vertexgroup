@@ -488,7 +488,7 @@ let analytics   = null;
 let entrepreneurs = [];
 let activeTab   = 'directory';
 let editingId   = null;
-let dirView     = 'core';
+let dirView     = 'progs';
 let sortBy      = 'createdAt';
 let sortDir     = 'desc';
 let currentPage = 1;
@@ -549,25 +549,30 @@ function mountApp(user){
 
 // ── Data loading ──────────────────────────────────────────────────────────────
 async function loadAll(){
-  setContent('<div class="empty"><div class="empty-icon">⏳</div>Loading data…</div>');
+  setContent('<div class="empty"><div class="empty-icon">⏳</div>Loading…</div>');
+  // Load entrepreneurs first — list must always render
   try {
-    const [aRes, lRes] = await Promise.all([
-      apiFetch('/api/incubators/analytics'),
-      apiFetch('/api/incubators/entrepreneurs?'+buildParams(1))
-    ]);
-    if (!aRes.success) throw new Error(aRes.message||'Failed to load analytics');
-    analytics     = aRes;
+    const lRes = await apiFetch('/api/incubators/entrepreneurs?'+buildParams(1));
     entrepreneurs = lRes.entrepreneurs||[];
     totalCount    = lRes.total||0;
     totalPages    = lRes.pages||1;
     currentPage   = 1;
-    populateFilterDropdowns();
     updateCountPill(totalCount);
-    updateDupBadge(aRes.kpis.duplicates||0);
     renderTab(activeTab);
   } catch(e){
-    setContent(`<div class="empty" style="color:var(--red)">Error: ${esc(e.message)}</div>`);
+    setContent(`<div class="empty" style="color:var(--red)">Could not load entrepreneurs: ${esc(e.message)}</div>`);
   }
+  // Load analytics in background — powers charts, filters, badges
+  try {
+    const aRes = await apiFetch('/api/incubators/analytics');
+    if (aRes.success){
+      analytics = aRes;
+      populateFilterDropdowns();
+      updateDupBadge(aRes.kpis?.duplicates||0);
+      // If currently on a tab that needs analytics, re-render it
+      if (activeTab !== 'directory') renderTab(activeTab);
+    }
+  } catch(_){}
 }
 
 function buildParams(page){
@@ -693,22 +698,25 @@ function switchTab(tab){
 }
 
 function renderTab(tab){
-  if (!analytics) return;
   if (tab==='directory')  renderDirectory();
-  if (tab==='cohorts')    renderCohorts();
-  if (tab==='overview')   renderOverview();
-  if (tab==='insights')   renderInsights();
-  if (tab==='duplicates') renderDuplicates();
-  if (tab==='funding')    renderFunding();
+  else if (!analytics){
+    setContent('<div class="empty"><div class="empty-icon">⏳</div>Loading charts…</div>');
+  } else {
+    if (tab==='cohorts')    renderCohorts();
+    if (tab==='overview')   renderOverview();
+    if (tab==='insights')   renderInsights();
+    if (tab==='duplicates') renderDuplicates();
+    if (tab==='funding')    renderFunding();
+  }
 }
 
 // ── DIRECTORY ─────────────────────────────────────────────────────────────────
 function renderDirectory(){
   const views=[
+    {id:'progs',    label:'List + Programme'},
     {id:'core',     label:'Core Info'},
     {id:'business', label:'Business'},
     {id:'location', label:'Location'},
-    {id:'progs',    label:'Programmes'},
     {id:'funding',  label:'Funding'},
   ];
   const vBtns=views.map(v=>
@@ -765,22 +773,41 @@ function renderDirectory(){
     </tr>`).join('');
 
   } else if (dirView==='progs'){
-    thead=`<tr><th>${esc('Name')}</th><th>Incubator</th><th>Programme</th><th>Year</th><th>Donor</th><th>Stage</th></tr>`;
-    rows=entrepreneurs.flatMap(e=>{
-      if (!e.programmes||!e.programmes.length){
-        return [`<tr>
+    thead=`<tr>${sortTh('name','Name')}<th>Company</th><th>Programme</th><th>Incubator</th><th>Year</th><th>Donor</th><th>Stage</th>${sortTh('country','Country')}<th></th></tr>`;
+    rows=entrepreneurs.map(e=>{
+      // Show all programme entries stacked in the programme cells
+      const progs = e.programmes||[];
+      if (!progs.length){
+        return `<tr>
           <td style="font-weight:600">${esc(e.name)}</td>
-          <td colspan="5" style="color:var(--text3);font-size:12px">No programme records</td>
-        </tr>`];
+          <td style="color:var(--text3)">${esc(e.companyName||'—')}</td>
+          <td colspan="5" style="color:var(--text3);font-size:12px;font-style:italic">No programme assigned</td>
+          <td>${esc(e.country||'—')}</td>
+          <td style="white-space:nowrap">
+            <button class="btn btn-sm" onclick="openEditModal('${e._id}')">Edit</button>
+            <button class="btn btn-sm btn-red" style="margin-left:4px" onclick="confirmDelete('${e._id}','${esc(e.name).replace(/'/g,"\\'")}')">Del</button>
+          </td>
+        </tr>`;
       }
-      return e.programmes.map((p,i)=>`<tr>
-        ${i===0?`<td rowspan="${e.programmes.length}" style="font-weight:600;vertical-align:top;padding-top:12px">${esc(e.name)}<div style="font-size:11px;color:var(--text3)">${esc(e.companyName||'')}</div></td>`:''}
-        <td>${esc(p.incubator||'—')}</td>
-        <td>${esc(p.programmeName||'—')}</td>
-        <td>${p.year||'—'}</td>
-        <td>${esc(p.donor||'—')}</td>
-        <td>${p.stage?`<span class="badge b-${p.stage}">${p.stage}</span>`:'—'}</td>
-      </tr>`);
+      const progLines    = progs.map(p=>esc(p.programmeName||'—')).join('<br>');
+      const incubLines   = progs.map(p=>esc(p.incubator||'—')).join('<br>');
+      const yearLines    = progs.map(p=>p.year||'—').join('<br>');
+      const donorLines   = progs.map(p=>esc(p.donor||'—')).join('<br>');
+      const stageLines   = progs.map(p=>p.stage?`<span class="badge b-${p.stage}">${p.stage}</span>`:'—').join('<br>');
+      return `<tr>
+        <td style="font-weight:600;vertical-align:top">${esc(e.name)}</td>
+        <td style="vertical-align:top;color:var(--text2)">${esc(e.companyName||'—')}</td>
+        <td style="vertical-align:top">${progLines}</td>
+        <td style="vertical-align:top">${incubLines}</td>
+        <td style="vertical-align:top;white-space:nowrap">${yearLines}</td>
+        <td style="vertical-align:top;color:var(--text2)">${donorLines}</td>
+        <td style="vertical-align:top">${stageLines}</td>
+        <td style="vertical-align:top">${esc(e.country||'—')}</td>
+        <td style="vertical-align:top;white-space:nowrap">
+          <button class="btn btn-sm" onclick="openEditModal('${e._id}')">Edit</button>
+          <button class="btn btn-sm btn-red" style="margin-left:4px" onclick="confirmDelete('${e._id}','${esc(e.name).replace(/'/g,"\\'")}')">Del</button>
+        </td>
+      </tr>`;
     }).join('');
 
   } else { // funding

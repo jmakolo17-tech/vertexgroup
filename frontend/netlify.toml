@@ -24,9 +24,15 @@
   to = "/incubator/index.html"
   status = 200
 
-# Subdomain redirect: incubator.vertexgroup.africa → incubator page
+# Subdomain: eso.vertexgroup.africa → incubator hub (root)
 [[redirects]]
-  from = "https://incubator.vertexgroup.africa/*"
+  from = "https://eso.vertexgroup.africa"
+  to = "/incubator/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "https://eso.vertexgroup.africa/*"
   to = "/incubator/index.html"
   status = 200
   force = true
