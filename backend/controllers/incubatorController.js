@@ -3,15 +3,20 @@ const XLSX = require('xlsx');
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 const str = v => String(v || '').trim();
-const num = v => parseFloat(str(v).replace(/[,$\s]/g,'')) || 0;
-const int = v => parseInt(str(v).replace(/[,$\s]/g,''))  || 0;
+const num = v => parseFloat(str(v).replace(/[^0-9.\-]/g,'')) || 0;
+const int = v => parseInt(str(v).replace(/[^0-9\-]/g,''))    || 0;
 
-// Normalise a column header: lowercase, strip accents, collapse whitespace/punctuation to _
+// Normalise a column header:
+//   1. lowercase + strip accents  (é→e  â→a  ô→o  û→u …)
+//   2. replace every non-alphanumeric character with _
+//   3. collapse consecutive _ and trim edges
+// This means "Prénom(s)", "prénom_s", "PRENOM S" all → "prenom_s"
+// and "Chiffre d'affaires ?" → "chiffre_d_affaires"
 const normKey = k => String(k)
   .toLowerCase().trim()
-  .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // remove diacritics: é→e, ô→o …
-  .replace(/[\s\-\/\'\u2019\u2018\u00b7\u2022]+/g, '_') // spaces / hyphens / apostrophes → _
-  .replace(/_+/g, '_').replace(/^_|_$/g, '');
+  .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip diacritics
+  .replace(/[^a-z0-9]+/g, '_')                      // any non-alphanumeric → _
+  .replace(/^_+|_+$/g, '');                         // trim leading/trailing _
 
 const norm = row => {
   const out = {};
@@ -19,192 +24,228 @@ const norm = row => {
   return out;
 };
 
-// Pick the first truthy value from a list of keys
-const pick = (r, ...keys) => { for (const k of keys) if (r[k] !== undefined && str(r[k])) return str(r[k]); return ''; };
+// Return first non-empty value from the given key list
+const pick = (r, ...keys) => {
+  for (const k of keys) if (r[k] !== undefined && str(r[k])) return str(r[k]);
+  return '';
+};
 
 const validStages    = ['applied','active','graduated','dropped'];
 const validBizStages = ['idea','early','growth','scale','mature'];
 
-// Map French stage words → English canonical values
 const normStage = raw => {
   const s = normKey(raw);
-  if (['actif','actif_ve','en_cours','en_programme'].includes(s)) return 'active';
-  if (['candidat','candidature','postule','postulant','soumis'].includes(s)) return 'applied';
-  if (['diplome','sorti','finaliste','termine','complete','acheve'].includes(s)) return 'graduated';
-  if (['abandonne','quitte','retire','exclu','desiste'].includes(s)) return 'dropped';
-  return validStages.includes(raw) ? raw : 'active';
+  if (['actif','actif_ve','en_cours','en_programme','oui'].includes(s)) return 'active';
+  if (['candidat','candidature','postule','postulant','soumis','non','en_attente'].includes(s)) return 'applied';
+  if (['diplome','sorti','finaliste','termine','complete','acheve','diplome_e'].includes(s)) return 'graduated';
+  if (['abandonne','quitte','retire','exclu','desiste','abandonne_e'].includes(s)) return 'dropped';
+  return validStages.includes(raw) ? raw : '';
 };
 
-// Map French business-stage words → English canonical values
 const normBizStage = raw => {
   const s = normKey(raw);
-  if (['idee','conception','projet'].includes(s)) return 'idea';
-  if (['demarrage','creation','pre_seed','seed','lancement','naissant'].includes(s)) return 'early';
-  if (['croissance','developpement'].includes(s)) return 'growth';
+  if (['idee','conception','projet','pre_creation'].includes(s)) return 'idea';
+  if (['demarrage','creation','pre_seed','seed','lancement','naissant','debut'].includes(s)) return 'early';
+  if (['croissance','developpement','expansion_rapide'].includes(s)) return 'growth';
   if (['expansion','scaling','scale_up','montee_en_puissance'].includes(s)) return 'scale';
-  if (['mature','etabli','consolide'].includes(s)) return 'mature';
+  if (['mature','etabli','consolide','maturite'].includes(s)) return 'mature';
   return validBizStages.includes(raw) ? raw : '';
 };
 
 function rowToFields(row) {
   const r = norm(row);
 
-  // ── First name (EN + FR) ─────────────────────────────────────────────────────
+  // ── First name ───────────────────────────────────────────────────────────────
+  // Google Forms "Prénom(s)" → key "prenom_s"
   const firstName = pick(r,
-    'first_name','firstname','given_name','forename',           // EN
-    'prenom','prenoms','prenom_s'                               // FR: Prénom / Prénoms
+    'prenom_s','prenom','prenoms','prenom_s_',              // FR: Prénom(s)
+    'first_name','firstname','given_name','forename',       // EN
   );
 
-  // ── Surname (EN + FR) ────────────────────────────────────────────────────────
+  // ── Surname ──────────────────────────────────────────────────────────────────
+  // Google Forms "Nom(s)" → key "nom_s"
   const surname = pick(r,
-    'surname','last_name','lastname','family_name',             // EN
-    'nom','nom_de_famille','nom_famille'                        // FR: Nom / Nom de famille
+    'nom_s','noms','nom_s_',                                // FR: Nom(s)
+    'nom','nom_de_famille','nom_famille',                   // FR generic
+    'surname','last_name','lastname','family_name',         // EN
   );
 
-  // ── Full name fallback (EN + FR) ─────────────────────────────────────────────
+  // ── Full name fallback ────────────────────────────────────────────────────────
   const fullName = pick(r,
-    'name','full_name','fullname','entrepreneur_name',          // EN
+    'name','full_name','fullname','entrepreneur_name',
     'participant','contact',
-    'nom_complet','nom_prenom','prenom_nom'                     // FR: Nom complet / Nom & Prénom
+    'nom_complet','nom_prenom','prenom_nom',
   );
 
-  // Build canonical name
   let name = '';
   if (firstName && surname)      name = `${firstName} ${surname}`;
   else if (firstName || surname) name = firstName || surname;
   else                           name = fullName;
 
-  // Last resort: any column whose key contains 'nom' or 'name' with a string value
+  // Last resort: find any short key that IS exactly "nom" or "name"
   if (!name) {
     for (const [k, v] of Object.entries(r)) {
-      if ((k.includes('nom') || k.includes('name')) && typeof v === 'string' && v.trim()) {
-        name = v.trim(); break;
-      }
+      if ((k === 'nom' || k === 'name') && str(v)) { name = str(v); break; }
     }
   }
 
-  // ── Age ─────────────────────────────────────────────────────────────────────
+  // ── Age ──────────────────────────────────────────────────────────────────────
   const age = int(pick(r,
-    'age','current_age','years',                                // EN
-    'age_actuel','age_actuelle'                                 // FR: Âge actuel
+    'age','current_age','age_actuel','age_actuelle','years',
   )) || undefined;
 
-  // ── Contact ──────────────────────────────────────────────────────────────────
+  // ── Email ────────────────────────────────────────────────────────────────────
+  // Google Forms may have "Adresse e-mail" (key: adresse_e_mail) or "Adresse mail"
   const email = (pick(r,
-    'email','e_mail','email_address','mail',                    // EN
-    'courriel','adresse_email','adresse_courriel',              // FR: Courriel
-    'adresse_mail'
+    'adresse_e_mail','adresse_mail','adresse_email',        // Google Forms FR
+    'email','e_mail','email_address','mail',                // EN
+    'courriel','adresse_courriel',                          // FR generic
   )).toLowerCase() || undefined;
 
+  // ── Phone ─────────────────────────────────────────────────────────────────────
+  // Google Forms "Numéro Whatsapp" → key "numero_whatsapp"
   const phone = pick(r,
-    'phone','telephone','mobile','cell','contact_number',       // EN
-    'tel','numero_telephone','numero','numero_tel',             // FR: Téléphone / Numéro
-    'portable','gsm'
+    'numero_whatsapp','whatsapp',                           // Google Forms FR
+    'phone','telephone','mobile','cell','contact_number',   // EN
+    'tel','numero_telephone','numero_tel','portable','gsm', // FR
   );
 
-  // ── Location ─────────────────────────────────────────────────────────────────
-  const country = pick(r,
-    'country','nation',                                         // EN
-    'pays','nationalite'                                        // FR: Pays
-  );
+  // ── Country ───────────────────────────────────────────────────────────────────
+  const country = pick(r, 'country','nation','pays','nationalite');
 
+  // ── City / Residence ──────────────────────────────────────────────────────────
+  // Google Forms "Adresse de résidence" → key "adresse_de_residence"
   const city = pick(r,
-    'city','town','location',                                   // EN
-    'ville','localite','commune','cite','municipalite'          // FR: Ville / Localité
+    'adresse_de_residence','adresse_de_residence_',        // Google Forms FR
+    'city','town','location',                              // EN
+    'ville','localite','commune','cite','adresse',         // FR
   );
 
-  // ── Business ─────────────────────────────────────────────────────────────────
+  // ── Sector ────────────────────────────────────────────────────────────────────
+  // Google Forms "Dans quel secteur est-elle active ?" → key "dans_quel_secteur_est_elle_active"
   const sector = pick(r,
-    'sector','industry','field',                                // EN
-    'secteur','domaine','filiere','branche'                     // FR: Secteur / Domaine / Filière
+    'dans_quel_secteur_est_elle_active',                   // Google Forms FR
+    'dans_quel_secteur_exercez_vous',
+    'sector','industry','field',                           // EN
+    'secteur','domaine','filiere','branche',               // FR
   );
 
+  // ── Company ───────────────────────────────────────────────────────────────────
+  // Google Forms "Nom de l'entreprise" → key "nom_de_l_entreprise"
   const companyName = pick(r,
-    'company','company_name','startup','business',              // EN
+    'nom_de_l_entreprise','nom_de_entreprise',             // Google Forms FR
+    'company','company_name','startup','business',         // EN
     'organization','organisation','venture',
-    'entreprise','societe','nom_entreprise',                    // FR: Entreprise / Société
-    'raison_sociale','nom_societe','enseigne'
+    'entreprise','societe','nom_entreprise',               // FR
+    'raison_sociale','nom_societe','enseigne',
   );
 
+  // ── Website ───────────────────────────────────────────────────────────────────
+  // Google Forms "Site internet du projet ou page sur un réseau social (si existant) :"
+  //   → key "site_internet_du_projet_ou_page_sur_un_reseau_social_si_existant"
   const website = pick(r,
-    'website','website_url','url','web',                        // EN
-    'site_web','site_internet','site','lien'                    // FR: Site web
+    'site_internet_du_projet_ou_page_sur_un_reseau_social_si_existant', // Google Forms
+    'website','website_url','url','web',                   // EN
+    'site_web','site_internet','site','lien',              // FR
   );
 
-  const gender = pick(r,
-    'gender','sex',                                             // EN
-    'genre','sexe'                                              // FR: Genre / Sexe
-  );
+  // ── Gender ────────────────────────────────────────────────────────────────────
+  const gender = pick(r, 'gender','sex','genre','sexe');
 
-  // Business stage — try EN then FR
+  // ── Business stage ────────────────────────────────────────────────────────────
   const rawBizStage = pick(r,
-    'business_stage','biz_stage','stage_of_business',          // EN
-    'stade','stade_developpement','stade_entreprise',           // FR: Stade / Stade de développement
-    'phase','etape','niveau'
+    'business_stage','biz_stage','stage_of_business',
+    'stade','stade_developpement','phase','etape','niveau',
   ).toLowerCase();
   const businessStage = normBizStage(rawBizStage);
 
+  // ── Year founded ──────────────────────────────────────────────────────────────
   const yearFounded = int(pick(r,
-    'year_founded','founded','founded_year',                    // EN
-    'annee_creation','annee_fondation','fondee_en',             // FR: Année de création
-    'date_creation','creation'
+    'year_founded','founded','founded_year',
+    'annee_creation','annee_fondation','fondee_en','date_creation',
   )) || undefined;
 
-  const employees = int(pick(r,
+  // ── Employees ─────────────────────────────────────────────────────────────────
+  // Google Forms: "Combien de personnes travaillent dans l'entreprise et quels sont leur rôle ?"
+  //   → key "combien_de_personnes_travaillent_dans_l_entreprise_et_quels_sont_leur_role"
+  // Answer may be free text like "3 personnes : 1 gérant, 2 vendeurs" — extract first number
+  const empRaw = pick(r,
+    'combien_de_personnes_travaillent_dans_l_entreprise_et_quels_sont_leur_role', // Google Forms
     'employees','employee_count','team_size','headcount','staff',  // EN
-    'employes','effectif','nb_employes','nombre_employes',         // FR: Employés / Effectif
-    'personnel','salaries'
-  )) || undefined;
+    'employes','effectif','nb_employes','nombre_employes','personnel','salaries',  // FR
+  );
+  const empMatch = String(empRaw).match(/\d+/);
+  const employees = empMatch ? parseInt(empMatch[0]) : undefined;
 
+  // ── Revenue ───────────────────────────────────────────────────────────────────
   const revenue = num(pick(r,
-    'revenue','annual_revenue','yearly_revenue',               // EN
-    'revenus','revenu','recettes','produits'                   // FR: Revenus
+    'revenue','annual_revenue','yearly_revenue',
+    'revenus','revenu','recettes','produits',
   )) || undefined;
 
-  // "Chiffre d'affaires" is French for turnover/sales
-  const turnover = num(pick(r,
-    'turnover','annual_turnover','sales','gross_sales',        // EN
-    'chiffre_affaires','ca','chiffre_daffaires',               // FR: Chiffre d'affaires / CA
-    'ventes','volume_affaires'
-  )) || undefined;
+  // ── Turnover ──────────────────────────────────────────────────────────────────
+  // Google Forms: "En moyenne, combien gagnez-vous par mois avec votre entreprise ?"
+  //   → key "en_moyenne_combien_gagnez_vous_par_mois_avec_votre_entreprise"
+  //   This is MONTHLY — multiply × 12 for annual
+  const monthlyRaw = pick(r, 'en_moyenne_combien_gagnez_vous_par_mois_avec_votre_entreprise');
+  const monthly    = num(monthlyRaw);
+  const turnoverFromMonthly = monthly > 0 ? monthly * 12 : 0;
+  const turnoverFromCol = num(pick(r,
+    'turnover','annual_turnover','sales','gross_sales',
+    'chiffre_affaires','ca','chiffre_daffaires','ventes','volume_affaires',
+  ));
+  const turnover = (turnoverFromCol || turnoverFromMonthly) || undefined;
 
-  // ── Programme ────────────────────────────────────────────────────────────────
-  const progName = pick(r,
-    'programme','program','programme_name','program_name','cohort',   // EN
-    'cohorte','nom_programme','intitule_programme'                    // FR: Cohorte / Nom du programme
+  // ── Description ───────────────────────────────────────────────────────────────
+  // Google Forms: "Décrivez votre entreprise et ses activités en 10 lignes maximum…"
+  //   → key "decrivez_votre_entreprise_et_ses_activites_en_10_lignes_maximum_comment_ton_projet_repond_il_aux_besoins_de_ta_communaute"
+  const description = pick(r,
+    'decrivez_votre_entreprise_et_ses_activites_en_10_lignes_maximum_comment_ton_projet_repond_il_aux_besoins_de_ta_communaute',
+    'decrivez_votre_entreprise_et_ses_activites_en_10_lignes_maximum',
+    'decrivez_votre_entreprise',
+    'description','about','bio','summary',
+    'description_entreprise','presentation','activites',
   );
 
-  // Stage values may be in French — normalise
-  const rawStage = pick(r, 'stage','status','statut','etat','etape_programme').toLowerCase();
-  const progStage = normStage(rawStage);
+  // ── Programme ─────────────────────────────────────────────────────────────────
+  const progName = pick(r,
+    'programme','program','programme_name','program_name','cohort',
+    'cohorte','nom_programme','intitule_programme',
+  );
+
+  // ── Stage — "Selectionné ?" (Oui → active, else applied) ─────────────────────
+  // Google Forms: "Selectionné ?" → key "selectionne"
+  const selectionne = pick(r, 'selectionne','selectionne_','selectionne_e','selection');
+  const rawStage    = pick(r, 'stage','status','statut','etat','etape_programme').toLowerCase();
+  let progStage;
+  if (selectionne) {
+    // "Oui" / "oui" / "O" / "yes" → active;  "Non" / empty → applied
+    progStage = /^(oui|o|yes|y|1)$/i.test(selectionne.trim()) ? 'active' : 'applied';
+  } else {
+    progStage = normStage(rawStage) || 'applied';
+  }
 
   const startDate = r.start_date || r.start || r.date_debut || r.debut || undefined;
   const endDate   = r.end_date   || r.end   || r.date_fin   || r.fin   || undefined;
 
   // ── Funding ───────────────────────────────────────────────────────────────────
   const fundingAmt = num(pick(r,
-    'funding','amount_raised','funding_raised','amount',       // EN
-    'financement','montant','montant_leve','capital_leve'      // FR: Financement / Montant levé
+    'funding','amount_raised','funding_raised','amount',
+    'financement','montant','montant_leve','capital_leve',
   ));
-
   const investor = pick(r,
-    'investor','funder','investor_name',                       // EN
-    'investisseur','bailleur','donateur','financeur',          // FR: Investisseur / Bailleur / Donateur
-    'partenaire_financier'
+    'investor','funder','investor_name',
+    'investisseur','bailleur','donateur','financeur','partenaire_financier',
   );
-
   const fundingType = pick(r,
-    'funding_type','type_of_funding','fund_type',              // EN
-    'type_financement','type_de_financement','nature_financement' // FR: Type de financement
+    'funding_type','type_of_funding','fund_type',
+    'type_financement','type_de_financement','nature_financement',
   );
-
-  const currency = pick(r,
-    'currency','devise'                                        // EN + FR: Devise
-  ) || 'USD';
+  const currency = pick(r, 'currency','devise') || 'USD';
 
   return { firstName, surname, name, age, email, phone, country, city, sector,
-           companyName, website, gender, businessStage, yearFounded, employees,
-           revenue, turnover, progName, progStage, startDate, endDate,
+           companyName, description, website, gender, businessStage, yearFounded,
+           employees, revenue, turnover, progName, progStage, startDate, endDate,
            fundingAmt, investor, fundingType, currency };
 }
 
@@ -407,8 +448,8 @@ exports.getDuplicates = async (req, res) => {
 exports.addEntrepreneur = async (req, res) => {
   try {
     const { firstName, surname, name, age, email, phone, country, city, sector,
-            companyName, website, gender, businessStage, yearFounded, employees,
-            revenue, turnover, programmes, funding, source, tags } = req.body;
+            companyName, description, website, gender, businessStage, yearFounded,
+            employees, revenue, turnover, programmes, funding, source, tags } = req.body;
 
     const fullName = (firstName && surname) ? `${firstName} ${surname}`.trim()
                    : (name||'').trim();
@@ -428,7 +469,7 @@ exports.addEntrepreneur = async (req, res) => {
     const calcFunding = (funding||[]).reduce((s,f)=>s+(f.amount||0),0);
     entrepreneur = await Entrepreneur.create({
       firstName, surname, name: fullName, age,
-      email, phone, country, city, sector, companyName, website,
+      email, phone, country, city, sector, companyName, description, website,
       gender, businessStage, yearFounded, employees, revenue, turnover,
       programmes: programmes||[], funding: funding||[],
       totalFunding: calcFunding, source, tags: tags||[], addedBy: req.user._id,
@@ -523,7 +564,7 @@ exports.uploadFile = async (req, res) => {
           if (fundEntry.length) existing.funding.push(...fundEntry);
           existing.totalFunding = existing.funding.reduce((s,fu)=>s+(fu.amount||0),0);
           ['firstName','surname','age','country','city','sector','revenue','turnover',
-           'employees','website','businessStage','companyName'].forEach(k => {
+           'employees','website','businessStage','companyName','description'].forEach(k => {
             if (!existing[k] && f[k]) existing[k] = f[k];
           });
           await existing.save();
@@ -533,7 +574,7 @@ exports.uploadFile = async (req, res) => {
             firstName:f.firstName, surname:f.surname, name:f.name,
             age:f.age, email:f.email, phone:f.phone,
             country:f.country, city:f.city, sector:f.sector,
-            companyName:f.companyName, website:f.website,
+            companyName:f.companyName, description:f.description, website:f.website,
             gender:f.gender, businessStage:f.businessStage, yearFounded:f.yearFounded,
             employees:f.employees, revenue:f.revenue, turnover:f.turnover,
             programmes:progEntry, funding:fundEntry,
@@ -579,6 +620,7 @@ exports.exportXLSX = async (req, res) => {
         Email:            e.email||'',
         Phone:            e.phone||'',
         Company:          e.companyName||'',
+        Description:      e.description||'',
         City:             e.city||'',
         Country:          e.country||'',
         Sector:           e.sector||'',

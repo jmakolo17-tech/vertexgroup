@@ -431,6 +431,12 @@ tr:hover td{background:var(--bg3)}
       <div class="fgroup"><label class="flabel">Company / Startup *</label><input class="finput" id="ef-company" placeholder="e.g. Acme Ltd"/></div>
       <div class="fgroup"><label class="flabel">Sector</label><input class="finput" id="ef-sector"/></div>
       <div class="fgroup"><label class="flabel">Website</label><input class="finput" id="ef-website" placeholder="https://…"/></div>
+    </div>
+    <div class="fgroup" style="margin-top:8px">
+      <label class="flabel">Description</label>
+      <textarea class="finput" id="ef-description" rows="3" placeholder="Describe the company / project…" style="resize:vertical;min-height:70px"></textarea>
+    </div>
+    <div class="g2" style="margin-top:8px">
       <div class="fgroup">
         <label class="flabel">Business Stage</label>
         <select class="finput" id="ef-bizstage">
@@ -780,6 +786,7 @@ function renderDirectory(){
       <th>First Name</th>
       <th>Age</th>
       <th>Company</th>
+      <th>Description</th>
       <th>Programme</th>
       <th>Incubator</th>
       <th>Year</th>
@@ -795,12 +802,16 @@ function renderDirectory(){
         <button class="btn btn-sm" onclick="openEditModal('${e._id}')">Edit</button>
         <button class="btn btn-sm btn-red" style="margin-left:4px" onclick="confirmDelete('${e._id}','${esc((e.surname||e.name||'').replace(/'/g,"\\'"))}')">Del</button>
       </td>`;
+      const descCell = e.description
+        ? `<td style="vertical-align:top;max-width:200px;font-size:11px;color:var(--text2);line-height:1.4" title="${esc(e.description)}">${esc(e.description.length>90?e.description.slice(0,90)+'…':e.description)}</td>`
+        : `<td style="color:var(--text3)">—</td>`;
       if (!progs.length){
         return `<tr>
           <td style="font-weight:600">${esc(e.surname||'—')}</td>
           <td>${esc(e.firstName||'—')}</td>
           <td style="color:var(--text2)">${e.age||'—'}</td>
           <td>${esc(e.companyName||'—')}</td>
+          ${descCell}
           <td colspan="5" style="color:var(--text3);font-size:12px;font-style:italic">No programme</td>
           <td style="color:${e.turnover>0?'var(--blue)':'var(--text3)'}">${e.turnover>0?'$'+e.turnover.toLocaleString():'—'}</td>
           <td>${esc(e.city||'—')}</td>
@@ -817,6 +828,7 @@ function renderDirectory(){
         <td style="vertical-align:top">${esc(e.firstName||'—')}</td>
         <td style="vertical-align:top;color:var(--text2)">${e.age||'—'}</td>
         <td style="vertical-align:top">${esc(e.companyName||'—')}</td>
+        ${descCell}
         <td style="vertical-align:top">${progLines}</td>
         <td style="vertical-align:top">${incubLines}</td>
         <td style="vertical-align:top;white-space:nowrap">${yearLines}</td>
@@ -1255,7 +1267,8 @@ function openAddModal(){
   document.getElementById('ent-title').textContent='Add Entrepreneur';
   document.getElementById('ent-save-btn').textContent='Add';
   ['ef-surname','ef-firstname','ef-email','ef-phone','ef-country','ef-city','ef-sector',
-   'ef-company','ef-website','ef-incubator','ef-prog','ef-donor','ef-fund-investor','ef-fund-type']
+   'ef-company','ef-website','ef-description','ef-incubator','ef-prog','ef-donor',
+   'ef-fund-investor','ef-fund-type']
     .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   ['ef-gender','ef-bizstage'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('ef-stage').value='active';
@@ -1273,7 +1286,7 @@ function openEditModal(id){
   s('ef-surname',e.surname); s('ef-firstname',e.firstName); s('ef-age',e.age);
   s('ef-email',e.email); s('ef-phone',e.phone);
   s('ef-city',e.city); s('ef-country',e.country); s('ef-sector',e.sector);
-  s('ef-company',e.companyName); s('ef-website',e.website);
+  s('ef-company',e.companyName); s('ef-website',e.website); s('ef-description',e.description);
   s('ef-gender',e.gender); s('ef-bizstage',e.businessStage);
   s('ef-founded',e.yearFounded); s('ef-employees',e.employees); s('ef-revenue',e.revenue);
   const prog=e.programmes?.[0]||{};
@@ -1311,6 +1324,7 @@ async function saveEntrepreneur(){
     country:      g('ef-country')||undefined,
     sector:       g('ef-sector')||undefined,
     companyName:  g('ef-company')||undefined,
+    description:  g('ef-description')||undefined,
     website:      g('ef-website')||undefined,
     gender:       document.getElementById('ef-gender')?.value||'',
     businessStage:document.getElementById('ef-bizstage')?.value||'',

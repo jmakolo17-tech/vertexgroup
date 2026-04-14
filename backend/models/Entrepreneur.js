@@ -38,6 +38,7 @@ const entrepreneurSchema = new mongoose.Schema({
 
   // Business
   companyName:   { type: String, trim: true },
+  description:   { type: String, trim: true },    // company / project description
   website:       { type: String, trim: true },
   sector:        { type: String, trim: true },
   gender:        { type: String, enum: ['Male','Female','Non-binary','Prefer not to say',''], default: '' },
