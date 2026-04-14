@@ -1219,30 +1219,29 @@ async function submitUpload(){
     if (data.success){
       const r=data.results;
       resultMsg.innerHTML=`
-        <div style="color:var(--accent);font-weight:600;font-size:14px;margin-bottom:8px">
-          ✅ Import complete!
-        </div>
+        <div style="color:var(--accent);font-weight:600;font-size:14px;margin-bottom:8px">✅ Import complete!</div>
         <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px">
-          <span>🆕 <strong>${r.created}</strong> new entrepreneurs added</span>
-          <span>🔀 <strong>${r.merged}</strong> merged into existing records</span>
-          ${r.errors.length?`<span style="color:var(--red)">⚠ ${r.errors.length} row error(s)</span>`:''}
+          <span>🆕 <strong>${r.created}</strong> added</span>
+          <span>🔀 <strong>${r.merged}</strong> merged</span>
+          ${r.skipped?`<span style="color:var(--text3)">⏭ ${r.skipped} skipped (no name)</span>`:''}
+          ${r.errors.length?`<span style="color:var(--red)">⚠ ${r.errors.length} error(s)</span>`:''}
         </div>
         <div style="font-size:12px;color:var(--text2)">
-          Programme: <strong>${esc(incubator)}${programme?' — '+esc(programme):''}${year?' ('+year+')':''}${donor?' · Donor: '+esc(donor):''}</strong>
+          ${esc(incubator)}${programme?' — '+esc(programme):''}${year?' ('+year+')':''}${donor?' · '+esc(donor):''}
         </div>`;
-      // After 2s close and navigate to directory filtered to this incubator
+      // Close and show the full list (no filter) so user sees all uploaded records
       setTimeout(()=>{
         closeModal('upload-modal');
-        // Set filter and reload
-        const fi=document.getElementById('f-incubator');
-        if (fi){ fi.value=incubator; fval.incubator=incubator; }
-        if (year){ const fy=document.getElementById('f-year'); if(fy){fy.value=year;fval.year=year;} }
-        renderFilterChips();
+        clearFilters();   // clears fval + DOM dropdowns
         switchTab('directory');
         loadAll();
-      }, 2200);
+      }, 1500);
     } else {
-      resultMsg.innerHTML=`<span style="color:var(--red)">❌ ${esc(data.message)}</span>`;
+      resultMsg.innerHTML=`
+        <div style="color:var(--red);font-weight:600;margin-bottom:6px">❌ Import failed</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6">${esc(data.message)}</div>
+        ${data.results?.skipped?`<div style="font-size:11px;color:var(--text3);margin-top:6px">${data.results.skipped} row(s) had no recognisable name column.</div>`:''}
+      `;
     }
   } catch(e){
     submitBtn.disabled=false; submitBtn.textContent='Upload & Import';

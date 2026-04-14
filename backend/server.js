@@ -15,10 +15,23 @@ connectDB();
 // ── Security middleware ───────────────────────────────────────────────────────
 app.use(helmet());
 
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(',').map(s => s.trim())
+  : ['http://localhost:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL
-    ? process.env.FRONTEND_URL.split(',').map(s => s.trim())
-    : ['http://localhost:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'],
+  origin: (origin, callback) => {
+    // Allow server-to-server (no origin) and localhost in dev
+    if (!origin) return callback(null, true);
+    // Allow any vertexgroup.africa subdomain
+    if (origin === 'https://vertexgroup.africa' ||
+        origin.endsWith('.vertexgroup.africa') ||
+        origin.endsWith('.netlify.app') ||
+        allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    callback(new Error('CORS: origin not allowed'));
+  },
   methods:     ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   credentials: true,
 }));

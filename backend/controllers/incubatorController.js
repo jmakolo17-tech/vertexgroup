@@ -22,11 +22,20 @@ function rowToFields(row) {
   // Name: support separate surname/firstname columns or a combined name column
   const firstName  = str(r.first_name||r.firstname||r.given_name||r.forename||r.prenom||'');
   const surname    = str(r.surname||r.last_name||r.lastname||r.family_name||r.nom||'');
-  const fullName   = str(r.name||r.full_name||r.entrepreneur_name||r.participant||'');
-  // Build the canonical name
-  const name = (firstName && surname) ? `${firstName} ${surname}`
-             : (firstName || surname) ? (firstName || surname)
-             : fullName;
+  const fullName   = str(r.name||r.full_name||r.entrepreneur_name||r.participant||r.contact||'');
+  // Build the canonical name — try all combinations
+  let name = '';
+  if (firstName && surname)   name = `${firstName} ${surname}`;
+  else if (firstName || surname) name = firstName || surname;
+  else                           name = fullName;
+  // Last resort: scan columns for anything labelled *name*
+  if (!name) {
+    for (const [k, v] of Object.entries(r)) {
+      if (k.includes('name') && typeof v === 'string' && v.trim()) {
+        name = v.trim(); break;
+      }
+    }
+  }
 
   const age         = int(r.age||r.current_age||r.years||0)||undefined;
   const email       = str(r.email||r.e_mail||r.email_address||'').toLowerCase()||undefined;
@@ -335,12 +344,12 @@ exports.uploadFile = async (req, res) => {
       if (!rows.length) return res.status(400).json({ success: false, message: 'File is empty or unreadable.' });
     }
 
-    const results = { created: 0, merged: 0, errors: [] };
+    const results = { created: 0, merged: 0, skipped: 0, errors: [] };
 
     for (const rawRow of rows) {
       try {
         const f = rowToFields(rawRow);
-        if (!f.name) continue;
+        if (!f.name) { results.skipped++; continue; }
 
         const progEntry = (f.progName || programmeName || incubatorSource) ? [{
           programmeName: f.progName || programmeName,
@@ -389,6 +398,17 @@ exports.uploadFile = async (req, res) => {
       } catch(rowErr) { results.errors.push(String(rowErr.message)); }
     }
 
+    // If nothing was created or merged, give a useful diagnostic
+    if (results.created === 0 && results.merged === 0) {
+      const colNames = rows.length ? Object.keys(rows[0]).join(', ') : 'none';
+      return res.json({
+        success: false,
+        message: `No entrepreneurs were imported. The file had ${rows.length} row(s) but no name column was found. ` +
+                 `Columns detected: ${colNames}. ` +
+                 `Expected columns: Surname, First Name (or Name, Full Name).`,
+        results,
+      });
+    }
     res.json({ success: true, results, total: rows.length });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
