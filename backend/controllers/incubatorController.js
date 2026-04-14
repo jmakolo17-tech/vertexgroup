@@ -1,15 +1,93 @@
 const Entrepreneur = require('../models/Entrepreneur');
 const XLSX = require('xlsx');
 
+// ── helpers ───────────────────────────────────────────────────────────────────
+const norm = row => {
+  const out = {};
+  Object.keys(row).forEach(k => {
+    out[k.toLowerCase().trim().replace(/[\s\-\/]+/g, '_')] = row[k];
+  });
+  return out;
+};
+const str = v => String(v || '').trim();
+const num = v => parseFloat(str(v).replace(/[,$\s]/g,'')) || 0;
+const int = v => parseInt(str(v).replace(/[,$\s]/g,''))  || 0;
+
+const validStages    = ['applied','active','graduated','dropped'];
+const validBizStages = ['idea','early','growth','scale','mature'];
+
+function rowToFields(row) {
+  const r = norm(row);
+  const name        = str(r.name||r.entrepreneur_name||r.full_name||r.participant||r.firstname||'');
+  const email       = str(r.email||r.e_mail||r.email_address||'').toLowerCase()||undefined;
+  const phone       = str(r.phone||r.telephone||r.mobile||r.cell||r.contact_number||'');
+  const country     = str(r.country||r.nation||'');
+  const city        = str(r.city||r.town||r.location||'');
+  const sector      = str(r.sector||r.industry||r.field||'');
+  const companyName = str(r.company||r.company_name||r.startup||r.business||r.organization||r.venture||'');
+  const website     = str(r.website||r.website_url||r.url||'');
+  const gender      = str(r.gender||r.sex||'');
+  const rawBizStage = str(r.business_stage||r.biz_stage||r.stage_of_business||'').toLowerCase();
+  const businessStage = validBizStages.includes(rawBizStage) ? rawBizStage : '';
+  const yearFounded   = int(r.year_founded||r.founded||r.founded_year||r.year||0)||undefined;
+  const employees     = int(r.employees||r.employee_count||r.team_size||r.headcount||r.staff||0)||undefined;
+  const revenue       = num(r.revenue||r.annual_revenue||r.yearly_revenue||0)||undefined;
+  const turnover      = num(r.turnover||r.annual_turnover||r.sales||r.gross_sales||0)||undefined;
+  const progName      = str(r.programme||r.program||r.programme_name||r.program_name||r.cohort||'');
+  const rawStage      = str(r.stage||r.status||'active').toLowerCase();
+  const progStage     = validStages.includes(rawStage) ? rawStage : 'active';
+  const startDate     = r.start_date||r.start||undefined;
+  const endDate       = r.end_date||r.end||undefined;
+  const fundingAmt    = num(r.funding||r.amount_raised||r.funding_raised||r.amount||0);
+  const investor      = str(r.investor||r.funder||r.investor_name||'');
+  const fundingType   = str(r.funding_type||r.type_of_funding||r.fund_type||'');
+  const currency      = str(r.currency||'USD');
+  return { name, email, phone, country, city, sector, companyName, website, gender,
+           businessStage, yearFounded, employees, revenue, turnover,
+           progName, progStage, startDate, endDate, fundingAmt, investor, fundingType, currency };
+}
+
+// ── PDF text → rows ───────────────────────────────────────────────────────────
+function parsePdfText(text) {
+  const splitCells = line => line.split(/\t|\s{2,}/).map(s => s.trim()).filter(Boolean);
+  const KEYWORDS = ['name','email','phone','country','sector','company','gender','stage',
+                    'programme','program','funding','revenue','turnover','employees','city',
+                    'investor','cohort','startup','industry','turnover','headcount'];
+
+  const lines = text.split('\n').map(l => l.replace(/\r/g,'')).filter(l => l.trim());
+  let headerIdx = -1, maxScore = 0;
+
+  for (let i = 0; i < Math.min(lines.length, 40); i++) {
+    const cells = splitCells(lines[i]);
+    let score = 0;
+    cells.forEach(c => { if (KEYWORDS.some(k => c.toLowerCase().includes(k))) score++; });
+    if (score > maxScore) { maxScore = score; headerIdx = i; }
+  }
+  if (headerIdx === -1 || maxScore < 2) return [];
+
+  const headers = splitCells(lines[headerIdx]).map(h => h.toLowerCase().replace(/\s+/g,'_'));
+  const rows = [];
+  for (let i = headerIdx + 1; i < lines.length; i++) {
+    const cells = splitCells(lines[i]);
+    if (cells.length < 2) continue;
+    const row = {};
+    headers.forEach((h, idx) => { if (cells[idx] !== undefined) row[h] = cells[idx]; });
+    rows.push(row);
+  }
+  return rows;
+}
+
 // ── GET /api/incubators/entrepreneurs ─────────────────────────────────────────
 exports.getEntrepreneurs = async (req, res) => {
   try {
-    const { search, country, sector, incubator, stage, page = 1, limit = 100 } = req.query;
+    const { search, country, sector, incubator, stage, bizStage,
+            source, page = 1, limit = 50 } = req.query;
     const filter = {};
-    if (country)           filter.country = new RegExp(country, 'i');
-    if (sector)            filter.sector  = new RegExp(sector, 'i');
-    if (req.query.source)  filter.source  = new RegExp(req.query.source, 'i');
-    if (incubator)         filter['programmes.incubator'] = new RegExp(incubator, 'i');
+    if (country)   filter.country            = new RegExp(country, 'i');
+    if (sector)    filter.sector             = new RegExp(sector, 'i');
+    if (source)    filter.source             = new RegExp(source, 'i');
+    if (bizStage)  filter.businessStage      = bizStage;
+    if (incubator) filter['programmes.incubator'] = new RegExp(incubator, 'i');
     if (stage)     filter['programmes.stage']     = stage;
     if (search) {
       filter.$or = [
@@ -21,10 +99,9 @@ exports.getEntrepreneurs = async (req, res) => {
     const skip  = (parseInt(page) - 1) * parseInt(limit);
     const total = await Entrepreneur.countDocuments(filter);
     const entrepreneurs = await Entrepreneur.find(filter)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(parseInt(limit));
-    res.json({ success: true, total, entrepreneurs });
+      .sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit));
+    res.json({ success: true, total, page: parseInt(page),
+               pages: Math.ceil(total / parseInt(limit)), entrepreneurs });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -33,61 +110,91 @@ exports.getEntrepreneurs = async (req, res) => {
 // ── GET /api/incubators/analytics ─────────────────────────────────────────────
 exports.getAnalytics = async (req, res) => {
   try {
-    const all = await Entrepreneur.find({});
+    const { incubator } = req.query;
+    const baseFilter = incubator ? { 'programmes.incubator': new RegExp(incubator,'i') } : {};
+    const all = await Entrepreneur.find(baseFilter).lean();
 
     const totalEntrepreneurs = all.length;
-    const totalFunding = all.reduce((s, e) => s + (e.totalFunding || 0), 0);
+    const totalFunding    = all.reduce((s,e)=>s+(e.totalFunding||0),0);
+    const totalRevenue    = all.reduce((s,e)=>s+(e.revenue||0),0);
+    const totalTurnover   = all.reduce((s,e)=>s+(e.turnover||0),0);
+    const totalEmployees  = all.reduce((s,e)=>s+(e.employees||0),0);
+    const fundedCount     = all.filter(e=>e.funding?.length>0).length;
+    const revenueCount    = all.filter(e=>e.revenue>0).length;
+    const activeNow       = all.filter(e=>e.programmes.some(p=>p.stage==='active')).length;
 
-    // Active in a programme right now
-    const activeNow = all.filter(e =>
-      e.programmes.some(p => p.stage === 'active')
-    ).length;
-
-    // Duplicates: entrepreneurs in 2+ incubators simultaneously (both active)
     const duplicates = all.filter(e => {
-      const activeProgs = e.programmes.filter(p => p.stage === 'active');
-      const incubators  = [...new Set(activeProgs.map(p => p.incubator).filter(Boolean))];
-      return incubators.length >= 2;
+      const ap = e.programmes.filter(p=>p.stage==='active');
+      return [...new Set(ap.map(p=>p.incubator).filter(Boolean))].length >= 2;
     });
 
-    // By country
-    const byCountry = {};
-    all.forEach(e => { if (e.country) byCountry[e.country] = (byCountry[e.country] || 0) + 1; });
+    const agg = field => {
+      const m = {};
+      all.forEach(e => { const v = e[field]; if (v) m[v]=(m[v]||0)+1; });
+      return Object.entries(m).sort((a,b)=>b[1]-a[1]);
+    };
 
-    // By sector
-    const bySector = {};
-    all.forEach(e => { if (e.sector) bySector[e.sector] = (bySector[e.sector] || 0) + 1; });
-
-    // By incubator
     const byIncubator = {};
     all.forEach(e => e.programmes.forEach(p => {
-      if (p.incubator) byIncubator[p.incubator] = (byIncubator[p.incubator] || 0) + 1;
+      if (p.incubator) byIncubator[p.incubator]=(byIncubator[p.incubator]||0)+1;
     }));
 
-    // Funded entrepreneurs
-    const funded = all.filter(e => e.funding && e.funding.length > 0).length;
-
-    // Funding by type
     const byFundingType = {};
-    all.forEach(e => e.funding.forEach(f => {
-      if (f.type) byFundingType[f.type] = (byFundingType[f.type] || 0) + (f.amount || 0);
+    all.forEach(e => (e.funding||[]).forEach(f => {
+      if (f.type) byFundingType[f.type]=(byFundingType[f.type]||0)+(f.amount||0);
     }));
 
-    // By gender
-    const byGender = {};
-    all.forEach(e => { const g = e.gender || 'Unknown'; byGender[g] = (byGender[g] || 0) + 1; });
+    const revByCountry = {}, revBySector = {};
+    all.forEach(e => {
+      if (e.country && e.revenue) revByCountry[e.country]=(revByCountry[e.country]||0)+(e.revenue||0);
+      if (e.sector  && e.revenue) revBySector[e.sector]  =(revBySector[e.sector]  ||0)+(e.revenue||0);
+    });
+
+    const empBuckets = {'1-5':0,'6-20':0,'21-50':0,'51-200':0,'200+':0};
+    all.forEach(e => {
+      const n=e.employees||0; if (!n) return;
+      if (n<=5) empBuckets['1-5']++;
+      else if (n<=20) empBuckets['6-20']++;
+      else if (n<=50) empBuckets['21-50']++;
+      else if (n<=200) empBuckets['51-200']++;
+      else empBuckets['200+']++;
+    });
+
+    const revBuckets = {'No revenue':0,'<$10K':0,'$10K–$100K':0,'$100K–$500K':0,'$500K–$1M':0,'$1M+':0};
+    all.forEach(e => {
+      const r=e.revenue||0;
+      if (!r) revBuckets['No revenue']++;
+      else if (r<10000)   revBuckets['<$10K']++;
+      else if (r<100000)  revBuckets['$10K–$100K']++;
+      else if (r<500000)  revBuckets['$100K–$500K']++;
+      else if (r<1000000) revBuckets['$500K–$1M']++;
+      else revBuckets['$1M+']++;
+    });
+
+    const byCity = {};
+    all.forEach(e => { if (e.city) byCity[e.city]=(byCity[e.city]||0)+1; });
 
     res.json({
       success: true,
-      kpis: { totalEntrepreneurs, totalFunding, activeNow, funded, duplicates: duplicates.length },
-      byCountry:     Object.entries(byCountry).sort((a,b)=>b[1]-a[1]).slice(0,15),
-      bySector:      Object.entries(bySector).sort((a,b)=>b[1]-a[1]).slice(0,15),
-      byIncubator:   Object.entries(byIncubator).sort((a,b)=>b[1]-a[1]),
-      byFundingType: Object.entries(byFundingType).sort((a,b)=>b[1]-a[1]),
-      byGender:      Object.entries(byGender),
-      duplicateList: duplicates.map(e => ({
-        _id: e._id, name: e.name, email: e.email, companyName: e.companyName,
-        programmes: e.programmes.filter(p => p.stage === 'active'),
+      kpis: { totalEntrepreneurs, totalFunding, totalRevenue, totalTurnover,
+              totalEmployees, activeNow, funded: fundedCount, revenueCount,
+              duplicates: duplicates.length,
+              avgRevenue: revenueCount ? Math.round(totalRevenue/revenueCount) : 0 },
+      byCountry:    agg('country').slice(0,15),
+      bySector:     agg('sector').slice(0,15),
+      byIncubator:  Object.entries(byIncubator).sort((a,b)=>b[1]-a[1]),
+      byFundingType:Object.entries(byFundingType).sort((a,b)=>b[1]-a[1]),
+      byGender:     agg('gender'),
+      byBizStage:   agg('businessStage'),
+      bySource:     agg('source').slice(0,15),
+      revByCountry: Object.entries(revByCountry).sort((a,b)=>b[1]-a[1]).slice(0,15),
+      revBySector:  Object.entries(revBySector).sort((a,b)=>b[1]-a[1]).slice(0,15),
+      empBuckets:   Object.entries(empBuckets),
+      revBuckets:   Object.entries(revBuckets),
+      byCity:       Object.entries(byCity).sort((a,b)=>b[1]-a[1]).slice(0,15),
+      duplicateList: duplicates.map(e=>({
+        _id:e._id,name:e.name,email:e.email,companyName:e.companyName,
+        programmes:e.programmes.filter(p=>p.stage==='active'),
       })),
     });
   } catch (err) {
@@ -100,8 +207,8 @@ exports.getDuplicates = async (req, res) => {
   try {
     const all = await Entrepreneur.find({ 'programmes.1': { $exists: true } });
     const duplicates = all.filter(e => {
-      const activeProgs = e.programmes.filter(p => p.stage === 'active');
-      return [...new Set(activeProgs.map(p => p.incubator).filter(Boolean))].length >= 2;
+      const ap = e.programmes.filter(p=>p.stage==='active');
+      return [...new Set(ap.map(p=>p.incubator).filter(Boolean))].length >= 2;
     });
     res.json({ success: true, duplicates });
   } catch (err) {
@@ -109,32 +216,31 @@ exports.getDuplicates = async (req, res) => {
   }
 };
 
-// ── POST /api/incubators/entrepreneurs (manual add) ───────────────────────────
+// ── POST /api/incubators/entrepreneurs ────────────────────────────────────────
 exports.addEntrepreneur = async (req, res) => {
   try {
-    const { name, email, phone, country, city, sector, companyName, gender, programmes, funding, source, tags } = req.body;
+    const { name, email, phone, country, city, sector, companyName, website,
+            gender, businessStage, yearFounded, employees, revenue, turnover,
+            programmes, funding, source, tags } = req.body;
     if (!name) return res.status(400).json({ success: false, message: 'Name is required.' });
 
-    // Upsert by email if provided
     let entrepreneur;
     if (email) {
       entrepreneur = await Entrepreneur.findOne({ email });
       if (entrepreneur) {
-        // Merge programmes
         if (programmes?.length) entrepreneur.programmes.push(...programmes);
         if (funding?.length)    entrepreneur.funding.push(...funding);
-        entrepreneur.totalFunding = entrepreneur.funding.reduce((s, f) => s + (f.amount || 0), 0);
+        entrepreneur.totalFunding = entrepreneur.funding.reduce((s,f)=>s+(f.amount||0),0);
         await entrepreneur.save();
         return res.json({ success: true, entrepreneur, merged: true });
       }
     }
-
-    const calcFunding = (funding || []).reduce((s, f) => s + (f.amount || 0), 0);
+    const calcFunding = (funding||[]).reduce((s,f)=>s+(f.amount||0),0);
     entrepreneur = await Entrepreneur.create({
-      name, email, phone, country, city, sector, companyName, gender,
-      programmes: programmes || [], funding: funding || [],
-      totalFunding: calcFunding, source, tags: tags || [],
-      addedBy: req.user._id,
+      name, email, phone, country, city, sector, companyName, website,
+      gender, businessStage, yearFounded, employees, revenue, turnover,
+      programmes: programmes||[], funding: funding||[],
+      totalFunding: calcFunding, source, tags: tags||[], addedBy: req.user._id,
     });
     res.status(201).json({ success: true, entrepreneur });
   } catch (err) {
@@ -145,9 +251,8 @@ exports.addEntrepreneur = async (req, res) => {
 // ── PATCH /api/incubators/entrepreneurs/:id ───────────────────────────────────
 exports.updateEntrepreneur = async (req, res) => {
   try {
-    if (req.body.funding) {
-      req.body.totalFunding = (req.body.funding || []).reduce((s, f) => s + (f.amount || 0), 0);
-    }
+    if (req.body.funding)
+      req.body.totalFunding = (req.body.funding||[]).reduce((s,f)=>s+(f.amount||0),0);
     const e = await Entrepreneur.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!e) return res.status(404).json({ success: false, message: 'Not found' });
     res.json({ success: true, entrepreneur: e });
@@ -166,97 +271,79 @@ exports.deleteEntrepreneur = async (req, res) => {
   }
 };
 
-// ── POST /api/incubators/upload (Excel import) ────────────────────────────────
-exports.uploadExcel = async (req, res) => {
+// ── POST /api/incubators/upload ───────────────────────────────────────────────
+exports.uploadFile = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded.' });
 
-    const wb = XLSX.read(req.file.buffer, { type: 'buffer', cellDates: true });
-    const sheetName = wb.SheetNames[0];
-    const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { defval: '' });
+    const ext  = (req.file.originalname.split('.').pop()||'').toLowerCase();
+    const mime = req.file.mimetype || '';
+    const incubatorSource = req.body.incubatorName || 'Imported';
+    let rows = [];
 
-    if (!rows.length) return res.status(400).json({ success: false, message: 'Sheet is empty.' });
-
-    // Normalise column names (case-insensitive)
-    const norm = (row) => {
-      const out = {};
-      Object.keys(row).forEach(k => { out[k.toLowerCase().replace(/\s+/g,'_')] = row[k]; });
-      return out;
-    };
+    if (ext === 'pdf' || mime === 'application/pdf') {
+      let pdfParse;
+      try { pdfParse = require('pdf-parse'); }
+      catch(e) { return res.status(500).json({ success: false, message: 'PDF support not available on server — install pdf-parse.' }); }
+      const data = await pdfParse(req.file.buffer);
+      rows = parsePdfText(data.text);
+      if (!rows.length)
+        return res.status(400).json({ success: false,
+          message: 'Could not find a data table in this PDF. Ensure it has a header row with column names like "Name", "Email", "Country", "Sector", etc.' });
+    } else {
+      // SheetJS handles xlsx, xls, csv, ods, numbers, tsv, dbf, etc.
+      const wb = XLSX.read(req.file.buffer, { type: 'buffer', cellDates: true });
+      rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { defval: '' });
+      if (!rows.length) return res.status(400).json({ success: false, message: 'File is empty or unreadable.' });
+    }
 
     const results = { created: 0, merged: 0, errors: [] };
-    const incubatorSource = req.body.incubatorName || 'Imported';
 
     for (const rawRow of rows) {
       try {
-        const row = norm(rawRow);
-        const name = String(row.name || row.entrepreneur_name || row.full_name || '').trim();
-        if (!name) continue;
+        const f = rowToFields(rawRow);
+        if (!f.name) continue;
 
-        const email       = String(row.email || '').trim().toLowerCase() || undefined;
-        const phone       = String(row.phone || row.phone_number || '').trim();
-        const country     = String(row.country || '').trim();
-        const city        = String(row.city || '').trim();
-        const sector      = String(row.sector || row.industry || '').trim();
-        const companyName = String(row.company || row.company_name || row.startup || '').trim();
-        const gender      = String(row.gender || '').trim();
-
-        // Programme info
-        const progName    = String(row.programme || row.program || row.programme_name || '').trim();
-        const stage       = String(row.stage || row.status || 'active').trim().toLowerCase();
-        const validStages = ['applied','active','graduated','dropped'];
-        const progStage   = validStages.includes(stage) ? stage : 'active';
-        const startDate   = row.start_date || row.start || undefined;
-        const endDate     = row.end_date   || row.end   || undefined;
-
-        // Funding info
-        const fundingAmt  = parseFloat(row.funding || row.amount_raised || row.funding_raised || 0) || 0;
-        const investor    = String(row.investor || row.funder || '').trim();
-        const fundingType = String(row.funding_type || row.type_of_funding || '').trim();
-
-        const progEntry = progName ? [{
-          programmeName: progName,
+        const progEntry = (f.progName || incubatorSource) ? [{
+          programmeName: f.progName,
           incubator:     incubatorSource,
-          stage:         progStage,
-          startDate:     startDate ? new Date(startDate) : undefined,
-          endDate:       endDate   ? new Date(endDate)   : undefined,
-          sector,
+          stage:         f.progStage,
+          startDate:     f.startDate ? new Date(f.startDate) : undefined,
+          endDate:       f.endDate   ? new Date(f.endDate)   : undefined,
+          sector:        f.sector,
         }] : [];
 
-        const fundEntry = fundingAmt > 0 ? [{
-          amount:   fundingAmt,
-          currency: String(row.currency || 'USD').trim(),
-          investor,
-          type:     fundingType,
-          date:     row.funding_date ? new Date(row.funding_date) : undefined,
+        const fundEntry = f.fundingAmt > 0 ? [{
+          amount: f.fundingAmt, currency: f.currency,
+          investor: f.investor, type: f.fundingType,
         }] : [];
 
-        // Try to find existing by email
-        let existing = email ? await Entrepreneur.findOne({ email }) : null;
-        if (!existing && name) {
-          existing = await Entrepreneur.findOne({ name: new RegExp(`^${name}$`, 'i') });
-        }
+        let existing = f.email ? await Entrepreneur.findOne({ email: f.email }) : null;
+        if (!existing && f.name)
+          existing = await Entrepreneur.findOne({ name: new RegExp(`^${f.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}$`,'i') });
 
         if (existing) {
           if (progEntry.length) existing.programmes.push(...progEntry);
           if (fundEntry.length) existing.funding.push(...fundEntry);
-          existing.totalFunding = existing.funding.reduce((s, f) => s + (f.amount || 0), 0);
-          if (!existing.country && country) existing.country = country;
-          if (!existing.sector  && sector)  existing.sector  = sector;
+          existing.totalFunding = existing.funding.reduce((s,fu)=>s+(fu.amount||0),0);
+          ['country','sector','revenue','turnover','employees','website','businessStage'].forEach(k => {
+            if (!existing[k] && f[k]) existing[k] = f[k];
+          });
           await existing.save();
           results.merged++;
         } else {
           await Entrepreneur.create({
-            name, email, phone, country, city, sector, companyName, gender,
-            programmes: progEntry, funding: fundEntry,
-            totalFunding: fundEntry.reduce((s, f) => s + (f.amount || 0), 0),
-            source: incubatorSource, addedBy: req.user._id,
+            name:f.name, email:f.email, phone:f.phone, country:f.country, city:f.city,
+            sector:f.sector, companyName:f.companyName, website:f.website,
+            gender:f.gender, businessStage:f.businessStage, yearFounded:f.yearFounded,
+            employees:f.employees, revenue:f.revenue, turnover:f.turnover,
+            programmes:progEntry, funding:fundEntry,
+            totalFunding:fundEntry.reduce((s,fu)=>s+(fu.amount||0),0),
+            source:incubatorSource, addedBy:req.user._id,
           });
           results.created++;
         }
-      } catch(rowErr) {
-        results.errors.push(String(rowErr.message));
-      }
+      } catch(rowErr) { results.errors.push(String(rowErr.message)); }
     }
 
     res.json({ success: true, results, total: rows.length });
@@ -268,28 +355,37 @@ exports.uploadExcel = async (req, res) => {
 // ── GET /api/incubators/export ────────────────────────────────────────────────
 exports.exportXLSX = async (req, res) => {
   try {
-    const all = await Entrepreneur.find({}).lean();
+    const { incubator } = req.query;
+    const filter = incubator ? { 'programmes.incubator': new RegExp(incubator,'i') } : {};
+    const all = await Entrepreneur.find(filter).lean();
     const rows = all.map(e => ({
-      Name:             e.name,
-      Email:            e.email || '',
-      Phone:            e.phone || '',
-      Company:          e.companyName || '',
-      Country:          e.country || '',
-      Sector:           e.sector || '',
-      Gender:           e.gender || '',
-      Source:           e.source || '',
+      Name:              e.name,
+      Email:             e.email||'',
+      Phone:             e.phone||'',
+      Company:           e.companyName||'',
+      Website:           e.website||'',
+      Country:           e.country||'',
+      City:              e.city||'',
+      Sector:            e.sector||'',
+      Gender:            e.gender||'',
+      'Business Stage':  e.businessStage||'',
+      'Year Founded':    e.yearFounded||'',
+      Employees:         e.employees||'',
+      'Annual Revenue':  e.revenue||0,
+      'Annual Turnover': e.turnover||0,
+      Source:            e.source||'',
       'Active Programmes': e.programmes.filter(p=>p.stage==='active').map(p=>p.programmeName).join('; '),
-      'All Programmes': e.programmes.map(p=>`${p.programmeName||'?'} @ ${p.incubator||'?'} [${p.stage}]`).join('; '),
-      'Total Funding':  e.totalFunding || 0,
-      'Funding Details':e.funding.map(f=>`${f.investor||'?'}: ${f.currency||'USD'} ${f.amount||0}`).join('; '),
-      'Enrolled Date':  e.createdAt ? new Date(e.createdAt).toLocaleDateString() : '',
+      'All Programmes':  e.programmes.map(p=>`${p.programmeName||'?'} @ ${p.incubator||'?'} [${p.stage}]`).join('; '),
+      'Total Funding':   e.totalFunding||0,
+      'Funding Details': (e.funding||[]).map(f=>`${f.investor||'?'}: ${f.currency||'USD'} ${f.amount||0} (${f.type||''})`).join('; '),
+      'Date Added':      e.createdAt ? new Date(e.createdAt).toLocaleDateString() : '',
     }));
     const ws = XLSX.utils.json_to_sheet(rows);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Entrepreneurs');
     const buf = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', 'attachment; filename="incubators-export.xlsx"');
+    res.setHeader('Content-Type','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition','attachment; filename="incubators-export.xlsx"');
     res.send(buf);
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

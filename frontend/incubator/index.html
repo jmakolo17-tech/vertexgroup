@@ -4,193 +4,205 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Incubator Hub — Vertex Group Africa</title>
-<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #0f1117; --bg2: #1a1d27; --bg3: #22263a;
-    --accent: #0d9e6e; --accent2: #0b8a5e;
-    --border: #2a2f45; --text: #e8eaf0; --text2: #9ba3c0; --text3: #5a6080;
-    --red: #ef4444; --amber: #f59e0b; --blue: #3b82f6; --purple: #6366f1;
-    --radius: 10px;
-  }
-  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; min-height: 100vh; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--bg2:#1a1d27;--bg3:#22263a;
+  --accent:#0d9e6e;--accent2:#0b8a5e;
+  --border:#2a2f45;--text:#e8eaf0;--text2:#9ba3c0;--text3:#5a6080;
+  --red:#ef4444;--amber:#f59e0b;--blue:#3b82f6;--purple:#6366f1;
+  --radius:10px;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;min-height:100vh}
 
-  /* ── Login ── */
-  #login-screen {
-    min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    background: radial-gradient(ellipse at 30% 40%, #0d9e6e18 0%, transparent 60%), var(--bg);
-  }
-  .login-box {
-    background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
-    padding: 40px 36px; width: 100%; max-width: 400px; box-shadow: 0 24px 64px rgba(0,0,0,.5);
-  }
-  .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
-  .login-logo svg { flex-shrink: 0; }
-  .login-logo span { font-size: 18px; font-weight: 700; }
-  .login-logo small { display: block; font-size: 11px; color: var(--text3); font-weight: 400; }
-  .login-box h2 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
-  .login-box p  { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
-  .fgroup { margin-bottom: 14px; }
-  .flabel { display: block; font-size: 12px; color: var(--text2); margin-bottom: 5px; font-weight: 500; }
-  .finput {
-    width: 100%; padding: 9px 12px; background: var(--bg3); border: 1px solid var(--border);
-    border-radius: 8px; color: var(--text); font-size: 13px; outline: none;
-    transition: border-color .15s;
-  }
-  .finput:focus { border-color: var(--accent); }
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-    padding: 9px 16px; border: 1px solid var(--border); border-radius: 8px;
-    background: var(--bg3); color: var(--text); font-size: 13px; font-weight: 500;
-    cursor: pointer; transition: all .15s; white-space: nowrap;
-  }
-  .btn:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-green { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .btn-green:hover { background: var(--accent2); border-color: var(--accent2); color: #fff; }
-  .btn-full { width: 100%; }
-  .btn-red { background: #ef444418; border-color: #ef4444; color: #ef4444; }
-  .btn-red:hover { background: #ef444430; }
-  #login-error { color: var(--red); font-size: 13px; margin-bottom: 12px; display: none; }
+/* ── Login ── */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 30% 40%,#0d9e6e18 0%,transparent 60%),var(--bg)}
+.login-box{background:var(--bg2);border:1px solid var(--border);border-radius:16px;
+  padding:40px 36px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,.5)}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.login-logo span{font-size:18px;font-weight:700}
+.login-logo small{display:block;font-size:11px;color:var(--text3);font-weight:400}
+.login-box h2{font-size:20px;font-weight:700;margin-bottom:6px}
+.login-box p{font-size:13px;color:var(--text2);margin-bottom:24px}
 
-  /* ── App shell ── */
-  #app { display: none; flex-direction: column; min-height: 100vh; }
-  header {
-    background: var(--bg2); border-bottom: 1px solid var(--border);
-    padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 100;
-  }
-  .header-left { display: flex; align-items: center; gap: 12px; }
-  .header-logo { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; }
-  .header-badge {
-    background: var(--accent); color: #fff; font-size: 10px; font-weight: 700;
-    padding: 2px 8px; border-radius: 20px; letter-spacing: .5px;
-  }
-  .header-right { display: flex; align-items: center; gap: 12px; }
-  .user-info { font-size: 12px; color: var(--text2); text-align: right; }
-  .av {
-    width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center;
-    justify-content: center; font-size: 12px; font-weight: 700; color: #fff;
-    background: var(--purple); flex-shrink: 0;
-  }
+/* ── Forms ── */
+.fgroup{margin-bottom:14px}
+.flabel{display:block;font-size:12px;color:var(--text2);margin-bottom:5px;font-weight:500}
+.finput{width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:13px;outline:none;transition:border-color .15s}
+.finput:focus{border-color:var(--accent)}
 
-  main { flex: 1; padding: 24px; max-width: 1400px; margin: 0 auto; width: 100%; }
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:8px 14px;border:1px solid var(--border);border-radius:8px;
+  background:var(--bg3);color:var(--text);font-size:13px;font-weight:500;
+  cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn-green{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-green:hover{background:var(--accent2);border-color:var(--accent2);color:#fff}
+.btn-full{width:100%}
+.btn-red{background:#ef444418;border-color:var(--red);color:var(--red)}
+.btn-red:hover{background:#ef444430}
+.btn-sm{padding:3px 10px;font-size:11px}
+#login-error{color:var(--red);font-size:13px;margin-bottom:12px;display:none}
 
-  /* ── Toolbar ── */
-  .toolbar {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
-  }
-  .toolbar-left { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .toolbar-right { display: flex; gap: 8px; }
-  .count-pill { font-size: 12px; color: var(--text3); background: var(--bg3); padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); }
+/* ── App shell ── */
+#app{display:none;flex-direction:column;min-height:100vh}
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 20px;
+  height:54px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100}
+.hdr-logo{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700}
+.hdr-badge{background:var(--accent);color:#fff;font-size:10px;font-weight:700;
+  padding:2px 7px;border-radius:20px;letter-spacing:.5px}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.user-info{font-size:12px;color:var(--text2);text-align:right}
+.av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:700;color:#fff;background:var(--purple)}
 
-  /* ── Tabs ── */
-  .tab-bar { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-  .tab-btn {
-    padding: 10px 20px; font-size: 13px; font-weight: 500; border: none;
-    background: none; cursor: pointer; color: var(--text2); border-bottom: 2px solid transparent;
-    transition: all .15s; white-space: nowrap;
-  }
-  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .dup-badge {
-    background: var(--red); color: #fff; font-size: 10px; font-weight: 700;
-    padding: 1px 6px; border-radius: 20px; margin-left: 5px;
-  }
+main{flex:1;padding:20px;max-width:1500px;margin:0 auto;width:100%}
 
-  /* ── Cards & layout ── */
-  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); }
-  .kpi-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-  .kpi-card {
-    flex: 1; min-width: 140px; padding: 18px 20px;
-    border-radius: var(--radius); border: 1px solid var(--border);
-    background: var(--bg2);
-  }
-  .kpi-val { font-size: 28px; font-weight: 700; line-height: 1; }
-  .kpi-label { font-size: 12px; color: var(--text2); margin-top: 6px; }
-  .charts-grid { display: flex; flex-wrap: wrap; gap: 12px; }
-  .chart-card { flex: 1; min-width: 240px; padding: 16px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); }
-  .chart-title { font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+/* ── Toolbar ── */
+.toolbar{display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.toolbar-left{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.toolbar-right{display:flex;gap:8px;flex-wrap:wrap}
+.count-pill{font-size:12px;color:var(--text3);background:var(--bg3);
+  padding:3px 10px;border-radius:20px;border:1px solid var(--border)}
 
-  /* ── Table ── */
-  .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
-  table { width: 100%; border-collapse: collapse; }
-  th { background: var(--bg3); font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .5px; padding: 10px 12px; text-align: left; white-space: nowrap; }
-  td { padding: 10px 12px; border-top: 1px solid var(--border); font-size: 13px; vertical-align: top; }
-  tr:hover td { background: var(--bg3); }
-  .stage-badge { padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
-  .stage-active     { background: #0d9e6e22; color: #0d9e6e; }
-  .stage-graduated  { background: #6366f122; color: #6366f1; }
-  .stage-applied    { background: #f59e0b22; color: #f59e0b; }
-  .stage-dropped    { background: #9ca3af22; color: #9ca3af; }
+/* ── Tabs ── */
+.tab-bar{display:flex;border-bottom:1px solid var(--border);margin-bottom:18px;
+  overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{padding:10px 18px;font-size:13px;font-weight:500;border:none;
+  background:none;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;
+  transition:all .15s;white-space:nowrap;flex-shrink:0}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-btn:hover{color:var(--text)}
+.dup-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;
+  padding:1px 5px;border-radius:20px;margin-left:4px}
 
-  /* ── Modals ── */
-  .modal-backdrop {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6);
-    backdrop-filter: blur(4px); z-index: 500; align-items: center; justify-content: center;
-  }
-  .modal-backdrop.open { display: flex; }
-  .modal-box {
-    background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
-    padding: 28px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto;
-    box-shadow: 0 24px 64px rgba(0,0,0,.5);
-  }
-  .modal-box.wide { max-width: 680px; }
-  .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-  .modal-head h3 { font-size: 16px; font-weight: 600; }
-  .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text2); line-height: 1; }
-  .modal-close:hover { color: var(--text); }
-  .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-  .modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
-  .section-label { font-size: 13px; font-weight: 600; margin: 16px 0 10px; }
-  hr.divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-  .result-msg { margin-top: 12px; font-size: 13px; min-height: 18px; }
+/* ── Sub-tabs (view switcher) ── */
+.view-tabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap}
+.view-btn{padding:5px 13px;font-size:12px;font-weight:500;border:1px solid var(--border);
+  border-radius:20px;background:none;color:var(--text2);cursor:pointer;transition:all .15s}
+.view-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
 
-  /* ── Toast ── */
-  #toast {
-    position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: #fff;
-    padding: 10px 18px; border-radius: 8px; font-size: 13px; z-index: 9999;
-    box-shadow: 0 4px 20px rgba(0,0,0,.4); display: none; transition: opacity .2s;
-  }
+/* ── Cards ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius)}
+.kpi-grid{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.kpi-card{flex:1;min-width:130px;padding:16px 18px;border-radius:var(--radius);
+  border:1px solid var(--border);background:var(--bg2)}
+.kpi-val{font-size:26px;font-weight:700;line-height:1}
+.kpi-label{font-size:11px;color:var(--text2);margin-top:5px}
+.charts-grid{display:flex;flex-wrap:wrap;gap:12px}
+.chart-card{flex:1;min-width:220px;padding:16px;background:var(--bg2);
+  border:1px solid var(--border);border-radius:var(--radius)}
+.chart-title{font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text)}
 
-  /* ── Overlap alert card ── */
-  .overlap-card { background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; }
-  .prog-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
-  .prog-row:last-child { border-bottom: none; }
+/* ── Tables ── */
+.table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;min-width:600px}
+th{background:var(--bg3);font-size:11px;font-weight:600;color:var(--text2);
+  text-transform:uppercase;letter-spacing:.5px;padding:10px 12px;
+  text-align:left;white-space:nowrap}
+td{padding:9px 12px;border-top:1px solid var(--border);font-size:13px;vertical-align:top}
+tr:hover td{background:var(--bg3)}
 
-  /* ── Bar chart ── */
-  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 12px; }
-  .bar-label { width: 110px; text-align: right; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
-  .bar-track { flex: 1; background: var(--border); border-radius: 3px; height: 12px; overflow: hidden; }
-  .bar-fill  { height: 12px; background: var(--accent); border-radius: 3px; transition: width .3s; }
-  .bar-num   { color: var(--text3); min-width: 26px; }
+/* ── Badges ── */
+.badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge-active    {background:#0d9e6e22;color:#0d9e6e}
+.badge-graduated {background:#6366f122;color:#6366f1}
+.badge-applied   {background:#f59e0b22;color:#f59e0b}
+.badge-dropped   {background:#9ca3af22;color:#9ca3af}
+.badge-idea      {background:#6366f122;color:#6366f1}
+.badge-early     {background:#3b82f622;color:#3b82f6}
+.badge-growth    {background:#0d9e6e22;color:#0d9e6e}
+.badge-scale     {background:#f59e0b22;color:#f59e0b}
+.badge-mature    {background:#ef444422;color:#ef4444}
 
-  /* ── Gender dots ── */
-  .gender-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 12px; }
-  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+/* ── Pagination ── */
+.pagination{display:flex;align-items:center;gap:6px;justify-content:center;
+  padding:16px 0;flex-wrap:wrap}
+.pg-btn{padding:5px 11px;border:1px solid var(--border);border-radius:6px;
+  background:var(--bg3);color:var(--text2);font-size:12px;cursor:pointer;transition:all .15s}
+.pg-btn:hover{border-color:var(--accent);color:var(--accent)}
+.pg-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.pg-btn:disabled{opacity:.4;cursor:default}
 
-  /* ── Empty state ── */
-  .empty-state { text-align: center; padding: 48px 24px; color: var(--text3); }
-  .empty-icon { font-size: 40px; margin-bottom: 10px; }
+/* ── Modals ── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);
+  backdrop-filter:blur(4px);z-index:500;align-items:center;justify-content:center;padding:16px}
+.modal-backdrop.open{display:flex}
+.modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;
+  padding:26px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;
+  box-shadow:0 24px 64px rgba(0,0,0,.5)}
+.modal-box.wide{max-width:700px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.modal-head h3{font-size:16px;font-weight:600}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text2);line-height:1}
+.modal-close:hover{color:var(--text)}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+.sec-label{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;
+  letter-spacing:.6px;margin:16px 0 10px}
+hr.div{border:none;border-top:1px solid var(--border);margin:16px 0}
+.result-msg{margin-top:10px;font-size:13px;min-height:16px}
 
-  /* ── Funding summary ── */
-  .fund-summary { display: flex; gap: 32px; flex-wrap: wrap; padding: 16px 20px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; }
-  .fund-sum-item .val { font-size: 24px; font-weight: 700; }
-  .fund-sum-item .lbl { font-size: 12px; color: var(--text2); margin-top: 4px; }
+/* ── Bar chart ── */
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:12px}
+.bar-label{width:110px;text-align:right;color:var(--text2);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+.bar-track{flex:1;background:var(--border);border-radius:3px;height:12px;overflow:hidden}
+.bar-fill{height:12px;border-radius:3px;transition:width .3s}
+.bar-num{color:var(--text3);min-width:30px;text-align:right}
 
-  @media (max-width: 600px) {
-    main { padding: 12px; }
-    .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
-    .toolbar { flex-direction: column; align-items: stretch; }
-    .toolbar-right { flex-wrap: wrap; }
-    .kpi-card { min-width: 120px; }
-  }
+/* ── Overlap card ── */
+.overlap-card{background:var(--bg2);border:1px solid var(--border);
+  border-left:3px solid var(--red);border-radius:var(--radius);padding:14px;margin-bottom:10px}
+.prog-row{display:flex;align-items:center;gap:8px;padding:5px 0;
+  border-bottom:1px solid var(--border);font-size:12px}
+.prog-row:last-child{border-bottom:none}
+
+/* ── Funding summary bar ── */
+.fund-kpi{display:flex;gap:28px;flex-wrap:wrap;padding:14px 18px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px}
+.fund-kpi-item .val{font-size:22px;font-weight:700}
+.fund-kpi-item .lbl{font-size:11px;color:var(--text2);margin-top:3px}
+
+/* ── Upload file area ── */
+.file-drop{border:2px dashed var(--border);border-radius:10px;padding:20px;
+  text-align:center;color:var(--text2);font-size:13px;transition:border-color .15s;cursor:pointer}
+.file-drop:hover,.file-drop.drag{border-color:var(--accent);color:var(--accent)}
+.file-types{font-size:11px;color:var(--text3);margin-top:6px}
+
+/* ── Toast ── */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--accent);color:#fff;
+  padding:10px 18px;border-radius:8px;font-size:13px;z-index:9999;
+  box-shadow:0 4px 20px rgba(0,0,0,.4);display:none}
+
+/* ── Empty ── */
+.empty{text-align:center;padding:48px 24px;color:var(--text3)}
+.empty-icon{font-size:40px;margin-bottom:10px}
+
+/* ── Incubator my-prog bar ── */
+.my-prog-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
+  margin-bottom:16px;flex-wrap:wrap}
+
+@media(max-width:640px){
+  main{padding:12px}
+  .form-grid-2,.form-grid-3{grid-template-columns:1fr}
+  .kpi-card{min-width:120px}
+  .toolbar{flex-direction:column;align-items:stretch}
+  .toolbar-right{flex-wrap:wrap}
+}
 </style>
 </head>
 <body>
 
-<!-- ══ LOGIN SCREEN ══════════════════════════════════════════════════════════ -->
+<!-- ══ LOGIN ════════════════════════════════════════════════════════════════ -->
 <div id="login-screen">
   <div class="login-box">
     <div class="login-logo">
@@ -198,10 +210,7 @@
         <polygon points="20,4 36,34 4,34" fill="#0d9e6e" opacity=".9"/>
         <polygon points="20,12 30,30 10,30" fill="#0f1117" opacity=".6"/>
       </svg>
-      <div>
-        <span>Vertex Group Africa</span>
-        <small>Incubator Hub</small>
-      </div>
+      <div><span>Vertex Group Africa</span><small>Incubator Hub</small></div>
     </div>
     <h2>Welcome back</h2>
     <p>Sign in to access the Incubator Hub</p>
@@ -212,7 +221,7 @@
     </div>
     <div class="fgroup">
       <label class="flabel">Password</label>
-      <input class="finput" type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"
+      <input class="finput" type="password" id="l-pass" placeholder="••••••••"
         onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
     <button class="btn btn-green btn-full" id="login-btn" onclick="doLogin()">Sign in</button>
@@ -222,23 +231,23 @@
 <!-- ══ APP ═══════════════════════════════════════════════════════════════════ -->
 <div id="app">
   <header>
-    <div class="header-left">
-      <div class="header-logo">
-        <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="hdr-logo">
+        <svg width="26" height="26" viewBox="0 0 40 40" fill="none">
           <polygon points="20,4 36,34 4,34" fill="#0d9e6e" opacity=".9"/>
           <polygon points="20,12 30,30 10,30" fill="#0f1117" opacity=".6"/>
         </svg>
         Incubator Hub
       </div>
-      <span class="header-badge">BETA</span>
+      <span class="hdr-badge">BETA</span>
     </div>
-    <div class="header-right">
+    <div class="hdr-right">
       <div class="user-info">
         <div id="hdr-name" style="font-weight:600;color:var(--text)"></div>
-        <div id="hdr-role"></div>
+        <div id="hdr-role" style="font-size:11px"></div>
       </div>
       <div class="av" id="hdr-av">?</div>
-      <button class="btn" onclick="doLogout()" style="padding:6px 12px;font-size:12px">Sign out</button>
+      <button class="btn" style="padding:5px 11px;font-size:12px" onclick="doLogout()">Sign out</button>
     </div>
   </header>
 
@@ -246,21 +255,29 @@
     <!-- Toolbar -->
     <div class="toolbar">
       <div class="toolbar-left">
-        <input class="finput" style="width:210px" id="search-input"
+        <input class="finput" style="width:200px" id="search-input"
           placeholder="Search entrepreneur…" oninput="debounceSearch()"/>
-        <select class="finput" style="width:130px" id="stage-filter" onchange="loadList()">
+        <select class="finput" style="width:120px" id="stage-filter" onchange="reloadList()">
           <option value="">All stages</option>
           <option value="active">Active</option>
           <option value="graduated">Graduated</option>
           <option value="applied">Applied</option>
           <option value="dropped">Dropped</option>
         </select>
+        <select class="finput" style="width:130px" id="bizstage-filter" onchange="reloadList()">
+          <option value="">All biz stages</option>
+          <option value="idea">Idea</option>
+          <option value="early">Early</option>
+          <option value="growth">Growth</option>
+          <option value="scale">Scale</option>
+          <option value="mature">Mature</option>
+        </select>
         <span class="count-pill" id="count-pill">—</span>
       </div>
       <div class="toolbar-right">
         <button class="btn btn-green" onclick="openUploadModal()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          Import Excel
+          Import Data
         </button>
         <button class="btn btn-green" onclick="openAddModal()">+ Add</button>
         <button class="btn" onclick="doExport()">
@@ -272,17 +289,18 @@
 
     <!-- Tab bar -->
     <div class="tab-bar">
-      <button class="tab-btn active" id="tab-overview"   onclick="switchTab('overview')">Overview</button>
-      <button class="tab-btn"        id="tab-directory"  onclick="switchTab('directory')">Directory</button>
-      <button class="tab-btn"        id="tab-duplicates" onclick="switchTab('duplicates')">
+      <button class="tab-btn active" id="tab-overview"    onclick="switchTab('overview')">Overview</button>
+      <button class="tab-btn"        id="tab-directory"   onclick="switchTab('directory')">Directory</button>
+      <button class="tab-btn"        id="tab-myprog"      onclick="switchTab('myprog')">My Programme</button>
+      <button class="tab-btn"        id="tab-insights"    onclick="switchTab('insights')">Insights</button>
+      <button class="tab-btn"        id="tab-duplicates"  onclick="switchTab('duplicates')">
         Overlap Alerts <span class="dup-badge" id="dup-badge" style="display:none"></span>
       </button>
-      <button class="tab-btn"        id="tab-funding"    onclick="switchTab('funding')">Fundraising</button>
+      <button class="tab-btn"        id="tab-funding"     onclick="switchTab('funding')">Fundraising</button>
     </div>
 
-    <!-- Content -->
     <div id="tab-content">
-      <div class="empty-state"><div class="empty-icon">⏳</div>Loading…</div>
+      <div class="empty"><div class="empty-icon">⏳</div>Loading…</div>
     </div>
   </main>
 </div>
@@ -294,9 +312,10 @@
       <h3>Import Entrepreneur Data</h3>
       <button class="modal-close" onclick="closeModal('upload-modal')">×</button>
     </div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6">
-      Upload <strong>.xlsx / .xls / .csv</strong>. Recognised columns (case-insensitive):<br>
-      <code style="font-size:11px;color:var(--text3)">name · email · phone · country · city · sector · company · gender · programme · stage · start_date · end_date · funding · currency · investor · funding_type</code>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.7">
+      Accepted formats: <strong>Excel (.xlsx, .xls), CSV, ODS, PDF, Numbers, TSV</strong><br>
+      Recognised columns (case-insensitive):<br>
+      <span style="font-size:11px;color:var(--text3)">name · email · phone · country · city · sector · company · website · gender · business_stage · year_founded · employees · revenue · turnover · programme · stage · start_date · end_date · funding · investor · funding_type</span>
     </p>
     <div class="fgroup">
       <label class="flabel">Incubator / Programme Name *</label>
@@ -304,7 +323,18 @@
     </div>
     <div class="fgroup" style="margin-top:10px">
       <label class="flabel">File *</label>
-      <input type="file" class="finput" id="up-file" accept=".xlsx,.xls,.csv"/>
+      <div class="file-drop" id="file-drop-zone" onclick="document.getElementById('up-file').click()"
+        ondragover="event.preventDefault();this.classList.add('drag')"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="handleFileDrop(event)">
+        <div id="file-drop-label">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:6px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><br>
+          Click to browse or drag &amp; drop
+        </div>
+        <div class="file-types">xlsx · xls · csv · ods · pdf · numbers · tsv</div>
+      </div>
+      <input type="file" id="up-file" accept=".xlsx,.xls,.csv,.ods,.pdf,.numbers,.tsv,.dbf"
+        style="display:none" onchange="onFileSelected(this)"/>
     </div>
     <div class="result-msg" id="up-result"></div>
     <div class="modal-footer">
@@ -314,21 +344,19 @@
   </div>
 </div>
 
-<!-- ══ ADD / EDIT MODAL ══════════════════════════════════════════════════════ -->
+<!-- ══ ADD/EDIT MODAL ════════════════════════════════════════════════════════ -->
 <div class="modal-backdrop" id="ent-modal">
   <div class="modal-box wide">
     <div class="modal-head">
       <h3 id="ent-modal-title">Add Entrepreneur</h3>
       <button class="modal-close" onclick="closeModal('ent-modal')">×</button>
     </div>
+
+    <div class="sec-label">Personal Information</div>
     <div class="form-grid-2">
       <div class="fgroup"><label class="flabel">Full Name *</label><input class="finput" id="ef-name"/></div>
       <div class="fgroup"><label class="flabel">Email</label><input class="finput" id="ef-email" type="email"/></div>
       <div class="fgroup"><label class="flabel">Phone</label><input class="finput" id="ef-phone"/></div>
-      <div class="fgroup"><label class="flabel">Country</label><input class="finput" id="ef-country"/></div>
-      <div class="fgroup"><label class="flabel">City</label><input class="finput" id="ef-city"/></div>
-      <div class="fgroup"><label class="flabel">Sector / Industry</label><input class="finput" id="ef-sector"/></div>
-      <div class="fgroup"><label class="flabel">Company / Startup</label><input class="finput" id="ef-company"/></div>
       <div class="fgroup">
         <label class="flabel">Gender</label>
         <select class="finput" id="ef-gender">
@@ -338,8 +366,35 @@
         </select>
       </div>
     </div>
-    <hr class="divider">
-    <div class="section-label">Programme Entry</div>
+
+    <div class="sec-label">Location</div>
+    <div class="form-grid-2">
+      <div class="fgroup"><label class="flabel">Country</label><input class="finput" id="ef-country"/></div>
+      <div class="fgroup"><label class="flabel">City</label><input class="finput" id="ef-city"/></div>
+    </div>
+
+    <div class="sec-label">Business Information</div>
+    <div class="form-grid-2">
+      <div class="fgroup"><label class="flabel">Company / Startup Name</label><input class="finput" id="ef-company"/></div>
+      <div class="fgroup"><label class="flabel">Website</label><input class="finput" id="ef-website" placeholder="https://…"/></div>
+      <div class="fgroup"><label class="flabel">Sector / Industry</label><input class="finput" id="ef-sector"/></div>
+      <div class="fgroup">
+        <label class="flabel">Business Stage</label>
+        <select class="finput" id="ef-bizstage">
+          <option value="">— select —</option>
+          <option value="idea">Idea</option><option value="early">Early</option>
+          <option value="growth">Growth</option><option value="scale">Scale</option>
+          <option value="mature">Mature</option>
+        </select>
+      </div>
+      <div class="fgroup"><label class="flabel">Year Founded</label><input class="finput" type="number" id="ef-yearfounded" placeholder="2020"/></div>
+      <div class="fgroup"><label class="flabel">Employees (headcount)</label><input class="finput" type="number" id="ef-employees" placeholder="5"/></div>
+      <div class="fgroup"><label class="flabel">Annual Revenue (USD)</label><input class="finput" type="number" id="ef-revenue" placeholder="0"/></div>
+      <div class="fgroup"><label class="flabel">Annual Turnover (USD)</label><input class="finput" type="number" id="ef-turnover" placeholder="0"/></div>
+    </div>
+
+    <hr class="div">
+    <div class="sec-label">Programme Entry</div>
     <div class="form-grid-3">
       <div class="fgroup"><label class="flabel">Programme Name</label><input class="finput" id="ef-prog-name"/></div>
       <div class="fgroup"><label class="flabel">Incubator</label><input class="finput" id="ef-incubator"/></div>
@@ -351,13 +406,15 @@
         </select>
       </div>
     </div>
-    <hr class="divider">
-    <div class="section-label">Funding (optional)</div>
+
+    <hr class="div">
+    <div class="sec-label">Funding (optional)</div>
     <div class="form-grid-3">
       <div class="fgroup"><label class="flabel">Amount (USD)</label><input class="finput" type="number" id="ef-fund-amt" placeholder="0"/></div>
       <div class="fgroup"><label class="flabel">Investor / Funder</label><input class="finput" id="ef-fund-investor"/></div>
       <div class="fgroup"><label class="flabel">Type</label><input class="finput" id="ef-fund-type" placeholder="grant, equity, prize…"/></div>
     </div>
+
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('ent-modal')">Cancel</button>
       <button class="btn btn-green" id="ent-save-btn" onclick="saveEntrepreneur()">Save</button>
@@ -365,29 +422,39 @@
   </div>
 </div>
 
-<!-- Toast -->
 <div id="toast"></div>
 
 <script>
-// ── Config ───────────────────────────────────────────────────────────────────
-const IS_LOCAL = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+// ── Config ────────────────────────────────────────────────────────────────────
+const IS_LOCAL = location.hostname==='localhost'||location.hostname==='127.0.0.1';
 const API = IS_LOCAL ? 'http://localhost:5000' : 'https://vertex-africa-api.onrender.com';
 
-// ── State ────────────────────────────────────────────────────────────────────
-let TOKEN = localStorage.getItem('incub_token') || null;
+// ── State ─────────────────────────────────────────────────────────────────────
+let TOKEN       = localStorage.getItem('incub_token') || null;
 let currentUser = null;
-let analytics = null;
+let analytics   = null;
 let entrepreneurs = [];
-let activeTab = 'overview';
-let editingId = null;
+let activeTab   = 'overview';
+let editingId   = null;
 let searchTimer = null;
 
-// ── Auth helpers ─────────────────────────────────────────────────────────────
-async function apiFetch(path, opts = {}) {
-  const headers = { 'Content-Type': 'application/json', ...(opts.headers || {}) };
+// Pagination
+let dirPage = 1, dirTotal = 0, dirPages = 1;
+let myPage  = 1, myTotal  = 0, myPages  = 1;
+const PER_PAGE = 50;
+
+// My programme
+let myIncubatorName = localStorage.getItem('incub_myname') || '';
+
+// Current directory view
+let dirView = 'core';
+
+// ── Auth ──────────────────────────────────────────────────────────────────────
+async function apiFetch(path, opts={}) {
+  const headers = {'Content-Type':'application/json',...(opts.headers||{})};
   if (TOKEN) headers['Authorization'] = 'Bearer ' + TOKEN;
-  const res = await fetch(API + path, { ...opts, headers });
-  return res.json().catch(() => ({ success: false, message: 'Invalid response' }));
+  const res = await fetch(API + path, {...opts, headers});
+  return res.json().catch(()=>({success:false,message:'Invalid response'}));
 }
 
 async function doLogin() {
@@ -396,224 +463,435 @@ async function doLogin() {
   const errEl = document.getElementById('login-error');
   const btn   = document.getElementById('login-btn');
   errEl.style.display = 'none';
-  if (!email || !pass) { errEl.textContent = 'Email and password are required.'; errEl.style.display = 'block'; return; }
-  btn.disabled = true; btn.textContent = 'Signing in…';
-  const r = await apiFetch('/api/auth/login', { method: 'POST', body: JSON.stringify({ email, password: pass }) });
-  btn.disabled = false; btn.textContent = 'Sign in';
+  if (!email||!pass){errEl.textContent='Email and password are required.';errEl.style.display='block';return;}
+  btn.disabled=true; btn.textContent='Signing in…';
+  const r = await apiFetch('/api/auth/login',{method:'POST',body:JSON.stringify({email,password:pass})});
+  btn.disabled=false; btn.textContent='Sign in';
   if (r.success && r.token) {
-    TOKEN = r.token;
-    localStorage.setItem('incub_token', TOKEN);
-    currentUser = r.user;
-    mountApp(r.user);
-  } else {
-    errEl.textContent = r.message || 'Invalid credentials.';
-    errEl.style.display = 'block';
-  }
+    TOKEN=r.token; localStorage.setItem('incub_token',TOKEN);
+    currentUser=r.user; mountApp(r.user);
+  } else { errEl.textContent=r.message||'Invalid credentials.'; errEl.style.display='block'; }
 }
 
 function doLogout() {
-  TOKEN = null; currentUser = null;
+  TOKEN=null; currentUser=null;
   localStorage.removeItem('incub_token');
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
 }
 
 function mountApp(user) {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-  document.getElementById('hdr-name').textContent = user.name || '';
-  document.getElementById('hdr-role').textContent = (user.role || '').replace(/_/g,' ');
-  document.getElementById('hdr-av').textContent = user.initials || (user.name || '?')[0].toUpperCase();
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('hdr-name').textContent = user.name||'';
+  document.getElementById('hdr-role').textContent = (user.role||'').replace(/_/g,' ');
+  document.getElementById('hdr-av').textContent   = user.initials||(user.name||'?')[0].toUpperCase();
   loadAll();
 }
 
-// ── Auto-login ───────────────────────────────────────────────────────────────
-(async function tryAutoLogin() {
+(async function tryAutoLogin(){
   if (!TOKEN) return;
   const r = await apiFetch('/api/auth/me');
-  if (r.success) { currentUser = r.user; mountApp(r.user); }
-  else { TOKEN = null; localStorage.removeItem('incub_token'); }
+  if (r.success){currentUser=r.user;mountApp(r.user);}
+  else{TOKEN=null;localStorage.removeItem('incub_token');}
 })();
 
-// ── Data loading ─────────────────────────────────────────────────────────────
+// ── Data loading ──────────────────────────────────────────────────────────────
 async function loadAll() {
-  document.getElementById('tab-content').innerHTML =
-    '<div class="empty-state"><div class="empty-icon">⏳</div>Loading incubator data…</div>';
+  setContent('<div class="empty"><div class="empty-icon">⏳</div>Loading…</div>');
   try {
     const [aRes, lRes] = await Promise.all([
       apiFetch('/api/incubators/analytics'),
-      apiFetch('/api/incubators/entrepreneurs?limit=500'),
+      buildListParams(1),
     ]);
-    if (!aRes.success) throw new Error(aRes.message || 'Analytics failed');
-    analytics = aRes;
-    entrepreneurs = lRes.entrepreneurs || [];
+    const [, listData] = await Promise.all([
+      Promise.resolve(aRes),
+      apiFetch('/api/incubators/entrepreneurs?' + lRes),
+    ]);
+    if (!aRes.success) throw new Error(aRes.message||'Analytics failed');
+    analytics     = aRes;
+    entrepreneurs = listData.entrepreneurs||[];
+    dirTotal = listData.total||0;
+    dirPages = listData.pages||1;
+    dirPage  = 1;
     updateCountPill(aRes.kpis.totalEntrepreneurs);
-    updateDupBadge(aRes.kpis.duplicates || 0);
+    updateDupBadge(aRes.kpis.duplicates||0);
     renderTab(activeTab);
   } catch(e) {
-    document.getElementById('tab-content').innerHTML =
-      `<div class="empty-state" style="color:var(--red)">Error: ${esc(e.message)}</div>`;
+    setContent(`<div class="empty" style="color:var(--red)">Error: ${esc(e.message)}</div>`);
   }
 }
 
-async function loadList() {
-  const search = document.getElementById('search-input').value.trim();
-  const stage  = document.getElementById('stage-filter').value;
-  const p = new URLSearchParams({ limit: 500 });
-  if (search) p.set('search', search);
-  if (stage)  p.set('stage', stage);
-  const r = await apiFetch('/api/incubators/entrepreneurs?' + p);
+function buildListParams(page) {
+  const search    = document.getElementById('search-input')?.value.trim()||'';
+  const stage     = document.getElementById('stage-filter')?.value||'';
+  const bizStage  = document.getElementById('bizstage-filter')?.value||'';
+  const p = new URLSearchParams({limit:PER_PAGE, page});
+  if (search)   p.set('search',search);
+  if (stage)    p.set('stage',stage);
+  if (bizStage) p.set('bizStage',bizStage);
+  return p.toString();
+}
+
+async function reloadList() {
+  dirPage = 1;
+  const r = await apiFetch('/api/incubators/entrepreneurs?' + buildListParams(1));
   if (r.success) {
     entrepreneurs = r.entrepreneurs;
+    dirTotal = r.total; dirPages = r.pages; dirPage = 1;
     updateCountPill(r.total);
-    if (activeTab === 'directory') renderDirectory();
-    if (activeTab === 'funding')   renderFunding();
+    if (activeTab==='directory') renderDirectory();
+    if (activeTab==='funding')   renderFunding();
   }
+}
+
+async function goPage(page) {
+  dirPage = page;
+  const r = await apiFetch('/api/incubators/entrepreneurs?' + buildListParams(page));
+  if (r.success) { entrepreneurs=r.entrepreneurs; dirTotal=r.total; dirPages=r.pages; renderDirectory(); }
+}
+
+async function goMyPage(page) {
+  myPage = page;
+  const p = new URLSearchParams({limit:PER_PAGE,page,incubator:myIncubatorName});
+  const r = await apiFetch('/api/incubators/entrepreneurs?'+p);
+  if (r.success) { myTotal=r.total; myPages=r.pages; renderMyProg(r.entrepreneurs); }
 }
 
 function debounceSearch() {
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(loadList, 300);
+  searchTimer = setTimeout(reloadList, 300);
 }
 
 function updateCountPill(n) {
-  document.getElementById('count-pill').textContent = n + ' entrepreneur' + (n !== 1 ? 's' : '');
+  document.getElementById('count-pill').textContent = n+' entrepreneur'+(n!==1?'s':'');
 }
 function updateDupBadge(n) {
-  const b = document.getElementById('dup-badge');
-  b.textContent = n; b.style.display = n > 0 ? 'inline' : 'none';
+  const b=document.getElementById('dup-badge');
+  b.textContent=n; b.style.display=n>0?'inline':'none';
 }
+function setContent(html){ document.getElementById('tab-content').innerHTML=html; }
 
 // ── Tab switching ─────────────────────────────────────────────────────────────
 function switchTab(tab) {
-  activeTab = tab;
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.id === 'tab-' + tab);
+  activeTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.classList.toggle('active', btn.id==='tab-'+tab);
   });
   renderTab(tab);
 }
 
 function renderTab(tab) {
   if (!analytics) return;
-  if (tab === 'overview')   renderOverview();
-  if (tab === 'directory')  renderDirectory();
-  if (tab === 'duplicates') renderDuplicates();
-  if (tab === 'funding')    renderFunding();
+  if (tab==='overview')   renderOverview();
+  if (tab==='directory')  renderDirectory();
+  if (tab==='myprog')     loadMyProg();
+  if (tab==='insights')   renderInsights();
+  if (tab==='duplicates') renderDuplicates();
+  if (tab==='funding')    renderFunding();
 }
 
-// ── Overview ─────────────────────────────────────────────────────────────────
+// ── Overview ──────────────────────────────────────────────────────────────────
 function renderOverview() {
   const k = analytics.kpis;
-  const fmt = n => n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(0)+'K' : String(n||0);
+  const fmtN = n => n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?(n/1e3).toFixed(0)+'K':String(n||0);
+  const fmtD = n => '$'+fmtN(n);
 
   const kpis = [
-    { label:'Total Entrepreneurs', val: k.totalEntrepreneurs, color:'var(--purple)' },
-    { label:'Active in Programme',  val: k.activeNow,          color:'var(--accent)' },
-    { label:'Total Funding Raised', val:'$'+fmt(k.totalFunding), color:'var(--amber)' },
-    { label:'Funded Entrepreneurs', val: k.funded,              color:'var(--blue)'  },
-    { label:'Overlap Alerts',       val: k.duplicates,          color:'var(--red)'   },
+    {label:'Total Entrepreneurs', val:k.totalEntrepreneurs, color:'var(--purple)'},
+    {label:'Active in Programme',  val:k.activeNow,          color:'var(--accent)'},
+    {label:'Total Funding Raised', val:fmtD(k.totalFunding), color:'var(--amber)'},
+    {label:'Total Revenue',        val:fmtD(k.totalRevenue), color:'var(--blue)'},
+    {label:'Total Employees',      val:fmtN(k.totalEmployees),color:'#ec4899'},
+    {label:'Overlap Alerts',       val:k.duplicates,          color:'var(--red)'},
   ].map(c=>`
     <div class="kpi-card" style="border-top:3px solid ${c.color}">
       <div class="kpi-val" style="color:${c.color}">${c.val}</div>
       <div class="kpi-label">${c.label}</div>
     </div>`).join('');
 
-  const barChart = (title, data) => {
+  const bar = (title,data,color='var(--accent)',isMoney=false) => {
     if (!data?.length) return '';
-    const max = data[0][1];
-    const bars = data.slice(0,10).map(([lbl,val])=>`
+    const max=data[0][1];
+    const bars=data.slice(0,10).map(([lbl,val])=>`
       <div class="bar-row">
         <div class="bar-label" title="${esc(lbl)}">${esc(lbl)}</div>
-        <div class="bar-track"><div class="bar-fill" style="width:${Math.round(val/max*100)}%"></div></div>
-        <div class="bar-num">${val}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${Math.round(val/max*100)}%;background:${color}"></div></div>
+        <div class="bar-num">${isMoney?'$'+fmtN(val):val}</div>
       </div>`).join('');
     return `<div class="chart-card"><div class="chart-title">${title}</div>${bars}</div>`;
   };
 
-  const genderColors = ['var(--purple)','var(--accent)','var(--amber)','var(--blue)','var(--red)'];
-  const total = (analytics.byGender||[]).reduce((s,[,v])=>s+v,0);
-  const genderChart = analytics.byGender?.length ? `
-    <div class="chart-card">
-      <div class="chart-title">By Gender</div>
-      ${(analytics.byGender||[]).map(([lbl,val],i)=>`
-        <div class="gender-row">
-          <div class="dot" style="background:${genderColors[i%genderColors.length]}"></div>
-          <span>${esc(lbl||'Unknown')}</span>
-          <span style="margin-left:auto;color:var(--text3)">${val} · ${Math.round(val/total*100)}%</span>
-        </div>`).join('')}
-    </div>` : '';
+  const dotLegend = (title,entries,colors) => {
+    if (!entries?.length) return '';
+    const total=entries.reduce((s,[,v])=>s+v,0);
+    const rows=entries.map(([lbl,val],i)=>`
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:12px">
+        <div style="width:10px;height:10px;border-radius:50%;background:${colors[i%colors.length]};flex-shrink:0"></div>
+        <span>${esc(lbl||'Unknown')}</span>
+        <span style="margin-left:auto;color:var(--text3)">${val} · ${Math.round(val/total*100)}%</span>
+      </div>`).join('');
+    return `<div class="chart-card"><div class="chart-title">${title}</div>${rows}</div>`;
+  };
 
-  document.getElementById('tab-content').innerHTML = `
+  const COLORS=['var(--purple)','var(--accent)','var(--amber)','var(--blue)','#ec4899','var(--red)'];
+  const STAGE_COLORS=['var(--purple)','var(--blue)','var(--accent)','var(--amber)','var(--red)'];
+
+  setContent(`
     <div class="kpi-grid">${kpis}</div>
     <div class="charts-grid">
-      ${barChart('Entrepreneurs by Country', analytics.byCountry)}
-      ${barChart('Entrepreneurs by Sector',  analytics.bySector)}
-      ${barChart('By Incubator / Programme', analytics.byIncubator)}
-      ${genderChart}
-    </div>`;
+      ${bar('Entrepreneurs by Country',analytics.byCountry)}
+      ${bar('Entrepreneurs by Sector', analytics.bySector,'var(--blue)')}
+      ${bar('By Incubator / Programme',analytics.byIncubator,'var(--purple)')}
+      ${dotLegend('By Gender',analytics.byGender,COLORS)}
+      ${dotLegend('Business Stage',analytics.byBizStage,STAGE_COLORS)}
+    </div>`);
 }
 
 // ── Directory ─────────────────────────────────────────────────────────────────
 function renderDirectory() {
+  const views=[
+    {id:'core',     label:'Core Info'},
+    {id:'business', label:'Business'},
+    {id:'location', label:'Location'},
+    {id:'progs',    label:'Programmes'},
+    {id:'funding',  label:'Funding'},
+  ];
+  const viewBtns = views.map(v=>
+    `<button class="view-btn${dirView===v.id?' active':''}" onclick="switchView('${v.id}')">${v.label}</button>`
+  ).join('');
+
   if (!entrepreneurs.length) {
-    document.getElementById('tab-content').innerHTML =
-      '<div class="empty-state"><div class="empty-icon">📋</div>No entrepreneurs found.</div>';
+    setContent(`<div class="view-tabs">${viewBtns}</div>
+      <div class="empty"><div class="empty-icon">📋</div>No entrepreneurs found.</div>`);
     return;
   }
-  const rows = entrepreneurs.map(e => {
-    const active = (e.programmes||[]).filter(p=>p.stage==='active');
-    const progTags = active.length
-      ? active.map(p=>`<span style="font-size:11px;background:var(--bg3);padding:2px 6px;border-radius:4px;margin-right:3px">${esc(p.incubator||p.programmeName||'?')}</span>`).join('')
-      : '<span style="color:var(--text3);font-size:11px">—</span>';
-    const lastStage = e.programmes?.length ? e.programmes[e.programmes.length-1].stage : '';
-    return `<tr>
-      <td>
-        <div style="font-weight:500">${esc(e.name)}</div>
-        <div style="font-size:11px;color:var(--text3)">${esc(e.email||'')}</div>
-      </td>
+
+  let thead='', rows='';
+
+  if (dirView==='core') {
+    thead=`<tr><th>Name</th><th>Email</th><th>Phone</th><th>Company</th><th>Sector</th><th>Gender</th><th></th></tr>`;
+    rows=entrepreneurs.map(e=>`<tr>
+      <td><div style="font-weight:500">${esc(e.name)}</div></td>
+      <td>${esc(e.email||'—')}</td>
+      <td>${esc(e.phone||'—')}</td>
+      <td>${esc(e.companyName||'—')}</td>
+      <td>${esc(e.sector||'—')}</td>
+      <td>${e.gender?`<span class="badge">${esc(e.gender)}</span>`:'—'}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-sm" onclick="openEditModal('${e._id}')">Edit</button>
+        <button class="btn btn-sm btn-red" style="margin-left:4px" onclick="confirmDelete('${e._id}','${esc(e.name).replace(/'/g,"\\'")}')">Del</button>
+      </td></tr>`).join('');
+  } else if (dirView==='business') {
+    thead=`<tr><th>Name</th><th>Company</th><th>Stage</th><th>Yr Founded</th><th>Employees</th><th>Revenue (USD)</th><th>Turnover (USD)</th><th>Website</th></tr>`;
+    rows=entrepreneurs.map(e=>`<tr>
+      <td style="font-weight:500">${esc(e.name)}</td>
+      <td>${esc(e.companyName||'—')}</td>
+      <td>${e.businessStage?`<span class="badge badge-${e.businessStage}">${e.businessStage}</span>`:'—'}</td>
+      <td>${e.yearFounded||'—'}</td>
+      <td>${e.employees!=null&&e.employees>0?e.employees.toLocaleString():'—'}</td>
+      <td style="color:${e.revenue>0?'var(--accent)':'var(--text3)'}">${e.revenue>0?'$'+e.revenue.toLocaleString():'—'}</td>
+      <td style="color:${e.turnover>0?'var(--blue)':'var(--text3)'}">${e.turnover>0?'$'+e.turnover.toLocaleString():'—'}</td>
+      <td>${e.website?`<a href="${esc(e.website)}" target="_blank" style="color:var(--accent);font-size:11px">Link ↗</a>`:'—'}</td>
+      </tr>`).join('');
+  } else if (dirView==='location') {
+    thead=`<tr><th>Name</th><th>Company</th><th>Country</th><th>City</th><th>Sector</th><th>Source</th></tr>`;
+    rows=entrepreneurs.map(e=>`<tr>
+      <td style="font-weight:500">${esc(e.name)}</td>
       <td>${esc(e.companyName||'—')}</td>
       <td>${esc(e.country||'—')}</td>
+      <td>${esc(e.city||'—')}</td>
       <td>${esc(e.sector||'—')}</td>
-      <td>${progTags}</td>
-      <td>${lastStage ? `<span class="stage-badge stage-${lastStage}">${lastStage}</span>` : '—'}</td>
-      <td style="color:${e.totalFunding>0?'var(--accent)':'var(--text3)'}">
-        ${e.totalFunding > 0 ? '$'+e.totalFunding.toLocaleString() : '—'}
-      </td>
-      <td style="white-space:nowrap">
-        <button class="btn" style="padding:3px 10px;font-size:11px" onclick="openEditModal('${e._id}')">Edit</button>
-        <button class="btn btn-red" style="padding:3px 10px;font-size:11px;margin-left:4px" onclick="confirmDelete('${e._id}','${esc(e.name)}')">Del</button>
-      </td>
-    </tr>`;
-  }).join('');
-  document.getElementById('tab-content').innerHTML = `
+      <td>${esc(e.source||'—')}</td>
+      </tr>`).join('');
+  } else if (dirView==='progs') {
+    thead=`<tr><th>Name</th><th>Company</th><th>Active Programmes</th><th>All Programmes</th><th>Latest Stage</th></tr>`;
+    rows=entrepreneurs.map(e=>{
+      const active=(e.programmes||[]).filter(p=>p.stage==='active');
+      const activeTags=active.length
+        ?active.map(p=>`<span style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-size:11px;margin-right:3px">${esc(p.incubator||p.programmeName||'?')}</span>`).join('')
+        :'<span style="color:var(--text3);font-size:11px">None</span>';
+      const all=(e.programmes||[]).map(p=>`${esc(p.programmeName||'?')} @ ${esc(p.incubator||'?')}`).join(', ')||'—';
+      const lastStage=e.programmes?.length?e.programmes[e.programmes.length-1].stage:'';
+      return `<tr>
+        <td style="font-weight:500">${esc(e.name)}</td>
+        <td>${esc(e.companyName||'—')}</td>
+        <td>${activeTags}</td>
+        <td style="font-size:12px;color:var(--text2);max-width:200px">${all}</td>
+        <td>${lastStage?`<span class="badge badge-${lastStage}">${lastStage}</span>`:'—'}</td>
+      </tr>`;}).join('');
+  } else { // funding view
+    thead=`<tr><th>Name</th><th>Company</th><th>Total Funding</th><th>Funding Details</th></tr>`;
+    rows=entrepreneurs.map(e=>{
+      const details=(e.funding||[]).map(f=>`<div style="font-size:11px;color:var(--text2)">${esc(f.investor||'Undisclosed')} · $${(f.amount||0).toLocaleString()} · ${esc(f.type||'')}</div>`).join('');
+      return `<tr>
+        <td style="font-weight:500">${esc(e.name)}</td>
+        <td>${esc(e.companyName||'—')}</td>
+        <td style="color:${e.totalFunding>0?'var(--accent)':'var(--text3)'}">
+          ${e.totalFunding>0?'$'+e.totalFunding.toLocaleString():'—'}</td>
+        <td>${details||'—'}</td>
+      </tr>`;}).join('');
+  }
+
+  setContent(`
+    <div class="view-tabs">${viewBtns}</div>
     <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th>Entrepreneur</th><th>Company</th><th>Country</th><th>Sector</th>
-          <th>Active Programmes</th><th>Stage</th><th>Funding</th><th></th>
-        </tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>`;
+      <table><thead>${thead}</thead><tbody>${rows}</tbody></table>
+    </div>
+    ${renderPaginationHtml(dirPage, dirPages, 'goPage')}
+    <div style="font-size:12px;color:var(--text3);text-align:center;margin-top:4px">
+      Showing ${entrepreneurs.length} of ${dirTotal} · Page ${dirPage} of ${dirPages} · ${PER_PAGE} per page
+    </div>`);
 }
 
-// ── Duplicates / Overlap ──────────────────────────────────────────────────────
-function renderDuplicates() {
-  const list = analytics.duplicateList || [];
-  if (!list.length) {
-    document.getElementById('tab-content').innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">✅</div>
-        <div>No overlap detected — no entrepreneur is simultaneously active in 2+ incubators.</div>
-      </div>`;
+function switchView(v) { dirView=v; renderDirectory(); }
+
+// ── My Programme tab ──────────────────────────────────────────────────────────
+async function loadMyProg() {
+  const bar = `
+    <div class="my-prog-bar">
+      <span style="font-size:13px;font-weight:500;flex-shrink:0">My Incubator:</span>
+      <input class="finput" style="width:240px" id="my-incub-input"
+        placeholder="Enter incubator name…" value="${esc(myIncubatorName)}"/>
+      <button class="btn btn-green" onclick="setMyIncubator()">Filter</button>
+      ${myIncubatorName?`<span style="font-size:12px;color:var(--text2)">Showing entrepreneurs in <strong>${esc(myIncubatorName)}</strong></span>`:''}
+    </div>`;
+  if (!myIncubatorName) {
+    setContent(`${bar}<div class="empty"><div class="empty-icon">🏢</div>Set your incubator name above to see your entrepreneurs.</div>`);
     return;
   }
-  const cards = list.map(e => {
-    const progs = (e.programmes||[]).map(p=>`
+  setContent(`${bar}<div class="empty"><div class="empty-icon">⏳</div>Loading…</div>`);
+  const p = new URLSearchParams({limit:PER_PAGE, page:myPage, incubator:myIncubatorName});
+  const r = await apiFetch('/api/incubators/entrepreneurs?'+p);
+  if (!r.success) { setContent(`${bar}<div class="empty" style="color:var(--red)">Error: ${esc(r.message)}</div>`); return; }
+  myTotal=r.total; myPages=r.pages;
+  renderMyProg(r.entrepreneurs, bar);
+}
+
+function setMyIncubator() {
+  const val = document.getElementById('my-incub-input')?.value.trim()||'';
+  myIncubatorName=val; myPage=1;
+  localStorage.setItem('incub_myname',val);
+  loadMyProg();
+}
+
+function renderMyProg(list, barHtml='') {
+  if (!barHtml) {
+    barHtml=`<div class="my-prog-bar">
+      <span style="font-size:13px;font-weight:500;flex-shrink:0">My Incubator:</span>
+      <input class="finput" style="width:240px" id="my-incub-input"
+        placeholder="Enter incubator name…" value="${esc(myIncubatorName)}"/>
+      <button class="btn btn-green" onclick="setMyIncubator()">Filter</button>
+      ${myIncubatorName?`<span style="font-size:12px;color:var(--text2)">Showing entrepreneurs in <strong>${esc(myIncubatorName)}</strong></span>`:''}
+    </div>`;
+  }
+
+  if (!list.length) {
+    setContent(`${barHtml}<div class="empty"><div class="empty-icon">🔍</div>No entrepreneurs found for "${esc(myIncubatorName)}".</div>`);
+    return;
+  }
+
+  const rows=list.map(e=>{
+    const progStage=(e.programmes||[]).find(p=>p.incubator&&p.incubator.toLowerCase().includes(myIncubatorName.toLowerCase()))?.stage||'';
+    return `<tr>
+      <td><div style="font-weight:500">${esc(e.name)}</div><div style="font-size:11px;color:var(--text3)">${esc(e.email||'')}</div></td>
+      <td>${esc(e.companyName||'—')}</td>
+      <td>${esc(e.country||'—')} ${e.city?'· '+esc(e.city):''}</td>
+      <td>${esc(e.sector||'—')}</td>
+      <td>${e.businessStage?`<span class="badge badge-${e.businessStage}">${e.businessStage}</span>`:'—'}</td>
+      <td>${e.employees>0?e.employees.toLocaleString():'—'}</td>
+      <td style="color:${e.revenue>0?'var(--accent)':'var(--text3)'}">${e.revenue>0?'$'+e.revenue.toLocaleString():'—'}</td>
+      <td>${progStage?`<span class="badge badge-${progStage}">${progStage}</span>`:'—'}</td>
+    </tr>`;}).join('');
+
+  setContent(`
+    ${barHtml}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Entrepreneur</th><th>Company</th><th>Location</th><th>Sector</th>
+          <th>Biz Stage</th><th>Employees</th><th>Revenue</th><th>Status</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    ${renderPaginationHtml(myPage,myPages,'goMyPage')}
+    <div style="font-size:12px;color:var(--text3);text-align:center;margin-top:4px">
+      Showing ${list.length} of ${myTotal} · Page ${myPage} of ${myPages} · ${PER_PAGE} per page
+    </div>`);
+}
+
+// ── Insights tab ──────────────────────────────────────────────────────────────
+function renderInsights() {
+  const a = analytics;
+  const k = a.kpis;
+  const fmtM = n => n>=1e6?'$'+(n/1e6).toFixed(2)+'M':n>=1e3?'$'+(n/1e3).toFixed(0)+'K':'$'+(n||0).toLocaleString();
+
+  const bar = (title,data,color='var(--accent)',isMoney=false,max=10) => {
+    if (!data?.length) return `<div class="chart-card"><div class="chart-title">${title}</div><div style="color:var(--text3);font-size:12px">No data</div></div>`;
+    const mxVal=data[0][1];
+    const bars=data.slice(0,max).map(([lbl,val])=>`
+      <div class="bar-row">
+        <div class="bar-label" title="${esc(lbl)}">${esc(lbl)}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${Math.round(val/mxVal*100)}%;background:${color}"></div></div>
+        <div class="bar-num" style="font-size:11px">${isMoney?fmtM(val):val}</div>
+      </div>`).join('');
+    return `<div class="chart-card"><div class="chart-title">${title}</div>${bars}</div>`;
+  };
+
+  const kpiCards=`
+    <div class="kpi-grid" style="margin-bottom:20px">
+      <div class="kpi-card" style="border-top:3px solid var(--accent)">
+        <div class="kpi-val" style="color:var(--accent)">${fmtM(k.totalRevenue)}</div>
+        <div class="kpi-label">Total Annual Revenue</div>
+      </div>
+      <div class="kpi-card" style="border-top:3px solid var(--blue)">
+        <div class="kpi-val" style="color:var(--blue)">${fmtM(k.totalTurnover)}</div>
+        <div class="kpi-label">Total Annual Turnover</div>
+      </div>
+      <div class="kpi-card" style="border-top:3px solid var(--amber)">
+        <div class="kpi-val" style="color:var(--amber)">${fmtM(k.avgRevenue)}</div>
+        <div class="kpi-label">Avg Revenue per Entrepreneur</div>
+      </div>
+      <div class="kpi-card" style="border-top:3px solid #ec4899">
+        <div class="kpi-val" style="color:#ec4899">${(k.totalEmployees||0).toLocaleString()}</div>
+        <div class="kpi-label">Total Jobs Created</div>
+      </div>
+      <div class="kpi-card" style="border-top:3px solid var(--purple)">
+        <div class="kpi-val" style="color:var(--purple)">${k.revenueCount}</div>
+        <div class="kpi-label">Entrepreneurs with Revenue</div>
+      </div>
+    </div>`;
+
+  setContent(`
+    ${kpiCards}
+    <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text2)">Revenue & Business Insights</div>
+    <div class="charts-grid" style="margin-bottom:20px">
+      ${bar('Revenue by Country',a.revByCountry,'var(--accent)',true)}
+      ${bar('Revenue by Sector', a.revBySector, 'var(--blue)',  true)}
+    </div>
+    <div class="charts-grid" style="margin-bottom:20px">
+      ${bar('Revenue Distribution',  a.revBuckets, 'var(--amber)', false)}
+      ${bar('Team Size Distribution', a.empBuckets, '#ec4899',     false)}
+    </div>
+    <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text2)">Location Insights</div>
+    <div class="charts-grid">
+      ${bar('Entrepreneurs by City',  a.byCity,    'var(--purple)')}
+      ${bar('Entrepreneurs by Source (Upload)',a.bySource,'var(--blue)')}
+    </div>`);
+}
+
+// ── Duplicates ────────────────────────────────────────────────────────────────
+function renderDuplicates() {
+  const list=analytics.duplicateList||[];
+  if (!list.length) {
+    setContent(`<div class="empty"><div class="empty-icon">✅</div>No overlap — no entrepreneur is simultaneously active in 2+ incubators.</div>`);
+    return;
+  }
+  const cards=list.map(e=>{
+    const progs=(e.programmes||[]).map(p=>`
       <div class="prog-row">
-        <span style="font-weight:500;min-width:130px">${esc(p.incubator||'?')}</span>
+        <span style="font-weight:500;min-width:140px">${esc(p.incubator||'?')}</span>
         <span style="color:var(--text2)">${esc(p.programmeName||'')}</span>
-        <span class="stage-badge stage-active" style="margin-left:auto">active</span>
+        <span class="badge badge-active" style="margin-left:auto">active</span>
       </div>`).join('');
     return `<div class="overlap-card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
@@ -621,204 +899,230 @@ function renderDuplicates() {
           <div style="font-weight:600">${esc(e.name)}</div>
           <div style="font-size:12px;color:var(--text3)">${esc(e.email||'')}${e.companyName?' · '+esc(e.companyName):''}</div>
         </div>
-        <span style="background:#ef444422;color:var(--red);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap">
+        <span style="background:#ef444422;color:var(--red);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">
           ${e.programmes.length} incubators
         </span>
-      </div>
-      ${progs}
-    </div>`;
-  }).join('');
-  document.getElementById('tab-content').innerHTML = `
+      </div>${progs}</div>`;}).join('');
+  setContent(`
     <div style="margin-bottom:14px;font-size:13px;color:var(--red);font-weight:500">
       ⚠ ${list.length} entrepreneur${list.length>1?'s are':' is'} simultaneously active in multiple incubators.
-    </div>
-    ${cards}`;
+    </div>${cards}`);
 }
 
 // ── Fundraising ───────────────────────────────────────────────────────────────
 function renderFunding() {
-  const funded = [...entrepreneurs].filter(e=>e.totalFunding>0)
-    .sort((a,b)=>b.totalFunding-a.totalFunding);
+  const funded=[...entrepreneurs].filter(e=>e.totalFunding>0).sort((a,b)=>b.totalFunding-a.totalFunding);
   if (!funded.length) {
-    document.getElementById('tab-content').innerHTML =
-      '<div class="empty-state"><div class="empty-icon">💰</div>No funding records yet.</div>';
+    setContent('<div class="empty"><div class="empty-icon">💰</div>No funding records found.</div>');
     return;
   }
-  const total = funded.reduce((s,e)=>s+e.totalFunding,0);
-  const fmt = n => n>=1e6 ? '$'+(n/1e6).toFixed(2)+'M' : '$'+n.toLocaleString();
-  const rows = funded.map(e => {
-    const details = (e.funding||[]).map(f=>
-      `<div style="font-size:11px;color:var(--text2)">${esc(f.investor||'Undisclosed')} · ${esc(f.currency||'USD')} ${(f.amount||0).toLocaleString()} · ${esc(f.type||'')}</div>`
-    ).join('');
+  const total=funded.reduce((s,e)=>s+e.totalFunding,0);
+  const fmt=n=>n>=1e6?'$'+(n/1e6).toFixed(2)+'M':'$'+n.toLocaleString();
+  const rows=funded.map(e=>{
+    const details=(e.funding||[]).map(f=>`<div style="font-size:11px;color:var(--text2)">${esc(f.investor||'Undisclosed')} · ${esc(f.currency||'USD')} ${(f.amount||0).toLocaleString()} · ${esc(f.type||'')}</div>`).join('');
     return `<tr>
       <td><div style="font-weight:500">${esc(e.name)}</div><div style="font-size:11px;color:var(--text3)">${esc(e.companyName||'')}</div></td>
       <td>${esc(e.country||'—')}</td>
       <td>${esc(e.sector||'—')}</td>
       <td style="color:var(--accent);font-weight:600">${fmt(e.totalFunding)}</td>
       <td>${details||'—'}</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('tab-content').innerHTML = `
-    <div class="fund-summary">
-      <div class="fund-sum-item"><div class="val" style="color:var(--accent)">${fmt(total)}</div><div class="lbl">Total funding across all records</div></div>
-      <div class="fund-sum-item"><div class="val" style="color:var(--purple)">${funded.length}</div><div class="lbl">Funded entrepreneurs</div></div>
+    </tr>`;}).join('');
+  setContent(`
+    <div class="fund-kpi">
+      <div class="fund-kpi-item"><div class="val" style="color:var(--accent)">${fmt(total)}</div><div class="lbl">Total funding</div></div>
+      <div class="fund-kpi-item"><div class="val" style="color:var(--purple)">${funded.length}</div><div class="lbl">Funded entrepreneurs</div></div>
     </div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Entrepreneur</th><th>Country</th><th>Sector</th><th>Total Raised</th><th>Funding Details</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>
-    </div>`;
+    </div>`);
+}
+
+// ── Pagination ────────────────────────────────────────────────────────────────
+function renderPaginationHtml(current, total, fn) {
+  if (total<=1) return '';
+  const MAX=7;
+  let pages=[];
+  if (total<=MAX) { for(let i=1;i<=total;i++) pages.push(i); }
+  else {
+    pages=[1];
+    if (current>3) pages.push('…');
+    for(let i=Math.max(2,current-1);i<=Math.min(total-1,current+1);i++) pages.push(i);
+    if (current<total-2) pages.push('…');
+    pages.push(total);
+  }
+  const btns=pages.map(p=>p==='…'
+    ?`<span style="color:var(--text3);padding:5px 4px">…</span>`
+    :`<button class="pg-btn${p===current?' active':''}" onclick="${fn}(${p})">${p}</button>`
+  ).join('');
+  return `<div class="pagination">
+    <button class="pg-btn" onclick="${fn}(${current-1})" ${current<=1?'disabled':''}>← Prev</button>
+    ${btns}
+    <button class="pg-btn" onclick="${fn}(${current+1})" ${current>=total?'disabled':''}>Next →</button>
+  </div>`;
 }
 
 // ── Upload modal ──────────────────────────────────────────────────────────────
 function openUploadModal() {
-  document.getElementById('up-name').value = '';
-  document.getElementById('up-file').value = '';
-  document.getElementById('up-result').innerHTML = '';
+  document.getElementById('up-name').value='';
+  document.getElementById('up-file').value='';
+  document.getElementById('up-result').innerHTML='';
+  document.getElementById('file-drop-label').innerHTML=
+    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:6px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><br>Click to browse or drag & drop';
   openModal('upload-modal');
 }
 
-async function submitUpload() {
-  const name = document.getElementById('up-name').value.trim();
-  const fileEl = document.getElementById('up-file');
-  const resultEl = document.getElementById('up-result');
-  if (!name) { resultEl.innerHTML = '<span style="color:var(--red)">Incubator name is required.</span>'; return; }
-  if (!fileEl.files?.length) { resultEl.innerHTML = '<span style="color:var(--red)">Please select a file.</span>'; return; }
-  resultEl.innerHTML = '<span style="color:var(--text2)">Uploading…</span>';
-  const fd = new FormData();
-  fd.append('file', fileEl.files[0]);
-  fd.append('incubatorName', name);
-  try {
-    const res = await fetch(API + '/api/incubators/upload', {
-      method: 'POST',
-      headers: { Authorization: 'Bearer ' + TOKEN },
-      body: fd,
-    });
-    const data = await res.json();
-    if (data.success) {
-      const r = data.results;
-      resultEl.innerHTML = `<span style="color:var(--accent)">✓ Done — ${r.created} created, ${r.merged} merged${r.errors.length?' · '+r.errors.length+' error(s)':''}.</span>`;
-      setTimeout(() => { closeModal('upload-modal'); loadAll(); }, 1800);
-    } else {
-      resultEl.innerHTML = `<span style="color:var(--red)">${esc(data.message)}</span>`;
-    }
-  } catch(e) {
-    resultEl.innerHTML = `<span style="color:var(--red)">Upload failed: ${esc(e.message)}</span>`;
+function onFileSelected(input) {
+  if (input.files?.length) {
+    document.getElementById('file-drop-label').textContent='📄 '+input.files[0].name;
   }
 }
 
-// ── Add / Edit modal ──────────────────────────────────────────────────────────
+function handleFileDrop(e) {
+  e.preventDefault();
+  document.getElementById('file-drop-zone').classList.remove('drag');
+  const file=e.dataTransfer.files[0];
+  if (!file) return;
+  const dt=new DataTransfer(); dt.items.add(file);
+  const inp=document.getElementById('up-file');
+  inp.files=dt.files;
+  document.getElementById('file-drop-label').textContent='📄 '+file.name;
+}
+
+async function submitUpload() {
+  const name   = document.getElementById('up-name').value.trim();
+  const fileEl = document.getElementById('up-file');
+  const resEl  = document.getElementById('up-result');
+  if (!name){ resEl.innerHTML='<span style="color:var(--red)">Incubator name is required.</span>'; return; }
+  if (!fileEl.files?.length){ resEl.innerHTML='<span style="color:var(--red)">Please select a file.</span>'; return; }
+  resEl.innerHTML='<span style="color:var(--text2)">⏳ Uploading and importing…</span>';
+  const fd=new FormData();
+  fd.append('file',fileEl.files[0]);
+  fd.append('incubatorName',name);
+  try {
+    const res=await fetch(API+'/api/incubators/upload',{
+      method:'POST', headers:{Authorization:'Bearer '+TOKEN}, body:fd,
+    });
+    const data=await res.json();
+    if (data.success) {
+      const r=data.results;
+      resEl.innerHTML=`<span style="color:var(--accent)">✓ Done — ${r.created} created, ${r.merged} merged${r.errors.length?' · '+r.errors.length+' row error(s)':''}.</span>`;
+      setTimeout(()=>{ closeModal('upload-modal'); loadAll(); }, 1800);
+    } else { resEl.innerHTML=`<span style="color:var(--red)">${esc(data.message)}</span>`; }
+  } catch(e){ resEl.innerHTML=`<span style="color:var(--red)">Upload failed: ${esc(e.message)}</span>`; }
+}
+
+// ── Add / Edit Entrepreneur ───────────────────────────────────────────────────
 function openAddModal() {
-  editingId = null;
-  document.getElementById('ent-modal-title').textContent = 'Add Entrepreneur';
-  document.getElementById('ent-save-btn').textContent = 'Add';
+  editingId=null;
+  document.getElementById('ent-modal-title').textContent='Add Entrepreneur';
+  document.getElementById('ent-save-btn').textContent='Add';
   ['ef-name','ef-email','ef-phone','ef-country','ef-city','ef-sector','ef-company',
-   'ef-prog-name','ef-incubator','ef-fund-investor','ef-fund-type'].forEach(id => {
-    document.getElementById(id).value = '';
+   'ef-website','ef-prog-name','ef-incubator','ef-fund-investor','ef-fund-type'].forEach(id=>{
+    document.getElementById(id).value='';
   });
-  document.getElementById('ef-gender').value = '';
-  document.getElementById('ef-stage').value = 'active';
-  document.getElementById('ef-fund-amt').value = '';
+  ['ef-gender','ef-bizstage'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('ef-stage').value='active';
+  ['ef-yearfounded','ef-employees','ef-revenue','ef-turnover','ef-fund-amt'].forEach(id=>{
+    document.getElementById(id).value='';
+  });
   openModal('ent-modal');
 }
 
 function openEditModal(id) {
-  const e = entrepreneurs.find(x => x._id === id);
-  if (!e) return;
-  editingId = id;
-  document.getElementById('ent-modal-title').textContent = 'Edit Entrepreneur';
-  document.getElementById('ent-save-btn').textContent = 'Save changes';
-  document.getElementById('ef-name').value    = e.name || '';
-  document.getElementById('ef-email').value   = e.email || '';
-  document.getElementById('ef-phone').value   = e.phone || '';
-  document.getElementById('ef-country').value = e.country || '';
-  document.getElementById('ef-city').value    = e.city || '';
-  document.getElementById('ef-sector').value  = e.sector || '';
-  document.getElementById('ef-company').value = e.companyName || '';
-  document.getElementById('ef-gender').value  = e.gender || '';
-  const prog = e.programmes?.[0] || {};
-  document.getElementById('ef-prog-name').value  = prog.programmeName || '';
-  document.getElementById('ef-incubator').value  = prog.incubator || '';
-  document.getElementById('ef-stage').value       = prog.stage || 'active';
-  const fund = e.funding?.[0] || {};
-  document.getElementById('ef-fund-amt').value      = fund.amount || '';
-  document.getElementById('ef-fund-investor').value = fund.investor || '';
-  document.getElementById('ef-fund-type').value     = fund.type || '';
+  const e=entrepreneurs.find(x=>x._id===id); if(!e) return;
+  editingId=id;
+  document.getElementById('ent-modal-title').textContent='Edit Entrepreneur';
+  document.getElementById('ent-save-btn').textContent='Save changes';
+  const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.value=val??''; };
+  set('ef-name',e.name); set('ef-email',e.email); set('ef-phone',e.phone);
+  set('ef-country',e.country); set('ef-city',e.city); set('ef-sector',e.sector);
+  set('ef-company',e.companyName); set('ef-website',e.website);
+  set('ef-gender',e.gender); set('ef-bizstage',e.businessStage);
+  set('ef-yearfounded',e.yearFounded); set('ef-employees',e.employees);
+  set('ef-revenue',e.revenue); set('ef-turnover',e.turnover);
+  const prog=e.programmes?.[0]||{};
+  set('ef-prog-name',prog.programmeName); set('ef-incubator',prog.incubator);
+  set('ef-stage',prog.stage||'active');
+  const fund=e.funding?.[0]||{};
+  set('ef-fund-amt',fund.amount); set('ef-fund-investor',fund.investor); set('ef-fund-type',fund.type);
   openModal('ent-modal');
 }
 
 async function saveEntrepreneur() {
-  const name = document.getElementById('ef-name').value.trim();
-  if (!name) { toast('Name is required'); return; }
-  const progName  = document.getElementById('ef-prog-name').value.trim();
-  const incubator = document.getElementById('ef-incubator').value.trim();
-  const stage     = document.getElementById('ef-stage').value || 'active';
-  const fundAmt   = parseFloat(document.getElementById('ef-fund-amt').value) || 0;
-  const investor  = document.getElementById('ef-fund-investor').value.trim();
-  const fundType  = document.getElementById('ef-fund-type').value.trim();
-  const body = {
+  const name=document.getElementById('ef-name').value.trim();
+  if (!name){toast('Name is required');return;}
+  const progName  =document.getElementById('ef-prog-name').value.trim();
+  const incubator =document.getElementById('ef-incubator').value.trim();
+  const stage     =document.getElementById('ef-stage').value||'active';
+  const fundAmt   =parseFloat(document.getElementById('ef-fund-amt').value)||0;
+  const investor  =document.getElementById('ef-fund-investor').value.trim()||'';
+  const fundType  =document.getElementById('ef-fund-type').value.trim()||'';
+
+  const body={
     name,
-    email:       document.getElementById('ef-email').value.trim() || undefined,
-    phone:       document.getElementById('ef-phone').value.trim() || undefined,
-    country:     document.getElementById('ef-country').value.trim() || undefined,
-    city:        document.getElementById('ef-city').value.trim() || undefined,
-    sector:      document.getElementById('ef-sector').value.trim() || undefined,
-    companyName: document.getElementById('ef-company').value.trim() || undefined,
-    gender:      document.getElementById('ef-gender').value || '',
-    programmes:  (progName || incubator) ? [{ programmeName: progName, incubator, stage }] : undefined,
-    funding:     fundAmt > 0 ? [{ amount: fundAmt, investor, type: fundType, currency: 'USD' }] : undefined,
+    email:       document.getElementById('ef-email').value.trim()||undefined,
+    phone:       document.getElementById('ef-phone').value.trim()||undefined,
+    country:     document.getElementById('ef-country').value.trim()||undefined,
+    city:        document.getElementById('ef-city').value.trim()||undefined,
+    sector:      document.getElementById('ef-sector').value.trim()||undefined,
+    companyName: document.getElementById('ef-company').value.trim()||undefined,
+    website:     document.getElementById('ef-website').value.trim()||undefined,
+    gender:      document.getElementById('ef-gender').value||'',
+    businessStage:document.getElementById('ef-bizstage').value||'',
+    yearFounded: parseInt(document.getElementById('ef-yearfounded').value)||undefined,
+    employees:   parseInt(document.getElementById('ef-employees').value)||undefined,
+    revenue:     parseFloat(document.getElementById('ef-revenue').value)||undefined,
+    turnover:    parseFloat(document.getElementById('ef-turnover').value)||undefined,
+    programmes:  (progName||incubator)?[{programmeName:progName,incubator,stage}]:undefined,
+    funding:     fundAmt>0?[{amount:fundAmt,investor,type:fundType,currency:'USD'}]:undefined,
   };
-  const url    = editingId ? `/api/incubators/entrepreneurs/${editingId}` : '/api/incubators/entrepreneurs';
-  const method = editingId ? 'PATCH' : 'POST';
-  const r = await apiFetch(url, { method, body: JSON.stringify(body) });
-  if (r.success) {
-    toast(editingId ? 'Saved' : 'Entrepreneur added');
-    closeModal('ent-modal');
-    loadAll();
-  } else { toast('Error: ' + (r.message || 'Could not save')); }
+
+  const url=editingId?`/api/incubators/entrepreneurs/${editingId}`:'/api/incubators/entrepreneurs';
+  const r=await apiFetch(url,{method:editingId?'PATCH':'POST',body:JSON.stringify(body)});
+  if (r.success){toast(editingId?'Saved':'Added');closeModal('ent-modal');loadAll();}
+  else toast('Error: '+(r.message||'Could not save'));
 }
 
-async function confirmDelete(id, name) {
+async function confirmDelete(id,name) {
   if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
-  const r = await apiFetch(`/api/incubators/entrepreneurs/${id}`, { method: 'DELETE' });
-  if (r.success) { toast('Deleted'); loadAll(); }
-  else toast('Error: ' + r.message);
+  const r=await apiFetch(`/api/incubators/entrepreneurs/${id}`,{method:'DELETE'});
+  if (r.success){toast('Deleted');loadAll();}
+  else toast('Error: '+r.message);
 }
 
 // ── Export ────────────────────────────────────────────────────────────────────
 async function doExport() {
   try {
-    const res = await fetch(API + '/api/incubators/export', {
-      headers: { Authorization: 'Bearer ' + TOKEN }
-    });
-    const blob = await res.blob();
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'incubators-export.xlsx';
+    const params=myIncubatorName&&activeTab==='myprog'?'?incubator='+encodeURIComponent(myIncubatorName):'';
+    const res=await fetch(API+'/api/incubators/export'+params,{headers:{Authorization:'Bearer '+TOKEN}});
+    const blob=await res.blob();
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='incubators-export.xlsx';
     document.body.appendChild(a); a.click();
-    setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(a.href); }, 1000);
-  } catch(e) { toast('Export failed'); }
+    setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(a.href);},1000);
+  } catch(e){toast('Export failed');}
 }
 
 // ── Modal helpers ─────────────────────────────────────────────────────────────
-function openModal(id)  { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-// Close on backdrop click
-document.querySelectorAll('.modal-backdrop').forEach(el => {
-  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); });
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-backdrop').forEach(el=>{
+  el.addEventListener('click',e=>{if(e.target===el) el.classList.remove('open');});
 });
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.style.display = 'block';
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => { t.style.display = 'none'; }, 3000);
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.style.display='block';
+  clearTimeout(t._t); t._t=setTimeout(()=>{t.style.display='none';},3000);
 }
 
 // ── Utils ─────────────────────────────────────────────────────────────────────
-function esc(s) {
+function esc(s){
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 </script>
