@@ -81,25 +81,32 @@ function parsePdfText(text) {
 exports.getEntrepreneurs = async (req, res) => {
   try {
     const { search, country, sector, incubator, stage, bizStage,
-            source, page = 1, limit = 50 } = req.query;
+            source, year, donor, sortBy = 'createdAt', sortDir = 'desc',
+            page = 1, limit = 50 } = req.query;
     const filter = {};
-    if (country)   filter.country            = new RegExp(country, 'i');
-    if (sector)    filter.sector             = new RegExp(sector, 'i');
-    if (source)    filter.source             = new RegExp(source, 'i');
-    if (bizStage)  filter.businessStage      = bizStage;
-    if (incubator) filter['programmes.incubator'] = new RegExp(incubator, 'i');
-    if (stage)     filter['programmes.stage']     = stage;
+    if (country)   filter.country                  = new RegExp(country, 'i');
+    if (sector)    filter.sector                   = new RegExp(sector, 'i');
+    if (source)    filter.source                   = new RegExp(source, 'i');
+    if (bizStage)  filter.businessStage            = bizStage;
+    if (incubator) filter['programmes.incubator']  = new RegExp(incubator, 'i');
+    if (stage)     filter['programmes.stage']      = stage;
+    if (year)      filter['programmes.year']       = parseInt(year);
+    if (donor)     filter['programmes.donor']      = new RegExp(donor, 'i');
     if (search) {
       filter.$or = [
         { name:        new RegExp(search, 'i') },
         { email:       new RegExp(search, 'i') },
         { companyName: new RegExp(search, 'i') },
+        { country:     new RegExp(search, 'i') },
       ];
     }
+    const allowedSort = ['name','country','sector','revenue','turnover','employees','totalFunding','createdAt'];
+    const sortField = allowedSort.includes(sortBy) ? sortBy : 'createdAt';
+    const sortOrder = sortDir === 'asc' ? 1 : -1;
     const skip  = (parseInt(page) - 1) * parseInt(limit);
     const total = await Entrepreneur.countDocuments(filter);
     const entrepreneurs = await Entrepreneur.find(filter)
-      .sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit));
+      .sort({ [sortField]: sortOrder }).skip(skip).limit(parseInt(limit));
     res.json({ success: true, total, page: parseInt(page),
                pages: Math.ceil(total / parseInt(limit)), entrepreneurs });
   } catch (err) {
@@ -134,9 +141,19 @@ exports.getAnalytics = async (req, res) => {
       return Object.entries(m).sort((a,b)=>b[1]-a[1]);
     };
 
-    const byIncubator = {};
+    const byIncubator = {}, byYear = {}, byDonor = {};
     all.forEach(e => e.programmes.forEach(p => {
       if (p.incubator) byIncubator[p.incubator]=(byIncubator[p.incubator]||0)+1;
+      if (p.year)      byYear[p.year]           =(byYear[p.year]          ||0)+1;
+      if (p.donor)     byDonor[p.donor]         =(byDonor[p.donor]        ||0)+1;
+    }));
+
+    // Cohorts: unique incubator+programme+year combinations
+    const cohortMap = {};
+    all.forEach(e => e.programmes.forEach(p => {
+      const key = [p.incubator||'?', p.programmeName||'?', p.year||'—', p.donor||'—'].join('||');
+      if (!cohortMap[key]) cohortMap[key] = { incubator:p.incubator, programmeName:p.programmeName, year:p.year, donor:p.donor, count:0 };
+      cohortMap[key].count++;
     }));
 
     const byFundingType = {};
@@ -183,6 +200,9 @@ exports.getAnalytics = async (req, res) => {
       byCountry:    agg('country').slice(0,15),
       bySector:     agg('sector').slice(0,15),
       byIncubator:  Object.entries(byIncubator).sort((a,b)=>b[1]-a[1]),
+      byYear:       Object.entries(byYear).sort((a,b)=>b[0]-a[0]),
+      byDonor:      Object.entries(byDonor).sort((a,b)=>b[1]-a[1]).slice(0,15),
+      cohorts:      Object.values(cohortMap).sort((a,b)=>b.count-a.count),
       byFundingType:Object.entries(byFundingType).sort((a,b)=>b[1]-a[1]),
       byGender:     agg('gender'),
       byBizStage:   agg('businessStage'),
@@ -278,7 +298,10 @@ exports.uploadFile = async (req, res) => {
 
     const ext  = (req.file.originalname.split('.').pop()||'').toLowerCase();
     const mime = req.file.mimetype || '';
-    const incubatorSource = req.body.incubatorName || 'Imported';
+    const incubatorSource = req.body.incubatorName  || 'Imported';
+    const programmeName   = req.body.programmeName  || '';
+    const cohortYear      = parseInt(req.body.year) || undefined;
+    const donor           = req.body.donor          || '';
     let rows = [];
 
     if (ext === 'pdf' || mime === 'application/pdf') {
@@ -304,9 +327,11 @@ exports.uploadFile = async (req, res) => {
         const f = rowToFields(rawRow);
         if (!f.name) continue;
 
-        const progEntry = (f.progName || incubatorSource) ? [{
-          programmeName: f.progName,
+        const progEntry = (f.progName || programmeName || incubatorSource) ? [{
+          programmeName: f.progName || programmeName,
           incubator:     incubatorSource,
+          year:          cohortYear,
+          donor:         donor || undefined,
           stage:         f.progStage,
           startDate:     f.startDate ? new Date(f.startDate) : undefined,
           endDate:       f.endDate   ? new Date(f.endDate)   : undefined,

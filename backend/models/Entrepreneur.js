@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const programmeEntrySchema = new mongoose.Schema({
   programmeName: { type: String },
   incubator:     { type: String },
+  year:          { type: Number },          // cohort year
+  donor:         { type: String },          // funder / donor
   stage:         { type: String, enum: ['applied','active','graduated','dropped'], default: 'active' },
   startDate:     { type: Date },
   endDate:       { type: Date },
