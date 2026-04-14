@@ -406,9 +406,9 @@ tr:hover td{background:var(--bg3)}
 
     <div class="sec-lbl">Personal</div>
     <div class="g2">
-      <div class="fgroup"><label class="flabel">Full Name *</label><input class="finput" id="ef-name"/></div>
-      <div class="fgroup"><label class="flabel">Email</label><input class="finput" id="ef-email" type="email"/></div>
-      <div class="fgroup"><label class="flabel">Phone</label><input class="finput" id="ef-phone"/></div>
+      <div class="fgroup"><label class="flabel">Surname *</label><input class="finput" id="ef-surname" placeholder="e.g. Kamau"/></div>
+      <div class="fgroup"><label class="flabel">First Name *</label><input class="finput" id="ef-firstname" placeholder="e.g. Jane"/></div>
+      <div class="fgroup"><label class="flabel">Current Age</label><input class="finput" type="number" id="ef-age" placeholder="e.g. 28"/></div>
       <div class="fgroup">
         <label class="flabel">Gender</label>
         <select class="finput" id="ef-gender">
@@ -416,19 +416,21 @@ tr:hover td{background:var(--bg3)}
           <option>Non-binary</option><option>Prefer not to say</option>
         </select>
       </div>
+      <div class="fgroup"><label class="flabel">Email</label><input class="finput" id="ef-email" type="email"/></div>
+      <div class="fgroup"><label class="flabel">Phone</label><input class="finput" id="ef-phone"/></div>
     </div>
 
     <div class="sec-lbl">Location</div>
     <div class="g2">
-      <div class="fgroup"><label class="flabel">Country</label><input class="finput" id="ef-country"/></div>
       <div class="fgroup"><label class="flabel">City</label><input class="finput" id="ef-city"/></div>
+      <div class="fgroup"><label class="flabel">Country</label><input class="finput" id="ef-country"/></div>
     </div>
 
     <div class="sec-lbl">Business</div>
     <div class="g2">
-      <div class="fgroup"><label class="flabel">Company / Startup</label><input class="finput" id="ef-company"/></div>
-      <div class="fgroup"><label class="flabel">Website</label><input class="finput" id="ef-website" placeholder="https://…"/></div>
+      <div class="fgroup"><label class="flabel">Company / Startup *</label><input class="finput" id="ef-company" placeholder="e.g. Acme Ltd"/></div>
       <div class="fgroup"><label class="flabel">Sector</label><input class="finput" id="ef-sector"/></div>
+      <div class="fgroup"><label class="flabel">Website</label><input class="finput" id="ef-website" placeholder="https://…"/></div>
       <div class="fgroup">
         <label class="flabel">Business Stage</label>
         <select class="finput" id="ef-bizstage">
@@ -440,14 +442,15 @@ tr:hover td{background:var(--bg3)}
       <div class="fgroup"><label class="flabel">Year Founded</label><input class="finput" type="number" id="ef-founded" placeholder="2020"/></div>
       <div class="fgroup"><label class="flabel">Employees</label><input class="finput" type="number" id="ef-employees" placeholder="0"/></div>
       <div class="fgroup"><label class="flabel">Annual Revenue (USD)</label><input class="finput" type="number" id="ef-revenue" placeholder="0"/></div>
-      <div class="fgroup"><label class="flabel">Annual Turnover (USD)</label><input class="finput" type="number" id="ef-turnover" placeholder="0"/></div>
     </div>
 
     <hr class="div">
-    <div class="sec-lbl">Programme Entry</div>
-    <div class="g3">
-      <div class="fgroup"><label class="flabel">Incubator</label><input class="finput" id="ef-incubator"/></div>
-      <div class="fgroup"><label class="flabel">Programme Name</label><input class="finput" id="ef-prog"/></div>
+    <div class="sec-lbl">Programme</div>
+    <div class="g2">
+      <div class="fgroup"><label class="flabel">Programme Name</label><input class="finput" id="ef-prog" placeholder="e.g. Cohort 3 Accelerator"/></div>
+      <div class="fgroup"><label class="flabel">Incubator</label><input class="finput" id="ef-incubator" placeholder="e.g. iHub Kenya"/></div>
+      <div class="fgroup"><label class="flabel">Year</label><input class="finput" type="number" id="ef-prog-year" placeholder="2024"/></div>
+      <div class="fgroup"><label class="flabel">Donor / Funder</label><input class="finput" id="ef-donor" placeholder="e.g. GSMA, AfDB, GIZ…"/></div>
       <div class="fgroup">
         <label class="flabel">Stage</label>
         <select class="finput" id="ef-stage">
@@ -455,8 +458,7 @@ tr:hover td{background:var(--bg3)}
           <option value="graduated">Graduated</option><option value="dropped">Dropped</option>
         </select>
       </div>
-      <div class="fgroup"><label class="flabel">Year</label><input class="finput" type="number" id="ef-prog-year" placeholder="2024"/></div>
-      <div class="fgroup"><label class="flabel">Donor</label><input class="finput" id="ef-donor" placeholder="GSMA, AfDB…"/></div>
+      <div class="fgroup"><label class="flabel">Turnover (USD)</label><input class="finput" type="number" id="ef-turnover" placeholder="0"/></div>
     </div>
 
     <hr class="div">
@@ -773,40 +775,56 @@ function renderDirectory(){
     </tr>`).join('');
 
   } else if (dirView==='progs'){
-    thead=`<tr>${sortTh('name','Name')}<th>Company</th><th>Programme</th><th>Incubator</th><th>Year</th><th>Donor</th><th>Stage</th>${sortTh('country','Country')}<th></th></tr>`;
+    thead=`<tr>
+      ${sortTh('surname','Surname')}
+      <th>First Name</th>
+      <th>Age</th>
+      <th>Company</th>
+      <th>Programme</th>
+      <th>Incubator</th>
+      <th>Year</th>
+      <th>Donor</th>
+      <th>Stage</th>
+      ${sortTh('turnover','Turnover')}
+      ${sortTh('city','City')}
+      <th></th>
+    </tr>`;
     rows=entrepreneurs.map(e=>{
-      // Show all programme entries stacked in the programme cells
       const progs = e.programmes||[];
+      const actions=`<td style="vertical-align:top;white-space:nowrap">
+        <button class="btn btn-sm" onclick="openEditModal('${e._id}')">Edit</button>
+        <button class="btn btn-sm btn-red" style="margin-left:4px" onclick="confirmDelete('${e._id}','${esc((e.surname||e.name||'').replace(/'/g,"\\'"))}')">Del</button>
+      </td>`;
       if (!progs.length){
         return `<tr>
-          <td style="font-weight:600">${esc(e.name)}</td>
-          <td style="color:var(--text3)">${esc(e.companyName||'—')}</td>
-          <td colspan="5" style="color:var(--text3);font-size:12px;font-style:italic">No programme assigned</td>
-          <td>${esc(e.country||'—')}</td>
-          <td style="white-space:nowrap">
-            <button class="btn btn-sm" onclick="openEditModal('${e._id}')">Edit</button>
-            <button class="btn btn-sm btn-red" style="margin-left:4px" onclick="confirmDelete('${e._id}','${esc(e.name).replace(/'/g,"\\'")}')">Del</button>
-          </td>
+          <td style="font-weight:600">${esc(e.surname||'—')}</td>
+          <td>${esc(e.firstName||'—')}</td>
+          <td style="color:var(--text2)">${e.age||'—'}</td>
+          <td>${esc(e.companyName||'—')}</td>
+          <td colspan="5" style="color:var(--text3);font-size:12px;font-style:italic">No programme</td>
+          <td style="color:${e.turnover>0?'var(--blue)':'var(--text3)'}">${e.turnover>0?'$'+e.turnover.toLocaleString():'—'}</td>
+          <td>${esc(e.city||'—')}</td>
+          ${actions}
         </tr>`;
       }
-      const progLines    = progs.map(p=>esc(p.programmeName||'—')).join('<br>');
-      const incubLines   = progs.map(p=>esc(p.incubator||'—')).join('<br>');
-      const yearLines    = progs.map(p=>p.year||'—').join('<br>');
-      const donorLines   = progs.map(p=>esc(p.donor||'—')).join('<br>');
-      const stageLines   = progs.map(p=>p.stage?`<span class="badge b-${p.stage}">${p.stage}</span>`:'—').join('<br>');
+      const progLines  = progs.map(p=>esc(p.programmeName||'—')).join('<br>');
+      const incubLines = progs.map(p=>esc(p.incubator||'—')).join('<br>');
+      const yearLines  = progs.map(p=>p.year||'—').join('<br>');
+      const donorLines = progs.map(p=>esc(p.donor||'—')).join('<br>');
+      const stageLines = progs.map(p=>p.stage?`<span class="badge b-${p.stage}">${p.stage}</span>`:'—').join(' ');
       return `<tr>
-        <td style="font-weight:600;vertical-align:top">${esc(e.name)}</td>
-        <td style="vertical-align:top;color:var(--text2)">${esc(e.companyName||'—')}</td>
+        <td style="font-weight:600;vertical-align:top">${esc(e.surname||'—')}</td>
+        <td style="vertical-align:top">${esc(e.firstName||'—')}</td>
+        <td style="vertical-align:top;color:var(--text2)">${e.age||'—'}</td>
+        <td style="vertical-align:top">${esc(e.companyName||'—')}</td>
         <td style="vertical-align:top">${progLines}</td>
         <td style="vertical-align:top">${incubLines}</td>
         <td style="vertical-align:top;white-space:nowrap">${yearLines}</td>
         <td style="vertical-align:top;color:var(--text2)">${donorLines}</td>
         <td style="vertical-align:top">${stageLines}</td>
-        <td style="vertical-align:top">${esc(e.country||'—')}</td>
-        <td style="vertical-align:top;white-space:nowrap">
-          <button class="btn btn-sm" onclick="openEditModal('${e._id}')">Edit</button>
-          <button class="btn btn-sm btn-red" style="margin-left:4px" onclick="confirmDelete('${e._id}','${esc(e.name).replace(/'/g,"\\'")}')">Del</button>
-        </td>
+        <td style="vertical-align:top;color:${e.turnover>0?'var(--blue)':'var(--text3)'}">${e.turnover>0?'$'+e.turnover.toLocaleString():'—'}</td>
+        <td style="vertical-align:top">${esc(e.city||'—')}</td>
+        ${actions}
       </tr>`;
     }).join('');
 
@@ -1237,15 +1255,13 @@ function openAddModal(){
   editingId=null;
   document.getElementById('ent-title').textContent='Add Entrepreneur';
   document.getElementById('ent-save-btn').textContent='Add';
-  const fields=['ef-name','ef-email','ef-phone','ef-country','ef-city','ef-sector',
-    'ef-company','ef-website','ef-incubator','ef-prog','ef-donor',
-    'ef-fund-investor','ef-fund-type'];
-  fields.forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  ['ef-surname','ef-firstname','ef-email','ef-phone','ef-country','ef-city','ef-sector',
+   'ef-company','ef-website','ef-incubator','ef-prog','ef-donor','ef-fund-investor','ef-fund-type']
+    .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   ['ef-gender','ef-bizstage'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('ef-stage').value='active';
-  ['ef-founded','ef-employees','ef-revenue','ef-turnover','ef-fund-amt','ef-prog-year'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.value='';
-  });
+  ['ef-age','ef-founded','ef-employees','ef-revenue','ef-turnover','ef-fund-amt','ef-prog-year']
+    .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   openModal('ent-modal');
 }
 
@@ -1255,51 +1271,62 @@ function openEditModal(id){
   document.getElementById('ent-title').textContent='Edit Entrepreneur';
   document.getElementById('ent-save-btn').textContent='Save changes';
   const s=(id,v)=>{ const el=document.getElementById(id); if(el) el.value=v??''; };
-  s('ef-name',e.name); s('ef-email',e.email); s('ef-phone',e.phone);
-  s('ef-country',e.country); s('ef-city',e.city); s('ef-sector',e.sector);
+  s('ef-surname',e.surname); s('ef-firstname',e.firstName); s('ef-age',e.age);
+  s('ef-email',e.email); s('ef-phone',e.phone);
+  s('ef-city',e.city); s('ef-country',e.country); s('ef-sector',e.sector);
   s('ef-company',e.companyName); s('ef-website',e.website);
   s('ef-gender',e.gender); s('ef-bizstage',e.businessStage);
-  s('ef-founded',e.yearFounded); s('ef-employees',e.employees);
-  s('ef-revenue',e.revenue); s('ef-turnover',e.turnover);
+  s('ef-founded',e.yearFounded); s('ef-employees',e.employees); s('ef-revenue',e.revenue);
   const prog=e.programmes?.[0]||{};
-  s('ef-incubator',prog.incubator); s('ef-prog',prog.programmeName);
-  s('ef-stage',prog.stage||'active'); s('ef-prog-year',prog.year); s('ef-donor',prog.donor);
+  s('ef-prog',prog.programmeName); s('ef-incubator',prog.incubator);
+  s('ef-prog-year',prog.year); s('ef-donor',prog.donor); s('ef-turnover',e.turnover);
+  s('ef-stage',prog.stage||'active');
   const fund=e.funding?.[0]||{};
   s('ef-fund-amt',fund.amount); s('ef-fund-investor',fund.investor); s('ef-fund-type',fund.type);
   openModal('ent-modal');
 }
 
 async function saveEntrepreneur(){
-  const name=document.getElementById('ef-name').value.trim();
-  if (!name){ toast('Name is required'); return; }
-  const g=id=>document.getElementById(id)?.value;
-  const n=id=>parseFloat(document.getElementById(id)?.value)||undefined;
-  const i=id=>parseInt(document.getElementById(id)?.value)||undefined;
+  const g   = id => document.getElementById(id)?.value?.trim()||'';
+  const num = id => parseFloat(document.getElementById(id)?.value)||undefined;
+  const int = id => parseInt(document.getElementById(id)?.value)||undefined;
 
-  const incubator=g('ef-incubator')?.trim()||'';
-  const progName =g('ef-prog')?.trim()||'';
-  const stage    =g('ef-stage')||'active';
-  const progYear =i('ef-prog-year');
-  const donor    =g('ef-donor')?.trim()||'';
-  const fundAmt  =parseFloat(g('ef-fund-amt'))||0;
+  const surname   = g('ef-surname');
+  const firstName = g('ef-firstname');
+  if (!surname && !firstName){ toast('Surname and First Name are required'); return; }
+
+  const incubator = g('ef-incubator');
+  const progName  = g('ef-prog');
+  const stage     = document.getElementById('ef-stage')?.value||'active';
+  const progYear  = int('ef-prog-year');
+  const donor     = g('ef-donor');
+  const fundAmt   = parseFloat(document.getElementById('ef-fund-amt')?.value)||0;
 
   const body={
-    name,
-    email:       g('ef-email')?.trim()||undefined,
-    phone:       g('ef-phone')?.trim()||undefined,
-    country:     g('ef-country')?.trim()||undefined,
-    city:        g('ef-city')?.trim()||undefined,
-    sector:      g('ef-sector')?.trim()||undefined,
-    companyName: g('ef-company')?.trim()||undefined,
-    website:     g('ef-website')?.trim()||undefined,
-    gender:      g('ef-gender')||'',
-    businessStage:g('ef-bizstage')||'',
-    yearFounded: i('ef-founded'),
-    employees:   i('ef-employees'),
-    revenue:     n('ef-revenue'),
-    turnover:    n('ef-turnover'),
-    programmes:  (incubator||progName)?[{incubator,programmeName:progName,stage,year:progYear,donor:donor||undefined}]:undefined,
-    funding:     fundAmt>0?[{amount:fundAmt,investor:g('ef-fund-investor')?.trim()||'',type:g('ef-fund-type')?.trim()||'',currency:'USD'}]:undefined,
+    firstName,
+    surname,
+    age:          int('ef-age'),
+    email:        g('ef-email')||undefined,
+    phone:        g('ef-phone')||undefined,
+    city:         g('ef-city')||undefined,
+    country:      g('ef-country')||undefined,
+    sector:       g('ef-sector')||undefined,
+    companyName:  g('ef-company')||undefined,
+    website:      g('ef-website')||undefined,
+    gender:       document.getElementById('ef-gender')?.value||'',
+    businessStage:document.getElementById('ef-bizstage')?.value||'',
+    yearFounded:  int('ef-founded'),
+    employees:    int('ef-employees'),
+    revenue:      num('ef-revenue'),
+    turnover:     num('ef-turnover'),
+    programmes:   (incubator||progName)?[{
+      programmeName:progName, incubator, stage,
+      year:progYear, donor:donor||undefined
+    }]:undefined,
+    funding: fundAmt>0?[{
+      amount:fundAmt, investor:g('ef-fund-investor')||'',
+      type:g('ef-fund-type')||'', currency:'USD'
+    }]:undefined,
   };
 
   const url=editingId?`/api/incubators/entrepreneurs/${editingId}`:'/api/incubators/entrepreneurs';
