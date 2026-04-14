@@ -18,3 +18,15 @@
   from = "/events"
   to = "/events.html"
   status = 200
+
+[[redirects]]
+  from = "/incubator"
+  to = "/incubator/index.html"
+  status = 200
+
+# Subdomain redirect: incubator.vertexgroup.africa → incubator page
+[[redirects]]
+  from = "https://incubator.vertexgroup.africa/*"
+  to = "/incubator/index.html"
+  status = 200
+  force = true
