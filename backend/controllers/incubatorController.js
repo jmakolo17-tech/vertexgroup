@@ -2,65 +2,206 @@ const Entrepreneur = require('../models/Entrepreneur');
 const XLSX = require('xlsx');
 
 // ── helpers ───────────────────────────────────────────────────────────────────
-const norm = row => {
-  const out = {};
-  Object.keys(row).forEach(k => {
-    out[k.toLowerCase().trim().replace(/[\s\-\/]+/g, '_')] = row[k];
-  });
-  return out;
-};
 const str = v => String(v || '').trim();
 const num = v => parseFloat(str(v).replace(/[,$\s]/g,'')) || 0;
 const int = v => parseInt(str(v).replace(/[,$\s]/g,''))  || 0;
 
+// Normalise a column header: lowercase, strip accents, collapse whitespace/punctuation to _
+const normKey = k => String(k)
+  .toLowerCase().trim()
+  .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // remove diacritics: é→e, ô→o …
+  .replace(/[\s\-\/\'\u2019\u2018\u00b7\u2022]+/g, '_') // spaces / hyphens / apostrophes → _
+  .replace(/_+/g, '_').replace(/^_|_$/g, '');
+
+const norm = row => {
+  const out = {};
+  Object.keys(row).forEach(k => { out[normKey(k)] = row[k]; });
+  return out;
+};
+
+// Pick the first truthy value from a list of keys
+const pick = (r, ...keys) => { for (const k of keys) if (r[k] !== undefined && str(r[k])) return str(r[k]); return ''; };
+
 const validStages    = ['applied','active','graduated','dropped'];
 const validBizStages = ['idea','early','growth','scale','mature'];
+
+// Map French stage words → English canonical values
+const normStage = raw => {
+  const s = normKey(raw);
+  if (['actif','actif_ve','en_cours','en_programme'].includes(s)) return 'active';
+  if (['candidat','candidature','postule','postulant','soumis'].includes(s)) return 'applied';
+  if (['diplome','sorti','finaliste','termine','complete','acheve'].includes(s)) return 'graduated';
+  if (['abandonne','quitte','retire','exclu','desiste'].includes(s)) return 'dropped';
+  return validStages.includes(raw) ? raw : 'active';
+};
+
+// Map French business-stage words → English canonical values
+const normBizStage = raw => {
+  const s = normKey(raw);
+  if (['idee','conception','projet'].includes(s)) return 'idea';
+  if (['demarrage','creation','pre_seed','seed','lancement','naissant'].includes(s)) return 'early';
+  if (['croissance','developpement'].includes(s)) return 'growth';
+  if (['expansion','scaling','scale_up','montee_en_puissance'].includes(s)) return 'scale';
+  if (['mature','etabli','consolide'].includes(s)) return 'mature';
+  return validBizStages.includes(raw) ? raw : '';
+};
 
 function rowToFields(row) {
   const r = norm(row);
 
-  // Name: support separate surname/firstname columns or a combined name column
-  const firstName  = str(r.first_name||r.firstname||r.given_name||r.forename||r.prenom||'');
-  const surname    = str(r.surname||r.last_name||r.lastname||r.family_name||r.nom||'');
-  const fullName   = str(r.name||r.full_name||r.entrepreneur_name||r.participant||r.contact||'');
-  // Build the canonical name — try all combinations
+  // ── First name (EN + FR) ─────────────────────────────────────────────────────
+  const firstName = pick(r,
+    'first_name','firstname','given_name','forename',           // EN
+    'prenom','prenoms','prenom_s'                               // FR: Prénom / Prénoms
+  );
+
+  // ── Surname (EN + FR) ────────────────────────────────────────────────────────
+  const surname = pick(r,
+    'surname','last_name','lastname','family_name',             // EN
+    'nom','nom_de_famille','nom_famille'                        // FR: Nom / Nom de famille
+  );
+
+  // ── Full name fallback (EN + FR) ─────────────────────────────────────────────
+  const fullName = pick(r,
+    'name','full_name','fullname','entrepreneur_name',          // EN
+    'participant','contact',
+    'nom_complet','nom_prenom','prenom_nom'                     // FR: Nom complet / Nom & Prénom
+  );
+
+  // Build canonical name
   let name = '';
-  if (firstName && surname)   name = `${firstName} ${surname}`;
+  if (firstName && surname)      name = `${firstName} ${surname}`;
   else if (firstName || surname) name = firstName || surname;
   else                           name = fullName;
-  // Last resort: scan columns for anything labelled *name*
+
+  // Last resort: any column whose key contains 'nom' or 'name' with a string value
   if (!name) {
     for (const [k, v] of Object.entries(r)) {
-      if (k.includes('name') && typeof v === 'string' && v.trim()) {
+      if ((k.includes('nom') || k.includes('name')) && typeof v === 'string' && v.trim()) {
         name = v.trim(); break;
       }
     }
   }
 
-  const age         = int(r.age||r.current_age||r.years||0)||undefined;
-  const email       = str(r.email||r.e_mail||r.email_address||'').toLowerCase()||undefined;
-  const phone       = str(r.phone||r.telephone||r.mobile||r.cell||r.contact_number||'');
-  const country     = str(r.country||r.nation||'');
-  const city        = str(r.city||r.town||r.location||'');
-  const sector      = str(r.sector||r.industry||r.field||'');
-  const companyName = str(r.company||r.company_name||r.startup||r.business||r.organization||r.venture||'');
-  const website     = str(r.website||r.website_url||r.url||'');
-  const gender      = str(r.gender||r.sex||'');
-  const rawBizStage = str(r.business_stage||r.biz_stage||r.stage_of_business||'').toLowerCase();
-  const businessStage = validBizStages.includes(rawBizStage) ? rawBizStage : '';
-  const yearFounded   = int(r.year_founded||r.founded||r.founded_year||0)||undefined;
-  const employees     = int(r.employees||r.employee_count||r.team_size||r.headcount||r.staff||0)||undefined;
-  const revenue       = num(r.revenue||r.annual_revenue||r.yearly_revenue||0)||undefined;
-  const turnover      = num(r.turnover||r.annual_turnover||r.sales||r.gross_sales||0)||undefined;
-  const progName      = str(r.programme||r.program||r.programme_name||r.program_name||r.cohort||'');
-  const rawStage      = str(r.stage||r.status||'active').toLowerCase();
-  const progStage     = validStages.includes(rawStage) ? rawStage : 'active';
-  const startDate     = r.start_date||r.start||undefined;
-  const endDate       = r.end_date||r.end||undefined;
-  const fundingAmt    = num(r.funding||r.amount_raised||r.funding_raised||r.amount||0);
-  const investor      = str(r.investor||r.funder||r.investor_name||'');
-  const fundingType   = str(r.funding_type||r.type_of_funding||r.fund_type||'');
-  const currency      = str(r.currency||'USD');
+  // ── Age ─────────────────────────────────────────────────────────────────────
+  const age = int(pick(r,
+    'age','current_age','years',                                // EN
+    'age_actuel','age_actuelle'                                 // FR: Âge actuel
+  )) || undefined;
+
+  // ── Contact ──────────────────────────────────────────────────────────────────
+  const email = (pick(r,
+    'email','e_mail','email_address','mail',                    // EN
+    'courriel','adresse_email','adresse_courriel',              // FR: Courriel
+    'adresse_mail'
+  )).toLowerCase() || undefined;
+
+  const phone = pick(r,
+    'phone','telephone','mobile','cell','contact_number',       // EN
+    'tel','numero_telephone','numero','numero_tel',             // FR: Téléphone / Numéro
+    'portable','gsm'
+  );
+
+  // ── Location ─────────────────────────────────────────────────────────────────
+  const country = pick(r,
+    'country','nation',                                         // EN
+    'pays','nationalite'                                        // FR: Pays
+  );
+
+  const city = pick(r,
+    'city','town','location',                                   // EN
+    'ville','localite','commune','cite','municipalite'          // FR: Ville / Localité
+  );
+
+  // ── Business ─────────────────────────────────────────────────────────────────
+  const sector = pick(r,
+    'sector','industry','field',                                // EN
+    'secteur','domaine','filiere','branche'                     // FR: Secteur / Domaine / Filière
+  );
+
+  const companyName = pick(r,
+    'company','company_name','startup','business',              // EN
+    'organization','organisation','venture',
+    'entreprise','societe','nom_entreprise',                    // FR: Entreprise / Société
+    'raison_sociale','nom_societe','enseigne'
+  );
+
+  const website = pick(r,
+    'website','website_url','url','web',                        // EN
+    'site_web','site_internet','site','lien'                    // FR: Site web
+  );
+
+  const gender = pick(r,
+    'gender','sex',                                             // EN
+    'genre','sexe'                                              // FR: Genre / Sexe
+  );
+
+  // Business stage — try EN then FR
+  const rawBizStage = pick(r,
+    'business_stage','biz_stage','stage_of_business',          // EN
+    'stade','stade_developpement','stade_entreprise',           // FR: Stade / Stade de développement
+    'phase','etape','niveau'
+  ).toLowerCase();
+  const businessStage = normBizStage(rawBizStage);
+
+  const yearFounded = int(pick(r,
+    'year_founded','founded','founded_year',                    // EN
+    'annee_creation','annee_fondation','fondee_en',             // FR: Année de création
+    'date_creation','creation'
+  )) || undefined;
+
+  const employees = int(pick(r,
+    'employees','employee_count','team_size','headcount','staff',  // EN
+    'employes','effectif','nb_employes','nombre_employes',         // FR: Employés / Effectif
+    'personnel','salaries'
+  )) || undefined;
+
+  const revenue = num(pick(r,
+    'revenue','annual_revenue','yearly_revenue',               // EN
+    'revenus','revenu','recettes','produits'                   // FR: Revenus
+  )) || undefined;
+
+  // "Chiffre d'affaires" is French for turnover/sales
+  const turnover = num(pick(r,
+    'turnover','annual_turnover','sales','gross_sales',        // EN
+    'chiffre_affaires','ca','chiffre_daffaires',               // FR: Chiffre d'affaires / CA
+    'ventes','volume_affaires'
+  )) || undefined;
+
+  // ── Programme ────────────────────────────────────────────────────────────────
+  const progName = pick(r,
+    'programme','program','programme_name','program_name','cohort',   // EN
+    'cohorte','nom_programme','intitule_programme'                    // FR: Cohorte / Nom du programme
+  );
+
+  // Stage values may be in French — normalise
+  const rawStage = pick(r, 'stage','status','statut','etat','etape_programme').toLowerCase();
+  const progStage = normStage(rawStage);
+
+  const startDate = r.start_date || r.start || r.date_debut || r.debut || undefined;
+  const endDate   = r.end_date   || r.end   || r.date_fin   || r.fin   || undefined;
+
+  // ── Funding ───────────────────────────────────────────────────────────────────
+  const fundingAmt = num(pick(r,
+    'funding','amount_raised','funding_raised','amount',       // EN
+    'financement','montant','montant_leve','capital_leve'      // FR: Financement / Montant levé
+  ));
+
+  const investor = pick(r,
+    'investor','funder','investor_name',                       // EN
+    'investisseur','bailleur','donateur','financeur',          // FR: Investisseur / Bailleur / Donateur
+    'partenaire_financier'
+  );
+
+  const fundingType = pick(r,
+    'funding_type','type_of_funding','fund_type',              // EN
+    'type_financement','type_de_financement','nature_financement' // FR: Type de financement
+  );
+
+  const currency = pick(r,
+    'currency','devise'                                        // EN + FR: Devise
+  ) || 'USD';
+
   return { firstName, surname, name, age, email, phone, country, city, sector,
            companyName, website, gender, businessStage, yearFounded, employees,
            revenue, turnover, progName, progStage, startDate, endDate,
@@ -70,9 +211,15 @@ function rowToFields(row) {
 // ── PDF text → rows ───────────────────────────────────────────────────────────
 function parsePdfText(text) {
   const splitCells = line => line.split(/\t|\s{2,}/).map(s => s.trim()).filter(Boolean);
-  const KEYWORDS = ['name','email','phone','country','sector','company','gender','stage',
-                    'programme','program','funding','revenue','turnover','employees','city',
-                    'investor','cohort','startup','industry','turnover','headcount'];
+  const KEYWORDS = [
+    // English
+    'name','email','phone','country','sector','company','gender','stage',
+    'programme','program','funding','revenue','turnover','employees','city',
+    'investor','cohort','startup','industry','headcount',
+    // French
+    'nom','prenom','pays','ville','secteur','entreprise','genre','statut',
+    'financement','effectif','revenus','courriel','telephone',
+  ];
 
   const lines = text.split('\n').map(l => l.replace(/\r/g,'')).filter(l => l.trim());
   let headerIdx = -1, maxScore = 0;
