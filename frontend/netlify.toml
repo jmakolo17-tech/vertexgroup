@@ -13,3 +13,8 @@
   from = "/forms/*"
   to = "/form.html"
   status = 200
+
+[[redirects]]
+  from = "/events"
+  to = "/events.html"
+  status = 200

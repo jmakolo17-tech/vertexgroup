@@ -669,6 +669,11 @@ tr:hover td { background: var(--surface2); transition: background 0.1s; }
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
       <span>Forms</span> <span class="nav-badge" id="forms-nav-badge"></span>
     </div>
+    <div class="nav-section-label" style="margin-top:8px">Ecosystem</div>
+    <div class="nav-item" onclick="nav(this,'incubators')">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/><circle cx="12" cy="7" r="1"/></svg>
+      <span>Incubators</span> <span class="nav-badge" id="incub-nav-badge"></span>
+    </div>
     <div class="nav-item" onclick="nav(this,'team')">
       <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <span data-i18n="nav_team">Team & Access</span>
@@ -1531,6 +1536,54 @@ tr:hover td { background: var(--surface2); transition: background 0.1s; }
     </div>
   </div>
 
+  <!-- ── INCUBATORS ──────────────────────────────────────────────────────────── -->
+  <div class="section" id="sec-incubators">
+
+    <!-- Toolbar -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <input class="finput" style="width:200px" id="incub-search" placeholder="Search entrepreneur…" oninput="debounceIncub()"/>
+        <select class="finput" style="width:120px" id="incub-stage-filter" onchange="loadIncubatorList()">
+          <option value="">All stages</option>
+          <option value="active">Active</option>
+          <option value="graduated">Graduated</option>
+          <option value="applied">Applied</option>
+          <option value="dropped">Dropped</option>
+        </select>
+        <span id="incub-count" style="font-size:12px;color:var(--text3)"></span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-green" onclick="openIncubUploadModal()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Import Excel
+        </button>
+        <button class="btn btn-green" onclick="openAddEntrepreneurModal()">+ Add</button>
+        <button class="btn" onclick="exportIncubXLSX()" title="Export all as spreadsheet">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab bar -->
+    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px">
+      <button id="incub-tab-overview" class="incub-tab" onclick="switchIncubTab('overview')"
+        style="padding:8px 18px;font-size:13px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--accent);border-bottom:2px solid var(--accent)">Overview</button>
+      <button id="incub-tab-directory" class="incub-tab" onclick="switchIncubTab('directory')"
+        style="padding:8px 18px;font-size:13px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent">Directory</button>
+      <button id="incub-tab-duplicates" class="incub-tab" onclick="switchIncubTab('duplicates')"
+        style="padding:8px 18px;font-size:13px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent">
+        Overlap alerts <span id="incub-dup-badge" class="nav-badge" style="margin-left:4px"></span>
+      </button>
+      <button id="incub-tab-funding" class="incub-tab" onclick="switchIncubTab('funding')"
+        style="padding:8px 18px;font-size:13px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent">Fundraising</button>
+    </div>
+
+    <div id="incub-content">
+      <div style="text-align:center;color:var(--text3);padding:48px">Loading incubator data…</div>
+    </div>
+  </div>
+
   <!-- ── TEAM ───────────────────────────────────────────────────────────────── -->
   <div class="section" id="sec-team">
     <div style="display:flex;justify-content:flex-end;margin-bottom:16px"><button class="btn btn-green" onclick="openAddTeamModal()" data-i18n="btn_add_member">+ Add member</button></div>
@@ -1800,6 +1853,14 @@ function mountDashboard(user) {
   if (langBtn) langBtn.textContent = window.LANG === 'en' ? 'FR' : 'EN';
   setTimeout(applyTranslations, 50); // slight delay ensures DOM is ready
   loadDashboardData();
+  // If a ?section= param was in the URL, auto-navigate after data loads
+  if (window._autoNavSection) {
+    setTimeout(() => {
+      const el = document.querySelector(`.nav-item[onclick*="'${window._autoNavSection}'"]`);
+      if (el) nav(el, window._autoNavSection);
+      window._autoNavSection = null;
+    }, 400);
+  }
 }
 
 function doLogout() {
@@ -3493,6 +3554,7 @@ function nav(el, id) {
   if(id==='invoices')    loadInvoices();
   if(id==='insights')    loadInsights();
   if(id==='forms')       loadForms();
+  if(id==='incubators')  loadIncubators();
   if(!chartsInit[id]) { chartsInit[id]=true; setTimeout(()=>renderSection(id),150); }
 }
 
@@ -5072,6 +5134,466 @@ async function exportFormXLSX() {
   XLSX.writeFile(wb, filename);
 }
 
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// INCUBATORS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+let _incubAnalytics = null;
+let _incubEntrepreneurs = [];
+let _incubActiveTab = 'overview';
+let _incubDebounceTimer = null;
+
+async function loadIncubators() {
+  document.getElementById('incub-content').innerHTML =
+    '<div style="text-align:center;color:var(--text3);padding:48px">Loading incubator data…</div>';
+  try {
+    const [analyticsRes, listRes] = await Promise.all([
+      apiFetch('/api/incubators/analytics'),
+      apiFetch('/api/incubators/entrepreneurs?limit=500'),
+    ]);
+    if (!analyticsRes.success || !listRes.success) throw new Error('Failed to load incubator data');
+    _incubAnalytics = analyticsRes;
+    _incubEntrepreneurs = listRes.entrepreneurs || [];
+
+    const dupCount = analyticsRes.kpis.duplicates || 0;
+    const badge = document.getElementById('incub-dup-badge');
+    if (badge) badge.textContent = dupCount > 0 ? dupCount : '';
+
+    const navBadge = document.getElementById('incub-nav-badge');
+    if (navBadge) navBadge.textContent = dupCount > 0 ? dupCount : '';
+
+    document.getElementById('incub-count').textContent =
+      `${analyticsRes.kpis.totalEntrepreneurs} entrepreneurs`;
+
+    switchIncubTab(_incubActiveTab);
+  } catch(e) {
+    document.getElementById('incub-content').innerHTML =
+      `<div style="color:#ef4444;padding:24px">Error: ${esc(e.message)}</div>`;
+  }
+}
+
+async function loadIncubatorList() {
+  const search = document.getElementById('incub-search')?.value.trim() || '';
+  const stage  = document.getElementById('incub-stage-filter')?.value || '';
+  const params = new URLSearchParams({ limit: 500 });
+  if (search) params.set('search', search);
+  if (stage)  params.set('stage', stage);
+  const r = await apiFetch('/api/incubators/entrepreneurs?' + params);
+  if (r.success) {
+    _incubEntrepreneurs = r.entrepreneurs;
+    document.getElementById('incub-count').textContent = `${r.total} entrepreneurs`;
+    if (_incubActiveTab === 'directory')  renderIncubDirectory(_incubEntrepreneurs);
+    if (_incubActiveTab === 'funding')    renderFundraising(_incubEntrepreneurs);
+  }
+}
+
+function debounceIncub() {
+  clearTimeout(_incubDebounceTimer);
+  _incubDebounceTimer = setTimeout(loadIncubatorList, 320);
+}
+
+function switchIncubTab(tab) {
+  _incubActiveTab = tab;
+  document.querySelectorAll('.incub-tab').forEach(btn => {
+    const active = btn.id === `incub-tab-${tab}`;
+    btn.style.color = active ? 'var(--accent)' : 'var(--text2)';
+    btn.style.borderBottom = active ? '2px solid var(--accent)' : '2px solid transparent';
+  });
+  if (!_incubAnalytics) return;
+  if (tab === 'overview')    renderIncubOverview(_incubAnalytics);
+  if (tab === 'directory')   renderIncubDirectory(_incubEntrepreneurs);
+  if (tab === 'duplicates')  renderDuplicates(_incubAnalytics.duplicateList || []);
+  if (tab === 'funding')     renderFundraising(_incubEntrepreneurs);
+}
+
+// ── Overview tab ──────────────────────────────────────────────────────────────
+function renderIncubOverview(a) {
+  const kpi = a.kpis;
+  const fmt = n => (n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(0)+'K' : String(n));
+
+  const kpiCards = [
+    { label: 'Total Entrepreneurs', value: kpi.totalEntrepreneurs, color: '#6366f1' },
+    { label: 'Active in Programme', value: kpi.activeNow, color: '#0d9e6e' },
+    { label: 'Total Funding Raised', value: '$' + fmt(kpi.totalFunding), color: '#f59e0b' },
+    { label: 'Funded Entrepreneurs', value: kpi.funded, color: '#3b82f6' },
+    { label: 'Overlap Alerts',       value: kpi.duplicates, color: '#ef4444' },
+  ].map(c => `
+    <div class="card" style="flex:1;min-width:140px;padding:16px 20px;border-top:3px solid ${c.color}">
+      <div style="font-size:24px;font-weight:700;color:${c.color}">${c.value}</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px">${c.label}</div>
+    </div>`).join('');
+
+  const barChart = (title, entries, maxW = 200) => {
+    if (!entries || !entries.length) return '';
+    const max = entries[0][1];
+    const bars = entries.slice(0, 10).map(([label, val]) => `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px">
+        <div style="width:110px;text-align:right;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${esc(label)}">${esc(label)}</div>
+        <div style="flex:1;background:var(--border);border-radius:3px;height:14px;max-width:${maxW}px">
+          <div style="width:${Math.round((val/max)*100)}%;background:var(--accent);height:14px;border-radius:3px"></div>
+        </div>
+        <div style="color:var(--text3);min-width:24px">${val}</div>
+      </div>`).join('');
+    return `<div class="card" style="padding:16px;flex:1;min-width:260px">
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px">${esc(title)}</div>
+      ${bars}
+    </div>`;
+  };
+
+  const genderPie = (entries) => {
+    if (!entries || !entries.length) return '';
+    const total = entries.reduce((s,[,v])=>s+v,0);
+    const colors = ['#6366f1','#0d9e6e','#f59e0b','#3b82f6','#ef4444'];
+    const slices = entries.map(([label,val],i) => `
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;margin-bottom:4px">
+        <div style="width:12px;height:12px;border-radius:50%;background:${colors[i%colors.length]}"></div>
+        <span>${esc(label)}</span>
+        <span style="color:var(--text3);margin-left:auto">${val} (${Math.round(val/total*100)}%)</span>
+      </div>`).join('');
+    return `<div class="card" style="padding:16px;min-width:200px">
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px">By Gender</div>
+      ${slices}
+    </div>`;
+  };
+
+  document.getElementById('incub-content').innerHTML = `
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px">${kpiCards}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px">
+      ${barChart('By Country', a.byCountry)}
+      ${barChart('By Sector', a.bySector)}
+      ${barChart('By Incubator / Programme', a.byIncubator)}
+      ${genderPie(a.byGender)}
+    </div>`;
+}
+
+// ── Directory tab ─────────────────────────────────────────────────────────────
+function renderIncubDirectory(list) {
+  if (!list || !list.length) {
+    document.getElementById('incub-content').innerHTML =
+      '<div style="color:var(--text3);padding:32px;text-align:center">No entrepreneurs found.</div>';
+    return;
+  }
+
+  const stageColor = { active:'#0d9e6e', graduated:'#6366f1', applied:'#f59e0b', dropped:'#9ca3af' };
+  const stageBadge = s => `<span style="background:${stageColor[s]||'#9ca3af'}22;color:${stageColor[s]||'#9ca3af'};padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600">${s||'?'}</span>`;
+
+  const rows = list.map(e => {
+    const activeProgs = (e.programmes||[]).filter(p=>p.stage==='active');
+    const progList = activeProgs.length
+      ? activeProgs.map(p=>`<span style="font-size:11px;background:var(--bg2);padding:2px 6px;border-radius:4px;margin-right:3px">${esc(p.incubator||p.programmeName||'?')}</span>`).join('')
+      : '<span style="color:var(--text3);font-size:11px">—</span>';
+    const latestStage = (e.programmes||[]).length
+      ? e.programmes[e.programmes.length-1].stage : '';
+    return `<tr>
+      <td><div style="font-weight:500">${esc(e.name)}</div><div style="font-size:11px;color:var(--text3)">${esc(e.email||'')}</div></td>
+      <td>${esc(e.companyName||'—')}</td>
+      <td>${esc(e.country||'—')}</td>
+      <td>${esc(e.sector||'—')}</td>
+      <td>${progList}</td>
+      <td>${latestStage ? stageBadge(latestStage) : '—'}</td>
+      <td style="color:${e.totalFunding>0?'#0d9e6e':'var(--text3)'}">
+        ${e.totalFunding > 0 ? '$' + e.totalFunding.toLocaleString() : '—'}</td>
+      <td>
+        <button class="btn" style="padding:3px 10px;font-size:11px" onclick="openEditEntrepreneurModal('${e._id}')">Edit</button>
+        <button class="btn btn-red" style="padding:3px 10px;font-size:11px;margin-left:4px" onclick="deleteEntrepreneur('${e._id}','${esc(e.name)}')">Del</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('incub-content').innerHTML = `
+    <div class="card" style="padding:0;overflow:auto">
+      <table>
+        <thead><tr>
+          <th>Entrepreneur</th><th>Company</th><th>Country</th><th>Sector</th>
+          <th>Active Programmes</th><th>Stage</th><th>Funding</th><th></th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ── Duplicates / Overlap tab ───────────────────────────────────────────────────
+function renderDuplicates(list) {
+  if (!list || !list.length) {
+    document.getElementById('incub-content').innerHTML = `
+      <div class="card" style="padding:32px;text-align:center">
+        <div style="font-size:32px;margin-bottom:8px">✅</div>
+        <div style="color:var(--text2)">No overlap detected — no entrepreneur is simultaneously active in 2+ incubators.</div>
+      </div>`;
+    return;
+  }
+
+  const cards = list.map(e => {
+    const progs = (e.programmes||[]).map(p=>`
+      <div style="display:flex;gap:8px;align-items:center;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)">
+        <span style="font-weight:500">${esc(p.incubator||'?')}</span>
+        <span style="color:var(--text3)">${esc(p.programmeName||'')}</span>
+        <span style="margin-left:auto;background:#0d9e6e22;color:#0d9e6e;padding:2px 7px;border-radius:20px;font-size:11px">active</span>
+      </div>`).join('');
+    return `<div class="card" style="padding:16px;border-left:3px solid #ef4444">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <div style="font-weight:600">${esc(e.name)}</div>
+          <div style="font-size:12px;color:var(--text3)">${esc(e.email||'')} · ${esc(e.companyName||'')}</div>
+        </div>
+        <span style="background:#ef444422;color:#ef4444;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">${e.programmes.length} incubators</span>
+      </div>
+      ${progs}
+    </div>`;
+  }).join('');
+
+  document.getElementById('incub-content').innerHTML = `
+    <div style="margin-bottom:12px;font-size:13px;color:#ef4444;font-weight:500">
+      ⚠ ${list.length} entrepreneur${list.length>1?'s are':' is'} currently active in multiple incubators simultaneously.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">${cards}</div>`;
+}
+
+// ── Fundraising tab ───────────────────────────────────────────────────────────
+function renderFundraising(list) {
+  const funded = list.filter(e => e.totalFunding > 0)
+    .sort((a,b) => b.totalFunding - a.totalFunding);
+
+  if (!funded.length) {
+    document.getElementById('incub-content').innerHTML =
+      '<div style="color:var(--text3);padding:32px;text-align:center">No funding records yet.</div>';
+    return;
+  }
+
+  const totalFunding = funded.reduce((s,e)=>s+e.totalFunding,0);
+
+  const rows = funded.map(e => {
+    const fundDetails = (e.funding||[]).map(f=>
+      `<div style="font-size:11px;color:var(--text2)">${esc(f.investor||'Undisclosed')} · ${esc(f.currency||'USD')} ${(f.amount||0).toLocaleString()} · ${esc(f.type||'')}</div>`
+    ).join('');
+    return `<tr>
+      <td><div style="font-weight:500">${esc(e.name)}</div><div style="font-size:11px;color:var(--text3)">${esc(e.companyName||'')}</div></td>
+      <td>${esc(e.country||'—')}</td>
+      <td>${esc(e.sector||'—')}</td>
+      <td style="color:#0d9e6e;font-weight:600">$${e.totalFunding.toLocaleString()}</td>
+      <td>${fundDetails || '—'}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('incub-content').innerHTML = `
+    <div class="card" style="padding:12px 20px;margin-bottom:16px;display:flex;gap:32px;flex-wrap:wrap">
+      <div><span style="font-size:22px;font-weight:700;color:#0d9e6e">$${(totalFunding>=1e6?(totalFunding/1e6).toFixed(2)+'M':totalFunding.toLocaleString())}</span>
+        <div style="font-size:12px;color:var(--text2)">Total funding across all entrepreneurs</div></div>
+      <div><span style="font-size:22px;font-weight:700;color:#6366f1">${funded.length}</span>
+        <div style="font-size:12px;color:var(--text2)">Funded entrepreneurs</div></div>
+    </div>
+    <div class="card" style="padding:0;overflow:auto">
+      <table>
+        <thead><tr><th>Entrepreneur</th><th>Country</th><th>Sector</th><th>Total Raised</th><th>Funding Details</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+// ── Import Excel modal ────────────────────────────────────────────────────────
+function openIncubUploadModal() {
+  const html = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="margin:0;font-size:16px">Import Entrepreneur Data (Excel)</h3>
+      <button onclick="closeModal('modal-incub-upload')" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text2)">×</button>
+    </div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:16px">
+      Upload an .xlsx / .xls / .csv file. Accepted columns (case-insensitive):
+      <code>name, email, phone, country, city, sector, company, gender, programme, stage, start_date, end_date, funding, currency, investor, funding_type</code>
+    </p>
+    <div class="fgroup">
+      <label class="flabel">Incubator / Programme Name *</label>
+      <input class="finput" id="incub-upload-name" placeholder="e.g. GSMA Ecosystem Accelerator" required/>
+    </div>
+    <div class="fgroup" style="margin-top:12px">
+      <label class="flabel">Excel / CSV File *</label>
+      <input type="file" id="incub-upload-file" accept=".xlsx,.xls,.csv" class="finput"/>
+    </div>
+    <div id="incub-upload-result" style="margin-top:12px;font-size:13px"></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+      <button class="btn" onclick="closeModal('modal-incub-upload')">Cancel</button>
+      <button class="btn btn-green" onclick="submitIncubUpload()">Upload & Import</button>
+    </div>`;
+  let modal = document.getElementById('modal-incub-upload');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'modal-incub-upload';
+    modal.className = 'modal-backdrop';
+    modal.innerHTML = `<div class="modal" style="max-width:560px" id="modal-incub-upload-inner"></div>`;
+    document.body.appendChild(modal);
+  }
+  document.getElementById('modal-incub-upload-inner').innerHTML = html;
+  openModal('modal-incub-upload');
+}
+
+async function submitIncubUpload() {
+  const name = document.getElementById('incub-upload-name')?.value.trim();
+  const fileInput = document.getElementById('incub-upload-file');
+  const resultDiv = document.getElementById('incub-upload-result');
+  if (!name) { resultDiv.innerHTML = '<span style="color:#ef4444">Incubator name is required.</span>'; return; }
+  if (!fileInput?.files?.length) { resultDiv.innerHTML = '<span style="color:#ef4444">Please select a file.</span>'; return; }
+
+  resultDiv.innerHTML = '<span style="color:var(--text2)">Uploading…</span>';
+  const fd = new FormData();
+  fd.append('file', fileInput.files[0]);
+  fd.append('incubatorName', name);
+
+  try {
+    const token = AUTH_TOKEN || localStorage.getItem('vertex_token');
+    const r = await fetch(`${API}/api/incubators/upload`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: fd,
+    });
+    const data = await r.json();
+    if (data.success) {
+      const res = data.results;
+      resultDiv.innerHTML = `<span style="color:#0d9e6e">✓ Done — ${res.created} created, ${res.merged} merged into existing records${res.errors.length?' · '+res.errors.length+' row error(s)':''}.</span>`;
+      setTimeout(() => { closeModal('modal-incub-upload'); loadIncubators(); }, 1800);
+    } else {
+      resultDiv.innerHTML = `<span style="color:#ef4444">Error: ${esc(data.message)}</span>`;
+    }
+  } catch(e) {
+    resultDiv.innerHTML = `<span style="color:#ef4444">Upload failed: ${esc(e.message)}</span>`;
+  }
+}
+
+// ── Add / Edit Entrepreneur modal ─────────────────────────────────────────────
+function openAddEntrepreneurModal(prefill = {}) {
+  _openEntrepreneurModal(null, prefill);
+}
+function openEditEntrepreneurModal(id) {
+  const e = _incubEntrepreneurs.find(x => x._id === id);
+  if (!e) return;
+  _openEntrepreneurModal(id, e);
+}
+
+function _openEntrepreneurModal(id, e) {
+  const isEdit = !!id;
+  const stages = ['applied','active','graduated','dropped'];
+  const stageOpts = stages.map(s=>`<option value="${s}" ${(e.programmes?.[0]?.stage||'active')===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('');
+  const genders = ['','Male','Female','Non-binary','Prefer not to say'];
+  const genderOpts = genders.map(g=>`<option value="${g}" ${(e.gender||'')===g?'selected':''}>${g||'— not specified —'}</option>`).join('');
+
+  const html = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="margin:0;font-size:16px">${isEdit ? 'Edit Entrepreneur' : 'Add Entrepreneur'}</h3>
+      <button onclick="closeModal('modal-incub-form')" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text2)">×</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="fgroup"><label class="flabel">Full Name *</label><input class="finput" id="ef-name" value="${esc(e.name||'')}"/></div>
+      <div class="fgroup"><label class="flabel">Email</label><input class="finput" id="ef-email" value="${esc(e.email||'')}"/></div>
+      <div class="fgroup"><label class="flabel">Phone</label><input class="finput" id="ef-phone" value="${esc(e.phone||'')}"/></div>
+      <div class="fgroup"><label class="flabel">Country</label><input class="finput" id="ef-country" value="${esc(e.country||'')}"/></div>
+      <div class="fgroup"><label class="flabel">City</label><input class="finput" id="ef-city" value="${esc(e.city||'')}"/></div>
+      <div class="fgroup"><label class="flabel">Sector</label><input class="finput" id="ef-sector" value="${esc(e.sector||'')}"/></div>
+      <div class="fgroup"><label class="flabel">Company / Startup</label><input class="finput" id="ef-company" value="${esc(e.companyName||'')}"/></div>
+      <div class="fgroup"><label class="flabel">Gender</label><select class="finput" id="ef-gender">${genderOpts}</select></div>
+    </div>
+    <hr style="margin:16px 0;border-color:var(--border)">
+    <div style="font-size:13px;font-weight:600;margin-bottom:8px">Programme Entry</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div class="fgroup"><label class="flabel">Programme Name</label><input class="finput" id="ef-prog-name" value="${esc(e.programmes?.[0]?.programmeName||'')}"/></div>
+      <div class="fgroup"><label class="flabel">Incubator</label><input class="finput" id="ef-incubator" value="${esc(e.programmes?.[0]?.incubator||'')}"/></div>
+      <div class="fgroup"><label class="flabel">Stage</label><select class="finput" id="ef-stage">${stageOpts}</select></div>
+    </div>
+    <hr style="margin:16px 0;border-color:var(--border)">
+    <div style="font-size:13px;font-weight:600;margin-bottom:8px">Funding (optional)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+      <div class="fgroup"><label class="flabel">Amount (USD)</label><input class="finput" type="number" id="ef-fund-amount" value="${e.funding?.[0]?.amount||''}"/></div>
+      <div class="fgroup"><label class="flabel">Investor / Funder</label><input class="finput" id="ef-fund-investor" value="${esc(e.funding?.[0]?.investor||'')}"/></div>
+      <div class="fgroup"><label class="flabel">Type</label><input class="finput" id="ef-fund-type" placeholder="grant, equity, prize…" value="${esc(e.funding?.[0]?.type||'')}"/></div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+      <button class="btn" onclick="closeModal('modal-incub-form')">Cancel</button>
+      <button class="btn btn-green" onclick="saveEntrepreneur('${id||''}')">Save</button>
+    </div>`;
+
+  let modal = document.getElementById('modal-incub-form');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'modal-incub-form';
+    modal.className = 'modal-backdrop';
+    modal.innerHTML = `<div class="modal" style="max-width:640px" id="modal-incub-form-inner"></div>`;
+    document.body.appendChild(modal);
+  }
+  document.getElementById('modal-incub-form-inner').innerHTML = html;
+  openModal('modal-incub-form');
+}
+
+async function saveEntrepreneur(id) {
+  const name = document.getElementById('ef-name')?.value.trim();
+  if (!name) { toast('Name is required'); return; }
+
+  const progName = document.getElementById('ef-prog-name')?.value.trim();
+  const incubator = document.getElementById('ef-incubator')?.value.trim();
+  const stage = document.getElementById('ef-stage')?.value || 'active';
+  const fundAmt = parseFloat(document.getElementById('ef-fund-amount')?.value) || 0;
+  const investor = document.getElementById('ef-fund-investor')?.value.trim() || '';
+  const fundType = document.getElementById('ef-fund-type')?.value.trim() || '';
+
+  const body = {
+    name,
+    email:       document.getElementById('ef-email')?.value.trim() || undefined,
+    phone:       document.getElementById('ef-phone')?.value.trim() || undefined,
+    country:     document.getElementById('ef-country')?.value.trim() || undefined,
+    city:        document.getElementById('ef-city')?.value.trim() || undefined,
+    sector:      document.getElementById('ef-sector')?.value.trim() || undefined,
+    companyName: document.getElementById('ef-company')?.value.trim() || undefined,
+    gender:      document.getElementById('ef-gender')?.value || '',
+    programmes: progName || incubator ? [{ programmeName: progName, incubator, stage }] : undefined,
+    funding:    fundAmt > 0 ? [{ amount: fundAmt, investor, type: fundType, currency: 'USD' }] : undefined,
+  };
+
+  const url = id ? `/api/incubators/entrepreneurs/${id}` : '/api/incubators/entrepreneurs';
+  const method = id ? 'PATCH' : 'POST';
+  const r = await apiFetch(url, { method, body: JSON.stringify(body) });
+  if (r.success) {
+    toast(id ? 'Entrepreneur updated' : 'Entrepreneur added');
+    closeModal('modal-incub-form');
+    loadIncubators();
+  } else {
+    toast('Error: ' + (r.message || 'Could not save'));
+  }
+}
+
+async function deleteEntrepreneur(id, name) {
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  const r = await apiFetch(`/api/incubators/entrepreneurs/${id}`, { method: 'DELETE' });
+  if (r.success) { toast('Deleted'); loadIncubators(); }
+  else toast('Error: ' + (r.message || 'Could not delete'));
+}
+
+async function exportIncubXLSX() {
+  const token = AUTH_TOKEN || localStorage.getItem('vertex_token');
+  const a = document.createElement('a');
+  a.href = `${API}/api/incubators/export`;
+  a.style.display = 'none';
+  // Use fetch to pass auth header then create blob URL
+  try {
+    const res = await fetch(`${API}/api/incubators/export`, { headers: { Authorization: `Bearer ${token}` } });
+    const blob = await res.blob();
+    a.href = URL.createObjectURL(blob);
+    a.download = 'incubators-export.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(a.href); }, 1000);
+  } catch(e) { toast('Export failed'); }
+}
+
+// ── Direct link support: ?section=incubators ──────────────────────────────────
+(function checkDirectSection() {
+  const params = new URLSearchParams(window.location.search);
+  const section = params.get('section');
+  if (section === 'incubators') {
+    // nav() is called after auth check in the existing init flow,
+    // so we hook into the existing onAuthReady pattern
+    window._autoNavSection = 'incubators';
+  }
+})();
+
+// ═══════════════════════════════════════════════════════════════════════════════
 
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');

@@ -123,6 +123,18 @@ exports.exportSubmissions = async (req, res) => {
   }
 };
 
+// ── Public: list all active forms (for events page) ──────────────────────────
+exports.getPublicForms = async (req, res) => {
+  try {
+    const forms = await Form.find({ status: 'active' })
+      .select('title description activityType slug submissionCount createdAt')
+      .sort({ createdAt: -1 });
+    res.json({ success: true, forms });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 // ── Public: get form by slug (no auth) ───────────────────────────────────────
 exports.getPublicForm = async (req, res) => {
   try {

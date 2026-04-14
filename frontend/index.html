@@ -630,8 +630,8 @@ window.__VERTEX_LOGO__ = "iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYCAYAAAC+ZpjcAAAAAXNSR0
 window.__T__ = {
   en: {
     // Nav
-    nav_about:"About", nav_services:"Services", nav_sme:"SME", nav_results:"Results",
-    nav_plans:"Plans", nav_diagnosis:"Free Diagnosis", nav_contact:"Contact",
+    nav_about:"About", nav_services:"Services", nav_sme:"SME", nav_results:"Our Work",
+    nav_events:"Events", nav_plans:"Plans", nav_diagnosis:"Free Diagnosis", nav_contact:"Contact",
     // Hero
     hero_label:"Sandton, South Africa · Pan-African Reach",
     hero_h1a:"Growth that's", hero_h1b:"built to last.",
@@ -960,8 +960,8 @@ window.__T__ = {
   },
 
   fr: {
-    nav_about:"À propos", nav_services:"Services", nav_results:"Résultats",
-    nav_plans:"Offres", nav_diagnosis:"Diagnostic gratuit", nav_contact:"Contact",
+    nav_about:"À propos", nav_services:"Services", nav_results:"Notre travail",
+    nav_events:"Événements", nav_plans:"Offres", nav_diagnosis:"Diagnostic gratuit", nav_contact:"Contact",
     hero_label:"Sandton, Afrique du Sud · Présence pan-africaine",
     hero_h1a:"Une croissance", hero_h1b:"durable.",
     hero_sub:"Vertex Group accompagne les PME africaines dans la définition de leur stratégie, l'accès aux marchés et la production de résultats mesurables — pas de simples recommandations. Nous construisons avec vous.",
@@ -1395,11 +1395,13 @@ function LangNotice({ detectedLang, currentLang, t, onSwitch, onDismiss }) {
 // ── NAV ───────────────────────────────────────────────────────────
 function Nav({ page, setPage, lang, setLang, t }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [workOpen, setWorkOpen] = useState(false);
   const navs = [
     ['about','nav_about'],['services','nav_services'],['sme','nav_sme'],
-    ['success','nav_results'],['plans','nav_plans'],['diagnosis','nav_diagnosis'],['contact','nav_contact']
+    ['plans','nav_plans'],['diagnosis','nav_diagnosis'],['contact','nav_contact']
   ];
-  const go = (p) => { setPage(p); setMenuOpen(false); window.scrollTo(0,0); };
+  const go = (p) => { setPage(p); setMenuOpen(false); setWorkOpen(false); window.scrollTo(0,0); };
+  const goExternal = (url) => { setMenuOpen(false); setWorkOpen(false); window.open(url,'_blank'); };
   return (
     <>
       <nav className="nav">
@@ -1407,7 +1409,32 @@ function Nav({ page, setPage, lang, setLang, t }) {
           <Logo size={68} style={{ borderRadius:0, width:'auto', maxWidth:'220px', height:'68px', objectFit:'contain' }} />
         </div>
         <ul className="nav-links">
-          {navs.map(([p,k]) => (
+          {navs.slice(0,3).map(([p,k]) => (
+            <li key={p}>
+              <button onClick={() => go(p)} className={`${page===p?'active':''}`}>{t[k]}</button>
+            </li>
+          ))}
+          {/* Our Work dropdown */}
+          <li style={{position:'relative'}} onMouseEnter={() => setWorkOpen(true)} onMouseLeave={() => setWorkOpen(false)}>
+            <button className={`${page==='success'?'active':''}`} style={{display:'flex',alignItems:'center',gap:'4px'}}
+              onClick={() => setWorkOpen(o=>!o)}>
+              {t.nav_results}
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            {workOpen && (
+              <div style={{position:'absolute',top:'100%',left:0,background:'#111',border:'1px solid rgba(255,255,255,0.1)',borderRadius:'6px',padding:'6px 0',minWidth:'160px',zIndex:300,marginTop:'6px'}}>
+                <button onClick={() => go('success')} style={{display:'block',width:'100%',padding:'8px 16px',background:'none',border:'none',color:'var(--grey-300)',fontSize:'0.75rem',letterSpacing:'0.08em',textTransform:'uppercase',cursor:'pointer',textAlign:'left',transition:'color 0.15s'}}
+                  onMouseEnter={e=>e.target.style.color='#fff'} onMouseLeave={e=>e.target.style.color='var(--grey-300)'}>
+                  {lang==='fr'?'Études de cas':'Case Studies'}
+                </button>
+                <button onClick={() => goExternal('/events.html')} style={{display:'block',width:'100%',padding:'8px 16px',background:'none',border:'none',color:'var(--grey-300)',fontSize:'0.75rem',letterSpacing:'0.08em',textTransform:'uppercase',cursor:'pointer',textAlign:'left',transition:'color 0.15s'}}
+                  onMouseEnter={e=>e.target.style.color='var(--accent)'} onMouseLeave={e=>e.target.style.color='var(--grey-300)'}>
+                  {t.nav_events}
+                </button>
+              </div>
+            )}
+          </li>
+          {navs.slice(3).map(([p,k]) => (
             <li key={p}>
               <button onClick={() => go(p)} className={`${page===p?'active':''} ${p==='diagnosis'?'nav-cta':''}`}>{t[k]}</button>
             </li>
@@ -1428,7 +1455,10 @@ function Nav({ page, setPage, lang, setLang, t }) {
         <div className="nav-logo" style={{marginBottom:'1rem'}} onClick={() => go('home')}>
           <Logo size={58} style={{ borderRadius:0, height:'58px', width:'auto', maxWidth:'180px', objectFit:'contain' }} />
         </div>
-        {navs.map(([p,k]) => <button key={p} onClick={() => go(p)}>{t[k]}</button>)}
+        {navs.slice(0,3).map(([p,k]) => <button key={p} onClick={() => go(p)}>{t[k]}</button>)}
+        <button onClick={() => go('success')}>{t.nav_results}</button>
+        <button onClick={() => goExternal('/events.html')} style={{color:'var(--accent)'}}>{t.nav_events}</button>
+        {navs.slice(3).map(([p,k]) => <button key={p} onClick={() => go(p)}>{t[k]}</button>)}
         <div className="mobile-lang">
           <button className={lang==='en'?'active':''} onClick={() => { setLang('en'); setMenuOpen(false); }}>EN</button>
           <button className={lang==='fr'?'active':''} onClick={() => { setLang('fr'); setMenuOpen(false); }}>FR</button>
@@ -2959,6 +2989,7 @@ function App() {
               {[['home',t.nav_about],['services',t.nav_services],['sme',t.nav_sme],['success',t.nav_results],['plans',t.nav_plans],['diagnosis',t.nav_diagnosis],['contact',t.nav_contact]].map(([p,l]) => (
                 <li key={p}><button onClick={() => go(p)}>{l}</button></li>
               ))}
+              <li><button onClick={() => window.open('/events.html','_blank')} style={{color:'var(--accent)'}}>{t.nav_events}</button></li>
             </ul>
           </div>
 

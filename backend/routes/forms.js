@@ -11,7 +11,8 @@ const publicLimiter = rateLimit({
 });
 
 // ── Public routes (no auth) ───────────────────────────────────────────────────
-router.get('/public/:slug',        ctrl.getPublicForm);
+router.get('/public',               ctrl.getPublicForms);   // list all active forms for events page
+router.get('/public/:slug',         ctrl.getPublicForm);
 router.post('/public/:slug/submit', publicLimiter, ctrl.submitForm);
 
 // ── Admin routes (protected) ──────────────────────────────────────────────────

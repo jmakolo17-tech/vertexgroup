@@ -66,6 +66,7 @@ app.use('/api/email',       require('./routes/email'));
 app.use('/api/invoices',    require('./routes/invoices'));
 app.use('/api/insights',    require('./routes/insights'));
 app.use('/api/forms',       require('./routes/forms'));
+app.use('/api/incubators',  require('./routes/incubators'));
 
 // ── 404 handler ───────────────────────────────────────────────────────────────
 app.use((_req, res) => {
