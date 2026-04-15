@@ -30,6 +30,18 @@ const pick = (r, ...keys) => {
   return '';
 };
 
+// Fallback: scan all normalised keys for any that CONTAIN the given substring.
+// Ordered by substring priority — first match wins.
+// Used when pick() fails (e.g. unusual Unicode encoding in the source file).
+const scan = (r, ...substrings) => {
+  for (const sub of substrings) {
+    for (const [k, v] of Object.entries(r)) {
+      if (k.includes(sub) && str(v)) return str(v);
+    }
+  }
+  return '';
+};
+
 const validStages    = ['applied','active','graduated','dropped'];
 const validBizStages = ['idea','early','growth','scale','mature'];
 
@@ -60,7 +72,7 @@ function rowToFields(row) {
   const firstName = pick(r,
     'prenom_s','prenom','prenoms','prenom_s_',              // FR: Prénom(s)
     'first_name','firstname','given_name','forename',       // EN
-  );
+  ) || scan(r, 'prenom_s', 'prenom', 'firstname', 'first_name', 'forename', 'given_name');
 
   // ── Surname ──────────────────────────────────────────────────────────────────
   // Google Forms "Nom(s)" → key "nom_s"
@@ -68,7 +80,7 @@ function rowToFields(row) {
     'nom_s','noms','nom_s_',                                // FR: Nom(s)
     'nom','nom_de_famille','nom_famille',                   // FR generic
     'surname','last_name','lastname','family_name',         // EN
-  );
+  ) || scan(r, 'nom_s', 'nom_de_famille', 'surname', 'last_name', 'lastname', 'family_name');
 
   // ── Full name fallback ────────────────────────────────────────────────────────
   const fullName = pick(r,
@@ -82,10 +94,25 @@ function rowToFields(row) {
   else if (firstName || surname) name = firstName || surname;
   else                           name = fullName;
 
-  // Last resort: find any short key that IS exactly "nom" or "name"
+  // Last resort: find any key that IS exactly "nom" or "name"
   if (!name) {
     for (const [k, v] of Object.entries(r)) {
       if ((k === 'nom' || k === 'name') && str(v)) { name = str(v); break; }
+    }
+  }
+  // Ultimate fallback: scan for any key starting with "nom" or "prenom" that has a short text value
+  if (!name) {
+    for (const [k, v] of Object.entries(r)) {
+      const s = str(v);
+      if (!s || s.length > 80 || /\d{4,}/.test(s) || s.includes('@')) continue;
+      if (/^prenom/.test(k)) { name = s; break; }
+    }
+  }
+  if (!name) {
+    for (const [k, v] of Object.entries(r)) {
+      const s = str(v);
+      if (!s || s.length > 80 || /\d{4,}/.test(s) || s.includes('@')) continue;
+      if (/^nom/.test(k) && !k.startsWith('nom_de_l') && !k.startsWith('nom_de_e')) { name = s; break; }
     }
   }
 
@@ -588,12 +615,14 @@ exports.uploadFile = async (req, res) => {
 
     // If nothing was created or merged, give a useful diagnostic
     if (results.created === 0 && results.merged === 0) {
-      const colNames = rows.length ? Object.keys(rows[0]).join(', ') : 'none';
+      const rawCols   = rows.length ? Object.keys(rows[0]).slice(0, 20).join(', ') : 'none';
+      const normCols  = rows.length ? Object.keys(norm(rows[0])).slice(0, 20).join(', ') : 'none';
       return res.json({
         success: false,
-        message: `No entrepreneurs were imported. The file had ${rows.length} row(s) but no name column was found. ` +
-                 `Columns detected: ${colNames}. ` +
-                 `Expected columns: Surname, First Name (or Name, Full Name).`,
+        message: `No entrepreneurs were imported. The file had ${rows.length} row(s) but no name could be built. ` +
+                 `Raw columns: ${rawCols}. ` +
+                 `Normalised keys: ${normCols}. ` +
+                 `Expected: a column like "Surname", "Nom(s)", "First Name", "Prénom(s)", or "Name".`,
         results,
       });
     }
