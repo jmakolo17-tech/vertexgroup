@@ -619,6 +619,23 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
   .processing-steps{max-width:90vw}
   .form-panel{padding:1.5rem}
 }
+/* ── QUALIFICATION SECTION ───────────────────────────────────────────────── */
+.qualify-section{background:#070706;border-top:var(--rule);border-bottom:var(--rule);padding:5rem 3rem}
+.qualify-inner{display:grid;grid-template-columns:1fr 1px 1fr;gap:0 4rem;max-width:960px;margin:0 auto;align-items:start}
+.qualify-divider{background:var(--grey-700);align-self:stretch}
+.qualify-col{padding:0 0.5rem}
+.qualify-col-icon{font-family:'DM Mono',monospace;font-size:0.85rem;letter-spacing:0.15em;font-weight:700;margin-bottom:1rem}
+.qualify-col.qualify-yes .qualify-col-icon{color:#4ade80}
+.qualify-col.qualify-no .qualify-col-icon{color:var(--grey-600)}
+.qualify-col-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;margin-bottom:1.6rem;line-height:1.3}
+.qualify-col.qualify-yes .qualify-col-title{color:var(--white)}
+.qualify-col.qualify-no .qualify-col-title{color:var(--grey-400)}
+.qualify-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1rem}
+.qualify-list li{font-size:0.88rem;color:var(--grey-300);line-height:1.7;padding-left:1.6rem;position:relative}
+.qualify-col.qualify-yes .qualify-list li::before{content:'→';position:absolute;left:0;color:#4ade80;font-family:'DM Mono',monospace;font-size:0.72rem;top:3px}
+.qualify-col.qualify-no .qualify-list li::before{content:'—';position:absolute;left:0;color:var(--grey-600);font-family:'DM Mono',monospace;font-size:0.72rem;top:3px}
+.qualify-cta-note{max-width:960px;margin:2.5rem auto 0;text-align:center;font-size:0.82rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.06em}
+@media(max-width:768px){.qualify-inner{grid-template-columns:1fr;gap:3rem 0}.qualify-divider{height:1px;width:100%;align-self:auto}.qualify-section{padding:4rem 1.5rem}}
 </style>
 </head>
 <body>
@@ -630,30 +647,30 @@ window.__VERTEX_LOGO__ = "iVBORw0KGgoAAAANSUhEUgAAAlgAAAJYCAYAAAC+ZpjcAAAAAXNSR0
 window.__T__ = {
   en: {
     // Nav
-    nav_about:"About", nav_services:"Services", nav_sme:"SME", nav_results:"Our Work",
-    nav_events:"Events", nav_plans:"Plans", nav_diagnosis:"Free Diagnosis", nav_contact:"Contact",
+    nav_about:"About", nav_services:"Services", nav_sme:"SME Hub", nav_results:"Our Work",
+    nav_events:"Events", nav_plans:"Plans", nav_diagnosis:"Free 360° Scorecard", nav_contact:"Contact",
     // Hero
-    hero_label:"Sandton, South Africa · Pan-African Reach",
-    hero_h1a:"Growth that's", hero_h1b:"built to last.",
-    hero_sub:"Vertex Group partners with African SMEs to define strategy, unlock markets, and deliver measurable outcomes — not recommendations. We build with you.",
-    hero_cta1:"Get a Free Business Diagnosis", hero_cta2:"Explore our services",
+    hero_label:"For African SMEs generating R2M–R50M in annual revenue",
+    hero_h1a:"You've built something real.", hero_h1b:"Now build something that scales.",
+    hero_sub:"Vertex Group is the execution partner for revenue-generating African SMEs. We don't hand over reports — we embed dedicated consultants, rebuild commercial systems, and stay accountable until growth is measurable and sustained.",
+    hero_cta1:"Get Your Free Vertex 360° Scorecard", hero_cta2:"See if we're the right fit →",
     hero_scroll:"Scroll",
     // Stats
-    stat1n:"200+", stat1l:"SMEs Supported Across Africa",
-    stat2n:"94%", stat2l:"Achieve Measurable Growth",
-    stat3n:"12+", stat3l:"African Markets",
-    stat4n:"3×", stat4l:"Average Revenue Increase",
+    stat1n:"200+", stat1l:"SMEs supported — Nigeria, South Africa, Kenya, DRC, Ghana & more",
+    stat2n:"94%", stat2l:"of engagements produce measurable revenue growth within 6 months",
+    stat3n:"12+", stat3l:"African markets with active client engagements",
+    stat4n:"3×", stat4l:"average revenue growth within 18 months of a structured engagement",
     // About
-    about_label:"Who We Are",
-    about_title:"Strategy that moves beyond the boardroom.",
-    about_p1:"Vertex Group is a <strong>strategic consulting firm</strong> rooted in Sandton, South Africa, with an expanding footprint across the African continent. We exist to give ambitious SMEs access to the tools, frameworks, and thinking that drive institutional-grade growth.",
-    about_p2:"We don't hand over reports and walk away. We embed within your business, align your team around shared goals, and work alongside leadership to execute strategy in real time. <strong>This is consulting as partnership.</strong>",
-    about_philosophy:"\"We don't work for businesses — we build with them.\"",
+    about_label:"Why Vertex",
+    about_title:"We don't leave when the strategy is done.",
+    about_p1:"Vertex Group is a <strong>strategic execution firm</strong> — not a traditional consulting firm. We embed within revenue-generating African SMEs, rebuild the commercial systems that have stalled, and stay in the room where decisions happen until measurable outcomes are confirmed. No handover. No exit until growth is real.",
+    about_p2:"Every engagement deploys dedicated Business Developers who work inside your team, structured OKR reviews, and guaranteed introductions into our <strong>200+ corporate and donor partner network across 12 African markets.</strong> We hold ourselves to the same milestones we set with you.",
+    about_philosophy:"\"The measure of a consulting engagement is not the quality of the strategy. It is the growth that follows.\"",
     about_presence:"Our Presence",
     about_visual_tag:"Est. Sandton · Pan-African",
     // Services
     services_label:"What We Do",
-    services_title:"Six pillars.\nOne outcome: growth.",
+    services_title:"Six ways we close\nthe strategy-execution gap.",
     svc1_title:"OKR Development & Execution",
     svc1_desc:"We introduce Objectives & Key Results as a living management system — not a template exercise. Your leadership team gains clarity of direction, alignment across functions, and accountability structures that actually hold.",
     svc1_o1:"Executive OKR design & facilitation",svc1_o2:"Cross-functional alignment workshops",svc1_o3:"Quarterly review cadence implementation",
@@ -673,16 +690,16 @@ window.__T__ = {
     svc6_desc:"Operating across African markets requires navigating complex and rapidly-evolving regulatory environments. We support businesses with accounting guidance, corporate structuring, and legal compliance across the countries where we operate — so you can focus on growth, not bureaucracy.",
     svc6_o1:"In-country compliance & regulatory guidance",svc6_o2:"Corporate structure & entity setup",svc6_o3:"Accounting frameworks & financial governance",
     // How we engage
-    engage_label:"Our Approach",engage_title:"How an engagement works.",
-    eng1_t:"Diagnosis",eng1_d:"We start with a deep audit of your business — strategy, operations, sales, and market position.",
-    eng2_t:"Design",eng2_d:"We co-create a 90-day action plan with your leadership team, anchored to OKRs and measurable milestones.",
-    eng3_t:"Execute",eng3_d:"Our consultants embed in your business, joining key meetings, coaching teams, and removing blockers in real time.",
-    eng4_t:"Measure",eng4_d:"Every engagement tracks against defined metrics. We review results monthly and adjust without ego.",
+    engage_label:"Our Approach",engage_title:"Four phases. One non-negotiable: measurable outcomes.",
+    eng1_t:"Diagnosis",eng1_d:"We begin with a structured 360° audit — strategy, operations, sales pipeline, and market position. You receive a health score and priority action list. Nothing proceeds without this foundation.",
+    eng2_t:"Design",eng2_d:"We design a 90-day execution roadmap with your leadership team. OKRs are set, milestones are agreed, and success metrics are locked in before any consultant touches your business.",
+    eng3_t:"Execute",eng3_d:"Dedicated Vertex consultants embed within your team — attending key meetings, coaching commercial leads, unblocking decisions in real time. This is not remote advisory. This is execution.",
+    eng4_t:"Measure",eng4_d:"Every engagement is reviewed monthly against agreed KPIs. We adjust without ego. If something is not working, we say so and fix it. You will never wonder what you are paying for.",
     // Diagnosis
-    diag_label:"Free Business Diagnosis",
-    diag_title:"Know exactly where you stand.",
-    diag_sub:"Upload your business profile, tell us about your challenges, and our AI — guided by Vertex Group's strategic frameworks — will deliver a comprehensive 360° business diagnostic in under an hour.",
-    badge_free:"AI Diagnosis — Free", badge_pro:"Deep Engagement — Book a Call",
+    diag_label:"The Vertex 360° Scorecard — Free",
+    diag_title:"Know exactly where your business stands before spending another rand on strategy.",
+    diag_sub:"Fill in your business profile. In 45–60 minutes, Vertex AI analyses your strategy, sales system, operations, market position, and financial health — and delivers a scored report with a prioritised action roadmap. No commitment. No sales call unless you request one.",
+    badge_free:"Vertex 360° Scorecard — Free", badge_pro:"Deep Engagement — Book a Call",
     step1_t:"Submit",step1_d:"Fill in your company details and upload any business documents.",
     step2_t:"AI Analysis",step2_d:"Our engine analyses your strategy, positioning, sales, and operations.",
     step3_t:"Report",step3_d:"Receive a full 360° diagnostic with scores, insights and priorities.",
@@ -695,7 +712,7 @@ window.__T__ = {
     form_goals:"Growth Goals (12–18 months)", form_goals_ph:"What does success look like for you in the next 12–18 months? (e.g. expand to new markets, double revenue, streamline operations)",
     form_upload:"Upload Business Profile or Documents",
     form_upload_sub:"PDF, DOCX, PPTX, TXT · Max 10MB · Optional but improves accuracy",
-    form_submit:"Run Free AI Diagnosis →",
+    form_submit:"Run My Free Vertex 360° Scorecard →",
     form_processing:"Analysing your business...", form_disclaimer:"Your information is confidential. No spam.",
     form_required:"Please complete all required fields.",
     form_email_invalid:"Valid email required",
@@ -731,14 +748,14 @@ window.__T__ = {
     from_clients:"FROM OUR CLIENTS",
     client_quote:"\"The free diagnosis gave us more clarity than a six-figure consultant we hired the year before.\"",
     // Results
-    results_label:"Case Studies", results_title:"Tangible outcomes. Every engagement.",
-    results_sub:"Every business we work with makes measurable progress. These are a few of the stories we're proud to share.",
-    results_cta_title:"Ready to write your own story?",
-    results_cta_sub:"Start with a free business diagnosis. No commitment, real insights.",
+    results_label:"Case Studies", results_title:"Specific outcomes. Named industries. Real markets.",
+    results_sub:"These are three of the engagements we're proud of. Industry, country, metric, and outcome — no vague claims.",
+    results_cta_title:"Your business could be the next case study.",
+    results_cta_sub:"Start with a free Vertex 360° Scorecard. 45 minutes. A scored report across 5 dimensions. No commitment — but your growth roadmap, in your hands.",
     // Contact
-    contact_label:"Get In Touch", contact_title:"Let's talk about your business.",
+    contact_label:"Get In Touch", contact_title:"Tell us about your business. We'll tell you if we're the right fit.",
     contact_reach:"Reach Us",
-    contact_subtitle:"A conversation costs nothing.",
+    contact_subtitle:"We respond within 24 business hours. If we're not the right partner, we'll say so — and point you to someone who is.",
     contact_loc_label:"Location", contact_loc_val:"155 West St, Sandown\nWeWork Building, 2196\nJohannesburg, South Africa",
     contact_email_label:"Email", contact_email_val:"info@vertexgroup.africa",
     contact_hours_label:"Office Hours", contact_hours_val:"Mon–Fri · 08:00–18:00 SAST",
@@ -754,11 +771,27 @@ window.__T__ = {
     contact_required:"Please fill in all required fields.",
     contact_services:["OKR Development & Execution","Business Strategy & Positioning","Sales Growth & Performance","Market Access Support","General Enquiry"],
     // Diagnosis CTA
-    diag_cta_label:"Free Offer",
-    diag_cta_title:"Know where your business stands",
-    diag_cta_em:"in under an hour.",
-    diag_cta_sub:"Upload your business profile, share your email — our AI delivers a 360° diagnostic in 45–60 minutes. No commitment required.",
-    diag_cta_btn:"Start Free Diagnosis",
+    diag_cta_label:"The Vertex 360° Scorecard — Always Free",
+    diag_cta_title:"Know exactly where your business stands",
+    diag_cta_em:"before you plan your next move.",
+    diag_cta_sub:"In 45–60 minutes, Vertex AI analyses your business across 5 dimensions and delivers a scored report with a prioritised action roadmap. No commitment. No sales call unless you want one.",
+    diag_cta_btn:"Get Your Free 360° Scorecard →",
+    // Qualification block
+    qualify_yes_title:"This is built for you if:",
+    qualify_yes_items:[
+      "Your business generates between R2M and R50M annually",
+      "You're operating in — or actively expanding into — African markets",
+      "Revenue has plateaued despite having a real product or service",
+      "You've tried advisors before and want a partner who stays through execution, not just strategy",
+      "You can commit to a minimum 3-month structured engagement"
+    ],
+    qualify_no_title:"We are not the right partner if:",
+    qualify_no_items:[
+      "You're pre-revenue or still validating your business idea",
+      "You want a report delivered and a consultant who moves on",
+      "You're looking for the lowest-cost advisory option"
+    ],
+    qualify_cta:"Start with a free 360° Scorecard — no commitment, no sales call unless you want one.",
     // Insights page
     ins_label:"Data & Intelligence",
     ins_title_a:"African Business",
@@ -821,19 +854,19 @@ window.__T__ = {
     ins_cta_btn:"Get Free Diagnosis →",
     // Plans page
     plans_label:"Engagement Plans",
-    plans_title:"Choose the plan that fits your ambition.",
-    plans_sub:"Every business we work with starts with a diagnosis. We then recommend the plan that best fits your stage, challenges, and goals — but the choice is always yours.",
-    plans_note_title:"Our philosophy:",
-    plans_note:"We do not do the work for you. We provide the frameworks, the expertise, the networks, and the accountability structures that make your growth possible. <strong>The execution is a partnership — your business, our support.</strong> Every plan includes an initial 360° diagnosis to ensure we recommend what genuinely fits.",
+    plans_title:"Structured engagements for businesses ready to execute.",
+    plans_sub:"Our paid programmes are designed for businesses generating R2M–R50M annually that are ready to commit to structured execution over 3–12 months. Every engagement begins with a free 360° Scorecard to ensure we recommend what genuinely fits your stage.",
+    plans_note_title:"Our commitment to you:",
+    plans_note:"We do not deliver reports and move on. We provide dedicated consultants, proven frameworks, accountable execution, and guaranteed introductions into our partner network. <strong>Every plan includes monthly performance reviews tied to the KPIs we set together.</strong> If we are not moving the needle, we will tell you — and fix it.",
     plan_recommended:"Most Popular",
-    plan_cta_free:"Start Free Diagnosis",
+    plan_cta_free:"Get Your Free Scorecard",
     plan_cta_quote:"Request a Quote",
     plan_cta_custom:"Book a Discovery Call",
     // Plan names
-    p0_name:"Free",p0_duration:"Always free",p0_price:"R0",p0_price_note:"No commitment",
-    p1_name:"3 Months",p1_duration:"Quarterly engagement",p1_price:"On request",p1_price_note:"Quoted per business",
-    p2_name:"6 Months",p2_duration:"Half-year engagement",p2_price:"On request",p2_price_note:"Quoted per business",
-    p3_name:"1 Year +",p3_duration:"Strategic partnership",p3_price:"Custom",p3_price_note:"Investment + access to capital",
+    p0_name:"Free",p0_duration:"Always free",p0_price:"R0",p0_price_note:"Start here — no commitment",
+    p1_name:"3 Months",p1_duration:"Quarterly engagement",p1_price:"On request",p1_price_note:"Best for businesses at R2M–R10M",
+    p2_name:"6 Months",p2_duration:"Half-year engagement",p2_price:"On request",p2_price_note:"Best for businesses at R5M–R30M",
+    p3_name:"1 Year +",p3_duration:"Strategic partnership",p3_price:"Custom",p3_price_note:"For R15M+ businesses scaling across Africa",
     // Plan features
     p0_f1:"360° AI Business Diagnostic",p0_f2:"30-min call with a Vertex expert",p0_f3:"Limited conversational market insights",p0_f4:"Business health score (5 dimensions)",p0_f5:"Top 3 priority action recommendations",
     p1_f1:"Everything in Free",p1_f2:"1 dedicated Business Developer (1 day/week)",p1_f3:"Full market intelligence & insights",p1_f4:"Brief communication strategy",p1_f5:"Monthly performance review",p1_f6:"OKR framework setup",p1_f7:"Sales process audit & quick wins",
@@ -879,7 +912,7 @@ window.__T__ = {
     sme_page_title_a:"Let",
     sme_page_title_b:"Build",
     sme_page_title_c:"Together",
-    sme_page_sub:"Vertex Group is not a consulting firm that hands you a report and leaves. We embed, co-create, and execute alongside you — because sustainable growth is built in partnership, not delivered from a distance.",
+    sme_page_sub:"Vertex Group works with revenue-generating African SMEs — businesses between R2M and R50M that have proven their model and are ready to scale it. If you are in that category and you are tired of strategies that live in documents, this is where to start.",
     sme_philosophy_label:"Our Philosophy",
     sme_philosophy_quote:"\"The difference between working for someone and working with them is the difference between a transaction and a transformation.\"",
     sme_philosophy_sub:"Every strategy we build is shaped by your market realities, your team's capabilities, and the opportunities specific to your business. We bring the methodology. You bring the market knowledge. Together, we build the outcome.",
@@ -961,25 +994,25 @@ window.__T__ = {
 
   fr: {
     nav_about:"À propos", nav_services:"Services", nav_results:"Notre travail",
-    nav_events:"Événements", nav_plans:"Offres", nav_diagnosis:"Diagnostic gratuit", nav_contact:"Contact",
-    hero_label:"Sandton, Afrique du Sud · Présence pan-africaine",
-    hero_h1a:"Une croissance", hero_h1b:"durable.",
-    hero_sub:"Vertex Group accompagne les PME africaines dans la définition de leur stratégie, l'accès aux marchés et la production de résultats mesurables — pas de simples recommandations. Nous construisons avec vous.",
-    hero_cta1:"Obtenir un diagnostic gratuit", hero_cta2:"Découvrir nos services",
+    nav_events:"Événements", nav_plans:"Offres", nav_diagnosis:"Bilan 360° Gratuit", nav_contact:"Contact",
+    hero_label:"Pour les PME africaines générant entre 2M et 50M ZAR de CA annuel",
+    hero_h1a:"Vous avez bâti quelque chose de réel.", hero_h1b:"Construisons maintenant quelque chose qui s'envole.",
+    hero_sub:"Vertex Group est le partenaire d'exécution des PME africaines qui génèrent des revenus. Nous n'envoyons pas de rapports — nous intégrons des consultants dédiés, reconstruisons les systèmes commerciaux, et restons responsables jusqu'à ce que la croissance soit mesurable et durable.",
+    hero_cta1:"Obtenir votre Bilan Vertex 360° Gratuit", hero_cta2:"Sommes-nous le bon partenaire ? →",
     hero_scroll:"Défiler",
-    stat1n:"200+", stat1l:"PME accompagnées en Afrique",
-    stat2n:"94%", stat2l:"Atteignent une croissance mesurable",
-    stat3n:"12+", stat3l:"Marchés africains",
-    stat4n:"3×", stat4l:"Augmentation moyenne du chiffre d'affaires",
-    about_label:"Qui sommes-nous",
-    about_title:"Une stratégie qui va au-delà de la salle de conseil.",
-    about_p1:"Vertex Group est un <strong>cabinet de conseil stratégique</strong> ancré à Sandton, en Afrique du Sud, avec une présence croissante sur le continent africain. Nous existons pour donner aux PME ambitieuses accès aux outils, cadres et réflexions qui génèrent une croissance institutionnelle.",
-    about_p2:"Nous ne remettons pas de rapports et ne partons pas. Nous nous intégrons à votre entreprise, alignons votre équipe autour d'objectifs communs, et travaillons aux côtés de la direction pour exécuter la stratégie en temps réel. <strong>C'est le conseil comme partenariat.</strong>",
-    about_philosophy:"\"Nous ne travaillons pas pour les entreprises — nous construisons avec elles.\"",
+    stat1n:"200+", stat1l:"PME accompagnées — Nigeria, Afrique du Sud, Kenya, RDC, Ghana et plus",
+    stat2n:"94%", stat2l:"des missions produisent une croissance mesurable des revenus en 6 mois",
+    stat3n:"12+", stat3l:"marchés africains avec des missions clients actives",
+    stat4n:"3×", stat4l:"croissance moyenne des revenus dans les 18 mois d'un engagement structuré",
+    about_label:"Pourquoi Vertex",
+    about_title:"Nous ne partons pas quand la stratégie est terminée.",
+    about_p1:"Vertex Group est une <strong>firme d'exécution stratégique</strong> — pas un cabinet de conseil traditionnel. Nous nous intégrons dans les PME africaines qui génèrent des revenus, reconstruisons les systèmes commerciaux bloqués, et restons dans la salle où se prennent les décisions jusqu'à ce que les résultats soient confirmés.",
+    about_p2:"Chaque mission déploie des Business Developers dédiés qui travaillent au sein de votre équipe, des revues OKR structurées, et des introductions garanties dans notre <strong>réseau de 200+ partenaires corporatifs et bailleurs sur 12 marchés africains.</strong> Nous nous tenons aux mêmes jalons que nous fixons avec vous.",
+    about_philosophy:"\"La mesure d'une mission de conseil n'est pas la qualité de la stratégie. C'est la croissance qui s'ensuit.\"",
     about_presence:"Notre présence",
     about_visual_tag:"Fondé à Sandton · Pan-africain",
     services_label:"Ce que nous faisons",
-    services_title:"Six piliers.\nUn seul objectif : la croissance.",
+    services_title:"Six leviers pour fermer\nle fossé stratégie-exécution.",
     svc1_title:"Développement et exécution des OKR",
     svc1_desc:"Nous introduisons les Objectifs et Résultats Clés comme un système de management vivant — pas un simple exercice de modèle. Votre équipe dirigeante gagne en clarté, en alignement et en responsabilisation.",
     svc1_o1:"Conception et facilitation des OKR dirigeants",svc1_o2:"Ateliers d'alignement transversal",svc1_o3:"Cadence de revue trimestrielle",
@@ -998,15 +1031,15 @@ window.__T__ = {
     svc6_title:"Conseil Comptable & Juridique",
     svc6_desc:"Opérer sur les marchés africains nécessite de naviguer dans des environnements réglementaires complexes et en constante évolution. Nous accompagnons les entreprises dans leur conformité comptable, leur structuration juridique et leur conformité réglementaire dans les pays où nous opérons — pour que vous puissiez vous concentrer sur la croissance.",
     svc6_o1:"Conformité réglementaire en pays",svc6_o2:"Structuration juridique et création d'entités",svc6_o3:"Cadres comptables et gouvernance financière",
-    engage_label:"Notre approche",engage_title:"Comment une mission fonctionne.",
-    eng1_t:"Diagnostic",eng1_d:"Nous commençons par un audit approfondi de votre entreprise — stratégie, opérations, ventes et position sur le marché.",
-    eng2_t:"Conception",eng2_d:"Nous co-créons un plan d'action sur 90 jours avec votre équipe dirigeante, ancré dans les OKR.",
-    eng3_t:"Exécution",eng3_d:"Nos consultants s'intègrent à votre entreprise, participent aux réunions clés et accompagnent les équipes.",
-    eng4_t:"Mesure",eng4_d:"Chaque mission suit des indicateurs définis. Nous révisons les résultats mensuellement.",
-    diag_label:"Diagnostic d'entreprise gratuit",
-    diag_title:"Sachez exactement où vous en êtes.",
-    diag_sub:"Téléchargez votre profil d'entreprise, partagez vos défis, et notre IA — guidée par les cadres stratégiques de Vertex Group — livrera un diagnostic 360° complet en moins d'une heure.",
-    badge_free:"Diagnostic IA — Gratuit", badge_pro:"Engagement approfondi — Réserver",
+    engage_label:"Notre approche",engage_title:"Quatre phases. Un impératif non négociable : des résultats mesurables.",
+    eng1_t:"Diagnostic",eng1_d:"Nous démarrons par un audit 360° structuré — stratégie, opérations, pipeline commercial et position sur le marché. Vous recevez un score de santé et une liste d'actions prioritaires. Rien ne progresse sans cette fondation.",
+    eng2_t:"Conception",eng2_d:"Nous concevons une feuille de route d'exécution sur 90 jours avec votre équipe dirigeante. Les OKR sont définis, les jalons fixés, et les critères de succès verrouillés avant qu'un consultant touche à votre entreprise.",
+    eng3_t:"Exécution",eng3_d:"Des consultants Vertex dédiés s'intègrent à votre équipe — participant aux réunions clés, coachant vos responsables commerciaux, débloquant les décisions en temps réel. Ce n'est pas du conseil à distance. C'est de l'exécution.",
+    eng4_t:"Mesure",eng4_d:"Chaque mission est revue mensuellement selon les KPIs convenus. Nous ajustons sans ego. Si quelque chose ne fonctionne pas, nous le disons — et nous le corrigeons. Vous saurez toujours ce que vous payez.",
+    diag_label:"Le Bilan Vertex 360° — Gratuit",
+    diag_title:"Sachez exactement où se trouve votre entreprise avant de dépenser encore en stratégie.",
+    diag_sub:"Remplissez votre profil d'entreprise. En 45–60 minutes, Vertex AI analyse votre stratégie, système de vente, opérations, position sur le marché et santé financière — et livre un rapport scoré avec une feuille de route d'actions prioritaires. Sans engagement. Sans appel commercial sauf si vous le souhaitez.",
+    badge_free:"Bilan Vertex 360° — Gratuit", badge_pro:"Engagement approfondi — Réserver",
     step1_t:"Soumettre",step1_d:"Remplissez vos coordonnées et téléchargez vos documents.",
     step2_t:"Analyse IA",step2_d:"Notre moteur analyse votre stratégie, positionnement, ventes et opérations.",
     step3_t:"Rapport",step3_d:"Recevez un diagnostic 360° complet avec scores, insights et priorités.",
@@ -1073,11 +1106,11 @@ window.__T__ = {
     contact_error:"Échec de l'envoi. Veuillez nous écrire directement à info@vertexgroup.africa",
     contact_required:"Veuillez remplir tous les champs obligatoires.",
     contact_services:["Développement et exécution des OKR","Stratégie et positionnement","Croissance des ventes","Accès au marché","Renseignement général"],
-    diag_cta_label:"Offre gratuite",
-    diag_cta_title:"Sachez où en est votre entreprise",
-    diag_cta_em:"en moins d'une heure.",
-    diag_cta_sub:"Téléchargez votre profil d'entreprise, partagez votre e-mail — notre IA livre un diagnostic 360° en 45–60 minutes.",
-    diag_cta_btn:"Démarrer le diagnostic gratuit",
+    diag_cta_label:"Le Bilan Vertex 360° — Toujours Gratuit",
+    diag_cta_title:"Sachez exactement où se trouve votre entreprise",
+    diag_cta_em:"avant de planifier votre prochain mouvement.",
+    diag_cta_sub:"En 45–60 minutes, Vertex AI analyse votre entreprise selon 5 dimensions et livre un rapport scoré avec une feuille de route d'actions prioritaires. Sans engagement. Sans appel commercial sauf si vous le souhaitez.",
+    diag_cta_btn:"Obtenir votre Bilan 360° Gratuit →",
     footer_copy:`© 2025 Vertex Group · Sandton, Afrique du Sud · info@vertexgroup.africa`,
     lang_notice_fr:"Langue française détectée. Passer en français ?",
     lang_notice_en:"Langue anglaise détectée. Passer en anglais ?",
@@ -1105,6 +1138,22 @@ window.__T__ = {
     social_instagram:"Instagram",
     social_linkedin:"LinkedIn",
     social_follow:"Suivez @vertexgroup.africa",
+    // Qualification block FR
+    qualify_yes_title:"Ce programme est fait pour vous si :",
+    qualify_yes_items:[
+      "Votre entreprise génère entre 2M et 50M ZAR annuellement",
+      "Vous opérez — ou vous développez activement — sur les marchés africains",
+      "Le chiffre d'affaires stagne malgré un produit ou service réel",
+      "Vous avez eu des conseillers et voulez un partenaire qui reste jusqu'à l'exécution",
+      "Vous pouvez vous engager dans une mission structurée de 3 mois minimum"
+    ],
+    qualify_no_title:"Nous ne sommes pas le bon partenaire si :",
+    qualify_no_items:[
+      "Vous êtes pré-revenu ou encore en train de valider votre idée d'entreprise",
+      "Vous voulez un rapport livré et un consultant qui passe à la suite",
+      "Vous cherchez l'option de conseil la moins chère disponible"
+    ],
+    qualify_cta:"Commencez par un Bilan 360° gratuit — sans engagement, sans appel commercial sauf si vous le souhaitez.",
     // Insights page FR
     ins_label:"Données & Intelligence",
     ins_title_a:"Insights sur le",
@@ -1167,18 +1216,18 @@ window.__T__ = {
     ins_cta_btn:"Obtenir un diagnostic gratuit →",
     // Plans page FR
     plans_label:"Nos offres d'engagement",
-    plans_title:"Choisissez le plan qui correspond à votre ambition.",
-    plans_sub:"Chaque entreprise que nous accompagnons commence par un diagnostic. Nous recommandons ensuite le plan qui correspond le mieux à votre stade, vos défis et vos objectifs — mais le choix vous appartient.",
-    plans_note_title:"Notre philosophie :",
-    plans_note:"Nous ne faisons pas le travail à votre place. Nous fournissons les cadres, l'expertise, les réseaux et les structures de responsabilisation qui rendent votre croissance possible. <strong>L'exécution est un partenariat — votre entreprise, notre soutien.</strong> Chaque plan inclut un diagnostic 360° initial pour nous assurer de recommander ce qui convient vraiment.",
+    plans_title:"Des missions structurées pour les entreprises prêtes à exécuter.",
+    plans_sub:"Nos programmes payants sont conçus pour les entreprises générant entre 2M et 50M ZAR annuellement et prêtes à s'engager dans une exécution structurée sur 3 à 12 mois. Chaque mission commence par un Bilan 360° gratuit pour nous assurer de recommander ce qui correspond vraiment à votre stade.",
+    plans_note_title:"Notre engagement envers vous :",
+    plans_note:"Nous ne livrons pas de rapports et ne partons pas. Nous fournissons des consultants dédiés, des cadres éprouvés, une exécution responsable et des introductions garanties dans notre réseau de partenaires. <strong>Chaque plan inclut des revues de performance mensuelles liées aux KPIs que nous fixons ensemble.</strong> Si nous ne faisons pas avancer les choses, nous vous le dirons — et nous corrigerons.",
     plan_recommended:"Le plus populaire",
-    plan_cta_free:"Démarrer le diagnostic gratuit",
+    plan_cta_free:"Obtenir votre Bilan Gratuit",
     plan_cta_quote:"Demander un devis",
     plan_cta_custom:"Prendre un rendez-vous",
-    p0_name:"Gratuit",p0_duration:"Toujours gratuit",p0_price:"0 R",p0_price_note:"Sans engagement",
-    p1_name:"3 Mois",p1_duration:"Engagement trimestriel",p1_price:"Sur demande",p1_price_note:"Devis par entreprise",
-    p2_name:"6 Mois",p2_duration:"Engagement semestriel",p2_price:"Sur demande",p2_price_note:"Devis par entreprise",
-    p3_name:"1 An +",p3_duration:"Partenariat stratégique",p3_price:"Sur mesure",p3_price_note:"Investissement + accès aux capitaux",
+    p0_name:"Gratuit",p0_duration:"Toujours gratuit",p0_price:"0 R",p0_price_note:"Commencez ici — sans engagement",
+    p1_name:"3 Mois",p1_duration:"Engagement trimestriel",p1_price:"Sur demande",p1_price_note:"Idéal pour les entreprises à 2M–10M ZAR",
+    p2_name:"6 Mois",p2_duration:"Engagement semestriel",p2_price:"Sur demande",p2_price_note:"Idéal pour les entreprises à 5M–30M ZAR",
+    p3_name:"1 An +",p3_duration:"Partenariat stratégique",p3_price:"Sur mesure",p3_price_note:"Pour les entreprises à 15M+ ZAR en expansion pan-africaine",
     p0_f1:"Diagnostic d'entreprise 360° IA",p0_f2:"Appel de 30 min avec un expert Vertex",p0_f3:"Insights de marché conversationnels (limités)",p0_f4:"Score de santé (5 dimensions)",p0_f5:"Top 3 recommandations prioritaires",
     p1_f1:"Tout ce qui est dans le plan Gratuit",p1_f2:"1 Business Developer dédié (1 jour/semaine)",p1_f3:"Intelligence de marché complète",p1_f4:"Stratégie de communication courte",p1_f5:"Revue de performance mensuelle",p1_f6:"Mise en place du cadre OKR",p1_f7:"Audit du processus de vente",
     p2_f1:"Tout ce qui est dans le plan 3 Mois",p2_f2:"2 Business Developers dédiés",p2_f3:"Intelligence de marché (continue)",p2_f4:"Garantie de partenariat — introductions et deals",p2_f5:"Révision complète du Business Model Canvas",p2_f6:"Plan d'action stratégique sur 2 ans",p2_f7:"Assistance à la structuration financière",p2_f8:"Accompagnement juridique et conformité",p2_f9:"Support R&D et ateliers innovation",p2_f10:"2 événements sectoriels curatés",p2_f11:"Évaluation de la préparation investisseurs",
@@ -1208,7 +1257,7 @@ window.__T__ = {
     sme_page_title_a:"Construisons",
     sme_page_title_b:"tous",
     sme_page_title_c:"ensemble",
-    sme_page_sub:"Vertex Group n'est pas un cabinet de conseil qui vous remet un rapport et s'en va. Nous nous intégrons, co-créons et exécutons à vos côtés — parce qu'une croissance durable se bâtit en partenariat, pas à distance.",
+    sme_page_sub:"Vertex Group travaille avec les PME africaines qui génèrent des revenus — des entreprises entre 2M et 50M ZAR qui ont prouvé leur modèle et sont prêtes à le faire passer à l'échelle. Si vous êtes dans cette catégorie et que vous en avez assez des stratégies qui restent dans des documents, c'est par ici.",
     sme_philosophy_label:"Notre Philosophie",
     sme_philosophy_quote:"\"La différence entre travailler pour quelqu'un et travailler avec lui, c'est la différence entre une transaction et une transformation.\"",
     sme_philosophy_sub:"Chaque stratégie que nous construisons est façonnée par vos réalités de marché, les capacités de votre équipe et les opportunités propres à votre entreprise. Nous apportons la méthodologie. Vous apportez la connaissance du marché. Ensemble, nous construisons le résultat.",
@@ -1983,6 +2032,28 @@ function HomePage({ setPage, t }) {
           </div>
         ))}
       </div>
+
+      {/* ── QUALIFICATION BLOCK ──────────────────────────────────────── */}
+      <section className="qualify-section">
+        <div className="qualify-inner">
+          <div className="qualify-col qualify-yes reveal">
+            <div className="qualify-col-icon">✓</div>
+            <div className="qualify-col-title">{t.qualify_yes_title}</div>
+            <ul className="qualify-list">
+              {(t.qualify_yes_items||[]).map((item,i) => <li key={i}>{item}</li>)}
+            </ul>
+          </div>
+          <div className="qualify-divider"/>
+          <div className="qualify-col qualify-no reveal">
+            <div className="qualify-col-icon">✗</div>
+            <div className="qualify-col-title">{t.qualify_no_title}</div>
+            <ul className="qualify-list">
+              {(t.qualify_no_items||[]).map((item,i) => <li key={i}>{item}</li>)}
+            </ul>
+          </div>
+        </div>
+        <p className="qualify-cta-note">{t.qualify_cta}</p>
+      </section>
 
       <section className="section">
         <div className="about-grid">
