@@ -383,6 +383,32 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .dash{color:var(--grey-700);text-align:center}
 .cat-row td{background:rgba(255,255,255,0.025)!important;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--grey-500)!important;padding:0.55rem 1.2rem!important}
 .featured-col{background:rgba(12,148,216,0.05)!important;border-right:1px solid rgba(12,148,216,0.18)!important}
+/* VS COMPARISON SECTION */
+.vs-section{padding:5rem 3rem;border-top:var(--rule);border-bottom:var(--rule);background:var(--bg)}
+.vs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);margin-top:3rem}
+.vs-card{background:var(--offblack);padding:2.5rem 2rem;display:flex;flex-direction:column;gap:1.2rem}
+.vs-card-target{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey-500);margin-bottom:0.2rem}
+.vs-card-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--white);line-height:1.2}
+.vs-truth{font-size:0.92rem;color:var(--grey-400);line-height:1.78;padding-top:1rem;border-top:1px solid var(--grey-700)}
+.vs-vertex{font-size:0.92rem;color:var(--grey-200);line-height:1.78}
+.vs-signal{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.08em;padding-top:1rem;border-top:1px solid var(--grey-700);margin-top:auto}
+/* SCARCITY / CAPACITY SIGNAL */
+.capacity-bar{margin:0 3rem;padding:1rem 1.8rem;border:1px solid rgba(200,184,154,0.2);background:rgba(200,184,154,0.03);display:flex;align-items:center;gap:1.5rem;justify-content:space-between;flex-wrap:wrap}
+.capacity-label{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent)}
+.capacity-text{font-size:0.86rem;color:var(--grey-300)}
+.capacity-dots{display:flex;gap:0.4rem;align-items:center}
+.capacity-dot{width:10px;height:10px;border-radius:50%;background:var(--grey-700)}
+.capacity-dot.filled{background:var(--accent)}
+/* PRICING ROI CONTEXT */
+.pricing-roi{margin:0 3rem 3rem;padding:1.5rem 2rem;border:1px solid var(--grey-700);border-left:3px solid var(--cta);background:rgba(12,148,216,0.03)}
+.pricing-roi-text{font-size:0.9rem;color:var(--grey-300);line-height:1.78}
+.pricing-roi-text strong{color:var(--white)}
+@media(max-width:900px){
+  .vs-grid{grid-template-columns:1fr}
+  .capacity-bar{margin:0 1.5rem;flex-direction:column;align-items:flex-start}
+  .pricing-roi{margin:0 1.5rem 2rem}
+  .vs-section{padding:3rem 1.5rem}
+}
 /* PRICE TRANSPARENCY BANNER */
 .price-transparency{margin:0 3rem;padding:1.2rem 2rem;border:1px solid rgba(12,148,216,0.2);background:rgba(12,148,216,0.04);display:flex;gap:1.2rem;align-items:center}
 .price-transparency-icon{font-size:1.1rem;color:var(--cta);flex-shrink:0}
@@ -981,7 +1007,7 @@ window.__T__ = {
     // Plan features
     p0_f1:"360° AI Business Diagnostic",p0_f2:"30-min call with a Vertex expert",p0_f3:"Limited conversational market insights",p0_f4:"Business health score (5 dimensions)",p0_f5:"Top 3 priority action recommendations",
     p1_f1:"Everything in Free",p1_f2:"1 dedicated Business Developer (1 day/week)",p1_f3:"Full market intelligence & insights",p1_f4:"Brief communication strategy",p1_f5:"Monthly performance review",p1_f6:"OKR framework setup",p1_f7:"Sales process audit & quick wins",
-    p2_f1:"Everything in 3-Month Plan",p2_f2:"2 dedicated Business Developers",p2_f3:"Full market intelligence (ongoing)",p2_f4:"Partnership guarantee — introductions & deals",p2_f5:"Business Model Canvas (BMC) full revision",p2_f6:"2-year strategic action plan",p2_f7:"Financial structuring assistance",p2_f8:"Legal & compliance guidance",p2_f9:"R&D support & innovation workshops",p2_f10:"2 curated industry events",p2_f11:"Investor readiness assessment",
+    p2_f1:"Everything in 3-Month Plan",p2_f2:"2 dedicated Business Developers",p2_f3:"Full market intelligence (ongoing)",p2_f4:"Named institutional introductions — specific organisations, committed in writing",p2_f5:"Business Model Canvas (BMC) full revision",p2_f6:"2-year strategic action plan",p2_f7:"Financial structuring assistance",p2_f8:"Legal & compliance guidance",p2_f9:"R&D support & innovation workshops",p2_f10:"2 curated industry events",p2_f11:"Investor readiness assessment",
     p3_f1:"Fully customised engagement",p3_f2:"Investment facilitation & deal structuring",p3_f3:"Access to Vertex investor network",p3_f4:"Board advisory & governance support",p3_f5:"Pan-African expansion strategy",p3_f6:"M&A and partnership facilitation",p3_f7:"C-suite coaching & leadership development",p3_f8:"All 6-month deliverables included",
     // Comparison table
     cmp_title:"Full plan comparison",
@@ -989,7 +1015,7 @@ window.__T__ = {
     cmp_cat1:"Core Consulting",cmp_cat2:"Team & Resources",cmp_cat3:"Market & Growth",cmp_cat4:"Strategic Assets",cmp_cat5:"Finance & Legal",
     cmp_r1:"360° Business Diagnostic",cmp_r2:"Expert Consultation Call",cmp_r3:"OKR Framework",cmp_r4:"Sales Process Review",
     cmp_r5:"Dedicated Business Developer",cmp_r6:"Number of Developers",cmp_r7:"Days per week on-site",
-    cmp_r8:"Market Insights",cmp_r9:"Communication Strategy",cmp_r10:"Partnership Guarantees",cmp_r11:"Industry Events",
+    cmp_r8:"Market Insights",cmp_r9:"Communication Strategy",cmp_r10:"Named Institutional Introductions",cmp_r11:"Industry Events",
     cmp_r12:"BMC Revision",cmp_r13:"2-Year Action Plan",cmp_r14:"R&D Support",cmp_r15:"Investor Readiness",
     cmp_r16:"Financial Assistance",cmp_r17:"Legal / Compliance Support",cmp_r18:"Access to Investors",
     cmp_v_30min:"30 min",cmp_v_limited:"Limited",cmp_v_full:"Full",cmp_v_brief:"Brief",cmp_v_1dev:"1",cmp_v_2dev:"2",cmp_v_1day:"1 day/week",cmp_v_2days:"2 days/week",cmp_v_2ev:"2 events",cmp_v_custom:"Custom",cmp_v_guaranteed:"Guaranteed",
@@ -1147,7 +1173,42 @@ window.__T__ = {
       {role:"Market Access Specialist", focus:"Network & institutional introductions", exp:"Active relationships in your target markets. Named introductions to relevant organisations within 30 days of engagement start — not at the end of a strategy document."},
       {role:"Commercial Operations Analyst", focus:"Sales systems & KPI tracking", exp:"Pipeline rebuild, CRM setup, reporting architecture, and the week-to-week execution accountability that most engagements never have."},
     ],
-    team_note:"Team composition is confirmed before signing. You meet every person working on your engagement before any work begins.",
+    team_note:"Before signing, you have a 30-minute working conversation with the Strategy Lead who will run your engagement — full name, background, and track record shared in advance. You meet the full team before any commitment is made.",
+    // Honest comparison section
+    vs_label:"THE HONEST COMPARISON",
+    vs_title:"Why Vertex instead of the obvious alternatives.",
+    vs_sub:"Most founders at this stage have three real options. Here is an honest assessment of each — including when Vertex is not the right answer.",
+    vs_cards:[
+      {
+        target:"Option 1",
+        title:"Big 4 & International Firms",
+        truth:"The Big 4 are excellent for businesses above $50M preparing for a transaction or a regulatory process. Below that threshold, your engagement goes to a junior team working a framework built for a company three times your size, at a day rate that assumes you are already at scale. This is not a criticism — it is simply a product mismatch.",
+        vertex:"Vertex works exclusively with businesses between $200K and $5M. The methodology, pricing, and team structure are designed for this stage — not adapted down from a larger template.",
+        signal:"When Big 4 is right: $50M+ revenue, M&A preparation, regulatory compliance."
+      },
+      {
+        target:"Option 2",
+        title:"Local & Independent Consultants",
+        truth:"Local consultants often know your market better than we do. The gap is in three areas: institutional network (they know individuals; we hold relationships with organisations), multi-market reach (most operate in one country), and embedded team structure (a solo practitioner cannot put three people inside your business).",
+        vertex:"We are not replacing local consultants. We complement them. Vertex adds the pan-African institutional network, multi-market execution capability, and the accountability infrastructure that independent practitioners typically cannot provide alone.",
+        signal:"When local consultants are right: single-market, single-discipline engagements."
+      },
+      {
+        target:"Option 3",
+        title:"Managing It Internally",
+        truth:"The case for doing nothing is rational: your team knows the business, you keep control, you avoid a new cost line. What is harder to see is what you do not capture in the next 18 months — the revenue gap from a sales system that was never rebuilt, the market that was entered too late, the compound cost of the same problems persisting.",
+        vertex:"The 360° Scorecard takes 45 minutes and costs nothing. If it tells you your business is healthy and on track, you have your answer and you paid nothing for it. If it shows gaps, you have the information to make a real decision.",
+        signal:"Start here: run the free diagnostic first. Decide with information, not instinct."
+      },
+    ],
+    // Team note (addresses anonymity)
+    team_note_full:"Before signing, you have a 30-minute working conversation with the Strategy Lead who will run your engagement — full name, background, and track record shared in advance. You meet the full team before any commitment is made. We do not hide behind the brand.",
+    // Scarcity / capacity
+    capacity_label:"CURRENT CAPACITY",
+    capacity_text:"Vertex runs a maximum of 8 active engagements at any time to maintain team quality.",
+    capacity_open:"Engagements available this quarter",
+    // Pricing ROI context
+    pricing_roi:"The price range reflects engagement scope and business size — not team seniority. Every engagement includes the same senior team. <strong>A 6-month engagement at $2,500/month costs $15,000. Clients who complete a 6-month engagement average 40–80% improvement in deal conversion within two quarters.</strong> Run the free diagnostic first — the report will tell you whether the math makes sense for your specific situation.",
     // Final CTA
     final_cta_label:"Start here",
     final_cta_title:"The 360° Scorecard takes 45 minutes.",
@@ -1541,7 +1602,39 @@ window.__T__ = {
       {role:"Spécialiste Accès Marché", focus:"Réseau & introductions institutionnelles", exp:"Relations actives sur vos marchés cibles. Introductions nommées à des organisations pertinentes dans les 30 jours suivant le début — pas à la fin d'un document de stratégie."},
       {role:"Analyste Opérations Commerciales", focus:"Systèmes de vente & suivi KPI", exp:"Reconstruction pipeline, configuration CRM, architecture de reporting et la responsabilité d'exécution semaine par semaine que la plupart des missions n'ont jamais."},
     ],
-    team_note:"La composition de l'équipe est confirmée avant la signature. Vous rencontrez chaque personne travaillant sur votre mission avant le début de tout travail.",
+    team_note:"Avant de signer, vous avez une conversation de travail de 30 minutes avec le Responsable Stratégie qui dirigera votre mission — nom complet, parcours et historique partagés à l'avance. Vous rencontrez toute l'équipe avant tout engagement.",
+    // Section comparaison honnête
+    vs_label:"LA COMPARAISON HONNÊTE",
+    vs_title:"Pourquoi Vertex plutôt que les alternatives évidentes.",
+    vs_sub:"La plupart des fondateurs à ce stade ont trois vraies options. Voici une évaluation honnête de chacune — y compris quand Vertex n'est pas la bonne réponse.",
+    vs_cards:[
+      {
+        target:"Option 1",
+        title:"Big 4 & Cabinets Internationaux",
+        truth:"Les Big 4 sont excellents pour les entreprises au-dessus de 50M$ qui préparent une transaction ou un processus réglementaire. En dessous, votre mission est confiée à une équipe junior travaillant avec un cadre conçu pour une entreprise trois fois plus grande. Ce n'est pas une critique — c'est simplement un mauvais match de produit.",
+        vertex:"Vertex travaille exclusivement avec des entreprises entre 200K$ et 5M$. La méthodologie, la tarification et la structure de l'équipe sont conçues pour ce stade — pas adaptées à la baisse depuis un modèle plus grand.",
+        signal:"Quand les Big 4 sont pertinents : CA 50M$+, préparation M&A, conformité réglementaire."
+      },
+      {
+        target:"Option 2",
+        title:"Consultants Locaux & Indépendants",
+        truth:"Les consultants locaux connaissent souvent votre marché mieux que nous. L'écart se situe dans trois domaines : réseau institutionnel (ils connaissent des individus ; nous avons des relations avec des organisations), portée multi-marchés (la plupart opèrent dans un seul pays), et structure d'équipe intégrée (un praticien solo ne peut pas mettre trois personnes dans votre entreprise).",
+        vertex:"Nous ne remplaçons pas les consultants locaux. Nous les complétons. Vertex ajoute le réseau institutionnel pan-africain, la capacité d'exécution multi-marchés et l'infrastructure de responsabilité que les praticiens indépendants ne peuvent généralement pas fournir seuls.",
+        signal:"Quand les consultants locaux sont pertinents : missions mono-marché et mono-discipline."
+      },
+      {
+        target:"Option 3",
+        title:"Gérer en Interne",
+        truth:"Le cas pour ne rien faire est rationnel : votre équipe connaît l'entreprise, vous gardez le contrôle. Ce qui est plus difficile à voir, c'est ce que vous ne capturez pas dans les 18 prochains mois — le manque à gagner d'un système commercial jamais reconstruit, le marché entré trop tard, le coût composé des mêmes problèmes qui persistent.",
+        vertex:"Le Bilan 360° prend 45 minutes et ne coûte rien. S'il vous dit que votre entreprise est en bonne santé, vous avez votre réponse. S'il montre des lacunes, vous avez les informations pour prendre une vraie décision.",
+        signal:"Commencez ici : lancez d'abord le diagnostic gratuit. Décidez avec des informations, pas avec l'instinct."
+      },
+    ],
+    team_note_full:"Avant de signer, vous avez une conversation de travail de 30 minutes avec le Responsable Stratégie qui dirigera votre mission — nom complet, parcours et historique partagés à l'avance. Vous rencontrez toute l'équipe avant tout engagement. Nous ne nous cachons pas derrière la marque.",
+    capacity_label:"CAPACITÉ ACTUELLE",
+    capacity_text:"Vertex gère un maximum de 8 missions actives à tout moment pour maintenir la qualité de l'équipe.",
+    capacity_open:"Missions disponibles ce trimestre",
+    pricing_roi:"La fourchette de prix reflète la portée de la mission et la taille de l'entreprise — pas la séniorité de l'équipe. Chaque mission inclut la même équipe senior. <strong>Une mission de 6 mois à 2 500$/mois coûte 15 000$. Les clients qui complètent une mission de 6 mois constatent en moyenne 40 à 80% d'amélioration de la conversion des deals en deux trimestres.</strong> Lancez d'abord le diagnostic gratuit — le rapport vous dira si le calcul est pertinent pour votre situation spécifique.",
     // CTA final
     final_cta_label:"Commencer ici",
     final_cta_title:"Le Bilan 360° prend 45 minutes.",
@@ -2201,6 +2294,20 @@ function PlansPage({ setPage, t }) {
         </div>
       </div>
 
+      {/* Capacity signal */}
+      <div className="capacity-bar reveal">
+        <div>
+          <div className="capacity-label">{t.capacity_label}</div>
+          <div className="capacity-text" style={{marginTop:'0.3rem'}}>{t.capacity_text}</div>
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:'1rem',flexWrap:'wrap'}}>
+          <span style={{fontFamily:'DM Mono,monospace',fontSize:'0.68rem',color:'var(--grey-500)',letterSpacing:'0.1em'}}>{t.capacity_open}</span>
+          <div className="capacity-dots">
+            {[1,2,3,4,5,6,7,8].map(i => <div key={i} className={`capacity-dot${i<=6?' filled':''}`}/>)}
+          </div>
+        </div>
+      </div>
+
       {/* Plan cards */}
       <div className="plans-grid">
         {plans.map(plan => (
@@ -2230,6 +2337,11 @@ function PlansPage({ setPage, t }) {
             </button>
           </div>
         ))}
+      </div>
+
+      {/* ROI context */}
+      <div className="pricing-roi reveal">
+        <div className="pricing-roi-text" dangerouslySetInnerHTML={{__html: t.pricing_roi}}/>
       </div>
 
       {/* Price transparency banner */}
@@ -2588,6 +2700,28 @@ function HomePage({ setPage, goSector, t }) {
         </div>
         <CaseStudies t={t}/>
         <Testimonials t={t}/>
+      </section>
+
+      {/* ── 7b. THE HONEST COMPARISON ── */}
+      <section className="vs-section">
+        <div className="reveal">
+          <div className="section-label">{t.vs_label}</div>
+          <h2 className="section-title">{t.vs_title}</h2>
+          <p style={{color:'var(--grey-400)',maxWidth:'600px',fontSize:'1.05rem',lineHeight:1.78,marginTop:'0.5rem'}}>{t.vs_sub}</p>
+        </div>
+        <div className="vs-grid">
+          {(t.vs_cards||[]).map((c,i) => (
+            <div key={i} className="vs-card reveal">
+              <div>
+                <div className="vs-card-target">{c.target}</div>
+                <div className="vs-card-title">{c.title}</div>
+              </div>
+              <div className="vs-truth">{c.truth}</div>
+              <div className="vs-vertex">{c.vertex}</div>
+              <div className="vs-signal">{c.signal}</div>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* ── 8. TEAM ── */}
