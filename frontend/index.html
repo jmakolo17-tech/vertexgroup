@@ -383,11 +383,34 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .dash{color:var(--grey-700);text-align:center}
 .cat-row td{background:rgba(255,255,255,0.025)!important;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--grey-500)!important;padding:0.55rem 1.2rem!important}
 .featured-col{background:rgba(12,148,216,0.05)!important;border-right:1px solid rgba(12,148,216,0.18)!important}
+/* PRICE TRANSPARENCY BANNER */
+.price-transparency{margin:0 3rem;padding:1.2rem 2rem;border:1px solid rgba(12,148,216,0.2);background:rgba(12,148,216,0.04);display:flex;gap:1.2rem;align-items:center}
+.price-transparency-icon{font-size:1.1rem;color:var(--cta);flex-shrink:0}
+.price-transparency-text{font-size:0.86rem;color:var(--grey-300);line-height:1.75}
+.price-transparency-text strong{color:var(--white);font-weight:500}
+/* PRICING INFLUENCE SECTION */
+.influence-section{padding:5rem 3rem;border-top:var(--rule)}
+.influence-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);margin-top:2.5rem}
+.influence-item{background:var(--offblack);padding:2rem 1.8rem}
+.influence-n{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--grey-600);letter-spacing:0.18em;margin-bottom:1rem;text-transform:uppercase}
+.influence-item-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:0.8rem;color:var(--white)}
+.influence-desc{font-size:0.9rem;color:var(--grey-400);line-height:1.78}
+/* FIRST CALL SECTION */
+.first-call-section{padding:5rem 3rem;background:var(--bg);border-top:var(--rule);border-bottom:var(--rule)}
+.first-call-inner{max-width:820px}
+.first-call-items{margin-top:2rem;display:flex;flex-direction:column;gap:0.8rem}
+.first-call-item{display:flex;gap:1.5rem;align-items:flex-start;padding:1.2rem 1.5rem;border:1px solid var(--grey-700);background:var(--offblack)}
+.first-call-item-n{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--grey-600);letter-spacing:0.15em;flex-shrink:0;padding-top:3px;text-transform:uppercase}
+.first-call-item-text{font-size:0.97rem;color:var(--grey-300);line-height:1.75}
+.first-call-note{margin-top:1.5rem;padding:1.2rem 1.5rem;border-left:3px solid var(--accent);background:rgba(200,184,154,0.04);font-size:0.9rem;color:var(--grey-300);line-height:1.75;font-style:italic}
 @media(max-width:900px){
   .plans-grid{grid-template-columns:1fr;margin:2rem 1.5rem}
   .pricing-hero{padding:3rem 1.5rem}
   .comparison-wrap{margin:0 1.5rem 3rem}
   .modal-body,.modal-header,.modal-footer{padding-left:1.5rem;padding-right:1.5rem}
+  .price-transparency{margin:0 1.5rem;flex-direction:column;gap:0.6rem}
+  .influence-section,.first-call-section{padding:3rem 1.5rem}
+  .influence-grid{grid-template-columns:1fr 1fr}
 }
 .toast{position:fixed;bottom:2rem;right:2rem;background:var(--offblack);border:1px solid var(--grey-700);padding:1.2rem 1.8rem;z-index:500;font-size:0.84rem;color:var(--white);animation:fadeUp 0.3s both;max-width:360px;line-height:1.5}
 .toast.success{border-color:var(--accent)}
@@ -940,20 +963,21 @@ window.__T__ = {
     ins_cta_sub:"Run a free 360° diagnostic and contribute to the most comprehensive view of African entrepreneurship available.",
     ins_cta_btn:"Get Free Diagnosis →",
     // Plans page
-    plans_label:"Engagement Plans",
-    plans_title:"Structured engagements for businesses ready to execute.",
-    plans_sub:"Our paid programmes are designed for businesses generating R2M–R50M annually that are ready to commit to structured execution over 3–12 months. Every engagement begins with a free 360° Scorecard to ensure we recommend what genuinely fits your stage.",
+    plans_label:"Engagement Pricing",
+    plans_title:"Know the range before you call anyone.",
+    plans_sub:"Most businesses hesitate to inquire because they don't know what it costs. Here are our engagement tiers, real price ranges, and the variables that move the number. You'll know where you land before speaking to anyone on our team.",
     plans_note_title:"Our commitment to you:",
     plans_note:"We do not deliver reports and move on. We provide dedicated consultants, proven frameworks, accountable execution, and guaranteed introductions into our partner network. <strong>Every plan includes monthly performance reviews tied to the KPIs we set together.</strong> If we are not moving the needle, we will tell you — and fix it.",
     plan_recommended:"Most Popular",
     plan_cta_free:"Get Your Free Scorecard",
     plan_cta_quote:"Request a Quote",
     plan_cta_custom:"Book a Discovery Call",
-    // Plan names
-    p0_name:"Free",p0_duration:"Always free",p0_price:"R0",p0_price_note:"Start here — no commitment",
-    p1_name:"3 Months",p1_duration:"Quarterly engagement",p1_price:"On request",p1_price_note:"Best for businesses at R2M–R10M",
-    p2_name:"6 Months",p2_duration:"Half-year engagement",p2_price:"On request",p2_price_note:"Best for businesses at R5M–R30M",
-    p3_name:"1 Year +",p3_duration:"Strategic partnership",p3_price:"Custom",p3_price_note:"For R15M+ businesses scaling across Africa",
+    price_transparency_text:"Every prospect receives a written price estimate before any conversation. No mystery. No pressure. You decide with full information.",
+    // Plan names & prices
+    p0_name:"Free",p0_duration:"Always free",p0_price:"R0",p0_price_suffix:null,p0_price_note:"Start here — no commitment",
+    p1_name:"3 Months",p1_duration:"Quarterly sprint",p1_price:"R25k–R45k",p1_price_suffix:"/month",p1_price_note:"Right for R2M–R10M revenue businesses",
+    p2_name:"6 Months",p2_duration:"Core engagement",p2_price:"R40k–R75k",p2_price_suffix:"/month",p2_price_note:"Right for R5M–R30M revenue businesses",
+    p3_name:"1 Year +",p3_duration:"Strategic partnership",p3_price:"R65k+",p3_price_suffix:"/month",p3_price_note:"Right for R15M+ businesses scaling across Africa",
     // Plan features
     p0_f1:"360° AI Business Diagnostic",p0_f2:"30-min call with a Vertex expert",p0_f3:"Limited conversational market insights",p0_f4:"Business health score (5 dimensions)",p0_f5:"Top 3 priority action recommendations",
     p1_f1:"Everything in Free",p1_f2:"1 dedicated Business Developer (1 day/week)",p1_f3:"Full market intelligence & insights",p1_f4:"Brief communication strategy",p1_f5:"Monthly performance review",p1_f6:"OKR framework setup",p1_f7:"Sales process audit & quick wins",
@@ -969,6 +993,26 @@ window.__T__ = {
     cmp_r12:"BMC Revision",cmp_r13:"2-Year Action Plan",cmp_r14:"R&D Support",cmp_r15:"Investor Readiness",
     cmp_r16:"Financial Assistance",cmp_r17:"Legal / Compliance Support",cmp_r18:"Access to Investors",
     cmp_v_30min:"30 min",cmp_v_limited:"Limited",cmp_v_full:"Full",cmp_v_brief:"Brief",cmp_v_1dev:"1",cmp_v_2dev:"2",cmp_v_1day:"1 day/week",cmp_v_2days:"2 days/week",cmp_v_2ev:"2 events",cmp_v_custom:"Custom",cmp_v_guaranteed:"Guaranteed",
+    // What shapes your price
+    influence_label:"WHAT SHAPES YOUR PRICE",
+    influence_title:"Four things that move the number.",
+    influence_sub:"Our pricing is not arbitrary. These are the four variables that determine where in the range your engagement sits.",
+    influence_items:[
+      {n:"01",title:"Revenue size",desc:"Larger businesses with more complexity require deeper resourcing. We calibrate team size and weekly involvement to your actual scale and capacity."},
+      {n:"02",title:"Scope of work",desc:"A focused sales system rebuild is different from a full market-entry strategy across three countries. The scope of what we tackle determines the investment."},
+      {n:"03",title:"Duration",desc:"Longer commitments allow us to go deeper — and price lower per month. A 12-month partnership always costs less per month than a standalone 3-month sprint."},
+      {n:"04",title:"Geography",desc:"Engagements covering 2+ African markets require additional research, network activation, and relationship capital. This is reflected honestly in the price."},
+    ],
+    // Your first conversation
+    first_call_label:"YOUR FIRST CONVERSATION",
+    first_call_title:"We do not pitch on the first call.",
+    first_call_items:[
+      "We listen to your business situation — what's working, what isn't, where you want to go.",
+      "We ask the questions that let us understand whether we're a genuine fit for your stage.",
+      "We tell you honestly if we can't move the needle for your specific situation.",
+      "You receive a written scope and price estimate within 48 hours — before any commitment.",
+    ],
+    first_call_note:"If it is not the right fit, we will point you toward something that is. No awkward follow-ups. No chasing.",
     // Quote modal
     quote_title:"Request a Quote",
     quote_plan_label:"Selected Plan",
@@ -1340,19 +1384,21 @@ window.__T__ = {
     ins_cta_sub:"Lancez un diagnostic 360° gratuit et contribuez à la vue la plus complète de l'entrepreneuriat africain disponible.",
     ins_cta_btn:"Obtenir un diagnostic gratuit →",
     // Plans page FR
-    plans_label:"Nos offres d'engagement",
-    plans_title:"Des missions structurées pour les entreprises prêtes à exécuter.",
-    plans_sub:"Nos programmes payants sont conçus pour les entreprises générant entre 2M et 50M ZAR annuellement et prêtes à s'engager dans une exécution structurée sur 3 à 12 mois. Chaque mission commence par un Bilan 360° gratuit pour nous assurer de recommander ce qui correspond vraiment à votre stade.",
+    plans_label:"Tarification des missions",
+    plans_title:"Connaissez les fourchettes avant d'appeler.",
+    plans_sub:"La plupart des entreprises hésitent à s'informer parce qu'elles ne savent pas ce que cela coûte. Voici nos niveaux d'engagement, les fourchettes réelles et les variables qui font bouger le chiffre. Vous saurez où vous vous situez avant de parler à qui que ce soit.",
     plans_note_title:"Notre engagement envers vous :",
     plans_note:"Nous ne livrons pas de rapports et ne partons pas. Nous fournissons des consultants dédiés, des cadres éprouvés, une exécution responsable et des introductions garanties dans notre réseau de partenaires. <strong>Chaque plan inclut des revues de performance mensuelles liées aux KPIs que nous fixons ensemble.</strong> Si nous ne faisons pas avancer les choses, nous vous le dirons — et nous corrigerons.",
     plan_recommended:"Le plus populaire",
     plan_cta_free:"Obtenir votre Bilan Gratuit",
     plan_cta_quote:"Demander un devis",
     plan_cta_custom:"Prendre un rendez-vous",
-    p0_name:"Gratuit",p0_duration:"Toujours gratuit",p0_price:"0 R",p0_price_note:"Commencez ici — sans engagement",
-    p1_name:"3 Mois",p1_duration:"Engagement trimestriel",p1_price:"Sur demande",p1_price_note:"Idéal pour les entreprises à 2M–10M ZAR",
-    p2_name:"6 Mois",p2_duration:"Engagement semestriel",p2_price:"Sur demande",p2_price_note:"Idéal pour les entreprises à 5M–30M ZAR",
-    p3_name:"1 An +",p3_duration:"Partenariat stratégique",p3_price:"Sur mesure",p3_price_note:"Pour les entreprises à 15M+ ZAR en expansion pan-africaine",
+    price_transparency_text:"Chaque prospect reçoit une estimation de prix écrite avant tout appel. Pas de mystère. Pas de pression. Vous décidez avec toutes les informations.",
+    // Noms et prix des plans
+    p0_name:"Gratuit",p0_duration:"Toujours gratuit",p0_price:"0 R",p0_price_suffix:null,p0_price_note:"Commencez ici — sans engagement",
+    p1_name:"3 Mois",p1_duration:"Sprint trimestriel",p1_price:"R25k–R45k",p1_price_suffix:"/mois",p1_price_note:"Pour les entreprises à 2M–10M ZAR de chiffre d'affaires",
+    p2_name:"6 Mois",p2_duration:"Mission principale",p2_price:"R40k–R75k",p2_price_suffix:"/mois",p2_price_note:"Pour les entreprises à 5M–30M ZAR de chiffre d'affaires",
+    p3_name:"1 An +",p3_duration:"Partenariat stratégique",p3_price:"R65k+",p3_price_suffix:"/mois",p3_price_note:"Pour les entreprises à 15M+ ZAR en expansion pan-africaine",
     p0_f1:"Diagnostic d'entreprise 360° IA",p0_f2:"Appel de 30 min avec un expert Vertex",p0_f3:"Insights de marché conversationnels (limités)",p0_f4:"Score de santé (5 dimensions)",p0_f5:"Top 3 recommandations prioritaires",
     p1_f1:"Tout ce qui est dans le plan Gratuit",p1_f2:"1 Business Developer dédié (1 jour/semaine)",p1_f3:"Intelligence de marché complète",p1_f4:"Stratégie de communication courte",p1_f5:"Revue de performance mensuelle",p1_f6:"Mise en place du cadre OKR",p1_f7:"Audit du processus de vente",
     p2_f1:"Tout ce qui est dans le plan 3 Mois",p2_f2:"2 Business Developers dédiés",p2_f3:"Intelligence de marché (continue)",p2_f4:"Garantie de partenariat — introductions et deals",p2_f5:"Révision complète du Business Model Canvas",p2_f6:"Plan d'action stratégique sur 2 ans",p2_f7:"Assistance à la structuration financière",p2_f8:"Accompagnement juridique et conformité",p2_f9:"Support R&D et ateliers innovation",p2_f10:"2 événements sectoriels curatés",p2_f11:"Évaluation de la préparation investisseurs",
@@ -1366,6 +1412,26 @@ window.__T__ = {
     cmp_r12:"Révision BMC",cmp_r13:"Plan d'action 2 ans",cmp_r14:"Support R&D",cmp_r15:"Préparation investisseurs",
     cmp_r16:"Assistance financière",cmp_r17:"Accompagnement juridique",cmp_r18:"Accès aux investisseurs",
     cmp_v_30min:"30 min",cmp_v_limited:"Limité",cmp_v_full:"Complet",cmp_v_brief:"Courte",cmp_v_1dev:"1",cmp_v_2dev:"2",cmp_v_1day:"1 jour/sem",cmp_v_2days:"2 jours/sem",cmp_v_2ev:"2 événements",cmp_v_custom:"Sur mesure",cmp_v_guaranteed:"Garanti",
+    // Ce qui détermine votre prix
+    influence_label:"CE QUI DÉTERMINE VOTRE PRIX",
+    influence_title:"Quatre éléments qui font bouger le chiffre.",
+    influence_sub:"Notre tarification n'est pas arbitraire. Voici les quatre variables qui déterminent où vous vous situez dans la fourchette.",
+    influence_items:[
+      {n:"01",title:"Taille du chiffre d'affaires",desc:"Les entreprises plus grandes avec plus de complexité nécessitent des ressources plus importantes. Nous calibrons la taille de l'équipe et l'implication hebdomadaire à votre échelle réelle."},
+      {n:"02",title:"Périmètre de la mission",desc:"Reconstruire un système de vente ciblé est différent d'une stratégie d'entrée sur trois marchés africains. Le périmètre de ce que nous traitons détermine l'investissement."},
+      {n:"03",title:"Durée",desc:"Les engagements plus longs nous permettent d'aller plus loin — et de tarifer moins par mois. Un partenariat de 12 mois coûte toujours moins par mois qu'un sprint de 3 mois."},
+      {n:"04",title:"Géographie",desc:"Les missions couvrant 2+ marchés africains nécessitent des recherches supplémentaires, une activation du réseau et du capital relationnel. Cela est honnêtement reflété dans le prix."},
+    ],
+    // Votre premier appel
+    first_call_label:"VOTRE PREMIER ÉCHANGE",
+    first_call_title:"Nous ne faisons pas de pitch lors du premier appel.",
+    first_call_items:[
+      "Nous écoutons votre situation — ce qui fonctionne, ce qui ne fonctionne pas, où vous voulez aller.",
+      "Nous posons les questions qui nous permettent de comprendre si nous sommes un vrai fit pour votre stade.",
+      "Nous vous disons honnêtement si nous ne pouvons pas faire bouger les choses pour votre situation spécifique.",
+      "Vous recevez une estimation de périmètre et de prix par écrit dans les 48 heures — avant tout engagement.",
+    ],
+    first_call_note:"Si ce n'est pas le bon fit, nous vous orienterons vers quelque chose qui l'est. Pas de relances gênantes. Pas de chasse.",
     quote_title:"Demander un devis",
     quote_plan_label:"Plan sélectionné",
     quote_name:"Nom complet *",quote_email:"Adresse e-mail *",quote_company:"Nom de l'entreprise *",
@@ -2081,25 +2147,25 @@ function PlansPage({ setPage, t }) {
 
   const plans = [
     {
-      id:'free', name:t.p0_name, duration:t.p0_duration, price:t.p0_price, priceNote:t.p0_price_note,
+      id:'free', name:t.p0_name, duration:t.p0_duration, price:t.p0_price, priceSuffix:null, priceNote:t.p0_price_note,
       cta:t.plan_cta_free, ctaStyle:'plan-cta-outline', featured:false,
       features:[t.p0_f1,t.p0_f2,t.p0_f3,t.p0_f4,t.p0_f5],
       action: () => { setPage('diagnosis'); window.scrollTo(0,0); }
     },
     {
-      id:'3m', name:t.p1_name, duration:t.p1_duration, price:t.p1_price, priceNote:t.p1_price_note,
+      id:'3m', name:t.p1_name, duration:t.p1_duration, price:t.p1_price, priceSuffix:t.p1_price_suffix, priceNote:t.p1_price_note,
       cta:t.plan_cta_quote, ctaStyle:'plan-cta-solid', featured:false,
       features:[t.p1_f1,t.p1_f2,t.p1_f3,t.p1_f4,t.p1_f5,t.p1_f6,t.p1_f7],
       action: null // opens modal
     },
     {
-      id:'6m', name:t.p2_name, duration:t.p2_duration, price:t.p2_price, priceNote:t.p2_price_note,
+      id:'6m', name:t.p2_name, duration:t.p2_duration, price:t.p2_price, priceSuffix:t.p2_price_suffix, priceNote:t.p2_price_note,
       cta:t.plan_cta_quote, ctaStyle:'plan-cta-solid', featured:true, badge:t.plan_recommended,
       features:[t.p2_f1,t.p2_f2,t.p2_f3,t.p2_f4,t.p2_f5,t.p2_f6,t.p2_f7,t.p2_f8,t.p2_f9,t.p2_f10,t.p2_f11],
       action: null
     },
     {
-      id:'1y', name:t.p3_name, duration:t.p3_duration, price:t.p3_price, priceNote:t.p3_price_note,
+      id:'1y', name:t.p3_name, duration:t.p3_duration, price:t.p3_price, priceSuffix:t.p3_price_suffix, priceNote:t.p3_price_note,
       cta:t.plan_cta_custom, ctaStyle:'plan-cta-custom', featured:false,
       features:[t.p3_f1,t.p3_f2,t.p3_f3,t.p3_f4,t.p3_f5,t.p3_f6,t.p3_f7,t.p3_f8],
       action: null
@@ -2142,7 +2208,10 @@ function PlansPage({ setPage, t }) {
             {plan.featured && <div className="plan-badge">{plan.badge}</div>}
             <div className={`plan-name ${plan.featured?'featured-name':''}`}>{plan.name}</div>
             <div className="plan-duration">{plan.duration}</div>
-            <div className="plan-price">{plan.price}</div>
+            <div className="plan-price" style={{fontSize:plan.priceSuffix?'1.55rem':'2rem'}}>
+              {plan.price}
+              {plan.priceSuffix && <span style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',color:'var(--grey-500)',letterSpacing:'0.08em',fontWeight:400,verticalAlign:'middle',marginLeft:'0.35rem'}}>{plan.priceSuffix}</span>}
+            </div>
             <div className="plan-price-note">{plan.priceNote}</div>
             <div className="plan-divider"/>
             <div className="plan-features">
@@ -2161,6 +2230,48 @@ function PlansPage({ setPage, t }) {
             </button>
           </div>
         ))}
+      </div>
+
+      {/* Price transparency banner */}
+      <div className="price-transparency reveal">
+        <div className="price-transparency-icon">◎</div>
+        <div className="price-transparency-text">
+          <strong>{isFr ? 'Notre engagement de transparence : ' : 'Our pricing commitment: '}</strong>
+          {t.price_transparency_text}
+        </div>
+      </div>
+
+      {/* What shapes your price */}
+      <div className="influence-section reveal">
+        <div className="section-label">{t.influence_label}</div>
+        <h2 className="section-title" style={{maxWidth:520}}>{t.influence_title}</h2>
+        <p style={{color:'var(--grey-300)',maxWidth:560,fontSize:'0.95rem',lineHeight:1.8,marginTop:'0.8rem'}}>{t.influence_sub}</p>
+        <div className="influence-grid">
+          {t.influence_items.map((item,i) => (
+            <div key={i} className="influence-item">
+              <div className="influence-n">{item.n}</div>
+              <div className="influence-item-title">{item.title}</div>
+              <div className="influence-desc">{item.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Your first conversation */}
+      <div className="first-call-section reveal">
+        <div className="first-call-inner">
+          <div className="section-label">{t.first_call_label}</div>
+          <h2 className="section-title" style={{maxWidth:520}}>{t.first_call_title}</h2>
+          <div className="first-call-items">
+            {t.first_call_items.map((item,i) => (
+              <div key={i} className="first-call-item">
+                <div className="first-call-item-n">0{i+1}</div>
+                <div className="first-call-item-text">{item}</div>
+              </div>
+            ))}
+          </div>
+          <div className="first-call-note">{t.first_call_note}</div>
+        </div>
       </div>
 
       {/* Comparison table */}
@@ -2321,10 +2432,10 @@ function Testimonials({ t }) {
 function PlanTeaser({ t, setPage }) {
   const isFr = t === T.fr;
   const cards = [
-    {name:t.p0_name, note:t.p0_price_note, f:[t.p0_f1,t.p0_f2,t.p0_f3], featured:false},
-    {name:t.p1_name, note:t.p1_price_note, f:[t.p1_f2,t.p1_f3,t.p1_f4], featured:false},
-    {name:t.p2_name, note:t.p2_price_note, f:[t.p2_f2,t.p2_f4,t.p2_f5], featured:true},
-    {name:t.p3_name, note:t.p3_price_note, f:[t.p3_f1,t.p3_f3,t.p3_f6], featured:false},
+    {name:t.p0_name, price:t.p0_price, suffix:null, note:t.p0_price_note, f:[t.p0_f1,t.p0_f2,t.p0_f3], featured:false},
+    {name:t.p1_name, price:t.p1_price, suffix:t.p1_price_suffix, note:t.p1_price_note, f:[t.p1_f2,t.p1_f3,t.p1_f4], featured:false},
+    {name:t.p2_name, price:t.p2_price, suffix:t.p2_price_suffix, note:t.p2_price_note, f:[t.p2_f2,t.p2_f4,t.p2_f5], featured:true},
+    {name:t.p3_name, price:t.p3_price, suffix:t.p3_price_suffix, note:t.p3_price_note, f:[t.p3_f1,t.p3_f3,t.p3_f6], featured:false},
   ];
   return (
     <div style={{padding:'5rem 3rem',borderTop:'var(--rule)',background:'var(--offblack)'}}>
@@ -2345,6 +2456,11 @@ function PlanTeaser({ t, setPage }) {
             onMouseEnter={e => { e.currentTarget.style.background = p.featured?'#0f1e2a':'#131311'; }}
             onMouseLeave={e => { e.currentTarget.style.background = p.featured?'#0d1a24':'var(--offblack)'; }}>
             <div style={{fontFamily:'Playfair Display,serif',fontSize:'1.3rem',fontWeight:900,marginBottom:'0.3rem',color:p.featured?'var(--cta)':'var(--white)'}}>{p.name}</div>
+            {p.price && p.price!=='R0' && p.price!=='0 R' && (
+              <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.72rem',color:p.featured?'var(--cta)':'var(--accent)',letterSpacing:'0.05em',marginBottom:'0.25rem',fontWeight:500}}>
+                {p.price}{p.suffix && <span style={{fontSize:'0.6rem',opacity:0.7,marginLeft:'0.2rem'}}>{p.suffix}</span>}
+              </div>
+            )}
             <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',color:'var(--grey-500)',letterSpacing:'0.1em',marginBottom:'1.2rem'}}>{p.note}</div>
             {p.f.map((f,j) => (
               <div key={j} style={{display:'flex',gap:'0.5rem',marginBottom:'0.5rem',fontSize:'0.78rem',color:'var(--grey-300)',lineHeight:1.5}}>
