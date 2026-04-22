@@ -34,6 +34,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:16px}
 body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden}
+.section p,.sp-challenges p,.sp-how p,.sp-case p,.about-text p{font-size:1.05rem;line-height:1.82;color:var(--grey-300);margin-bottom:1.2rem}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;font-family:'DM Sans',sans-serif}
 input,select,textarea{font-family:'DM Sans',sans-serif}
@@ -238,7 +239,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .case-industry{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:1.2rem}
 .case-metric{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;line-height:1;margin-bottom:0.3rem;letter-spacing:-0.02em}
 .case-metric-label{font-size:0.7rem;color:var(--grey-500);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1.5rem}
-.case-desc{font-size:0.85rem;color:var(--grey-300);line-height:1.78}
+.case-desc{font-size:1rem;color:var(--grey-300);line-height:1.82}
 .case-country{margin-top:1.5rem;display:flex;align-items:center;gap:0.5rem;font-size:0.68rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.1em}
 .case-country::before{content:'◎';color:var(--accent);font-size:0.58rem}
 .testimonial-bar{margin-top:4rem;padding:3rem;border:1px solid var(--grey-700);display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:center}
@@ -423,7 +424,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .sme-service-card:hover::before{width:100%}
 .sme-service-num{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--grey-500);letter-spacing:0.15em;margin-bottom:1.5rem}
 .sme-service-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:600;margin-bottom:0.8rem;line-height:1.2}
-.sme-service-desc{color:var(--grey-300);font-size:0.85rem;line-height:1.8;margin-bottom:1.2rem}
+.sme-service-desc{color:var(--grey-300);font-size:1rem;line-height:1.82;margin-bottom:1.2rem}
 .sme-service-tag{font-family:'DM Mono',monospace;font-size:0.64rem;letter-spacing:0.08em;color:var(--accent);padding:0.3rem 0.7rem;border:1px solid rgba(200,184,154,0.3);display:inline-block}
 
 .sme-insights-section{padding:7rem 3rem;background:var(--offblack);border-top:var(--rule)}
@@ -631,11 +632,78 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .qualify-col.qualify-yes .qualify-col-title{color:var(--white)}
 .qualify-col.qualify-no .qualify-col-title{color:var(--grey-400)}
 .qualify-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1rem}
-.qualify-list li{font-size:0.88rem;color:var(--grey-300);line-height:1.7;padding-left:1.6rem;position:relative}
+.qualify-list li{font-size:1rem;color:var(--grey-300);line-height:1.78;padding-left:1.6rem;position:relative}
 .qualify-col.qualify-yes .qualify-list li::before{content:'→';position:absolute;left:0;color:#4ade80;font-family:'DM Mono',monospace;font-size:0.72rem;top:3px}
 .qualify-col.qualify-no .qualify-list li::before{content:'—';position:absolute;left:0;color:var(--grey-600);font-family:'DM Mono',monospace;font-size:0.72rem;top:3px}
 .qualify-cta-note{max-width:960px;margin:2.5rem auto 0;text-align:center;font-size:0.82rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.06em}
 @media(max-width:768px){.qualify-inner{grid-template-columns:1fr;gap:3rem 0}.qualify-divider{height:1px;width:100%;align-self:auto}.qualify-section{padding:4rem 1.5rem}}
+/* ── SECTOR SECTION ──────────────────────────────────────────────── */
+.sector-section{padding:5rem 3rem;border-bottom:var(--rule)}
+.sector-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);margin-top:3rem}
+.sector-card{background:var(--offblack);padding:2.5rem 2rem;transition:background 0.2s}
+.sector-card:hover{background:#131311}
+.sector-card-icon{font-family:'DM Mono',monospace;font-size:1.1rem;color:var(--accent);margin-bottom:1rem;opacity:0.8}
+.sector-card-name{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:0.75rem;line-height:1.3}
+.sector-card-desc{font-size:0.97rem;color:var(--grey-400);line-height:1.78}
+@media(max-width:900px){.sector-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.sector-grid{grid-template-columns:1fr}.sector-section{padding:4rem 1.5rem}}
+/* ── HOW WE WORK ─────────────────────────────────────────────────── */
+.how-section{padding:5rem 3rem;background:var(--bg);border-bottom:var(--rule)}
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);margin-top:3rem}
+.how-step{background:var(--bg);padding:2.5rem 2rem}
+.how-step-n{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;color:var(--grey-600);margin-bottom:1.2rem}
+.how-step-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--white);margin-bottom:1rem;line-height:1.2}
+.how-step-desc{font-size:0.97rem;color:var(--grey-400);line-height:1.78}
+@media(max-width:900px){.how-steps{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.how-steps{grid-template-columns:1fr}.how-section{padding:4rem 1.5rem}}
+/* ── TEAM SECTION ────────────────────────────────────────────────── */
+.team-section{padding:5rem 3rem;border-bottom:var(--rule)}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);margin-top:3rem}
+.team-card{background:var(--offblack);padding:2.5rem 2rem}
+.team-role{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:0.8rem}
+.team-focus{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:1rem;line-height:1.3}
+.team-exp{font-size:0.97rem;color:var(--grey-400);line-height:1.78}
+.team-note{max-width:700px;margin:2.5rem auto 0;text-align:center;font-size:0.82rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.05em;line-height:1.6}
+@media(max-width:900px){.team-grid{grid-template-columns:1fr}.team-section{padding:4rem 1.5rem}}
+/* ── FINAL CTA SECTION ───────────────────────────────────────────── */
+.final-cta-section{padding:8rem 3rem;text-align:center;background:var(--bg);border-top:var(--rule)}
+.final-cta-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4.5vw,3.5rem);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:1.5rem}
+.final-cta-sub{font-size:0.95rem;color:var(--grey-300);max-width:540px;margin:0 auto 2.5rem;line-height:1.75}
+.final-cta-note{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;color:var(--grey-600);margin-top:1.5rem}
+@media(max-width:600px){.final-cta-section{padding:5rem 1.5rem}}
+/* ── SECTOR PAGE ─────────────────────────────────────────────────── */
+.sp-hero{padding:6rem 3rem 4rem;border-bottom:var(--rule)}
+.sp-hero-label{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem}
+.sp-hero-name{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:1.5rem}
+.sp-hero-sub{font-size:1.05rem;color:var(--grey-400);max-width:640px;line-height:1.85}
+.sp-challenges{padding:5rem 3rem;border-bottom:var(--rule)}
+.sp-challenges-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);margin-top:3rem}
+.sp-challenge{background:var(--offblack);padding:2.5rem 2rem}
+.sp-challenge-n{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;color:var(--grey-600);margin-bottom:1rem}
+.sp-challenge-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:0.8rem;line-height:1.4}
+.sp-challenge-desc{font-size:1rem;color:var(--grey-400);line-height:1.8}
+.sp-how{padding:5rem 3rem;background:var(--bg);border-bottom:var(--rule)}
+.sp-how-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;margin-top:3rem}
+.sp-how-item{padding:2rem;border:1px solid var(--grey-800);border-left:3px solid rgba(200,184,154,0.3)}
+.sp-how-title{font-family:'DM Mono',monospace;font-size:0.78rem;letter-spacing:0.08em;font-weight:700;color:var(--white);margin-bottom:0.7rem}
+.sp-how-desc{font-size:1rem;color:var(--grey-400);line-height:1.8}
+.sp-case{padding:5rem 3rem;border-bottom:var(--rule)}
+.sp-case-inner{border:1px solid var(--grey-700);border-top:3px solid var(--accent);max-width:820px;margin:3rem auto 0}
+.sp-case-header{padding:1.2rem 2.5rem;background:var(--offblack);border-bottom:1px solid var(--grey-700)}
+.sp-case-tag{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent)}
+.sp-case-body{padding:2.5rem}
+.sp-case-row{margin-bottom:1.8rem}
+.sp-case-row-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--grey-600);margin-bottom:0.4rem}
+.sp-case-row-text{font-size:1.05rem;color:var(--grey-200);line-height:1.82}
+.sp-case-row.outcome .sp-case-row-text{color:var(--white);font-weight:600}
+.sp-services{padding:4rem 3rem;background:var(--offblack);border-bottom:var(--rule)}
+.sp-services-tags{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:1.5rem}
+.sp-service-tag{font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;padding:0.4rem 0.8rem;border:1px solid var(--grey-700);color:var(--grey-400)}
+.sp-cta{padding:6rem 3rem;text-align:center;border-top:var(--rule)}
+.sp-cta-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;color:var(--white);line-height:1.2;margin-bottom:1.2rem}
+.sp-cta-sub{font-size:1.05rem;color:var(--grey-400);max-width:520px;margin:0 auto 2.5rem;line-height:1.8}
+@media(max-width:900px){.sp-challenges-grid{grid-template-columns:1fr}.sp-how-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.sp-hero,.sp-challenges,.sp-how,.sp-case,.sp-services,.sp-cta{padding-left:1.5rem;padding-right:1.5rem}.sp-hero{padding-top:5rem}.sp-case-body{padding:1.5rem}.sp-case-header{padding:1rem 1.5rem}}
 </style>
 </head>
 <body>
@@ -1004,6 +1072,44 @@ window.__T__ = {
     newsletter_btn:"Subscribe →",
     newsletter_disclaimer:"Monthly. No spam. Unsubscribe anytime.",
     newsletter_success:"You're subscribed. Welcome to the Vertex community.",
+    // Sectors
+    sector_label:"Where we work",
+    sector_title:"Six sectors. One execution standard.",
+    sector_sub:"Vertex embeds in businesses across Africa's highest-growth sectors. If your growth has stalled, we know your market.",
+    sectors:[
+      {icon:"◈", key:"fintech",       name:"Fintech & Financial Services", desc:"Payment infrastructure, lending products, insurance distribution, and financial access for underserved markets. We know what regulators require and what customers actually use."},
+      {icon:"◈", key:"retail",        name:"Retail & FMCG",                desc:"Distribution architecture, last-mile execution, supplier negotiation, and the commercial systems that turn foot traffic into consistent revenue."},
+      {icon:"◈", key:"tech",          name:"Technology & SaaS",            desc:"Product-market fit validation, B2B go-to-market execution, enterprise sales process design, and the transition from founder-led selling to a scalable commercial team."},
+      {icon:"◈", key:"agri",          name:"Agriculture & Agri-business",  desc:"Aggregation models, off-take agreements, input finance access, and supply chain design for agricultural businesses with proven models and constrained growth."},
+      {icon:"◈", key:"professional",  name:"Professional Services",        desc:"Practice growth, geographic expansion, service productisation, and the transition from time-for-money billing to scalable, defensible revenue models."},
+      {icon:"◈", key:"health",        name:"Healthcare & Pharma",          desc:"Distribution networks, institutional procurement, regulatory navigation, and the commercial architecture required to reach patients at scale across African markets."},
+    ],
+    // How We Work
+    how_label:"The execution model",
+    how_title:"How a Vertex engagement works.",
+    how_sub:"We follow a four-phase model on every engagement. The scope changes. The discipline does not.",
+    how_steps:[
+      {n:"01", title:"Diagnose", desc:"The Vertex 360° Scorecard analyses your business across five dimensions. You receive a scored report and a prioritised roadmap — before any engagement begins."},
+      {n:"02", title:"Design", desc:"A 90-day execution plan, co-built with your leadership. Every objective has a named KPI. Every KPI has a named accountable person."},
+      {n:"03", title:"Execute", desc:"Vertex consultants embed in your team. Not remotely, not occasionally — present, accountable, and working on the priorities that move the numbers."},
+      {n:"04", title:"Measure", desc:"Monthly KPI reviews against the plan. Adjustments made in real time. The engagement does not close until the metrics reflect the original objective."},
+    ],
+    // Team
+    team_label:"Who works with you",
+    team_title:"Every engagement gets a dedicated three-person team.",
+    team_sub:"We do not staff junior consultants with senior oversight. The person who scopes your engagement is the person who works it.",
+    team_roles:[
+      {role:"Strategy Lead", focus:"Commercial & growth strategy", exp:"10+ years in African market strategy, OKR design, and revenue architecture across 3+ sectors. Accountable for the 90-day plan and the outcomes it targets."},
+      {role:"Market Access Specialist", focus:"Network & institutional introductions", exp:"Active relationships in your target markets. Named introductions to relevant organisations within 30 days of engagement start — not at the end of a strategy document."},
+      {role:"Commercial Operations Analyst", focus:"Sales systems & KPI tracking", exp:"Pipeline rebuild, CRM setup, reporting architecture, and the week-to-week execution accountability that most engagements never have."},
+    ],
+    team_note:"Team composition is confirmed before signing. You meet every person working on your engagement before any work begins.",
+    // Final CTA
+    final_cta_label:"Start here",
+    final_cta_title:"The 360° Scorecard takes 45 minutes.",
+    final_cta_sub:"It tells you exactly where your business is losing revenue, which markets you are under-serving, and what the highest-leverage moves are. Free. No sales call unless you want one.",
+    final_cta_btn:"Get Your Free 360° Scorecard →",
+    final_cta_note:"Used by 200+ SMEs across 12 African markets.",
     // Social
     social_label:"Connect With Us",
     social_instagram:"Instagram",
@@ -1338,6 +1444,44 @@ window.__T__ = {
     sme_cta_sub:"Commencez par un diagnostic d'entreprise 360° gratuit. En 45–60 minutes, Vertex AI analyse votre entreprise selon 5 dimensions et vous fournit une feuille de route vers la croissance.",
     sme_cta_btn:"Obtenir votre diagnostic PME gratuit →",
     sme_cta_ghost:"Parler à notre équipe",
+    // Secteurs
+    sector_label:"Où nous travaillons",
+    sector_title:"Six secteurs. Un standard d'exécution.",
+    sector_sub:"Vertex s'intègre dans des entreprises à travers les secteurs à plus forte croissance d'Afrique. Si votre croissance a stagné, nous connaissons votre marché.",
+    sectors:[
+      {icon:"◈", key:"fintech",       name:"Fintech & Services Financiers",              desc:"Infrastructure de paiement, produits de prêt, distribution d'assurance et accès financier pour les marchés sous-desservis. Nous connaissons les exigences réglementaires et ce que les clients utilisent réellement."},
+      {icon:"◈", key:"retail",        name:"Commerce de Détail & FMCG",                  desc:"Architecture de distribution, exécution du dernier kilomètre, négociation fournisseurs et les systèmes commerciaux qui transforment le trafic en revenus réguliers."},
+      {icon:"◈", key:"tech",          name:"Technologie & SaaS",                         desc:"Validation de l'adéquation produit-marché, exécution go-to-market B2B, conception du processus de vente entreprise et la transition de la vente portée par le fondateur vers une équipe commerciale évolutive."},
+      {icon:"◈", key:"agri",          name:"Agriculture & Agri-business",                desc:"Modèles d'agrégation, accords d'off-take, accès au financement des intrants et conception de la chaîne d'approvisionnement pour les entreprises agricoles avec des modèles prouvés et une croissance contrainte."},
+      {icon:"◈", key:"professional",  name:"Services Professionnels",                    desc:"Croissance de la pratique, expansion géographique, productisation des services et la transition du facturation temps-pour-argent vers des modèles de revenus évolutifs et défendables."},
+      {icon:"◈", key:"health",        name:"Santé & Pharma",                             desc:"Réseaux de distribution, approvisionnement institutionnel, navigation réglementaire et l'architecture commerciale nécessaire pour atteindre les patients à grande échelle sur les marchés africains."},
+    ],
+    // Comment nous travaillons
+    how_label:"Le modèle d'exécution",
+    how_title:"Comment fonctionne une mission Vertex.",
+    how_sub:"Nous suivons un modèle en quatre phases pour chaque mission. La portée change. La discipline, non.",
+    how_steps:[
+      {n:"01", title:"Diagnostiquer", desc:"Le Bilan Vertex 360° analyse votre entreprise selon cinq dimensions. Vous recevez un rapport scoré et une feuille de route prioritaire — avant le début de toute mission."},
+      {n:"02", title:"Concevoir", desc:"Un plan d'exécution de 90 jours, co-construit avec votre direction. Chaque objectif a un KPI nommé. Chaque KPI a un responsable nommé."},
+      {n:"03", title:"Exécuter", desc:"Les consultants Vertex s'intègrent dans votre équipe. Pas à distance, pas occasionnellement — présents, responsables, et travaillant sur les priorités qui font bouger les chiffres."},
+      {n:"04", title:"Mesurer", desc:"Revues KPI mensuelles par rapport au plan. Ajustements en temps réel. La mission ne se ferme pas tant que les métriques ne reflètent pas l'objectif initial."},
+    ],
+    // Équipe
+    team_label:"Qui travaille avec vous",
+    team_title:"Chaque mission reçoit une équipe dédiée de trois personnes.",
+    team_sub:"Nous n'affectons pas des consultants juniors avec une supervision senior. La personne qui cadre votre mission est la personne qui la travaille.",
+    team_roles:[
+      {role:"Responsable Stratégie", focus:"Stratégie commerciale & croissance", exp:"10+ ans de stratégie sur les marchés africains, conception OKR et architecture des revenus dans 3+ secteurs. Responsable du plan à 90 jours et des résultats qu'il cible."},
+      {role:"Spécialiste Accès Marché", focus:"Réseau & introductions institutionnelles", exp:"Relations actives sur vos marchés cibles. Introductions nommées à des organisations pertinentes dans les 30 jours suivant le début — pas à la fin d'un document de stratégie."},
+      {role:"Analyste Opérations Commerciales", focus:"Systèmes de vente & suivi KPI", exp:"Reconstruction pipeline, configuration CRM, architecture de reporting et la responsabilité d'exécution semaine par semaine que la plupart des missions n'ont jamais."},
+    ],
+    team_note:"La composition de l'équipe est confirmée avant la signature. Vous rencontrez chaque personne travaillant sur votre mission avant le début de tout travail.",
+    // CTA final
+    final_cta_label:"Commencer ici",
+    final_cta_title:"Le Bilan 360° prend 45 minutes.",
+    final_cta_sub:"Il vous indique exactement où votre entreprise perd des revenus, quels marchés vous sous-exploitez et quels sont les leviers les plus impactants. Gratuit. Pas d'appel commercial sauf si vous le souhaitez.",
+    final_cta_btn:"Obtenir votre Bilan 360° Gratuit →",
+    final_cta_note:"Utilisé par 200+ PME dans 12 marchés africains.",
   }
 };
 </script>
@@ -1375,6 +1519,249 @@ async function apiGet(path) {
 // Translations: see window.__T__ (loaded in plain script)
 const T = window.__T__;
 
+// ── SECTOR PAGE DATA ─────────────────────────────────────────────
+const SECTOR_DATA = {
+  fintech: {
+    en: {
+      name: "Fintech & Financial Services",
+      hero_qualifier: "For payment platforms, embedded finance, digital lenders, and financial access solutions operating across African markets.",
+      challenges: [
+        { title: "Regulatory fragmentation kills expansion speed", desc: "Every market has a different central bank, different licensing requirements, different capital thresholds. What works in Nigeria doesn't work in Kenya. What gets approved in South Africa takes three times as long in Ghana. Most fintech SMEs spend their first 18 months in a new market on compliance instead of revenue." },
+        { title: "Enterprise sales runs on relationships, not decks", desc: "Selling to banks, MFIs, and telcos in Africa requires warm introductions — not cold outreach. Decision-making is slow, relationship-dependent, and often informal. Most fintechs have a strong product and zero pipeline into the institutions that would buy it at scale." },
+        { title: "Unit economics that look healthy mask a retention problem", desc: "CAC is often understated (founder relationships don't show up in the numbers) and LTV is overstated (churn before the customer becomes profitable is common). Most fintech SMEs grow revenue while quietly destroying value. The numbers look right until they don't." },
+      ],
+      how_items: [
+        { title: "Market entry sequencing", desc: "We map regulatory requirements across your target markets and design an entry sequence based on time-to-revenue, not alphabetical order. Direct relationships with regulatory consultants in 12 African markets — we get answers, not estimates." },
+        { title: "Enterprise pipeline development", desc: "Direct introductions to our network of tier-2 banks, MFIs, telcos, and corporate treasury departments across the continent. These are warm introductions from a known party — not referrals to a contact database." },
+        { title: "Commercial architecture", desc: "Full audit of your sales process from ICP to close. We rebuild the pipeline, define qualification criteria, write the sales playbook, and embed Business Developers to prove it works before we leave." },
+        { title: "Unit economics review", desc: "CAC/LTV analysis by cohort, margin analysis by product line, and a clear view of which revenue is building a business and which is masking one that isn't." },
+      ],
+      case: { tag: "Commercial Architecture · Fintech · Nigeria", situation: "Nigerian embedded finance platform, $1.2M ARR, three years in market. Strong product, zero enterprise sales process. Founder personally closing every deal — spending 60% of their time on sales with no pipeline beyond warm contacts.", work: "ICP refinement for enterprise tier → enterprise sales playbook built from first principles → two Business Developers embedded for four months → introductions to three tier-2 banks and two microfinance institutions → CRM setup and sales cycle documentation.", outcome: "Four enterprise contracts signed within six months. ARR grew from $1.2M to $2.8M. BD team now operates independently. Founder's time on sales reduced from 60% to 18%." },
+      services: ["Commercial Architecture", "Enterprise Pipeline Development", "Market Entry Sequencing", "Unit Economics Review"],
+      cta_title: "Where is your fintech leaving revenue?",
+      cta_sub: "Run the PULSE Assessment. In 45 minutes you will know exactly which dimension is blocking your next growth stage — and what to do about it.",
+    },
+    fr: {
+      name: "Fintech & Services Financiers",
+      hero_qualifier: "Pour les plateformes de paiement, la finance embarquée, les prêteurs numériques et les solutions d'accès financier opérant sur les marchés africains.",
+      challenges: [
+        { title: "La fragmentation réglementaire tue la vitesse d'expansion", desc: "Chaque marché a une banque centrale différente, des exigences de licence différentes, des seuils de capital différents. La plupart des PME fintech passent leurs 18 premiers mois sur un nouveau marché à gérer la conformité plutôt qu'à générer des revenus." },
+        { title: "La vente B2B repose sur les relations, pas sur les présentations", desc: "Vendre aux banques, aux IMF et aux opérateurs télécoms en Afrique nécessite des introductions chaleureuses. La prise de décision est lente et souvent informelle. La plupart des fintechs ont un produit solide et aucun pipeline vers les institutions qui l'achèteraient à grande échelle." },
+        { title: "Des économies unitaires saines masquent un problème de rétention", desc: "Le CAC est souvent sous-estimé et la LTV surestimée. Le churn avant que le client ne soit rentable est courant. La plupart des PME fintech augmentent leurs revenus tout en détruisant silencieusement de la valeur." },
+      ],
+      how_items: [
+        { title: "Séquençage d'entrée sur le marché", desc: "Nous cartographions les exigences réglementaires sur vos marchés cibles et concevons une séquence d'entrée basée sur le délai de revenus. Relations directes avec des consultants réglementaires dans 12 marchés africains." },
+        { title: "Développement du pipeline entreprise", desc: "Introductions directes à notre réseau de banques de tier 2, d'IMF et de télécoms sur le continent. Ce sont des introductions chaleureuses d'une partie connue — pas des renvois vers une base de contacts." },
+        { title: "Architecture commerciale", desc: "Audit complet de votre processus de vente de l'ICP à la conclusion. Nous reconstruisons le pipeline, définissons les critères de qualification, rédigeons le playbook de vente et intégrons des BDs pour prouver que ça marche." },
+        { title: "Revue des économies unitaires", desc: "Analyse CAC/LTV par cohorte, analyse des marges par ligne de produit, et une vision claire des revenus qui construisent une entreprise et de ceux qui masquent une qui ne le fait pas." },
+      ],
+      case: { tag: "Architecture Commerciale · Fintech · Nigeria", situation: "Plateforme de finance embarquée nigériane, 1,2M$ de CA annuel, trois ans sur le marché. Produit solide, zéro processus de vente entreprise. Fondateur concluant personnellement chaque contrat — 60% du temps sur la vente sans pipeline.", work: "Raffinement de l'ICP pour le tier entreprise → playbook de vente enterprise → deux Business Developers intégrés pendant quatre mois → introductions à trois banques de tier 2 et deux IMF → mise en place du CRM.", outcome: "Quatre contrats entreprise signés en six mois. Le CA annuel est passé de 1,2M$ à 2,8M$. L'équipe BD fonctionne maintenant de manière indépendante. Le temps du fondateur sur la vente est passé de 60% à 18%." },
+      services: ["Architecture Commerciale", "Développement Pipeline Entreprise", "Séquençage d'Entrée Marché", "Revue des Économies Unitaires"],
+      cta_title: "Où votre fintech laisse-t-elle des revenus ?",
+      cta_sub: "Faites l'évaluation PULSE. En 45 minutes vous saurez exactement quelle dimension bloque votre prochaine étape de croissance.",
+    },
+  },
+  retail: {
+    en: {
+      name: "Retail & FMCG",
+      hero_qualifier: "For consumer goods brands, FMCG distributors, and retailers operating across African formal and informal markets.",
+      challenges: [
+        { title: "Informal trade dominance rewrites the distribution rulebook", desc: "In most African markets, 70–85% of consumer goods move through informal trade — kiosks, open markets, hawkers. Building distribution that captures this channel requires a fundamentally different architecture than a modern trade playbook. Most brands try to apply a superstore model to an informal market and wonder why volumes don't scale." },
+        { title: "Managing 200 small distributors is a different business than managing 5 large ones", desc: "Fragmented distribution networks create inconsistent shelf presence, pricing discipline problems, and reporting blind spots. A consumer goods business with 180 distributors across 4 markets often has less visibility into sell-out data than one with 5 — and makes worse decisions as a result." },
+        { title: "Price sensitivity vs. brand premium is a false choice — but choosing wrong is fatal", desc: "Competing on price destroys margin and commoditises the category. Competing on premium requires brand investment most SMEs can't sustain. The brands that win find a precise positioning that justifies a 15–25% premium on a specific consumer need and build their route-to-market around that consumer, not the easiest channel." },
+      ],
+      how_items: [
+        { title: "Distribution architecture", desc: "We map your current distribution against the actual channel mix in your target markets — formal, informal, and digital — and design a route-to-market that reaches the consumer you're targeting, not just the retailer who's easiest to reach." },
+        { title: "Modern trade entry", desc: "Direct introductions to category buyers at major retail chains across South Africa, Nigeria, Kenya, and Ghana. We have existing relationships — your first conversation is not a cold call." },
+        { title: "Distributor network optimisation", desc: "Audit of your existing distributor relationships: coverage gaps, pricing discipline, sell-out tracking, and contractual clarity. We reduce the number of relationships you manage while increasing the volume each drives." },
+        { title: "Margin and pricing architecture", desc: "Full margin analysis by SKU, channel, and market. We identify where you're subsidising distribution, where pricing is suppressing volume, and what the optimal price architecture looks like for sustainable growth." },
+      ],
+      case: { tag: "Market Expansion · FMCG · Ghana", situation: "Ghanaian consumer goods brand, $3M annual revenue, distributed exclusively in Accra and Tema. Strong local brand recognition, award-winning product, no route-to-market outside the home region. Distribution entirely through one partner with no incentive to expand.", work: "Distribution audit → route-to-market design for 4 new regions → distributor partner identification and onboarding → 90-day trade push with embedded commercial support → sell-out tracking implementation.", outcome: "Expanded to 4 regions in 8 months. Annual revenue grew from $3M to $5.1M. Distributor network grew from 8 to 31 partners. Single-partner dependency eliminated." },
+      services: ["Distribution Architecture", "Modern Trade Entry", "Distributor Network Optimisation", "Pricing & Margin Analysis"],
+      cta_title: "Is your distribution architecture limiting your revenue ceiling?",
+      cta_sub: "Run the PULSE Assessment. The Scale Infrastructure dimension will tell you exactly where your distribution model is constraining growth.",
+    },
+    fr: {
+      name: "Commerce de Détail & FMCG",
+      hero_qualifier: "Pour les marques de biens de consommation, les distributeurs FMCG et les détaillants opérant sur les marchés africains formels et informels.",
+      challenges: [
+        { title: "La dominance du commerce informel réécrit les règles de distribution", desc: "Dans la plupart des marchés africains, 70 à 85% des biens de consommation transitent par le commerce informel — kiosques, marchés ouverts, vendeurs ambulants. La plupart des marques essaient d'appliquer un modèle de grande surface à un marché informel et se demandent pourquoi les volumes ne se développent pas." },
+        { title: "Gérer 200 petits distributeurs est un métier différent de gérer 5 grands", desc: "Les réseaux de distribution fragmentés créent une présence en rayon incohérente, des problèmes de discipline tarifaire et des angles morts. Une entreprise avec 180 distributeurs a souvent moins de visibilité sur les données de vente qu'une avec 5 — et prend de moins bonnes décisions." },
+        { title: "Sensibilité au prix vs. prime de marque — choisir le mauvais camp est fatal", desc: "Concurrencer sur le prix détruit les marges. Concurrencer sur le premium nécessite des investissements en marque que la plupart des PME ne peuvent pas soutenir. Les marques qui gagnent trouvent un positionnement précis qui justifie une prime de 15 à 25% sur un besoin spécifique." },
+      ],
+      how_items: [
+        { title: "Architecture de distribution", desc: "Nous cartographions votre distribution actuelle par rapport au mix de canaux réel de vos marchés cibles — formel, informel et digital — et concevons un itinéraire vers le marché qui atteint le consommateur que vous ciblez." },
+        { title: "Entrée dans le commerce moderne", desc: "Introductions directes aux acheteurs de catégorie dans les principales chaînes de distribution en Afrique du Sud, au Nigeria, au Kenya et au Ghana. Nous avons des relations existantes — votre premier entretien n'est pas un appel à froid." },
+        { title: "Optimisation du réseau de distributeurs", desc: "Audit de vos relations distributeurs : couverture, discipline tarifaire, suivi des ventes et clarté contractuelle. Nous réduisons le nombre de relations à gérer tout en augmentant le volume que chacune génère." },
+        { title: "Architecture tarifaire et des marges", desc: "Analyse complète des marges par SKU, canal et marché. Nous identifions où vous subventionnez la distribution et quelle est l'architecture tarifaire optimale pour une croissance durable." },
+      ],
+      case: { tag: "Expansion Marché · FMCG · Ghana", situation: "Marque de biens de consommation ghanéenne, 3M$ de CA annuel, distribuée exclusivement à Accra et Tema. Forte notoriété locale, produit primé, aucun itinéraire vers le marché hors de la région d'origine. Distribution via un seul partenaire sans incitation à s'étendre.", work: "Audit de distribution → conception d'un itinéraire vers le marché pour 4 nouvelles régions → identification et intégration de partenaires distributeurs → poussée commerciale de 90 jours avec soutien intégré → implémentation du suivi des ventes.", outcome: "Expansion à 4 régions en 8 mois. Le CA annuel est passé de 3M$ à 5,1M$. Le réseau de distributeurs est passé de 8 à 31 partenaires. La dépendance à un seul partenaire a été éliminée." },
+      services: ["Architecture de Distribution", "Entrée Commerce Moderne", "Optimisation Réseau Distributeurs", "Analyse Tarifaire & Marges"],
+      cta_title: "Votre architecture de distribution limite-t-elle votre plafond de revenus ?",
+      cta_sub: "Faites l'évaluation PULSE. La dimension Infrastructure d'Échelle vous dira exactement où votre modèle de distribution contraint la croissance.",
+    },
+  },
+  tech: {
+    en: {
+      name: "Technology & SaaS",
+      hero_qualifier: "For software companies, SaaS platforms, and digital product businesses targeting African enterprise or consumer markets.",
+      challenges: [
+        { title: "The founder can demo. The founder can't build a sales team.", desc: "Technical founders who built the product often carry the entire revenue function personally. The business grows to $500K–$1M ARR and then stalls — not because the product stopped working, but because the selling process was never systemised. Nobody else knows how to close." },
+        { title: "African enterprise sales cycles are long, relationship-dependent, and culturally specific", desc: "Cold outreach barely works in mature Western markets. In African enterprise, it is nearly irrelevant. Deals get done through known relationships and respected introductions. Copying a San Francisco inbound SaaS playbook in Lagos or Nairobi is expensive and demoralising." },
+        { title: "Pricing for African markets is not a discount — it's an entirely different model", desc: "US/EU SaaS pricing applied to African enterprises produces one of two outcomes: the price is too high and kills adoption, or it's reduced arbitrarily and destroys the business model. The right answer requires understanding local competitor pricing, procurement budgets, and what a CFO in Johannesburg or Accra will actually approve." },
+      ],
+      how_items: [
+        { title: "African market PMF validation", desc: "We pressure-test your product-market fit assumptions against actual African enterprise buyer behaviour. ICP refinement, TAM sizing for specific markets, and honest assessment of whether the product needs repositioning before the sales system is built." },
+        { title: "Enterprise sales process design", desc: "We build your enterprise sales process from the ground up — ICP, outreach sequence, qualification framework, proposal structure, negotiation playbook, and close methodology — calibrated for African enterprise culture, not imported from a US SaaS template." },
+        { title: "Institutional introductions", desc: "Direct introductions to enterprise buyers in your sector across our 200+ relationship network. HR software goes to CHROs. Supply chain software goes to COOs. The introductions are named, warm, and followed up by Vertex — not handed over and forgotten." },
+        { title: "Transition from founder-led to team-led selling", desc: "We document what the founder does instinctively, turn it into a repeatable playbook, hire and onboard your first commercial hires against that playbook, and stay long enough to make sure the handover actually works." },
+      ],
+      case: { tag: "Commercial Architecture · SaaS · Kenya", situation: "Kenyan HR SaaS platform, 45 clients — all SMEs, $600K ARR. Founder spending 60% of time on sales with no structured process. Targeting enterprise for 18 months with zero traction: wrong ICP, no warm intros, no enterprise-calibrated pitch.", work: "ICP analysis and repositioning → enterprise sales playbook → two Business Developers embedded for five months → introductions to eight enterprise HR decision-makers → pricing architecture redesign for enterprise tier → CRM implementation.", outcome: "First three enterprise contracts signed in five months. ARR grew from $600K to $1.4M within ten months. Founder's time on sales reduced from 60% to 15%. Sales team now operates on the playbook independently." },
+      services: ["Enterprise Sales Process Design", "PMF Validation", "Institutional Introductions", "Founder-to-Team Sales Transition"],
+      cta_title: "Is your revenue ceiling your product — or your commercial architecture?",
+      cta_sub: "The PULSE Assessment answers this in 45 minutes. Most SaaS founders discover the product is fine. The pipeline is not.",
+    },
+    fr: {
+      name: "Technologie & SaaS",
+      hero_qualifier: "Pour les éditeurs de logiciels, les plateformes SaaS et les entreprises de produits numériques ciblant les marchés africains B2B ou grand public.",
+      challenges: [
+        { title: "Le fondateur sait pitcher. Il ne sait pas construire une équipe commerciale.", desc: "Les fondateurs techniques portent souvent toute la fonction revenus personnellement. L'entreprise croît jusqu'à 500K–1M$ de CA puis stagne — pas parce que le produit a cessé de fonctionner, mais parce que le processus de vente n'a jamais été systématisé." },
+        { title: "Les cycles de vente enterprise africains sont longs, relationnels et culturellement spécifiques", desc: "Le démarchage à froid fonctionne à peine sur les marchés occidentaux matures. En Afrique, les affaires se font par des relations connues et des introductions respectées. Copier un playbook SaaS américain à Lagos ou Nairobi est coûteux et décourageant." },
+        { title: "La tarification pour les marchés africains n'est pas une réduction — c'est un modèle entièrement différent", desc: "La tarification SaaS US/EU appliquée aux entreprises africaines produit soit un prix trop élevé qui tue l'adoption, soit une réduction arbitraire qui détruit le modèle commercial. La bonne réponse nécessite de comprendre ce qu'un DAF à Johannesburg ou Accra approuvera réellement." },
+      ],
+      how_items: [
+        { title: "Validation PMF pour le marché africain", desc: "Nous testons vos hypothèses d'adéquation produit-marché par rapport au comportement réel des acheteurs enterprise africains. Raffinement de l'ICP, dimensionnement du TAM pour des marchés spécifiques, et évaluation honnête du besoin de repositionnement." },
+        { title: "Conception du processus de vente enterprise", desc: "Nous construisons votre processus de vente enterprise de zéro — ICP, séquence de prospection, cadre de qualification, méthodologie de conclusion — calibré pour la culture enterprise africaine, pas importé d'un modèle américain." },
+        { title: "Introductions institutionnelles", desc: "Introductions directes aux acheteurs enterprise dans votre secteur via notre réseau de 200+ relations. Les logiciels RH vont aux DRH. Les logiciels de supply chain vont aux COO. Les introductions sont nommées, chaleureuses et suivies par Vertex." },
+        { title: "Transition de la vente fondateur-led à team-led", desc: "Nous documentons ce que le fondateur fait instinctivement, le transformons en playbook reproductible, recrutons vos premiers commerciaux contre ce playbook, et restons assez longtemps pour que la transition fonctionne réellement." },
+      ],
+      case: { tag: "Architecture Commerciale · SaaS · Kenya", situation: "Plateforme SaaS RH kenyane, 45 clients PME, 600K$ de CA. Fondateur passant 60% de son temps sur la vente sans processus structuré. Ciblait l'entreprise depuis 18 mois sans traction : mauvais ICP, pas d'introductions chaleureuses.", work: "Analyse et repositionnement ICP → playbook de vente enterprise → deux Business Developers intégrés cinq mois → introductions à huit décideurs RH enterprise → refonte de l'architecture tarifaire → implémentation CRM.", outcome: "Trois premiers contrats enterprise signés en cinq mois. Le CA a augmenté de 600K$ à 1,4M$ en dix mois. Le temps du fondateur sur la vente est passé de 60% à 15%. L'équipe commerciale opère maintenant de manière indépendante." },
+      services: ["Conception Processus Vente Enterprise", "Validation PMF", "Introductions Institutionnelles", "Transition Commerciale Fondateur-Équipe"],
+      cta_title: "Votre plafond de revenus est-il votre produit — ou votre architecture commerciale ?",
+      cta_sub: "L'évaluation PULSE répond en 45 minutes. La plupart des fondateurs SaaS découvrent que le produit va bien. Le pipeline, non.",
+    },
+  },
+  agri: {
+    en: {
+      name: "Agriculture & Agri-business",
+      hero_qualifier: "For agricultural businesses, agri-processors, commodity traders, and input suppliers operating across African smallholder and commercial farming markets.",
+      challenges: [
+        { title: "No off-take agreement means no planning horizon", desc: "An agricultural business that sells on the spot market cannot plan production, cannot access working capital at scale, and cannot offer smallholder partners any certainty. The off-take agreement is the single most valuable commercial document in agri-business — and most SMEs negotiate it from a position of weakness because they start looking after harvest, not before." },
+        { title: "Input finance access at scale requires a track record, not just a business plan", desc: "Banks and development finance institutions will lend to agricultural SMEs — but terms depend heavily on demonstrated repayment history, documented supply chain relationships, and clear off-take visibility. Most agri SMEs lack the documentation, DFI relationships, or commercial structure to access the financing their ambitions require." },
+        { title: "Post-harvest loss destroys margin before the product reaches the market", desc: "Across sub-Saharan Africa, 30–40% of agricultural produce is lost between farm and market due to logistics failures, cold chain gaps, and storage inadequacy. For an agri SME with 20–30% gross margins, a 30% post-harvest loss rate doesn't halve the margin — it eliminates it." },
+      ],
+      how_items: [
+        { title: "Off-take agreement negotiation", desc: "We identify, introduce, and support negotiation with off-take partners — regional aggregators, processors, export buyers, and institutional purchasers — before the harvest cycle, not after. Our network includes direct relationships with export buyers in Europe, the Middle East, and across Africa." },
+        { title: "Development finance access", desc: "Direct relationships with development finance institutions and impact investors active in African agriculture. We help agri SMEs structure the documentation, commercial narrative, and financial model that DFIs need to approve funding — not just connect you to a website." },
+        { title: "Outgrower scheme design", desc: "We design scalable outgrower models that allow agri businesses to increase production through smallholder partnerships without proportional increases in operational complexity. Contract structure, input provision models, extension services, and aggregation logistics." },
+        { title: "Supply chain architecture", desc: "End-to-end analysis of your supply chain from farm gate to off-taker. We identify the logistics gaps, storage inadequacies, and handling failures destroying your margin and design practical solutions within your capital constraints." },
+      ],
+      case: { tag: "Off-take Development · Agri-business · Tanzania", situation: "Tanzanian macadamia aggregator working with 200 smallholders. No formal off-take agreement — selling entirely on spot market at volatile prices. Revenue unpredictable quarter to quarter. Could not access working capital because there was no offtake commitment to show a lender.", work: "Off-take partner identification → negotiation support with three export buyers → DFI financing introduction through Vertex's donor network → outgrower scheme documentation → 60 additional smallholder partner onboardings.", outcome: "Two-year off-take agreement signed with a European commodity buyer. Export revenue locked at a guaranteed minimum. Working capital facility secured via DFI. Smallholder network grew from 200 to 260 partners." },
+      services: ["Off-take Agreement Development", "Development Finance Access", "Outgrower Scheme Design", "Supply Chain Architecture"],
+      cta_title: "Is your agri business constrained by access — or architecture?",
+      cta_sub: "The PULSE Assessment identifies whether your growth ceiling is a market access problem, a financing problem, or an operational structure problem. In 45 minutes.",
+    },
+    fr: {
+      name: "Agriculture & Agri-business",
+      hero_qualifier: "Pour les entreprises agricoles, les agri-transformateurs, les négociants en matières premières et les fournisseurs d'intrants opérant sur les marchés agricains.",
+      challenges: [
+        { title: "Sans accord d'off-take, pas d'horizon de planification", desc: "Une entreprise agricole qui vend sur le marché spot ne peut pas planifier la production, ni accéder au fonds de roulement à grande échelle. L'accord d'off-take est le document commercial le plus précieux en agri-business — et la plupart des PME le négocient depuis une position de faiblesse car elles le cherchent après la récolte, pas avant." },
+        { title: "L'accès au financement à grande échelle nécessite un historique, pas seulement un business plan", desc: "Les banques et les IFD prêtent aux PME agricoles — mais les conditions dépendent de l'historique de remboursement démontré et d'une visibilité claire sur l'off-take. La plupart des PME agri manquent de la documentation ou des relations nécessaires pour accéder au financement requis." },
+        { title: "Les pertes post-récolte détruisent les marges avant que le produit n'atteigne le marché", desc: "En Afrique subsaharienne, 30 à 40% de la production agricole est perdue entre la ferme et le marché. Pour une PME agri avec des marges brutes de 20 à 30%, un taux de perte post-récolte de 30% n'halvye pas la marge — il l'élimine." },
+      ],
+      how_items: [
+        { title: "Négociation d'accords d'off-take", desc: "Nous identifions, introduisons et soutenons la négociation avec des partenaires off-take — agrégateurs régionaux, transformateurs, acheteurs à l'export — avant le cycle de récolte. Notre réseau inclut des relations directes avec des acheteurs en Europe, au Moyen-Orient et en Afrique." },
+        { title: "Accès au financement du développement", desc: "Relations directes avec des IFD et des investisseurs d'impact actifs dans l'agriculture africaine. Nous aidons les PME agri à structurer la documentation et le modèle financier dont les IFD ont besoin pour approuver le financement." },
+        { title: "Conception de schémas outgrower", desc: "Nous concevons des modèles outgrower évolutifs permettant aux entreprises agri d'augmenter la production via des partenariats smallholders sans augmentation proportionnelle de la complexité opérationnelle." },
+        { title: "Architecture de la chaîne d'approvisionnement", desc: "Analyse de bout en bout de votre chaîne d'approvisionnement de la ferme à l'off-taker. Nous identifions les lacunes qui détruisent votre marge et concevons des solutions pratiques dans vos contraintes de capital." },
+      ],
+      case: { tag: "Développement Off-take · Agri-business · Tanzanie", situation: "Agrégateur de macadamia tanzanien travaillant avec 200 smallholders. Pas d'accord d'off-take formel — vente sur le marché spot à des prix volatils. Revenus imprévisibles. Impossible d'accéder au fonds de roulement sans engagement d'off-take à montrer à un prêteur.", work: "Identification de partenaires off-take → soutien à la négociation avec trois acheteurs à l'export → introduction IFD via le réseau de donateurs de Vertex → documentation du schéma outgrower → intégration de 60 partenaires smallholders supplémentaires.", outcome: "Accord d'off-take de deux ans signé avec un acheteur européen. Revenus d'export verrouillés à un minimum garanti. Facilité de fonds de roulement obtenue via IFD. Réseau smallholder passé de 200 à 260 partenaires." },
+      services: ["Développement Accords Off-take", "Accès Financement Développement", "Conception Schémas Outgrower", "Architecture Chaîne d'Approvisionnement"],
+      cta_title: "Votre entreprise agri est-elle contrainte par l'accès — ou l'architecture ?",
+      cta_sub: "L'évaluation PULSE identifie si votre plafond de croissance est un problème d'accès, de financement ou de structure opérationnelle. En 45 minutes.",
+    },
+  },
+  professional: {
+    en: {
+      name: "Professional Services",
+      hero_qualifier: "For law firms, accounting practices, management consultancies, HR advisory firms, and specialist professional services businesses operating across Africa.",
+      challenges: [
+        { title: "Revenue concentration is an existential risk hiding in plain sight", desc: "In most professional services SMEs, 2–3 clients represent 50–70% of total revenue. The business feels healthy until one of those clients leaves or reduces scope. At that point, the firm discovers it built relationships, not a business. The diversification conversation gets deferred every quarter — until there's no longer a choice." },
+        { title: "Selling time means the revenue ceiling is your headcount", desc: "Professional services firms built on time-for-money billing cannot grow revenue faster than they can hire. Every pound of growth requires a proportional pound of cost. The escape is productisation — turning repeatable expertise into standardised offerings. Most firms know this. Very few execute it." },
+        { title: "Geographic expansion fails when the brand and network don't travel", desc: "A well-regarded firm in Johannesburg or Lagos opens in Nairobi and finds that none of the reputation, relationships, or referral networks exist in the new market. They spend 18 months building what took 10 years at home — or they retreat and call it a market issue." },
+      ],
+      how_items: [
+        { title: "Revenue diversification strategy", desc: "We analyse your client concentration risk, map the TAM beyond your current clients, and build a pipeline development plan that reduces your top-3 client revenue dependency to below 35% within 18 months." },
+        { title: "Service productisation", desc: "We identify which of your current bespoke services have a repeatable core and design the product wrapper that makes them sellable without bespoke delivery. Fixed price, defined scope, standard methodology, scalable execution." },
+        { title: "Geographic market entry", desc: "Market entry support for professional services firms expanding across Africa. We provide the local introductions, market intelligence, and commercial support that allows a firm to build a new-market pipeline without 18 months of expensive relationship-building from scratch." },
+        { title: "Commercial architecture", desc: "Most professional services firms are entirely referral-dependent. We design and implement a proactive pipeline strategy — thought leadership positioning, sector-specific outreach, proposal process improvement — that reduces dependence on inbound referrals." },
+      ],
+      case: { tag: "Market Expansion + Diversification · Legal · South Africa / Kenya", situation: "South African legal advisory firm, $2.5M revenue. 70% from two anchor clients. Had lost a comparable anchor in 2021 and nearly closed. Leadership wanted to expand to East Africa but had no Nairobi network, no Kenyan regulatory expertise, and no route to market.", work: "Revenue concentration analysis → diversification roadmap → three new service product definitions → Kenya market feasibility → introductions to four Nairobi enterprises requiring South Africa-equivalent legal advisory → proposal process redesign.", outcome: "Kenya office operational within nine months. Anchor client revenue reduced from 70% to 44% of total. Overall revenue grew 40% in the first year. Nairobi team hired and operating independently within 14 months." },
+      services: ["Revenue Diversification Strategy", "Service Productisation", "Geographic Market Entry", "Commercial Architecture"],
+      cta_title: "What is your revenue concentration risk — and when does it become a crisis?",
+      cta_sub: "The PULSE Assessment scores your Pipeline and External Position dimensions against benchmarks for professional services firms at your stage. Know the number before it matters.",
+    },
+    fr: {
+      name: "Services Professionnels",
+      hero_qualifier: "Pour les cabinets d'avocats, les cabinets comptables, les cabinets de conseil, les cabinets RH et les entreprises de services professionnels spécialisés opérant en Afrique.",
+      challenges: [
+        { title: "La concentration des revenus est un risque existentiel visible à vue", desc: "Dans la plupart des PME de services professionnels, 2 à 3 clients représentent 50 à 70% du CA total. Le cabinet semble en bonne santé jusqu'à ce que l'un de ces clients parte. La conversation sur la diversification est reportée chaque trimestre — jusqu'à ce qu'il n'y ait plus le choix." },
+        { title: "Vendre du temps signifie que le plafond de revenus est votre masse salariale", desc: "Les cabinets construits sur la facturation temps-pour-argent ne peuvent pas augmenter les revenus plus vite qu'ils n'embauchent. La sortie est la productisation — transformer l'expertise reproductible en offres standardisées à prix fixe. La plupart des cabinets le savent. Très peu l'exécutent." },
+        { title: "L'expansion géographique échoue quand la marque et le réseau ne voyagent pas", desc: "Un cabinet bien considéré à Johannesburg ou Lagos s'installe à Nairobi et découvre qu'aucune des relations n'existe sur le nouveau marché. Ils passent 18 mois à construire ce qui a pris 10 ans chez eux — ou ils se retirent." },
+      ],
+      how_items: [
+        { title: "Stratégie de diversification des revenus", desc: "Nous analysons votre risque de concentration clients et construisons un plan de développement du pipeline qui réduit la dépendance aux 3 premiers clients à moins de 35% en 18 mois." },
+        { title: "Productisation des services", desc: "Nous identifions lesquels de vos services sur mesure ont un noyau reproductible et concevons l'habillage produit qui les rend vendables sans livraison sur mesure. Prix fixe, portée définie, exécution évolutive." },
+        { title: "Entrée sur le marché géographique", desc: "Soutien à l'entrée sur le marché pour les cabinets s'étendant en Afrique. Introductions locales, intelligence de marché et soutien commercial qui permettent de construire un pipeline sans 18 mois de construction de relations coûteuse." },
+        { title: "Architecture commerciale", desc: "La plupart des cabinets dépendent entièrement des recommandations. Nous concevons une stratégie de pipeline proactif — positionnement de leadership éclairé, prospection sectorielle — qui réduit cette dépendance." },
+      ],
+      case: { tag: "Expansion Marché + Diversification · Juridique · Afrique du Sud / Kenya", situation: "Cabinet de conseil juridique sud-africain, 2,5M$ de CA. 70% des revenus provenant de deux clients ancres. Avait failli fermer en 2021 après la perte d'un client ancre. Souhaitait s'étendre en Afrique de l'Est sans réseau local.", work: "Analyse de la concentration des revenus → feuille de route de diversification → trois nouvelles définitions de services produits → faisabilité du marché kenyan → introductions à quatre entreprises nairobaises → refonte du processus de proposition.", outcome: "Bureau kenyan opérationnel en neuf mois. Revenus clients ancres réduits de 70% à 44%. CA global augmenté de 40% la première année. Équipe Nairobi opérationnelle de manière indépendante en 14 mois." },
+      services: ["Stratégie Diversification Revenus", "Productisation des Services", "Entrée Marché Géographique", "Architecture Commerciale"],
+      cta_title: "Quel est votre risque de concentration revenus — et quand devient-il une crise ?",
+      cta_sub: "L'évaluation PULSE score vos dimensions Pipeline et Position Externe par rapport aux benchmarks des cabinets de services professionnels à votre stade.",
+    },
+  },
+  health: {
+    en: {
+      name: "Healthcare & Pharma",
+      hero_qualifier: "For pharmaceutical distributors, diagnostic equipment suppliers, healthcare technology platforms, and private healthcare providers expanding across African markets.",
+      challenges: [
+        { title: "Regulatory pathways differ by country, by product class, and by enforcement reality", desc: "NAFDAC in Nigeria, SAHPRA in South Africa, KEBS in Kenya — each has different registration requirements, timelines, and informal processes. Most healthcare SMEs trying to expand across Africa underestimate regulatory complexity by a factor of three and hit 18-month delays they didn't plan for." },
+        { title: "Institutional procurement is slow, relationship-dependent, and opaque", desc: "Selling to public health systems, hospital groups, and institutional buyers requires navigating procurement processes that are long and often non-transparent. Tender cycles run 12–18 months. Without the right relationships at the right level, you are competing on price against incumbents who have multi-year relationships." },
+        { title: "Last-mile distribution from national distributor to clinic is the gap that kills market penetration", desc: "Most healthcare businesses can reach a national distributor. Getting product from that distributor to a clinic or pharmacy in a secondary city requires a different infrastructure — informal agents, community health workers, motorcycle logistics — that doesn't appear in any distributor's catalogue or market entry plan." },
+      ],
+      how_items: [
+        { title: "Regulatory pathway design", desc: "We work with specialist regulatory consultants in each target market to map the realistic registration timeline and required documentation for your specific product class. We do not give estimates — we give introductions to people who have done it." },
+        { title: "Institutional procurement strategy", desc: "Direct introductions to procurement decision-makers in hospital groups, public health institutions, and NGO procurement departments. We identify which tenders to target, when to engage, and who makes the decision — before the RFP is published." },
+        { title: "Distribution partner identification", desc: "We identify and qualify local distribution partners with existing relationships in your target channel — pharmacy chains, diagnostic labs, clinic networks, or public health facilities. We negotiate the partnership structure and support the first commercial cycle." },
+        { title: "Market entry sequencing", desc: "For healthcare businesses targeting multiple African markets, we design an entry sequence based on regulatory feasibility, market size, competitive intensity, and the availability of existing distribution infrastructure — not on which markets sound most attractive." },
+      ],
+      case: { tag: "Market Entry · Diagnostics · West Africa (Francophone)", situation: "South African diagnostic equipment supplier targeting four francophone West African markets: Côte d'Ivoire, Senegal, Mali, Burkina Faso. No French-language commercial capacity, no regulatory relationships, no local distribution presence in any of the four markets.", work: "Market feasibility and entry sequencing → regulatory consultant introductions per country → distribution partner identification in Côte d'Ivoire and Senegal (prioritised by regulatory speed and market size) → first pilot contract support → French-language commercial documentation.", outcome: "Two markets entered within 14 months. First pilot supply contracts signed with two private hospital groups. Regulatory approval filed in both markets within 10 months. Expansion to Mali and Burkina Faso planned for month 18." },
+      services: ["Regulatory Pathway Design", "Institutional Procurement Strategy", "Distribution Partner Identification", "Market Entry Sequencing"],
+      cta_title: "Which market do you enter first — and how do you do it without losing 18 months on regulatory?",
+      cta_sub: "The PULSE Assessment's External Position dimension tells you exactly where your market entry architecture has gaps. Free. 45 minutes.",
+    },
+    fr: {
+      name: "Santé & Pharma",
+      hero_qualifier: "Pour les distributeurs pharmaceutiques, les fournisseurs d'équipements de diagnostic, les plateformes de technologie de santé et les prestataires de soins privés se développant sur les marchés africains.",
+      challenges: [
+        { title: "Les parcours réglementaires diffèrent par pays, par classe de produit et par réalité d'application", desc: "NAFDAC au Nigeria, SAHPRA en Afrique du Sud, KEBS au Kenya — chacun a des exigences d'enregistrement et des délais différents. La plupart des PME de santé sous-estiment la complexité réglementaire d'un facteur trois et se retrouvent face à des retards de 18 mois imprévus." },
+        { title: "La passation de marchés institutionnels est lente, relationnelle et opaque", desc: "Vendre aux systèmes de santé publics et aux groupes hospitaliers nécessite de naviguer des processus longs et souvent non transparents. Les cycles d'appel d'offres durent 12 à 18 mois. Sans les bonnes relations, vous concurrencez sur le prix contre des titulaires avec des relations pluriannuelles." },
+        { title: "La distribution du dernier kilomètre est l'écart qui tue la pénétration du marché", desc: "La plupart des entreprises de santé peuvent atteindre un distributeur national. Faire passer le produit de ce distributeur à une clinique dans une ville secondaire nécessite une infrastructure différente — agents informels, logistique moto — qui n'apparaît dans aucun catalogue de distributeur." },
+      ],
+      how_items: [
+        { title: "Conception du parcours réglementaire", desc: "Nous travaillons avec des consultants réglementaires spécialistes dans chaque marché cible pour cartographier le délai d'enregistrement réaliste pour votre classe de produit spécifique. Nous ne donnons pas d'estimations — nous fournissons des introductions à des personnes qui l'ont fait." },
+        { title: "Stratégie de passation de marchés institutionnels", desc: "Introductions directes aux décideurs en matière d'approvisionnement dans les groupes hospitaliers et les institutions de santé. Nous identifions quels appels d'offres cibler et qui prend la décision — avant la publication de l'appel d'offres." },
+        { title: "Identification de partenaires de distribution", desc: "Nous identifions et qualifions des partenaires de distribution locaux ayant des relations existantes dans votre canal cible. Nous négocions la structure du partenariat et soutenons le premier cycle commercial." },
+        { title: "Séquençage d'entrée sur le marché", desc: "Pour les entreprises ciblant plusieurs marchés africains, nous concevons une séquence d'entrée basée sur la faisabilité réglementaire, la taille du marché et la disponibilité de l'infrastructure de distribution existante." },
+      ],
+      case: { tag: "Entrée Marché · Diagnostic · Afrique de l'Ouest Francophone", situation: "Fournisseur d'équipements de diagnostic sud-africain ciblant quatre marchés d'Afrique de l'Ouest francophone. Aucune capacité commerciale en français, aucune relation réglementaire, aucune présence locale dans aucun des quatre marchés.", work: "Faisabilité de marché et séquençage d'entrée → introductions consultants réglementaires par pays → identification partenaires de distribution en Côte d'Ivoire et au Sénégal → soutien premiers contrats pilotes → documentation commerciale en français.", outcome: "Deux marchés entrés en 14 mois. Premiers contrats pilotes signés avec deux groupes hospitaliers privés. Enregistrement réglementaire déposé dans les deux marchés en 10 mois. Expansion au Mali et Burkina Faso prévue au mois 18." },
+      services: ["Conception Parcours Réglementaire", "Stratégie Marchés Institutionnels", "Identification Partenaires Distribution", "Séquençage Entrée Marché"],
+      cta_title: "Quel marché entrez-vous en premier — sans perdre 18 mois sur le réglementaire ?",
+      cta_sub: "La dimension Position Externe de l'évaluation PULSE vous indique exactement où votre architecture d'entrée sur le marché a des lacunes. Gratuit. 45 minutes.",
+    },
+  },
+};
 
 // ── FRENCH-SPEAKING AFRICAN COUNTRIES ───────────────────────────
 const FRENCH_COUNTRIES = ['CD','CG','CM','CI','BJ','BF','GA','GN','ML','MR','NE','RW','SN','TG','TN','MG','BI','KM','DJ','CF','GQ','TD','SC','ST','MU'];
@@ -1976,10 +2363,12 @@ function PlanTeaser({ t, setPage }) {
 }
 
 // ── HOME PAGE ─────────────────────────────────────────────────────
-function HomePage({ setPage, t }) {
+function HomePage({ setPage, goSector, t }) {
   useReveal();
   return (
     <div>
+
+      {/* ── 1. HERO — single CTA ── */}
       <section className="hero">
         <div className="hero-bg"/><div className="hero-grid"/>
         <div className="hero-label">{t.hero_label}</div>
@@ -1987,7 +2376,6 @@ function HomePage({ setPage, t }) {
         <p className="hero-sub">{t.hero_sub}</p>
         <div className="hero-actions">
           <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.hero_cta1}</button>
-          <button className="btn-ghost" onClick={() => { setPage('services'); window.scrollTo(0,0); }}>{t.hero_cta2}</button>
         </div>
         <div className="hero-scroll-indicator">
           <div className="scroll-line"/>
@@ -1995,6 +2383,7 @@ function HomePage({ setPage, t }) {
         </div>
       </section>
 
+      {/* ── 2. STATS BAR ── */}
       <div className="stats-bar">
         {[['stat1n','stat1l'],['stat2n','stat2l'],['stat3n','stat3l'],['stat4n','stat4l']].map(([nk,lk],i) => (
           <div key={i} className="stat-item reveal">
@@ -2004,7 +2393,7 @@ function HomePage({ setPage, t }) {
         ))}
       </div>
 
-      {/* ── QUALIFICATION BLOCK ──────────────────────────────────────── */}
+      {/* ── 3. IS THIS FOR YOU? ── */}
       <section className="qualify-section">
         <div className="qualify-inner">
           <div className="qualify-col qualify-yes reveal">
@@ -2026,57 +2415,96 @@ function HomePage({ setPage, t }) {
         <p className="qualify-cta-note">{t.qualify_cta}</p>
       </section>
 
-      <section className="section">
-        <div className="about-grid">
-          <div className="about-text reveal">
-            <div className="section-label">{t.about_label}</div>
-            <h2 className="section-title">{t.about_title}</h2>
-            <p dangerouslySetInnerHTML={{__html:t.about_p1}}/>
-            <p dangerouslySetInnerHTML={{__html:t.about_p2}}/>
-            <div className="about-philosophy"><p>{t.about_philosophy}</p></div>
-            <div className="africa-tags" style={{marginTop:'2rem'}}>
-              {['South Africa','Nigeria','Kenya','Ghana','Rwanda','Egypt','Tanzania','DR Congo','Namibia','Malawi'].map(c => <span key={c} className="africa-tag">{c}</span>)}
+      {/* ── 4. SECTOR ENTRY POINTS ── */}
+      <section className="sector-section">
+        <div className="reveal">
+          <div className="section-label">{t.sector_label}</div>
+          <h2 className="section-title">{t.sector_title}</h2>
+          <p style={{color:'var(--grey-400)',maxWidth:'600px',fontSize:'1.05rem',lineHeight:1.78,marginTop:'0.5rem'}}>{t.sector_sub}</p>
+        </div>
+        <div className="sector-grid">
+          {(t.sectors||[]).map((s,i) => (
+            <div key={i} className="sector-card reveal" style={{cursor:'pointer'}} onClick={() => goSector && goSector(s.key)}>
+              <div className="sector-card-icon">{s.icon}</div>
+              <div className="sector-card-name">{s.name}</div>
+              <div className="sector-card-desc">{s.desc}</div>
+              <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',letterSpacing:'0.12em',color:'var(--accent)',marginTop:'1.2rem'}}>
+                {t === T.fr ? 'En savoir plus →' : 'Learn more →'}
+              </div>
             </div>
-          </div>
-          <div className="about-visual reveal">
-            <div className="about-visual-bg"/>
-            <Logo size={220} style={{zIndex:1,opacity:0.7,borderRadius:'50%'}}/>
-            <div className="about-visual-tag">{t.about_visual_tag}</div>
-          </div>
+          ))}
         </div>
       </section>
 
-      <section className="section services-section">
-        <div className="services-header reveal">
-          <div>
-            <div className="section-label">{t.services_label}</div>
-            <h2 className="section-title">{t.services_title.split('\n').map((line,i) => <span key={i}>{line}{i===0&&<br/>}</span>)}</h2>
-          </div>
-          <button className="btn-ghost" onClick={() => { setPage('services'); window.scrollTo(0,0); }}>{t.all_services}</button>
+      {/* ── 5. CORE OFFER — HOW VERTEX WORKS ── */}
+      <section className="how-section">
+        <div className="reveal">
+          <div className="section-label">{t.how_label}</div>
+          <h2 className="section-title">{t.how_title}</h2>
+          <p style={{color:'var(--grey-400)',maxWidth:'600px',fontSize:'1.05rem',lineHeight:1.78,marginTop:'0.5rem'}}>{t.how_sub}</p>
         </div>
-        <div className="reveal"><ServicesGrid t={t}/></div>
+        <div className="how-steps">
+          {(t.how_steps||[]).map((s,i) => (
+            <div key={i} className="how-step reveal">
+              <div className="how-step-n">{s.n}</div>
+              <div className="how-step-title">{s.title}</div>
+              <div className="how-step-desc">{s.desc}</div>
+            </div>
+          ))}
+        </div>
       </section>
 
+      {/* ── 6. VERTEX 360° FLAGSHIP PRODUCT ── */}
+      <div style={{padding:'6rem 3rem',background:'var(--offblack)',borderTop:'var(--rule)',borderBottom:'var(--rule)'}} className="reveal">
+        <div style={{maxWidth:'680px',margin:'0 auto',textAlign:'center'}}>
+          <div className="section-label" style={{justifyContent:'center'}}>{t.diag_cta_label}</div>
+          <h2 style={{fontFamily:'Playfair Display,serif',fontSize:'clamp(2rem,4vw,3rem)',fontWeight:900,marginBottom:'1.5rem',lineHeight:1.1,color:'var(--white)'}}>{t.diag_cta_title}<br/><em style={{fontStyle:'italic',color:'var(--accent)'}}>{t.diag_cta_em}</em></h2>
+          <p style={{color:'var(--grey-300)',maxWidth:'480px',margin:'0 auto 2.5rem',fontSize:'1.05rem',lineHeight:1.8}}>{t.diag_cta_sub}</p>
+          <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.diag_cta_btn}</button>
+        </div>
+      </div>
+
+      {/* ── 7. PROOF ── */}
       <section className="section">
         <div className="reveal">
           <div className="section-label">{t.results_label}</div>
           <h2 className="section-title">{t.results_title}</h2>
         </div>
         <CaseStudies t={t}/>
-        <div className="reveal" style={{marginTop:'2rem',textAlign:'center'}}>
-          <button className="btn-ghost" onClick={() => { setPage('success'); window.scrollTo(0,0); }}>{t.all_cases}</button>
-        </div>
+        <Testimonials t={t}/>
       </section>
 
-      {/* PLANS TEASER */}
+      {/* ── 8. TEAM ── */}
+      <section className="team-section">
+        <div className="reveal">
+          <div className="section-label">{t.team_label}</div>
+          <h2 className="section-title">{t.team_title}</h2>
+          <p style={{color:'var(--grey-400)',maxWidth:'600px',fontSize:'1.05rem',lineHeight:1.78,marginTop:'0.5rem'}}>{t.team_sub}</p>
+        </div>
+        <div className="team-grid">
+          {(t.team_roles||[]).map((r,i) => (
+            <div key={i} className="team-card reveal">
+              <div className="team-role">{r.role}</div>
+              <div className="team-focus">{r.focus}</div>
+              <div className="team-exp">{r.exp}</div>
+            </div>
+          ))}
+        </div>
+        <p className="team-note">{t.team_note}</p>
+      </section>
+
+      {/* ── 9. PRICING SIGNAL ── */}
       <PlanTeaser t={t} setPage={setPage}/>
 
-      <div style={{padding:'5rem 3rem',background:'var(--offblack)',borderTop:'var(--rule)',borderBottom:'var(--rule)',textAlign:'center'}} className="reveal">
-        <div className="section-label" style={{justifyContent:'center'}}>{t.diag_cta_label}</div>
-        <h2 style={{fontFamily:'Playfair Display,serif',fontSize:'clamp(2rem,4vw,3rem)',fontWeight:900,marginBottom:'1.5rem',lineHeight:1.1}}>{t.diag_cta_title}<br/><em style={{fontStyle:'italic',color:'var(--accent)'}}>{t.diag_cta_em}</em></h2>
-        <p style={{color:'var(--grey-300)',maxWidth:'500px',margin:'0 auto 2.5rem',fontSize:'0.95rem',lineHeight:1.75}}>{t.diag_cta_sub}</p>
-        <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.diag_cta_btn}</button>
-      </div>
+      {/* ── 10. FINAL CTA ── */}
+      <section className="final-cta-section reveal">
+        <div className="section-label" style={{justifyContent:'center'}}>{t.final_cta_label}</div>
+        <div className="final-cta-title">{t.final_cta_title}</div>
+        <p className="final-cta-sub">{t.final_cta_sub}</p>
+        <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.final_cta_btn}</button>
+        <p className="final-cta-note">{t.final_cta_note}</p>
+      </section>
+
     </div>
   );
 }
@@ -2942,6 +3370,114 @@ function SMEPage({ setPage, t }) {
   );
 }
 
+// ── SECTOR PAGE ───────────────────────────────────────────────────
+function SectorPage({ sectorKey, setPage, t }) {
+  useReveal();
+  const isFr = t === T.fr;
+  const d = SECTOR_DATA[sectorKey] && SECTOR_DATA[sectorKey][isFr ? 'fr' : 'en'];
+  if (!d) { return null; }
+  const sl = isFr ? 'Secteur' : 'Sector';
+  const challengesLabel = isFr ? 'Ce que nous observons' : 'What we see';
+  const challengesTitle = isFr ? 'Trois défis qui bloquent la croissance dans ce secteur.' : 'Three challenges blocking growth in this sector.';
+  const howLabel = isFr ? 'Notre rôle' : 'Our role';
+  const howTitle = isFr ? 'Comment Vertex intervient.' : 'How Vertex works in this sector.';
+  const caseLabel = isFr ? "Exemple d'engagement" : 'Engagement example';
+  const caseTitle = isFr ? 'Un profil réel. Des résultats typiques.' : 'A real profile. Typical outcomes.';
+  const svcLabel = isFr ? 'Services concernés' : 'Relevant services';
+  const svcTitle = isFr ? 'Ce que nous faisons dans cette mission.' : 'What we do in this engagement.';
+  const svcBtn = isFr ? 'Voir tous nos services →' : 'See all services →';
+  const ctaWhere = isFr ? 'Par où commencer' : 'Where to start';
+  const ctaBtn = isFr ? 'Faire mon évaluation PULSE gratuite →' : 'Run My Free PULSE Assessment →';
+  const sitLbl = isFr ? 'Situation' : 'Situation';
+  const workLbl = isFr ? 'Notre travail' : 'Our work';
+  const outLbl = isFr ? 'Résultat typique' : 'Typical outcome';
+  return (
+    <div style={{paddingTop:80}}>
+      {/* Hero */}
+      <div className="sp-hero">
+        <div className="sp-hero-label reveal">{sl}</div>
+        <div className="sp-hero-name reveal">{d.name}</div>
+        <p className="sp-hero-sub reveal">{d.hero_qualifier}</p>
+      </div>
+      {/* Challenges */}
+      <section className="sp-challenges">
+        <div className="reveal">
+          <div className="section-label">{challengesLabel}</div>
+          <h2 className="section-title">{challengesTitle}</h2>
+        </div>
+        <div className="sp-challenges-grid">
+          {d.challenges.map((c, i) => (
+            <div key={i} className="sp-challenge reveal">
+              <div className="sp-challenge-n">0{i+1}</div>
+              <div className="sp-challenge-title">{c.title}</div>
+              <p className="sp-challenge-desc">{c.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      {/* How Vertex helps */}
+      <section className="sp-how">
+        <div className="reveal">
+          <div className="section-label">{howLabel}</div>
+          <h2 className="section-title">{howTitle}</h2>
+        </div>
+        <div className="sp-how-grid">
+          {d.how_items.map((h, i) => (
+            <div key={i} className="sp-how-item reveal">
+              <div className="sp-how-title">{h.title}</div>
+              <p className="sp-how-desc">{h.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      {/* Engagement example */}
+      <section className="sp-case">
+        <div className="reveal">
+          <div className="section-label">{caseLabel}</div>
+          <h2 className="section-title">{caseTitle}</h2>
+        </div>
+        <div className="sp-case-inner reveal">
+          <div className="sp-case-header"><div className="sp-case-tag">{d.case.tag}</div></div>
+          <div className="sp-case-body">
+            <div className="sp-case-row">
+              <div className="sp-case-row-label">{sitLbl}</div>
+              <p className="sp-case-row-text">{d.case.situation}</p>
+            </div>
+            <div className="sp-case-row">
+              <div className="sp-case-row-label">{workLbl}</div>
+              <p className="sp-case-row-text">{d.case.work}</p>
+            </div>
+            <div className="sp-case-row outcome">
+              <div className="sp-case-row-label" style={{color:'var(--accent)'}}>{outLbl}</div>
+              <p className="sp-case-row-text">{d.case.outcome}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* Relevant services */}
+      <section className="sp-services">
+        <div className="reveal">
+          <div className="section-label">{svcLabel}</div>
+          <h2 className="section-title" style={{maxWidth:500}}>{svcTitle}</h2>
+        </div>
+        <div className="sp-services-tags reveal">
+          {d.services.map((s, i) => <span key={i} className="sp-service-tag">{s}</span>)}
+        </div>
+        <div style={{marginTop:'2rem'}} className="reveal">
+          <button className="btn-ghost" onClick={() => { setPage('services'); window.scrollTo(0,0); }}>{svcBtn}</button>
+        </div>
+      </section>
+      {/* CTA */}
+      <section className="sp-cta reveal">
+        <div className="section-label" style={{justifyContent:'center'}}>{ctaWhere}</div>
+        <div className="sp-cta-title">{d.cta_title}</div>
+        <p className="sp-cta-sub">{d.cta_sub}</p>
+        <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{ctaBtn}</button>
+      </section>
+    </div>
+  );
+}
+
 // ── APP ────────────────────────────────────────────────────────────
 function App() {
   const [page, setPage] = useState('home');
@@ -2950,6 +3486,7 @@ function App() {
   const [detectedLang, setDetectedLang] = useState(null);
   const [detectedCountry, setDetectedCountry] = useState(null);
   const [langNoticeDismissed, setLangNoticeDismissed] = useState(false);
+  const [activeSector, setActiveSector] = useState(null);
 
   const t = lang === 'fr' ? T.fr : T.en;
 
@@ -2966,9 +3503,10 @@ function App() {
   };
 
   const go = (p) => { setPage(p); window.scrollTo(0,0); };
+  const goSector = (key) => { setActiveSector(key); setPage('sector'); window.scrollTo(0,0); };
 
   const pages = {
-    home: <HomePage setPage={setPage} t={t}/>,
+    home: <HomePage setPage={setPage} goSector={goSector} t={t}/>,
     services: <ServicesPage setPage={setPage} t={t}/>,
     sme: <SMEPage setPage={setPage} t={t}/>,
     success: <SuccessPage setPage={setPage} t={t}/>,
@@ -2976,6 +3514,7 @@ function App() {
     diagnosis: <DiagnosisPage setPage={setPage} setReport={setReport} t={t}/>,
     report: <ReportPage report={report} setPage={setPage} t={t}/>,
     contact: <ContactPage t={t}/>,
+    sector: <SectorPage sectorKey={activeSector} setPage={setPage} t={t}/>,
   };
 
   const isFr = lang === 'fr';
