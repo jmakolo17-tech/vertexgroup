@@ -1577,6 +1577,8 @@ tr:hover td { background: var(--surface2); transition: background 0.1s; }
       </button>
       <button id="incub-tab-funding" class="incub-tab" onclick="switchIncubTab('funding')"
         style="padding:8px 18px;font-size:13px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent">Fundraising</button>
+      <button id="incub-tab-access" class="incub-tab" onclick="switchIncubTab('access')"
+        style="padding:8px 18px;font-size:13px;font-weight:500;border:none;background:none;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent">Portal Access</button>
     </div>
 
     <div id="incub-content">
@@ -5205,6 +5207,66 @@ function switchIncubTab(tab) {
   if (tab === 'directory')   renderIncubDirectory(_incubEntrepreneurs);
   if (tab === 'duplicates')  renderDuplicates(_incubAnalytics.duplicateList || []);
   if (tab === 'funding')     renderFundraising(_incubEntrepreneurs);
+  if (tab === 'access')      loadIncubAccess();
+}
+
+// ── Portal Access management ──────────────────────────────────────────────────
+async function loadIncubAccess() {
+  document.getElementById('incub-content').innerHTML = `<div style="text-align:center;color:var(--text3);padding:48px">Loading…</div>`;
+  const r = await api('GET', '/api/users');
+  const users = (r?.users || []).filter(u => u.role === 'incubator');
+  renderIncubAccess(users);
+}
+
+function renderIncubAccess(users) {
+  const rows = users.length
+    ? users.map(u => `<tr>
+        <td><div style="font-weight:600">${esc(u.name)}</div></td>
+        <td style="color:var(--text3);font-size:12px">${esc(u.email)}</td>
+        <td><span class="badge ${u.isActive?'b-active':'b-dropped'}">${u.isActive?'Active':'Inactive'}</span></td>
+        <td style="color:var(--text3);font-size:12px">${u.lastLoginAt ? new Date(u.lastLoginAt).toLocaleDateString() : 'Never'}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-sm btn-red" onclick="deleteIncubUser('${u._id}','${esc(u.name).replace(/'/g,"\\'")}')">Revoke</button>
+        </td>
+      </tr>`).join('')
+    : `<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:32px">No incubator portal users yet. Add one to grant access.</td></tr>`;
+
+  document.getElementById('incub-content').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div>
+        <div style="font-weight:600;font-size:15px">Incubator Portal Access</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:3px">These accounts can log in at <strong>incubator.vertexgroup.africa</strong></div>
+      </div>
+      <button class="btn btn-green" onclick="openAddIncubUserModal()">+ Add incubator</button>
+    </div>
+    <div class="card">
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Last login</th><th></th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function openAddIncubUserModal() {
+  const name  = prompt('Incubator organisation name (e.g. "iHub Kenya"):');
+  if (!name) return;
+  const email = prompt('Login email for this incubator:');
+  if (!email || !email.includes('@')) { alert('Invalid email.'); return; }
+  const pass  = prompt('Set a temporary password (min 8 characters):');
+  if (!pass || pass.length < 8) { alert('Password must be at least 8 characters.'); return; }
+
+  api('POST', '/api/users', { name, email, password: pass, role: 'incubator' })
+    .then(r => {
+      if (r?.success) { showToast('Incubator access granted — ' + name); loadIncubAccess(); }
+      else showToast('Error: ' + (r?.message || 'Could not create user'), true);
+    });
+}
+
+async function deleteIncubUser(id, name) {
+  if (!confirm(`Revoke portal access for "${name}"? They will no longer be able to log in.`)) return;
+  const r = await api('DELETE', `/api/users/${id}`);
+  if (r?.success) { showToast('Access revoked for ' + name); loadIncubAccess(); }
+  else showToast('Error: ' + (r?.message || 'Delete failed'), true);
 }
 
 // ── Overview tab ──────────────────────────────────────────────────────────────
