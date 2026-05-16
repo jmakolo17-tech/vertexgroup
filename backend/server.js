@@ -96,6 +96,46 @@ app.use((err, _req, res, _next) => {
   });
 });
 
+// ── Diagnostic email scheduler ────────────────────────────────────────────────
+// Runs every 5 minutes. Sends results emails for diagnostics whose 24-hour
+// window has elapsed and whose email has not yet been dispatched.
+const Diagnostic    = require('./models/Diagnostic');
+const { diagnosticResults, sendEmail: _schedSend } = require('./utils/email');
+
+async function sendScheduledDiagnosticEmails() {
+  try {
+    const due = await Diagnostic.find({
+      status:           'completed',
+      emailSentAt:      null,
+      emailScheduledAt: { $lte: new Date() },
+    });
+
+    for (const d of due) {
+      _schedSend(diagnosticResults({
+        name:                 d.name,
+        email:                d.email,
+        company:              d.company,
+        overallScore:         d.overallScore,
+        scoreLabel:           d.scoreLabel,
+        executiveSummary:     d.executiveSummary,
+        growthPotential:      d.growthPotential,
+        vertexRecommendation: d.vertexRecommendation,
+        dimensions:           d.dimensions || [],
+      }, d.language || 'en'));
+
+      d.emailSentAt = new Date();
+      await d.save();
+      console.log(`Diagnostic email sent → ${d.email} (${d.company})`);
+    }
+  } catch (err) {
+    console.error('Diagnostic scheduler error:', err.message);
+  }
+}
+
+// Run immediately on boot (catches any missed while server was down), then every 5 min
+sendScheduledDiagnosticEmails();
+setInterval(sendScheduledDiagnosticEmails, 5 * 60 * 1000);
+
 // ── Start ─────────────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

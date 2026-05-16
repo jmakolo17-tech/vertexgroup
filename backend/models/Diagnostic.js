@@ -47,7 +47,8 @@ const diagnosticSchema = new mongoose.Schema({
   lead: { type: mongoose.Schema.Types.ObjectId, ref: 'Lead' },
 
   // Email delivery
-  emailSentAt: { type: Date },
+  emailScheduledAt: { type: Date },   // when to send results email (24h after submission)
+  emailSentAt:      { type: Date },   // when it was actually sent
 }, { timestamps: true });
 
 diagnosticSchema.index({ email: 1 });

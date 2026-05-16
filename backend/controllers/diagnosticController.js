@@ -1,7 +1,7 @@
 const Diagnostic = require('../models/Diagnostic');
 const Lead = require('../models/Lead');
 const Notification = require('../models/Notification');
-const { sendEmail, diagnosticConfirmation, newLeadNotification, diagnosticResults } = require('../utils/email');
+const { sendEmail, diagnosticConfirmation, newLeadNotification } = require('../utils/email');
 
 // ── Vertex AI Diagnostic Engine (powered by Claude) ──────────────────────────
 async function runAIDiagnostic(data) {
@@ -137,12 +137,13 @@ exports.submitDiagnostic = async (req, res) => {
       path:     f.path,
     }));
 
-    // Create diagnostic record
+    // Create diagnostic record — results email scheduled 24 hours after submission
     const diagnostic = await Diagnostic.create({
       name, email, company, country, phone, industry, challenge, employees, revenue,
       language: language || 'en',
       attachments,
       status: 'pending',
+      emailScheduledAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
 
     // Create linked lead
@@ -183,21 +184,8 @@ exports.submitDiagnostic = async (req, res) => {
         diagnostic.vertexRecommendation = aiResult.vertex_recommendation;
         diagnostic.dimensions           = aiResult.dimensions;
         diagnostic.status               = 'completed';
-        diagnostic.emailSentAt          = new Date();
+        // emailSentAt left null — the scheduler in server.js sends it after emailScheduledAt
         await diagnostic.save();
-
-        // Send full results to entrepreneur
-        sendEmail(diagnosticResults({
-          name,
-          email,
-          company,
-          overallScore:          aiResult.overall_score,
-          scoreLabel:            aiResult.score_label,
-          executiveSummary:      aiResult.executive_summary,
-          growthPotential:       aiResult.growth_potential,
-          vertexRecommendation:  aiResult.vertex_recommendation,
-          dimensions:            aiResult.dimensions,
-        }, lang));
 
         // Update dashboard notification to show completion
         await Notification.create({
@@ -218,7 +206,7 @@ exports.submitDiagnostic = async (req, res) => {
     res.status(201).json({
       success:      true,
       diagnosticId: diagnostic._id,
-      message:      'Diagnostic submitted. Results will be emailed within 45–60 minutes.',
+      message:      'Submission received. After analysis of the information provided, you will receive a diagnosis from one of our experts within 24 hours.',
     });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

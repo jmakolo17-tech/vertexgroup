@@ -58,8 +58,8 @@ const diagnosticConfirmation = (data, lang = 'en') => {
   return {
     to: data.email,
     subject: isFr
-      ? 'Votre diagnostic est en cours — Vertex Group Africa'
-      : 'Your diagnostic is being prepared — Vertex Group Africa',
+      ? 'Votre demande de diagnostic a été reçue — Vertex Group Africa'
+      : 'Your diagnostic request has been received — Vertex Group Africa',
     html: `
       <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;background:#ffffff">
         <div style="background:#0a0a0a;padding:24px 40px;text-align:center">
@@ -67,11 +67,11 @@ const diagnosticConfirmation = (data, lang = 'en') => {
           <div style="color:#9ca3af;font-size:11px;margin-top:4px;letter-spacing:0.08em">${isFr ? 'Votre ambition. Notre architecture' : 'Your ambition. Our architecture'}</div>
         </div>
         <div style="padding:40px">
-          <h2 style="color:#0a0a0a;font-size:22px;font-weight:700;margin:0 0 16px">${isFr ? 'Nous avons bien reçu votre demande.' : 'We have received your request.'}</h2>
+          <h2 style="color:#0a0a0a;font-size:22px;font-weight:700;margin:0 0 16px">${isFr ? 'Demande bien reçue.' : 'Request received.'}</h2>
           <p style="color:#374151;font-size:15px;line-height:1.7;margin:0 0 16px">${isFr ? `Bonjour ${data.name},` : `Hello ${data.name},`}</p>
           <p style="color:#374151;font-size:15px;line-height:1.7;margin:0 0 24px">${isFr
-            ? `Votre diagnostic 360° pour <strong>${data.company}</strong> est en cours de préparation. Vous recevrez les résultats complets dans <strong>45–60 minutes</strong>.`
-            : `Your 360° business diagnostic for <strong>${data.company}</strong> is being prepared. You will receive your full results within <strong>45–60 minutes</strong>.`}</p>
+            ? `Nous avons bien reçu votre demande de diagnostic pour <strong>${data.company}</strong>. Après analyse des informations que vous nous avez fournies, vous recevrez un diagnostic de l'un de nos experts <strong>dans les prochaines 24 heures</strong>.`
+            : `We have received your diagnostic request for <strong>${data.company}</strong>. After analysis of the information provided, you will receive a diagnosis from one of our experts <strong>within the next 24 hours</strong>.`}</p>
           <div style="background:#f3f4f6;border-radius:8px;padding:20px;margin-bottom:24px;text-align:center">
             <p style="margin:0 0 4px;font-size:13px;color:#6b7280;font-weight:600;text-transform:uppercase;letter-spacing:0.08em">${isFr ? 'Ce que vous allez recevoir' : 'What you will receive'}</p>
             <p style="margin:0;font-size:14px;color:#374151;line-height:1.8">${isFr
