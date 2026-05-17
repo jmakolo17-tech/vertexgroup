@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
 
 const programmeEntrySchema = new mongoose.Schema({
-  programmeName: { type: String },
-  incubator:     { type: String },
-  year:          { type: Number },
-  donor:         { type: String },
-  stage:         { type: String, enum: ['applied','active','graduated','dropped'], default: 'active' },
-  startDate:     { type: Date },
-  endDate:       { type: Date },
-  sector:        { type: String },
-  notes:         { type: String },
+  programmeName:  { type: String },
+  programmeType:  { type: String, enum: ['incubation','acceleration','mentorship','training','fellowship','boot_camp','grant','other',''], default: '' },
+  incubator:      { type: String },
+  year:           { type: Number },
+  donor:          { type: String },
+  stage:          { type: String, enum: ['applied','active','graduated','dropped'], default: 'active' },
+  startDate:      { type: Date },
+  endDate:        { type: Date },
+  sector:         { type: String },
+  notes:          { type: String },
 }, { _id: true });
 
 const fundingEntrySchema = new mongoose.Schema({

@@ -10,12 +10,14 @@ const upload = multer({
   fileFilter: (_req, file, cb) => {
     const ext  = file.originalname.split('.').pop().toLowerCase();
     const mime = file.mimetype || '';
-    const ok   = /^(xlsx|xls|csv|ods|numbers|tsv|dbf|pdf)$/.test(ext)
+    const ok   = /^(xlsx|xls|csv|ods|numbers|tsv|dbf|pdf|docx|doc)$/.test(ext)
               || mime === 'application/pdf'
               || mime.includes('spreadsheet')
               || mime.includes('excel')
-              || mime === 'text/csv';
-    cb(ok ? null : new Error('Unsupported file. Accepted: xlsx, xls, csv, ods, numbers, tsv, pdf'), ok);
+              || mime === 'text/csv'
+              || mime.includes('wordprocessingml')
+              || mime.includes('msword');
+    cb(ok ? null : new Error('Unsupported file. Accepted: xlsx, xls, csv, ods, numbers, tsv, pdf, docx'), ok);
   },
 });
 

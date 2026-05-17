@@ -5202,12 +5202,12 @@ function switchIncubTab(tab) {
     btn.style.color = active ? 'var(--accent)' : 'var(--text2)';
     btn.style.borderBottom = active ? '2px solid var(--accent)' : '2px solid transparent';
   });
+  if (tab === 'access') { loadIncubAccess(); return; }
   if (!_incubAnalytics) return;
   if (tab === 'overview')    renderIncubOverview(_incubAnalytics);
   if (tab === 'directory')   renderIncubDirectory(_incubEntrepreneurs);
   if (tab === 'duplicates')  renderDuplicates(_incubAnalytics.duplicateList || []);
   if (tab === 'funding')     renderFundraising(_incubEntrepreneurs);
-  if (tab === 'access')      loadIncubAccess();
 }
 
 // ── Portal Access management ──────────────────────────────────────────────────

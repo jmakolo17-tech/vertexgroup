@@ -359,6 +359,20 @@ tr:hover td{background:var(--bg3)}
         <input class="finput" id="up-programme" placeholder="e.g. Cohort 3 Accelerator"/>
       </div>
       <div class="fgroup">
+        <label class="flabel">Programme Type</label>
+        <select class="finput" id="up-prog-type">
+          <option value="">— select type —</option>
+          <option value="incubation">Incubation</option>
+          <option value="acceleration">Acceleration</option>
+          <option value="mentorship">Mentorship</option>
+          <option value="training">Training / Workshop</option>
+          <option value="fellowship">Fellowship</option>
+          <option value="boot_camp">Boot Camp</option>
+          <option value="grant">Grant Program</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="fgroup">
         <label class="flabel">Cohort Year</label>
         <select class="finput" id="up-year">
           <option value="">— select year —</option>
@@ -377,11 +391,14 @@ tr:hover td{background:var(--bg3)}
       ondrop="handleDrop(event)">
       <div style="font-size:28px;margin-bottom:8px">📂</div>
       <div class="file-zone-label" id="file-zone-label">Click to browse or drag &amp; drop</div>
-      <div class="file-types">xlsx · xls · csv · ods · pdf · numbers · tsv</div>
+      <div class="file-types">xlsx · xls · csv · ods · pdf · docx · numbers · tsv</div>
     </div>
     <input type="file" id="up-file" style="display:none"
-      accept=".xlsx,.xls,.csv,.ods,.pdf,.numbers,.tsv,.dbf"
+      accept=".xlsx,.xls,.csv,.ods,.pdf,.docx,.doc,.numbers,.tsv,.dbf"
       onchange="onFilePicked(this)"/>
+    <div style="font-size:11px;color:var(--text3);margin-top:8px;line-height:1.5">
+      💡 <strong>Word &amp; PDF documents</strong> (application forms, narrative reports) are analysed by AI and may take 15–30 seconds. Spreadsheets are processed instantly.
+    </div>
 
     <div class="upload-result-box" id="up-result-box">
       <div id="up-result-msg" style="font-size:13px"></div>
@@ -455,6 +472,20 @@ tr:hover td{background:var(--bg3)}
     <div class="g2">
       <div class="fgroup"><label class="flabel">Programme Name</label><input class="finput" id="ef-prog" placeholder="e.g. Cohort 3 Accelerator"/></div>
       <div class="fgroup"><label class="flabel">Incubator</label><input class="finput" id="ef-incubator" placeholder="e.g. iHub Kenya"/></div>
+      <div class="fgroup">
+        <label class="flabel">Programme Type</label>
+        <select class="finput" id="ef-prog-type">
+          <option value="">—</option>
+          <option value="incubation">Incubation</option>
+          <option value="acceleration">Acceleration</option>
+          <option value="mentorship">Mentorship</option>
+          <option value="training">Training / Workshop</option>
+          <option value="fellowship">Fellowship</option>
+          <option value="boot_camp">Boot Camp</option>
+          <option value="grant">Grant Program</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
       <div class="fgroup"><label class="flabel">Year</label><input class="finput" type="number" id="ef-prog-year" placeholder="2024"/></div>
       <div class="fgroup"><label class="flabel">Donor / Funder</label><input class="finput" id="ef-donor" placeholder="e.g. GSMA, AfDB, GIZ…"/></div>
       <div class="fgroup">
@@ -796,6 +827,7 @@ function renderDirectory(){
       <th>Company</th>
       <th>Description</th>
       <th>Programme</th>
+      <th>Type</th>
       <th>Incubator</th>
       <th>Year</th>
       <th>Donor</th>
@@ -813,6 +845,7 @@ function renderDirectory(){
       const descCell = e.description
         ? `<td style="vertical-align:top;max-width:200px;font-size:11px;color:var(--text2);line-height:1.4" title="${esc(e.description)}">${esc(e.description.length>90?e.description.slice(0,90)+'…':e.description)}</td>`
         : `<td style="color:var(--text3)">—</td>`;
+      const progTypeLabel = { incubation:'Incubation', acceleration:'Acceleration', mentorship:'Mentorship', training:'Training', fellowship:'Fellowship', boot_camp:'Boot Camp', grant:'Grant', other:'Other' };
       if (!progs.length){
         return `<tr>
           <td style="font-weight:600">${esc(e.surname||'—')}</td>
@@ -820,13 +853,14 @@ function renderDirectory(){
           <td style="color:var(--text2)">${e.age||'—'}</td>
           <td>${esc(e.companyName||'—')}</td>
           ${descCell}
-          <td colspan="5" style="color:var(--text3);font-size:12px;font-style:italic">No programme</td>
+          <td colspan="6" style="color:var(--text3);font-size:12px;font-style:italic">No programme</td>
           <td style="color:${e.turnover>0?'var(--blue)':'var(--text3)'}">${e.turnover>0?'$'+e.turnover.toLocaleString():'—'}</td>
           <td>${esc(e.city||'—')}</td>
           ${actions}
         </tr>`;
       }
       const progLines  = progs.map(p=>esc(p.programmeName||'—')).join('<br>');
+      const typeLines  = progs.map(p=>p.programmeType?`<span class="badge" style="background:var(--purple)22;color:var(--purple)">${esc(progTypeLabel[p.programmeType]||p.programmeType)}</span>`:'—').join(' ');
       const incubLines = progs.map(p=>esc(p.incubator||'—')).join('<br>');
       const yearLines  = progs.map(p=>p.year||'—').join('<br>');
       const donorLines = progs.map(p=>esc(p.donor||'—')).join('<br>');
@@ -838,6 +872,7 @@ function renderDirectory(){
         <td style="vertical-align:top">${esc(e.companyName||'—')}</td>
         ${descCell}
         <td style="vertical-align:top">${progLines}</td>
+        <td style="vertical-align:top">${typeLines}</td>
         <td style="vertical-align:top">${incubLines}</td>
         <td style="vertical-align:top;white-space:nowrap">${yearLines}</td>
         <td style="vertical-align:top;color:var(--text2)">${donorLines}</td>
@@ -1180,6 +1215,7 @@ function paginationHtml(cur,total,fn){
 function openUploadModal(){
   document.getElementById('up-incubator').value='';
   document.getElementById('up-programme').value='';
+  document.getElementById('up-prog-type').value='';
   document.getElementById('up-year').value='';
   document.getElementById('up-donor').value='';
   document.getElementById('up-file').value='';
@@ -1206,10 +1242,11 @@ function handleDrop(e){
 }
 
 async function submitUpload(){
-  const incubator = document.getElementById('up-incubator').value.trim();
-  const programme = document.getElementById('up-programme').value.trim();
-  const year      = document.getElementById('up-year').value;
-  const donor     = document.getElementById('up-donor').value.trim();
+  const incubator   = document.getElementById('up-incubator').value.trim();
+  const programme   = document.getElementById('up-programme').value.trim();
+  const programmeType = document.getElementById('up-prog-type').value;
+  const year        = document.getElementById('up-year').value;
+  const donor       = document.getElementById('up-donor').value.trim();
   const fileEl    = document.getElementById('up-file');
   const resultBox = document.getElementById('up-result-box');
   const resultMsg = document.getElementById('up-result-msg');
@@ -1218,16 +1255,20 @@ async function submitUpload(){
   if (!incubator){ toast('Incubator name is required'); return; }
   if (!fileEl.files?.length){ toast('Please select a file'); return; }
 
+  const isAiDoc = /\.(pdf|docx|doc)$/i.test(fileEl.files[0]?.name||'');
   resultBox.classList.add('show');
-  resultMsg.innerHTML='<span style="color:var(--text2)">⏳ Uploading and importing data…</span>';
+  resultMsg.innerHTML = isAiDoc
+    ? '<span style="color:var(--text2)">🤖 Analysing document with AI — this may take 15–30 seconds…</span>'
+    : '<span style="color:var(--text2)">⏳ Uploading and importing data…</span>';
   submitBtn.disabled=true; submitBtn.textContent='Importing…';
 
   const fd=new FormData();
   fd.append('file',fileEl.files[0]);
-  fd.append('incubatorName', incubator);
-  fd.append('programmeName', programme);
-  fd.append('year',          year);
-  fd.append('donor',         donor);
+  fd.append('incubatorName',  incubator);
+  fd.append('programmeName',  programme);
+  fd.append('programmeType',  programmeType);
+  fd.append('year',           year);
+  fd.append('donor',          donor);
 
   try {
     const res=await fetch(API+'/api/incubators/upload',{
@@ -1240,8 +1281,9 @@ async function submitUpload(){
 
     if (data.success){
       const r=data.results;
+      const methodNote = data.method==='ai' ? ' <span style="font-size:11px;color:var(--purple)">(AI extracted)</span>' : '';
       resultMsg.innerHTML=`
-        <div style="color:var(--accent);font-weight:600;font-size:14px;margin-bottom:8px">✅ Import complete!</div>
+        <div style="color:var(--accent);font-weight:600;font-size:14px;margin-bottom:8px">✅ Import complete!${methodNote}</div>
         <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px">
           <span>🆕 <strong>${r.created}</strong> added</span>
           <span>🔀 <strong>${r.merged}</strong> merged</span>
@@ -1280,7 +1322,7 @@ function openAddModal(){
    'ef-company','ef-website','ef-description','ef-incubator','ef-prog','ef-donor',
    'ef-fund-investor','ef-fund-type']
     .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
-  ['ef-gender','ef-bizstage'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  ['ef-gender','ef-bizstage','ef-prog-type'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('ef-stage').value='active';
   ['ef-age','ef-founded','ef-employees','ef-revenue','ef-turnover','ef-fund-amt','ef-prog-year']
     .forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
@@ -1301,6 +1343,7 @@ function openEditModal(id){
   s('ef-founded',e.yearFounded); s('ef-employees',e.employees); s('ef-revenue',e.revenue);
   const prog=e.programmes?.[0]||{};
   s('ef-prog',prog.programmeName); s('ef-incubator',prog.incubator);
+  s('ef-prog-type',prog.programmeType||'');
   s('ef-prog-year',prog.year); s('ef-donor',prog.donor); s('ef-turnover',e.turnover);
   s('ef-stage',prog.stage||'active');
   const fund=e.funding?.[0]||{};
@@ -1344,6 +1387,7 @@ async function saveEntrepreneur(){
     turnover:     num('ef-turnover'),
     programmes:   (incubator||progName)?[{
       programmeName:progName, incubator, stage,
+      programmeType:document.getElementById('ef-prog-type')?.value||'',
       year:progYear, donor:donor||undefined
     }]:undefined,
     funding: fundAmt>0?[{
