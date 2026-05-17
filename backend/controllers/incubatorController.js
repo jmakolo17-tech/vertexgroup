@@ -243,51 +243,30 @@ function rowToFields(row) {
 }
 
 // ── AI extraction via Claude ──────────────────────────────────────────────────
-async function aiExtractEntrepreneurs(text, context = {}) {
+// Single chunk AI call
+async function aiExtractChunk(chunkText, context) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return null;
 
   const prompt = `You are an expert at extracting entrepreneur and participant data from incubator and accelerator program documents. The document may be written in French, English, or both.
 
-Extract ALL entrepreneurs, participants, applicants, or beneficiaries mentioned. Return a raw JSON array (no markdown, no code blocks — just the JSON starting with "[").
+Extract ALL entrepreneurs, participants, applicants, or beneficiaries mentioned in this section. Return a raw JSON array (no markdown, no code blocks — just JSON starting with "[").
 
-For each person found, use this structure (null for any missing field):
-{
-  "firstName": string,
-  "surname": string,
-  "age": number or null,
-  "email": string or null,
-  "phone": string or null,
-  "city": string or null,
-  "country": string or null,
-  "companyName": string or null,
-  "description": string or null (concise 1-3 sentence business description),
-  "sector": string or null,
-  "gender": "Male" | "Female" | "Non-binary" | null,
-  "businessStage": "idea" | "early" | "growth" | "scale" | "mature" | null,
-  "yearFounded": number or null,
-  "employees": number or null,
-  "revenue": number or null,
-  "turnover": number or null,
-  "programmeName": string or null,
-  "programmeType": "incubation" | "acceleration" | "mentorship" | "training" | "fellowship" | "boot_camp" | "grant" | "other" | null,
-  "progStage": "active" | "applied" | "graduated" | "dropped" | null,
-  "fundingAmount": number or null,
-  "investor": string or null
-}
+For each person found, use this structure (null for missing fields):
+{"firstName":string,"surname":string,"age":number|null,"email":string|null,"phone":string|null,"city":string|null,"country":string|null,"companyName":string|null,"description":string|null,"sector":string|null,"gender":"Male"|"Female"|"Non-binary"|null,"businessStage":"idea"|"early"|"growth"|"scale"|"mature"|null,"yearFounded":number|null,"employees":number|null,"revenue":number|null,"turnover":number|null,"programmeName":string|null,"programmeType":"incubation"|"acceleration"|"mentorship"|"training"|"fellowship"|"boot_camp"|"grant"|"other"|null,"progStage":"active"|"applied"|"graduated"|"dropped"|null,"fundingAmount":number|null,"investor":string|null}
 
-Programme context (use these as defaults when the document doesn't specify):
+Programme context (use as defaults when not in the document):
 - Incubator: ${context.incubatorSource || 'not specified'}
 - Programme: ${context.programmeName || 'not specified'}
 - Year: ${context.cohortYear || 'not specified'}
 - Donor: ${context.donor || 'not specified'}
 
-Document content:
+Document section:
 ---
-${text.slice(0, 14000)}
+${chunkText}
 ---
 
-Return ONLY a JSON array. If no entrepreneur data is found, return [].`;
+Return ONLY a JSON array. Return [] if no entrepreneur data found in this section.`;
 
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -299,20 +278,55 @@ Return ONLY a JSON array. If no entrepreneur data is found, return [].`;
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 4096,
+        max_tokens: 8192,
         messages: [{ role: 'user', content: prompt }],
       }),
     });
-    if (!resp.ok) return null;
+    if (!resp.ok) { console.error('AI chunk error:', resp.status); return []; }
     const data = await resp.json();
     const content = (data.content?.[0]?.text || '').trim();
     const match = content.match(/\[[\s\S]*\]/);
     if (!match) return [];
     return JSON.parse(match[0]);
   } catch (e) {
-    console.error('AI extraction error:', e.message);
-    return null;
+    console.error('AI chunk extraction error:', e.message);
+    return [];
   }
+}
+
+// Split large documents into overlapping chunks, call AI on each, deduplicate
+async function aiExtractEntrepreneurs(text, context = {}) {
+  if (!process.env.ANTHROPIC_API_KEY) return null;
+
+  const CHUNK_SIZE  = 12000; // chars per chunk — fits ~30-40 entrepreneurs
+  const OVERLAP     = 800;   // overlap to avoid splitting mid-record
+  const MAX_CHUNKS  = 30;    // cap: 30 × 12k = 360k chars max
+
+  // Build chunks
+  const chunks = [];
+  for (let i = 0; i < text.length && chunks.length < MAX_CHUNKS; i += CHUNK_SIZE - OVERLAP) {
+    chunks.push(text.slice(i, i + CHUNK_SIZE));
+    if (i + CHUNK_SIZE >= text.length) break;
+  }
+
+  const allResults = [];
+  const seen = new Set(); // deduplicate by email or full name
+
+  for (const chunk of chunks) {
+    const rows = await aiExtractChunk(chunk, context);
+    if (!rows) continue;
+    for (const r of rows) {
+      const name  = `${r.firstName||''} ${r.surname||''}`.trim().toLowerCase();
+      const email = (r.email||'').toLowerCase().trim();
+      const key   = email || name;
+      if (!key) continue;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      allResults.push(r);
+    }
+  }
+
+  return allResults.length > 0 ? allResults : (chunks.length > 0 ? [] : null);
 }
 
 // ── Save a batch of AI-extracted records ──────────────────────────────────────
