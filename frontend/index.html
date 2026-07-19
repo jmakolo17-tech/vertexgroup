@@ -1660,8 +1660,8 @@ const { useState, useEffect, useRef, useCallback } = React;
 const LOGO_B64 = window.__VERTEX_LOGO__;
 
 // ── API CONFIG ────────────────────────────────────────────────────
-// Set window.VERTEX_API_BASE before this script to override in production
-const API_BASE = window.VERTEX_API_BASE || 'http://localhost:5000';
+const _isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+const API_BASE = window.VERTEX_API_BASE || (_isLocal ? 'http://localhost:5000' : 'https://vertex-africa-api.onrender.com');
 const CONTACT_EMAIL = "info@vertexgroup.africa";
 const SITE_DOMAIN = "vertexgroup.africa";
 
