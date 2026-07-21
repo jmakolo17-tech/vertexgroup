@@ -85,6 +85,33 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .hero-scroll-indicator{position:absolute;bottom:2.5rem;right:3rem;display:flex;flex-direction:column;align-items:center;gap:0.6rem;animation:fadeUp 0.9s 1.2s both}
 .hero-scroll-indicator span{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey-500);writing-mode:vertical-rl}
 .scroll-line{width:1px;height:60px;background:linear-gradient(to bottom,var(--grey-700),transparent);animation:scrollPulse 2s infinite}
+/* HERO PHOTO + CAROUSEL */
+.hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none;z-index:0;transition:opacity 1.4s ease}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,5,5,0.6) 0%,rgba(5,5,5,0.32) 45%,rgba(5,5,5,0.9) 100%);z-index:1}
+.hero .hero-bg,.hero .hero-grid,.hero .hero-label,.hero .hero-h1,.hero .hero-sub,.hero .hero-actions,.hero .hero-scroll-indicator{position:relative;z-index:3}
+.carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10;background:rgba(0,0,0,0.32);border:1px solid rgba(255,255,255,0.22);color:rgba(255,255,255,0.92);width:52px;height:52px;font-size:2.4rem;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);padding:0;line-height:1}
+.carousel-arrow:hover{background:rgba(0,0,0,0.62);border-color:rgba(255,255,255,0.5)}
+.carousel-prev{left:2rem}.carousel-next{right:2rem}
+.carousel-progress{position:absolute;bottom:4.5rem;left:3rem;z-index:10;display:flex;gap:0.7rem;align-items:center}
+.carousel-pip{height:2px;border:none;cursor:pointer;transition:all 0.4s ease;padding:0;background:rgba(255,255,255,0.28)}
+.carousel-pip.active{background:var(--accent)}
+@media(max-width:600px){.carousel-arrow{display:none}.carousel-progress{left:1.5rem;bottom:3.5rem}}
+/* EDITORIAL STRIPS */
+.editorial-strip{position:relative;overflow:hidden;height:540px;display:flex;align-items:center}
+.editorial-strip-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.editorial-strip-overlay{position:absolute;inset:0;background:linear-gradient(108deg,rgba(5,5,5,0.92) 0%,rgba(5,5,5,0.68) 50%,rgba(5,5,5,0.18) 100%)}
+.editorial-strip-content{position:relative;z-index:2;padding:4rem 3.5rem;max-width:640px}
+.editorial-strip-label{font-family:'DM Mono',monospace;font-size:0.64rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem}
+.editorial-strip-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.8vw,3.2rem);font-weight:900;line-height:1.06;letter-spacing:-0.025em;margin-bottom:1.2rem;color:var(--white)}
+.editorial-strip-sub{font-size:1.05rem;color:rgba(255,255,255,0.75);line-height:1.82;margin-bottom:2rem;max-width:480px}
+@media(max-width:900px){.editorial-strip{height:auto}.editorial-strip-content{padding:3rem 1.5rem}}
+/* IMAGE FEATURE SPLIT */
+.img-feature{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.img-feature-photo{aspect-ratio:4/3;overflow:hidden}
+.img-feature-photo img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s ease;display:block}
+.img-feature-photo:hover img{transform:scale(1.04)}
+.img-feature-text{padding:4rem 3.5rem;display:flex;flex-direction:column;justify-content:center;background:var(--offblack)}
+@media(max-width:900px){.img-feature{grid-template-columns:1fr}.img-feature-photo{aspect-ratio:16/9}}
 
 /* STATS */
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);border-top:var(--rule);border-bottom:var(--rule)}
@@ -296,24 +323,24 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .social-btn:hover{border-color:var(--cta);color:var(--white);background:rgba(12,148,216,0.08)}
 .social-btn svg{flex-shrink:0}
 
-/* FOOTER — expanded */
-.footer{background:#030303;padding:0;border-top:var(--rule)}
+/* FOOTER — expanded, blue */
+.footer{background:#01325a;padding:0;border-top:none}
 .footer-main{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding:4rem 3rem 3rem}
 .footer-brand{}
 .footer-brand-logo{display:flex;align-items:center;gap:0.7rem;margin-bottom:1.2rem;cursor:pointer}
-.footer-brand-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600}
+.footer-brand-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:#fff}
 .footer-brand-text span{color:var(--accent)}
-.footer-brand-desc{font-size:0.82rem;color:var(--grey-500);line-height:1.7;max-width:280px;margin-bottom:1.5rem}
-.footer-address{font-size:0.75rem;color:var(--grey-500);font-family:'DM Mono',monospace;line-height:1.8;letter-spacing:0.04em}
-.footer-address strong{color:var(--grey-300);display:block;margin-bottom:0.3rem;letter-spacing:0.1em;font-size:0.65rem;text-transform:uppercase}
-.footer-col-title{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey-300);margin-bottom:1.2rem}
+.footer-brand-desc{font-size:0.82rem;color:rgba(255,255,255,0.62);line-height:1.7;max-width:280px;margin-bottom:1.5rem}
+.footer-address{font-size:0.75rem;color:rgba(255,255,255,0.5);font-family:'DM Mono',monospace;line-height:1.8;letter-spacing:0.04em}
+.footer-address strong{color:rgba(255,255,255,0.75);display:block;margin-bottom:0.3rem;letter-spacing:0.1em;font-size:0.65rem;text-transform:uppercase}
+.footer-col-title{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.8);margin-bottom:1.2rem}
 .footer-col-links{display:flex;flex-direction:column;gap:0.6rem;list-style:none}
-.footer-col-links button{background:none;border:none;color:var(--grey-500);font-size:0.8rem;cursor:pointer;transition:color 0.2s;padding:0;text-align:left}
-.footer-col-links button:hover{color:var(--white)}
-.footer-bottom{border-top:var(--rule);padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap}
-.footer-copy{font-size:0.65rem;color:var(--grey-700);font-family:'DM Mono',monospace;letter-spacing:0.08em}
+.footer-col-links button{background:none;border:none;color:rgba(255,255,255,0.52);font-size:0.8rem;cursor:pointer;transition:color 0.2s;padding:0;text-align:left}
+.footer-col-links button:hover{color:#fff}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.12);padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;background:#012647}
+.footer-copy{font-size:0.65rem;color:rgba(255,255,255,0.42);font-family:'DM Mono',monospace;letter-spacing:0.08em}
 .footer-legal{display:flex;gap:1.5rem}
-.footer-legal span{font-size:0.65rem;color:var(--grey-700);font-family:'DM Mono',monospace;letter-spacing:0.06em;cursor:default}
+.footer-legal span{font-size:0.65rem;color:rgba(255,255,255,0.32);font-family:'DM Mono',monospace;letter-spacing:0.06em;cursor:default}
 
 @media(max-width:768px){
   .nav-logo img{height:54px;max-width:170px}
@@ -687,32 +714,49 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .qualify-cta-note{max-width:960px;margin:2.5rem auto 0;text-align:center;font-size:0.82rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.06em}
 @media(max-width:768px){.qualify-inner{grid-template-columns:1fr;gap:3rem 0}.qualify-divider{height:1px;width:100%;align-self:auto}.qualify-section{padding:4rem 1.5rem}}
 /* ── SECTOR SECTION ──────────────────────────────────────────────── */
-.sector-section{padding:5rem 3rem;border-bottom:var(--rule)}
-.sector-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);margin-top:3rem}
-.sector-card{background:var(--offblack);padding:2.5rem 2rem;transition:background 0.2s}
-.sector-card:hover{background:#131311}
-.sector-card-icon{font-family:'DM Mono',monospace;font-size:1.1rem;color:var(--accent);margin-bottom:1rem;opacity:0.8}
-.sector-card-name{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:0.75rem;line-height:1.3}
-.sector-card-desc{font-size:0.97rem;color:var(--grey-400);line-height:1.78}
+.sector-section{padding:5rem 3rem 6rem;border-bottom:var(--rule)}
+.sector-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3.5rem}
+.sector-card{background:var(--offblack);border:1px solid var(--grey-700);overflow:hidden;cursor:pointer;transition:transform 0.3s ease,border-color 0.3s,box-shadow 0.3s}
+.sector-card:hover{transform:translateY(-6px);border-color:rgba(200,184,154,0.35);box-shadow:0 20px 48px rgba(0,0,0,0.55)}
+.sector-card-img-wrap{height:210px;overflow:hidden;position:relative}
+.sector-card-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;display:block}
+.sector-card:hover .sector-card-img-wrap img{transform:scale(1.07)}
+.sector-card-img-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,5,5,0.05) 0%,rgba(5,5,5,0.6) 100%)}
+.sector-card-body{padding:1.8rem 2rem 2rem}
+.sector-card-icon{font-size:1.1rem;color:var(--accent);margin-bottom:0.5rem;opacity:0.9}
+.sector-card-name{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:0.6rem;line-height:1.25}
+.sector-card-desc{font-size:0.85rem;color:var(--grey-400);line-height:1.72;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sector-card-cta{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.14em;color:var(--accent);margin-top:1.3rem;padding-top:1rem;border-top:1px solid rgba(200,184,154,0.12);display:flex;align-items:center;gap:0.4rem;transition:gap 0.2s}
+.sector-card:hover .sector-card-cta{gap:0.7rem}
 @media(max-width:900px){.sector-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.sector-grid{grid-template-columns:1fr}.sector-section{padding:4rem 1.5rem}}
+@media(max-width:600px){.sector-grid{grid-template-columns:1fr}.sector-section{padding:4rem 1.5rem 5rem}}
 /* ── HOW WE WORK ─────────────────────────────────────────────────── */
-.how-section{padding:5rem 3rem;background:var(--bg);border-bottom:var(--rule)}
-.how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);margin-top:3rem}
-.how-step{background:var(--bg);padding:2.5rem 2rem}
-.how-step-n{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;color:var(--grey-600);margin-bottom:1.2rem}
-.how-step-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--white);margin-bottom:1rem;line-height:1.2}
-.how-step-desc{font-size:0.97rem;color:var(--grey-400);line-height:1.78}
-@media(max-width:900px){.how-steps{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.how-steps{grid-template-columns:1fr}.how-section{padding:4rem 1.5rem}}
+.how-section{padding:7rem 3rem;background:var(--offblack);border-top:var(--rule);border-bottom:var(--rule)}
+.how-header{text-align:center;max-width:680px;margin:0 auto 5.5rem}
+.how-process{display:grid;grid-template-columns:repeat(4,1fr);position:relative}
+.how-connector{position:absolute;top:31px;left:calc(12.5%);right:calc(12.5%);height:1px;background:linear-gradient(90deg,var(--accent) 0%,rgba(200,184,154,0.2) 100%);pointer-events:none;z-index:0}
+.how-step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 1.8rem;position:relative;z-index:1}
+.how-step-badge{width:62px;height:62px;border-radius:50%;border:1px solid rgba(200,184,154,0.55);display:flex;align-items:center;justify-content:center;background:var(--offblack);margin-bottom:2rem;transition:border-color 0.3s,background 0.3s,box-shadow 0.3s;flex-shrink:0}
+.how-step:hover .how-step-badge{border-color:var(--accent);background:rgba(200,184,154,0.07);box-shadow:0 0 24px rgba(200,184,154,0.12)}
+.how-step-num{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.14em;color:var(--accent);font-weight:500}
+.how-step-icon{font-size:1.05rem;margin-bottom:1rem;opacity:0.7}
+.how-step-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--white);margin-bottom:0.9rem;line-height:1.15}
+.how-step-desc{font-size:0.88rem;color:var(--grey-400);line-height:1.82;max-width:215px}
+.how-step-phase{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,184,154,0.35);margin-top:1.4rem}
+@media(max-width:900px){.how-process{grid-template-columns:1fr 1fr;gap:3.5rem}.how-connector{display:none}.how-header{margin-bottom:3.5rem}}
+@media(max-width:600px){.how-process{grid-template-columns:1fr;gap:2.5rem}.how-section{padding:5rem 1.5rem}}
 /* ── TEAM SECTION ────────────────────────────────────────────────── */
-.team-section{padding:5rem 3rem;border-bottom:var(--rule)}
-.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);margin-top:3rem}
-.team-card{background:var(--offblack);padding:2.5rem 2rem}
+.team-section{padding:6rem 3rem 5rem;border-bottom:var(--rule);position:relative;overflow:hidden}
+.team-section-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
+.team-section-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,5,5,0.85) 0%,rgba(5,5,5,0.78) 60%,rgba(5,5,5,0.94) 100%);z-index:1}
+.team-section-inner{position:relative;z-index:2}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.team-card{background:rgba(8,8,7,0.7);border:1px solid rgba(200,184,154,0.15);padding:2.5rem 2rem;backdrop-filter:blur(8px);transition:border-color 0.3s,background 0.3s}
+.team-card:hover{background:rgba(8,8,7,0.88);border-color:rgba(200,184,154,0.32)}
 .team-role{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:0.8rem}
 .team-focus{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:1rem;line-height:1.3}
-.team-exp{font-size:0.97rem;color:var(--grey-400);line-height:1.78}
-.team-note{max-width:700px;margin:2.5rem auto 0;text-align:center;font-size:0.82rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.05em;line-height:1.6}
+.team-exp{font-size:0.9rem;color:var(--grey-400);line-height:1.78}
+.team-note{max-width:700px;margin:2.5rem auto 0;text-align:center;font-size:0.82rem;color:rgba(255,255,255,0.42);font-family:'DM Mono',monospace;letter-spacing:0.05em;line-height:1.6}
 @media(max-width:900px){.team-grid{grid-template-columns:1fr}.team-section{padding:4rem 1.5rem}}
 /* ── FINAL CTA SECTION ───────────────────────────────────────────── */
 .final-cta-section{padding:8rem 3rem;text-align:center;background:var(--bg);border-top:var(--rule)}
@@ -2600,25 +2644,88 @@ function PlanTeaser({ t, setPage }) {
 }
 
 // ── HOME PAGE ─────────────────────────────────────────────────────
+function HeroCarousel({ t, setPage }) {
+  const isFr = t === T.fr;
+  const [idx, setIdx] = React.useState(0);
+  const [paused, setPaused] = React.useState(false);
+  const slides = [
+    {
+      img:"https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=1920&q=80",
+      pos:"center 40%",
+      label: isFr ? "Le moteur de croissance de l'Afrique" : "Africa's Growth Engine",
+      h1a: isFr ? "44 millions de PME." : "44 million SMEs.",
+      h1b: isFr ? "Un potentiel immense. Sous-exploité." : "Enormous potential. Largely untapped.",
+      sub:  isFr
+        ? "L'Afrique abrite le plus grand bassin d'entrepreneurs à croissance rapide au monde. Vertex Group est là pour transformer ce potentiel en résultats mesurables."
+        : "Africa is home to the world's fastest-growing pool of entrepreneurs. Vertex Group exists to turn that potential into measurable results.",
+    },
+    {
+      img:"https://images.unsplash.com/photo-1596524430615-b46475ddff6e?auto=format&fit=crop&w=1920&q=80",
+      pos:"center 35%",
+      label: isFr ? "Marchés en expansion" : "Expanding Markets",
+      h1a: isFr ? "Lagos. Nairobi. Accra." : "Lagos. Nairobi. Accra.",
+      h1b: isFr ? "Johannesburg. Votre prochain marché." : "Johannesburg. Your next market.",
+      sub:  isFr
+        ? "Nous disposons des relations institutionnelles et de la connaissance locale pour vous emmener au-delà de votre territoire actuel — rapidement, avec les bons partenaires."
+        : "We hold the institutional relationships and local knowledge to take you beyond your current territory — quickly, with the right partners in place.",
+    },
+    {
+      img:"https://images.unsplash.com/photo-1574783951979-c1781edb1834?auto=format&fit=crop&w=1920&q=80",
+      pos:"center 30%",
+      label: isFr ? "Exécution. Pas de rapports." : "Execution. Not Reports.",
+      h1a: isFr ? "Le problème n'est pas la stratégie." : "The gap isn't strategy.",
+      h1b: isFr ? "C'est l'exécution." : "It's execution.",
+      sub:  isFr
+        ? "Vertex Group s'intègre dans les PME africaines et reste jusqu'à ce que les indicateurs bougent. Pas un rapport. Pas une remise de cadre. Des résultats concrets."
+        : "Vertex Group embeds inside African SMEs and stays until the numbers move. Not a report. Not a framework handoff. Concrete, tracked results.",
+    },
+  ];
+  React.useEffect(() => {
+    if (paused) return;
+    const timer = setInterval(() => setIdx(i => (i + 1) % slides.length), 5500);
+    return () => clearInterval(timer);
+  }, [paused, slides.length]);
+  const s = slides[idx];
+  return (
+    <section className="hero" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      {slides.map((sl,i) => (
+        <img key={i} className="hero-photo" src={sl.img} alt=""
+          style={{opacity: i===idx ? 1 : 0, objectPosition: sl.pos}}
+          loading={i===0 ? "eager" : "lazy"}/>
+      ))}
+      <div className="hero-overlay"/>
+      <div className="hero-bg"/><div className="hero-grid"/>
+      <div key={`lbl-${idx}`} className="hero-label" style={{animationDuration:'0.65s',animationDelay:'0s'}}>{s.label}</div>
+      <h1 key={`h1-${idx}`} className="hero-h1" style={{animationDuration:'0.65s',animationDelay:'0.1s'}}>{s.h1a}<br/><em>{s.h1b}</em></h1>
+      <p key={`sub-${idx}`} className="hero-sub" style={{animationDuration:'0.65s',animationDelay:'0.2s'}}>{s.sub}</p>
+      <div className="hero-actions">
+        <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.hero_cta1}</button>
+      </div>
+      <button className="carousel-arrow carousel-prev" onClick={() => setIdx(i => (i-1+slides.length)%slides.length)}>&#8249;</button>
+      <button className="carousel-arrow carousel-next" onClick={() => setIdx(i => (i+1)%slides.length)}>&#8250;</button>
+      <div className="carousel-progress">
+        {slides.map((_,i) => (
+          <button key={i} onClick={() => setIdx(i)}
+            className={`carousel-pip${i===idx?' active':''}`}
+            style={{width: i===idx ? '40px' : '20px'}}/>
+        ))}
+      </div>
+      <div className="hero-scroll-indicator">
+        <div className="scroll-line"/>
+        <span>{t.hero_scroll}</span>
+      </div>
+    </section>
+  );
+}
+
 function HomePage({ setPage, goSector, t }) {
   useReveal();
+  const isFr = t === T.fr;
   return (
     <div>
 
-      {/* ── 1. HERO — single CTA ── */}
-      <section className="hero">
-        <div className="hero-bg"/><div className="hero-grid"/>
-        <div className="hero-label">{t.hero_label}</div>
-        <h1 className="hero-h1">{t.hero_h1a}<br/><em>{t.hero_h1b}</em></h1>
-        <p className="hero-sub">{t.hero_sub}</p>
-        <div className="hero-actions">
-          <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.hero_cta1}</button>
-        </div>
-        <div className="hero-scroll-indicator">
-          <div className="scroll-line"/>
-          <span>{t.hero_scroll}</span>
-        </div>
-      </section>
+      {/* ── 1. HERO CAROUSEL ── */}
+      <HeroCarousel t={t} setPage={setPage}/>
 
       {/* ── 2. STATS BAR ── */}
       <div className="stats-bar">
@@ -2628,6 +2735,18 @@ function HomePage({ setPage, goSector, t }) {
             <div className="stat-label">{t[lk]}</div>
           </div>
         ))}
+      </div>
+
+      {/* ── EDITORIAL STRIP — Cape Town ── */}
+      <div className="editorial-strip">
+        <img className="editorial-strip-img" src="https://images.unsplash.com/photo-1526512340740-9217d0159da9?auto=format&fit=crop&w=1920&q=80" alt="Cape Town" style={{objectPosition:'center 45%'}}/>
+        <div className="editorial-strip-overlay"/>
+        <div className="editorial-strip-content reveal">
+          <div className="editorial-strip-label">{isFr ? "L'opportunité africaine" : "The African Opportunity"}</div>
+          <h2 className="editorial-strip-title">{isFr ? "L'Afrique n'a pas besoin d'aide. Elle a besoin d'exécution." : "Africa doesn't need aid. It needs execution."}</h2>
+          <p className="editorial-strip-sub">{isFr ? "Avec 44 millions de PME et une classe moyenne en pleine expansion, le continent dispose de toutes les conditions pour une croissance accélérée. Ce qui manque, c'est la rigueur d'exécution." : "With 44 million SMEs and a rapidly expanding middle class, the continent has every condition for accelerated growth. What is missing is execution rigour."}</p>
+          <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.hero_cta1}</button>
+        </div>
       </div>
 
       {/* ── 3. IS THIS FOR YOU? ── */}
@@ -2660,34 +2779,59 @@ function HomePage({ setPage, goSector, t }) {
           <p style={{color:'var(--grey-400)',maxWidth:'600px',fontSize:'1.05rem',lineHeight:1.78,marginTop:'0.5rem'}}>{t.sector_sub}</p>
         </div>
         <div className="sector-grid">
-          {(t.sectors||[]).map((s,i) => (
-            <div key={i} className="sector-card reveal" style={{cursor:'pointer'}} onClick={() => goSector && goSector(s.key)}>
-              <div className="sector-card-icon">{s.icon}</div>
-              <div className="sector-card-name">{s.name}</div>
-              <div className="sector-card-desc">{s.desc}</div>
-              <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',letterSpacing:'0.12em',color:'var(--accent)',marginTop:'1.2rem'}}>
-                {t === T.fr ? 'En savoir plus →' : 'Learn more →'}
+          {(t.sectors||[]).map((s,i) => {
+            const imgs = {
+              fintech:      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=75",
+              retail:       "https://images.unsplash.com/photo-1534237710431-e2fc698436d0?auto=format&fit=crop&w=800&q=75",
+              tech:         "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=800&q=75",
+              agri:         "https://images.unsplash.com/photo-1574323347407-f5e1ad6962b6?auto=format&fit=crop&w=800&q=75",
+              professional: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=75",
+              health:       "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=75",
+            };
+            return (
+              <div key={i} className="sector-card reveal" onClick={() => goSector && goSector(s.key)}>
+                <div className="sector-card-img-wrap">
+                  <img src={imgs[s.key] || imgs.professional} alt={s.name} loading="lazy"/>
+                  <div className="sector-card-img-grad"/>
+                </div>
+                <div className="sector-card-body">
+                  <div className="sector-card-icon">{s.icon}</div>
+                  <div className="sector-card-name">{s.name}</div>
+                  <div className="sector-card-desc">{s.desc}</div>
+                  <div className="sector-card-cta">{t === T.fr ? 'En savoir plus' : 'Learn more'} <span>→</span></div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
       {/* ── 5. CORE OFFER — HOW VERTEX WORKS ── */}
       <section className="how-section">
-        <div className="reveal">
-          <div className="section-label">{t.how_label}</div>
-          <h2 className="section-title">{t.how_title}</h2>
-          <p style={{color:'var(--grey-400)',maxWidth:'600px',fontSize:'1.05rem',lineHeight:1.78,marginTop:'0.5rem'}}>{t.how_sub}</p>
+        <div className="how-header reveal">
+          <div className="section-label" style={{justifyContent:'center'}}>{t.how_label}</div>
+          <h2 className="section-title" style={{marginBottom:'1rem'}}>{t.how_title}</h2>
+          <p style={{color:'var(--grey-400)',fontSize:'1.05rem',lineHeight:1.78}}>{t.how_sub}</p>
         </div>
-        <div className="how-steps">
-          {(t.how_steps||[]).map((s,i) => (
-            <div key={i} className="how-step reveal">
-              <div className="how-step-n">{s.n}</div>
-              <div className="how-step-title">{s.title}</div>
-              <div className="how-step-desc">{s.desc}</div>
-            </div>
-          ))}
+        <div className="how-process">
+          <div className="how-connector"/>
+          {(t.how_steps||[]).map((s,i) => {
+            const icons = ['◎','◈','◆','◉'];
+            const phases = isFr
+              ? ['Découverte','Planification','Livraison','Responsabilité']
+              : ['Discovery','Planning','Delivery','Accountability'];
+            return (
+              <div key={i} className="how-step reveal">
+                <div className="how-step-badge">
+                  <span className="how-step-num">{s.n}</span>
+                </div>
+                <div className="how-step-icon">{icons[i]}</div>
+                <div className="how-step-title">{s.title}</div>
+                <div className="how-step-desc">{s.desc}</div>
+                <div className="how-step-phase">{isFr ? 'Phase' : 'Phase'} {i+1} · {phases[i]}</div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -2701,6 +2845,31 @@ function HomePage({ setPage, goSector, t }) {
         </div>
       </div>
 
+      {/* ── IMAGE FEATURE — professionals ── */}
+      <div className="img-feature reveal">
+        <div className="img-feature-photo">
+          <img src="https://images.unsplash.com/photo-1573497491765-dccce02b29df?auto=format&fit=crop&w=900&q=80" alt="African business professionals"/>
+        </div>
+        <div className="img-feature-text">
+          <div className="section-label">{isFr ? "Notre approche" : "Our Approach"}</div>
+          <h2 className="section-title" style={{marginBottom:'1.5rem'}}>{isFr ? "Nous travaillons depuis l'intérieur." : "We work from the inside."}</h2>
+          <p style={{color:'var(--grey-300)',fontSize:'1rem',lineHeight:1.82,marginBottom:'2rem'}}>{isFr ? "Nos consultants s'intègrent dans votre équipe — présents, responsables, travaillant sur les priorités qui font bouger les chiffres. Pas de livrables à distance." : "Our consultants embed inside your team — present, accountable, and working on the priorities that move the numbers. No remote deliverables."}</p>
+          <button className="btn-ghost" onClick={() => { setPage('services'); window.scrollTo(0,0); }}>{isFr ? "Voir nos services →" : "See how we work →"}</button>
+        </div>
+      </div>
+
+      {/* ── EDITORIAL STRIP 2 — results ── */}
+      <div className="editorial-strip">
+        <img className="editorial-strip-img" src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1920&q=80" alt="African professionals" style={{objectPosition:'center 30%'}}/>
+        <div className="editorial-strip-overlay"/>
+        <div className="editorial-strip-content reveal">
+          <div className="editorial-strip-label">{isFr ? "Résultats prouvés" : "Proven Results"}</div>
+          <h2 className="editorial-strip-title">{isFr ? "Nos clients ne croissent pas. Ils transforment." : "Our clients don't just grow. They transform."}</h2>
+          <p className="editorial-strip-sub">{isFr ? "Chiffre d'affaires triplé. Systèmes opérationnels. Équipes alignées. Pas de promesses — des livrables mesurés." : "Tripled revenue. Operational systems. Aligned teams. No promises — measured deliverables."}</p>
+          <button className="btn-primary" onClick={() => { setPage('success'); window.scrollTo(0,0); }}>{isFr ? "Voir nos résultats" : "View our results"}</button>
+        </div>
+      </div>
+
       {/* ── 7. PROOF ── */}
       <section className="section">
         <div className="reveal">
@@ -2711,45 +2880,28 @@ function HomePage({ setPage, goSector, t }) {
         <Testimonials t={t}/>
       </section>
 
-      {/* ── 7b. THE HONEST COMPARISON ── */}
-      <section className="vs-section">
-        <div className="reveal">
-          <div className="section-label">{t.vs_label}</div>
-          <h2 className="section-title">{t.vs_title}</h2>
-          <p style={{color:'var(--grey-400)',maxWidth:'600px',fontSize:'1.05rem',lineHeight:1.78,marginTop:'0.5rem'}}>{t.vs_sub}</p>
-        </div>
-        <div className="vs-grid">
-          {(t.vs_cards||[]).map((c,i) => (
-            <div key={i} className="vs-card reveal">
-              <div>
-                <div className="vs-card-target">{c.target}</div>
-                <div className="vs-card-title">{c.title}</div>
-              </div>
-              <div className="vs-truth">{c.truth}</div>
-              <div className="vs-vertex">{c.vertex}</div>
-              <div className="vs-signal">{c.signal}</div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* ── 8. TEAM ── */}
       <section className="team-section">
-        <div className="reveal">
-          <div className="section-label">{t.team_label}</div>
-          <h2 className="section-title">{t.team_title}</h2>
-          <p style={{color:'var(--grey-400)',maxWidth:'600px',fontSize:'1.05rem',lineHeight:1.78,marginTop:'0.5rem'}}>{t.team_sub}</p>
+        <img className="team-section-bg" src="https://images.unsplash.com/photo-1573497491765-dccce02b29df?auto=format&fit=crop&w=1920&q=80" alt=""/>
+        <div className="team-section-overlay"/>
+        <div className="team-section-inner">
+          <div className="reveal">
+            <div className="section-label">{t.team_label}</div>
+            <h2 className="section-title">{t.team_title}</h2>
+            <p style={{color:'rgba(255,255,255,0.6)',maxWidth:'600px',fontSize:'1.05rem',lineHeight:1.78,marginTop:'0.5rem'}}>{t.team_sub}</p>
+          </div>
+          <div className="team-grid">
+            {(t.team_roles||[]).map((r,i) => (
+              <div key={i} className="team-card reveal">
+                <div className="team-role">{r.role}</div>
+                <div className="team-focus">{r.focus}</div>
+                <div className="team-exp">{r.exp}</div>
+              </div>
+            ))}
+          </div>
+          <p className="team-note">{t.team_note}</p>
         </div>
-        <div className="team-grid">
-          {(t.team_roles||[]).map((r,i) => (
-            <div key={i} className="team-card reveal">
-              <div className="team-role">{r.role}</div>
-              <div className="team-focus">{r.focus}</div>
-              <div className="team-exp">{r.exp}</div>
-            </div>
-          ))}
-        </div>
-        <p className="team-note">{t.team_note}</p>
       </section>
 
       {/* ── 9. PRICING SIGNAL ── */}
