@@ -65,7 +65,7 @@ input,select,textarea{font-family:'IBM Plex Mono',monospace}
 .nav-hamburger span{width:20px;height:1px;background:var(--white);display:block;transition:all 0.3s}
 .mobile-menu{display:none;position:fixed;inset:0;z-index:199;background:rgba(10,10,10,0.98);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:2rem}
 .mobile-menu.open{display:flex}
-.mobile-menu button{background:none;border:none;color:var(--white);font-size:1.4rem;font-family:'Instrument Serif',serif;font-weight:600;letter-spacing:0.05em;padding:0.5rem}
+.mobile-menu button{background:none;border:none;color:var(--white);font-size:1.4rem;font-family:'IBM Plex Mono',monospace;font-weight:400;letter-spacing:0.05em;padding:0.5rem}
 .mobile-lang{display:flex;gap:1rem;margin-top:1rem}
 .mobile-lang button{background:none;border:1px solid var(--grey-700);color:var(--grey-300);font-size:0.8rem;padding:0.5rem 1.2rem;font-family:'IBM Plex Mono',monospace;letter-spacing:0.1em;text-transform:uppercase}
 .mobile-lang button.active{background:var(--accent);border-color:var(--accent);color:var(--black)}
@@ -479,6 +479,59 @@ input,select,textarea{font-family:'IBM Plex Mono',monospace}
 .toast{position:fixed;bottom:2rem;right:2rem;background:var(--offblack);border:1px solid var(--grey-700);padding:1.2rem 1.8rem;z-index:500;font-size:0.84rem;color:var(--white);animation:fadeUp 0.3s both;max-width:360px;line-height:1.5}
 .toast.success{border-color:var(--accent)}
 .toast.error{border-color:#e07070}
+/* DIAGNOSIS PAGE REDESIGN */
+.diag-hero{padding:5rem 3rem 4rem;border-bottom:var(--rule);background:var(--black);position:relative;overflow:hidden}
+.diag-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.diag-hero-glow{position:absolute;top:-20%;right:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(ellipse,rgba(27,117,188,0.08) 0%,transparent 65%);pointer-events:none}
+.diag-badges{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:2rem}
+.diag-badge{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.4rem 0.9rem;border:1px solid;display:flex;align-items:center;gap:0.5rem}
+.diag-badge-free{border-color:var(--sky);color:var(--sky);background:rgba(4,174,239,0.06)}
+.diag-badge-time{border-color:var(--grey-700);color:var(--grey-500)}
+.diag-badge-lock{border-color:var(--grey-700);color:var(--grey-500)}
+.diag-deliverables{padding:3rem;background:var(--offblack);border-bottom:var(--rule);display:grid;grid-template-columns:repeat(5,1fr);gap:1px;border-top:none}
+.diag-deliverable{background:var(--offblack);padding:2rem 1.6rem;border-right:var(--rule);position:relative}
+.diag-deliverable:last-child{border-right:none}
+.diag-deliverable::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--sky),var(--accent));opacity:0}
+.diag-deliverable:hover::before{opacity:1}
+.diag-deliverable-icon{font-size:1.1rem;margin-bottom:0.8rem;color:var(--sky)}
+.diag-deliverable-title{font-size:0.8rem;font-weight:500;color:var(--white);margin-bottom:0.4rem;line-height:1.3}
+.diag-deliverable-desc{font-size:0.72rem;color:var(--grey-500);line-height:1.6;font-family:'IBM Plex Mono',monospace}
+.diag-form-layout{padding:4rem 3rem;display:grid;grid-template-columns:1fr 440px;gap:4rem;align-items:start}
+.diag-form-card{background:var(--offblack);border:1px solid var(--grey-700);border-top:3px solid var(--sky)}
+.diag-form-header{padding:2rem 2.5rem 1.5rem;border-bottom:1px solid var(--grey-700)}
+.diag-form-title{font-family:'Instrument Serif',serif;font-size:1.6rem;margin-bottom:0.3rem;line-height:1.2}
+.diag-form-sub{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;color:var(--grey-500)}
+.diag-form-body{padding:2rem 2.5rem}
+.diag-form-row{display:grid;grid-template-columns:1fr 1fr;gap:0 1.5rem}
+.diag-form-step{display:flex;align-items:center;gap:0.7rem;font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--sky);margin-bottom:1.2rem;margin-top:1.6rem}
+.diag-form-step::after{content:'';flex:1;height:1px;background:var(--grey-700)}
+.diag-form-step:first-of-type{margin-top:0}
+.diag-sidebar{display:flex;flex-direction:column;gap:1.5rem;position:sticky;top:100px}
+.diag-score-preview{background:var(--offblack);border:1px solid var(--grey-700);overflow:hidden}
+.diag-score-preview-header{background:var(--grey-800);padding:1rem 1.5rem;border-bottom:1px solid var(--grey-700);display:flex;align-items:center;justify-content:space-between}
+.diag-score-preview-label{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--grey-500)}
+.diag-score-preview-tag{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;padding:0.2rem 0.5rem;border:1px solid rgba(4,174,239,0.4);color:var(--sky)}
+.diag-score-preview-body{padding:1.5rem}
+.diag-score-num{font-family:'Instrument Serif',serif;font-size:3.5rem;font-weight:400;line-height:1;color:var(--white);margin-bottom:0.2rem}
+.diag-score-num span{font-size:1.4rem;color:var(--grey-500)}
+.diag-score-label{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--sky);margin-bottom:1.2rem}
+.diag-dim-row{display:flex;align-items:center;gap:0.7rem;margin-bottom:0.7rem}
+.diag-dim-name{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.06em;color:var(--grey-400);width:88px;flex-shrink:0}
+.diag-dim-bar{flex:1;height:2px;background:var(--grey-700);position:relative}
+.diag-dim-fill{height:100%;background:linear-gradient(90deg,var(--sky),var(--accent))}
+.diag-dim-score{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--grey-500);width:24px;text-align:right;flex-shrink:0}
+.diag-preview-blur{filter:blur(4px);opacity:0.5;user-select:none;pointer-events:none}
+.diag-preview-cta{text-align:center;padding:1rem 1.5rem 1.5rem;border-top:1px solid var(--grey-700)}
+.diag-preview-cta p{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--grey-500);letter-spacing:0.04em;line-height:1.6;margin-bottom:0.8rem}
+@media(max-width:900px){
+  .diag-hero{padding:3rem 1.5rem}
+  .diag-deliverables{grid-template-columns:1fr 1fr;padding:2rem 1.5rem}
+  .diag-deliverable{border-right:none;border-bottom:var(--rule);padding:1.5rem}
+  .diag-form-layout{grid-template-columns:1fr;padding:2.5rem 1.5rem;gap:2.5rem}
+  .diag-sidebar{position:static}
+  .diag-form-row{grid-template-columns:1fr}
+  .diag-form-header,.diag-form-body{padding-left:1.5rem;padding-right:1.5rem}
+}
 
 /* LANG NOTICE */
 .lang-notice{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--offblack);border:1px solid var(--accent);padding:1rem 2rem;z-index:400;font-size:0.82rem;display:flex;align-items:center;gap:1.5rem;animation:fadeUp 0.4s both;white-space:nowrap}
@@ -2063,15 +2116,20 @@ async function readFileAsBase64(file) {
 
 // ── LOGO COMPONENT ────────────────────────────────────────────────
 function Logo({ size = 38, style = {} }) {
-  const c = 'rgba(255,255,255,0.93)';
   return (
-    <svg height={size} viewBox="0 0 268 78" fill="none" xmlns="http://www.w3.org/2000/svg"
+    <svg height={size} viewBox="0 0 320 78" fill="none" xmlns="http://www.w3.org/2000/svg"
       style={{width:'auto',display:'block',flexShrink:0,...style}} aria-label="Vertex Group">
-      <text x="0" y="62" fontFamily="'DM Sans','Helvetica Neue',Helvetica,Arial,sans-serif"
-        fontWeight="700" fontSize="64" fill={c}>VerteX</text>
-      <circle cx="250" cy="10" r="6.5" fill={c}/>
-      <circle cx="238" cy="21" r="5" fill={c}/>
-      <circle cx="228" cy="30" r="3.5" fill={c}/>
+      <defs>
+        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#04AEEF"/>
+          <stop offset="100%" stopColor="#1B75BC"/>
+        </linearGradient>
+      </defs>
+      <text x="0" y="62" fontFamily="'Helvetica Neue',Helvetica,Arial,sans-serif"
+        fontWeight="800" fontSize="64" fill="url(#logoGrad)">VerteX</text>
+      <circle cx="307" cy="8"  r="8.5" fill="url(#logoGrad)"/>
+      <circle cx="292" cy="23" r="6.5" fill="url(#logoGrad)"/>
+      <circle cx="280" cy="35" r="4.5" fill="url(#logoGrad)"/>
     </svg>
   );
 }
@@ -2249,15 +2307,15 @@ Submitted via vertexgroup.africa
               <span style={{color:'var(--cta)',fontSize:'0.7rem',marginTop:'2px',flexShrink:0}}>✓</span>
               <span>{f}</span>
             </div>)}
-            {plan.features.length > 5 && <div style={{color:'var(--grey-500)',fontSize:'0.75rem',marginTop:'0.5rem',fontFamily:'DM Mono,monospace'}}>+{plan.features.length - 5} {isFr?'inclus':'more included'}</div>}
+            {plan.features.length > 5 && <div style={{color:'var(--grey-500)',fontSize:'0.75rem',marginTop:'0.5rem',fontFamily:"'IBM Plex Mono',monospace"}}>+{plan.features.length - 5} {isFr?'inclus':'more included'}</div>}
           </div>
 
           {sent ? (
             <div style={{textAlign:'center',padding:'2rem 0'}}>
               <div style={{fontSize:'2.5rem',marginBottom:'1rem'}}>✦</div>
-              <div style={{fontFamily:'Playfair Display,serif',fontSize:'1.3rem',fontWeight:700,marginBottom:'1rem'}}>{isFr?'Demande envoyée !':'Request Sent!'}</div>
+              <div style={{fontFamily:"'Instrument Serif',serif",fontSize:'1.3rem',fontWeight:700,marginBottom:'1rem'}}>{isFr?'Demande envoyée !':'Request Sent!'}</div>
               <p style={{color:'var(--grey-300)',fontSize:'0.88rem',lineHeight:1.75,maxWidth:400,margin:'0 auto'}}>{t.quote_success}</p>
-              <button onClick={onClose} style={{marginTop:'2rem',background:'var(--cta)',color:'var(--white)',border:'none',padding:'0.8rem 2rem',fontSize:'0.78rem',letterSpacing:'0.1em',textTransform:'uppercase',cursor:'pointer',fontFamily:'DM Sans,sans-serif'}}>{isFr?'Fermer':'Close'}</button>
+              <button onClick={onClose} style={{marginTop:'2rem',background:'var(--cta)',color:'var(--white)',border:'none',padding:'0.8rem 2rem',fontSize:'0.78rem',letterSpacing:'0.1em',textTransform:'uppercase',cursor:'pointer',fontFamily:"'IBM Plex Mono',monospace"}}>{isFr?'Fermer':'Close'}</button>
             </div>
           ) : (
             <>
@@ -2305,7 +2363,7 @@ Submitted via vertexgroup.africa
             <button className="form-submit" onClick={handleSubmit} disabled={sending||sent} style={{margin:0}}>
               {sending ? t.quote_sending : t.quote_submit}
             </button>
-            <div style={{textAlign:'center',marginTop:'0.8rem',fontSize:'0.68rem',color:'var(--grey-500)',fontFamily:'DM Mono,monospace'}}>
+            <div style={{textAlign:'center',marginTop:'0.8rem',fontSize:'0.68rem',color:'var(--grey-500)',fontFamily:"'IBM Plex Mono',monospace"}}>
               {isFr?'Envoyé à':'Sent to'} {CONTACT_EMAIL}
             </div>
           </div>
@@ -2388,7 +2446,7 @@ function PlansPage({ setPage, t }) {
           <div className="capacity-text" style={{marginTop:'0.3rem'}}>{t.capacity_text}</div>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:'1rem',flexWrap:'wrap'}}>
-          <span style={{fontFamily:'DM Mono,monospace',fontSize:'0.68rem',color:'var(--grey-500)',letterSpacing:'0.1em'}}>{t.capacity_open}</span>
+          <span style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.68rem',color:'var(--grey-500)',letterSpacing:'0.1em'}}>{t.capacity_open}</span>
           <div className="capacity-dots">
             {[1,2,3,4,5,6,7,8].map(i => <div key={i} className={`capacity-dot${i<=6?' filled':''}`}/>)}
           </div>
@@ -2404,7 +2462,7 @@ function PlansPage({ setPage, t }) {
             <div className="plan-duration">{plan.duration}</div>
             <div className="plan-price" style={{fontSize:plan.priceSuffix?'1.55rem':'2rem'}}>
               {plan.price}
-              {plan.priceSuffix && <span style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',color:'var(--grey-500)',letterSpacing:'0.08em',fontWeight:400,verticalAlign:'middle',marginLeft:'0.35rem'}}>{plan.priceSuffix}</span>}
+              {plan.priceSuffix && <span style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.62rem',color:'var(--grey-500)',letterSpacing:'0.08em',fontWeight:400,verticalAlign:'middle',marginLeft:'0.35rem'}}>{plan.priceSuffix}</span>}
             </div>
             <div className="plan-price-note">{plan.priceNote}</div>
             <div className="plan-divider"/>
@@ -2523,7 +2581,7 @@ function PlansPage({ setPage, t }) {
       {/* Bottom CTA */}
       <div style={{padding:'5rem 3rem',background:'var(--offblack)',borderTop:'var(--rule)',textAlign:'center'}} className="reveal">
         <div className="section-label" style={{justifyContent:'center'}}>{isFr?'Pas sûr de votre choix ?':'Not sure which plan fits?'}</div>
-        <h2 style={{fontFamily:'Playfair Display,serif',fontSize:'clamp(1.8rem,3.5vw,2.8rem)',fontWeight:900,marginBottom:'1.2rem',lineHeight:1.1}}>
+        <h2 style={{fontFamily:"'Instrument Serif',serif",fontSize:'clamp(1.8rem,3.5vw,2.8rem)',fontWeight:900,marginBottom:'1.2rem',lineHeight:1.1}}>
           {isFr?'Commencez par le diagnostic gratuit.':'Start with the free diagnosis.'}
           <br/><em style={{fontStyle:'italic',color:'var(--accent)',fontSize:'0.85em'}}>{isFr?'Nous vous guiderons vers le bon plan.':'We\'ll guide you to the right plan.'}</em>
         </h2>
@@ -2596,14 +2654,14 @@ function CaseStudies({ t }) {
     <div className="cases-grid">
       {patterns.map((p, i) => (
         <div key={i} className="case-card reveal" style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.6rem',letterSpacing:'0.2em',textTransform:'uppercase',color:'var(--accent)',border:'1px solid rgba(200,184,154,0.3)',padding:'0.25rem 0.6rem',alignSelf:'flex-start'}}>{p.tag}</div>
+          <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.6rem',letterSpacing:'0.2em',textTransform:'uppercase',color:'var(--accent)',border:'1px solid rgba(200,184,154,0.3)',padding:'0.25rem 0.6rem',alignSelf:'flex-start'}}>{p.tag}</div>
           <div className="case-industry" style={{fontSize:'0.78rem',color:'var(--grey-400)'}}>{p.type}</div>
           <div style={{flex:1}}>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.6rem',letterSpacing:'0.15em',color:'var(--grey-500)',textTransform:'uppercase',marginBottom:'0.4rem'}}>{isFr ? 'Situation' : 'Situation'}</div>
+            <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.6rem',letterSpacing:'0.15em',color:'var(--grey-500)',textTransform:'uppercase',marginBottom:'0.4rem'}}>{isFr ? 'Situation' : 'Situation'}</div>
             <p className="case-desc" style={{marginBottom:'1rem'}}>{p.problem}</p>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.6rem',letterSpacing:'0.15em',color:'var(--grey-500)',textTransform:'uppercase',marginBottom:'0.4rem'}}>{isFr ? 'Notre travail' : 'Our work'}</div>
+            <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.6rem',letterSpacing:'0.15em',color:'var(--grey-500)',textTransform:'uppercase',marginBottom:'0.4rem'}}>{isFr ? 'Notre travail' : 'Our work'}</div>
             <p className="case-desc" style={{marginBottom:'1rem'}}>{p.work}</p>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.6rem',letterSpacing:'0.15em',color:'var(--accent)',textTransform:'uppercase',marginBottom:'0.4rem'}}>{isFr ? 'Résultat typique' : 'Typical outcome'}</div>
+            <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.6rem',letterSpacing:'0.15em',color:'var(--accent)',textTransform:'uppercase',marginBottom:'0.4rem'}}>{isFr ? 'Résultat typique' : 'Typical outcome'}</div>
             <p style={{fontSize:'0.88rem',fontWeight:600,color:'var(--white)',lineHeight:1.5}}>{p.outcome}</p>
           </div>
         </div>
@@ -2617,10 +2675,10 @@ function Testimonials({ t }) {
   const isFr = t === T.fr;
   return (
     <div className="reveal" style={{marginTop:'3rem',padding:'2.5rem',border:'1px solid var(--grey-700)',borderLeft:'3px solid var(--accent)',background:'rgba(200,184,154,0.04)'}}>
-      <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',letterSpacing:'0.2em',textTransform:'uppercase',color:'var(--accent)',marginBottom:'1rem'}}>
+      <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.62rem',letterSpacing:'0.2em',textTransform:'uppercase',color:'var(--accent)',marginBottom:'1rem'}}>
         {isFr ? t.no_testimonials_label_fr : t.no_testimonials_label}
       </div>
-      <p style={{fontFamily:'Playfair Display,serif',fontSize:'1.05rem',fontStyle:'italic',lineHeight:1.7,color:'var(--grey-200)',maxWidth:'680px'}}>
+      <p style={{fontFamily:"'Instrument Serif',serif",fontSize:'1.05rem',fontStyle:'italic',lineHeight:1.7,color:'var(--grey-200)',maxWidth:'680px'}}>
         {isFr ? t.no_testimonials_text_fr : t.no_testimonials_text}
       </p>
     </div>
@@ -2654,20 +2712,20 @@ function PlanTeaser({ t, setPage }) {
             style={{background:p.featured?'#0d1a24':'var(--offblack)',padding:'2rem',cursor:'pointer',borderTop:p.featured?'2px solid var(--cta)':'2px solid transparent',transition:'background 0.2s'}}
             onMouseEnter={e => { e.currentTarget.style.background = p.featured?'#0f1e2a':'#131311'; }}
             onMouseLeave={e => { e.currentTarget.style.background = p.featured?'#0d1a24':'var(--offblack)'; }}>
-            <div style={{fontFamily:'Playfair Display,serif',fontSize:'1.3rem',fontWeight:900,marginBottom:'0.3rem',color:p.featured?'var(--cta)':'var(--white)'}}>{p.name}</div>
+            <div style={{fontFamily:"'Instrument Serif',serif",fontSize:'1.3rem',fontWeight:900,marginBottom:'0.3rem',color:p.featured?'var(--cta)':'var(--white)'}}>{p.name}</div>
             {p.price && p.price!=='$0' && (
-              <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.72rem',color:p.featured?'var(--cta)':'var(--accent)',letterSpacing:'0.05em',marginBottom:'0.25rem',fontWeight:500}}>
+              <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.72rem',color:p.featured?'var(--cta)':'var(--accent)',letterSpacing:'0.05em',marginBottom:'0.25rem',fontWeight:500}}>
                 {p.price}{p.suffix && <span style={{fontSize:'0.6rem',opacity:0.7,marginLeft:'0.2rem'}}>{p.suffix}</span>}
               </div>
             )}
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',color:'var(--grey-500)',letterSpacing:'0.1em',marginBottom:'1.2rem'}}>{p.note}</div>
+            <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.62rem',color:'var(--grey-500)',letterSpacing:'0.1em',marginBottom:'1.2rem'}}>{p.note}</div>
             {p.f.map((f,j) => (
               <div key={j} style={{display:'flex',gap:'0.5rem',marginBottom:'0.5rem',fontSize:'0.78rem',color:'var(--grey-300)',lineHeight:1.5}}>
                 <span style={{color:p.featured?'var(--cta)':'var(--accent)',fontSize:'0.65rem',marginTop:2,flexShrink:0}}>✦</span>
                 <span>{f}</span>
               </div>
             ))}
-            <div style={{marginTop:'1.5rem',fontSize:'0.68rem',letterSpacing:'0.1em',textTransform:'uppercase',color:p.featured?'var(--cta)':'var(--grey-500)',fontFamily:'DM Mono,monospace'}}>
+            <div style={{marginTop:'1.5rem',fontSize:'0.68rem',letterSpacing:'0.1em',textTransform:'uppercase',color:p.featured?'var(--cta)':'var(--grey-500)',fontFamily:"'IBM Plex Mono',monospace"}}>
               {isFr ? 'Voir le plan →' : 'See plan →'}
             </div>
           </div>
@@ -2850,7 +2908,7 @@ function HomePage({ setPage, goSector, t }) {
       <div style={{padding:'6rem 3rem',background:'var(--offblack)',borderTop:'var(--rule)',borderBottom:'var(--rule)'}} className="reveal">
         <div style={{maxWidth:'680px',margin:'0 auto',textAlign:'center'}}>
           <div className="section-label" style={{justifyContent:'center'}}>{t.diag_cta_label}</div>
-          <h2 style={{fontFamily:'Playfair Display,serif',fontSize:'clamp(2rem,4vw,3rem)',fontWeight:900,marginBottom:'1.5rem',lineHeight:1.1,color:'var(--white)'}}>{t.diag_cta_title}<br/><em style={{fontStyle:'italic',color:'var(--accent)'}}>{t.diag_cta_em}</em></h2>
+          <h2 style={{fontFamily:"'Instrument Serif',serif",fontSize:'clamp(2rem,4vw,3rem)',fontWeight:900,marginBottom:'1.5rem',lineHeight:1.1,color:'var(--white)'}}>{t.diag_cta_title}<br/><em style={{fontStyle:'italic',color:'var(--accent)'}}>{t.diag_cta_em}</em></h2>
           <p style={{color:'var(--grey-300)',maxWidth:'480px',margin:'0 auto 2.5rem',fontSize:'1.05rem',lineHeight:1.8}}>{t.diag_cta_sub}</p>
           <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.diag_cta_btn}</button>
         </div>
@@ -2956,7 +3014,7 @@ function AboutPage({ setPage, t }) {
 
       {/* Philosophy quote */}
       <div style={{padding:'4rem 3rem',background:'var(--offblack)',borderBottom:'var(--rule)',textAlign:'center'}} className="reveal">
-        <blockquote style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(1.3rem,2.5vw,1.9rem)',fontStyle:'italic',color:'var(--white)',lineHeight:1.45,maxWidth:700,margin:'0 auto'}}>{t.about_philosophy}</blockquote>
+        <blockquote style={{fontFamily:"'Instrument Serif',serif",fontSize:'clamp(1.3rem,2.5vw,1.9rem)',fontStyle:'italic',color:'var(--white)',lineHeight:1.45,maxWidth:700,margin:'0 auto'}}>{t.about_philosophy}</blockquote>
       </div>
 
       {/* Three principles */}
@@ -2968,8 +3026,8 @@ function AboutPage({ setPage, t }) {
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))',gap:'2rem'}}>
           {principles.map((p, i) => (
             <div key={i} className="reveal" style={{borderLeft:'2px solid var(--accent)',paddingLeft:'1.5rem'}}>
-              <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.6rem',color:'var(--accent)',letterSpacing:'0.2em',textTransform:'uppercase',marginBottom:'0.8rem'}}>0{i+1}</div>
-              <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:'1.2rem',fontWeight:700,marginBottom:'0.8rem',color:'var(--white)'}}>{p.title}</h3>
+              <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.6rem',color:'var(--accent)',letterSpacing:'0.2em',textTransform:'uppercase',marginBottom:'0.8rem'}}>0{i+1}</div>
+              <h3 style={{fontFamily:"'Instrument Serif',serif",fontSize:'1.2rem',fontWeight:700,marginBottom:'0.8rem',color:'var(--white)'}}>{p.title}</h3>
               <p style={{color:'var(--grey-300)',fontSize:'0.9rem',lineHeight:1.8}}>{p.desc}</p>
             </div>
           ))}
@@ -2988,7 +3046,7 @@ function AboutPage({ setPage, t }) {
 
       {/* CTA */}
       <div style={{padding:'5rem 3rem',textAlign:'center',borderTop:'var(--rule)'}} className="reveal">
-        <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:'1.8rem',fontWeight:700,marginBottom:'1rem'}}>{isFr ? 'Prêt à commencer ?' : 'Ready to get started?'}</h3>
+        <h3 style={{fontFamily:"'Instrument Serif',serif",fontSize:'1.8rem',fontWeight:700,marginBottom:'1rem'}}>{isFr ? 'Prêt à commencer ?' : 'Ready to get started?'}</h3>
         <p style={{color:'var(--grey-300)',marginBottom:'2rem',fontSize:'0.95rem',maxWidth:500,margin:'0 auto 2rem'}}>{isFr ? 'Commencez par un diagnostic gratuit de votre entreprise.' : 'Start with a free 360° diagnostic of your business.'}</p>
         <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.nav_diagnosis}</button>
       </div>
@@ -3017,15 +3075,15 @@ function ServicesPage({ setPage, t }) {
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))',gap:'1px',background:'var(--grey-700)',border:'1px solid var(--grey-700)'}} className="reveal">
           {steps.map(([n,tk,dk]) => (
             <div key={n} style={{background:'var(--offblack)',padding:'2.5rem'}}>
-              <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',color:'var(--accent)',letterSpacing:'0.15em',marginBottom:'1rem'}}>{n}</div>
-              <div style={{fontFamily:'Playfair Display,serif',fontSize:'1.2rem',fontWeight:600,marginBottom:'0.8rem'}}>{t[tk]}</div>
+              <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.62rem',color:'var(--accent)',letterSpacing:'0.15em',marginBottom:'1rem'}}>{n}</div>
+              <div style={{fontFamily:"'Instrument Serif',serif",fontSize:'1.2rem',fontWeight:600,marginBottom:'0.8rem'}}>{t[tk]}</div>
               <div style={{fontSize:'0.84rem',color:'var(--grey-300)',lineHeight:1.75}}>{t[dk]}</div>
             </div>
           ))}
         </div>
       </div>
       <div style={{padding:'4rem 3rem',textAlign:'center',borderTop:'var(--rule)'}} className="reveal">
-        <h3 style={{fontFamily:'Playfair Display,serif',fontSize:'1.8rem',fontWeight:700,marginBottom:'1rem'}}>{t.start_diag}</h3>
+        <h3 style={{fontFamily:"'Instrument Serif',serif",fontSize:'1.8rem',fontWeight:700,marginBottom:'1rem'}}>{t.start_diag}</h3>
         <p style={{color:'var(--grey-300)',marginBottom:'2rem',fontSize:'0.9rem'}}>{t.start_diag_sub}</p>
         <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.start_diag_btn}</button>
       </div>
@@ -3052,7 +3110,7 @@ function SuccessPage({ setPage, t }) {
         <Testimonials t={t}/>
       </section>
       <div style={{padding:'4rem 3rem',textAlign:'center',borderTop:'var(--rule)',background:'var(--offblack)'}} className="reveal">
-        <h3 style={{fontFamily:'Playfair Display,serif',fontSize:'1.8rem',fontWeight:700,marginBottom:'1rem'}}>{t.results_cta_title}</h3>
+        <h3 style={{fontFamily:"'Instrument Serif',serif",fontSize:'1.8rem',fontWeight:700,marginBottom:'1rem'}}>{t.results_cta_title}</h3>
         <p style={{color:'var(--grey-300)',marginBottom:'2rem',fontSize:'0.9rem'}}>{t.results_cta_sub}</p>
         <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.diag_cta_btn}</button>
       </div>
@@ -3126,13 +3184,13 @@ function ContactPage({ t }) {
               <span style={{fontSize:'1rem'}}>📍</span>
               <div>
                 <div style={{fontSize:'0.78rem',fontWeight:500,color:'#fff'}}>155 West St, Sandown</div>
-                <div style={{fontSize:'0.7rem',color:'rgba(255,255,255,0.6)',fontFamily:'DM Mono,monospace'}}>WeWork · Johannesburg, 2196</div>
+                <div style={{fontSize:'0.7rem',color:'rgba(255,255,255,0.6)',fontFamily:"'IBM Plex Mono',monospace"}}>WeWork · Johannesburg, 2196</div>
               </div>
             </div>
           </div>
           {/* Social */}
           <div style={{marginTop:'2rem'}}>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',letterSpacing:'0.2em',color:'var(--grey-500)',textTransform:'uppercase',marginBottom:'0.8rem'}}>{t.social_label}</div>
+            <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.62rem',letterSpacing:'0.2em',color:'var(--grey-500)',textTransform:'uppercase',marginBottom:'0.8rem'}}>{t.social_label}</div>
             <div style={{display:'flex',gap:'0.6rem'}}>
               <a href="https://www.instagram.com/vertexgroup.africa" target="_blank" rel="noopener noreferrer" className="social-btn" style={{color:'var(--grey-700)'}}>
                 <IconInstagram/> {t.social_instagram}
@@ -3166,7 +3224,7 @@ function ContactPage({ t }) {
             <button className="form-submit" onClick={handleSubmit} disabled={sending||sent}>
               {sending ? t.contact_sending : sent ? t.contact_sent : t.contact_submit}
             </button>
-            <div style={{fontSize:'0.7rem',color:'var(--grey-500)',fontFamily:'DM Mono,monospace',textAlign:'center',lineHeight:1.5}}>
+            <div style={{fontSize:'0.7rem',color:'var(--grey-500)',fontFamily:"'IBM Plex Mono',monospace",textAlign:'center',lineHeight:1.5}}>
               {CONTACT_EMAIL} · {SITE_DOMAIN}
             </div>
           </div>
@@ -3262,15 +3320,15 @@ function DiagnosisPage({ setPage, setReport, t }) {
           <div style={{width:48,height:48,borderRadius:'50%',background:'rgba(12,148,216,0.1)',border:'1px solid rgba(12,148,216,0.3)',display:'flex',alignItems:'center',justifyContent:'center',marginBottom:'2rem'}}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0c94d8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.6rem',letterSpacing:'0.2em',color:'var(--cta)',marginBottom:'1.2rem',textTransform:'uppercase'}}>{isFr ? 'VERTEX GROUP AFRICA' : 'VERTEX GROUP AFRICA'}</div>
-          <h1 style={{fontFamily:'Playfair Display,serif',fontSize:'clamp(1.8rem,3.5vw,2.6rem)',fontWeight:900,color:'var(--white)',marginBottom:'1.5rem',lineHeight:1.15}}>{t.diag_submitted_title}</h1>
+          <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.6rem',letterSpacing:'0.2em',color:'var(--sky)',marginBottom:'1.2rem',textTransform:'uppercase'}}>VERTEX GROUP AFRICA</div>
+          <h1 style={{fontFamily:"'Instrument Serif',serif",fontSize:'clamp(1.8rem,3.5vw,2.6rem)',fontWeight:400,color:'var(--white)',marginBottom:'1.5rem',lineHeight:1.15}}>{t.diag_submitted_title}</h1>
           <p style={{color:'var(--grey-300)',fontSize:'1.1rem',lineHeight:1.8,maxWidth:520,marginBottom:'1rem'}}>{t.diag_submitted_body}</p>
           <p style={{color:'var(--grey-500)',fontSize:'0.85rem',lineHeight:1.7,maxWidth:480,marginBottom:'3rem'}}>
             {t.diag_submitted_note.replace('[email]', submittedEmail)}
           </p>
           <div style={{display:'flex',gap:'1rem',flexWrap:'wrap',justifyContent:'center'}}>
             <button className="btn-primary" onClick={() => { setPage('contact'); window.scrollTo(0,0); }}>{t.rep_cta_btn}</button>
-            <button style={{padding:'0.85rem 2rem',border:'1px solid var(--grey-700)',color:'var(--grey-300)',background:'transparent',cursor:'pointer',fontFamily:'DM Mono,monospace',fontSize:'0.7rem',letterSpacing:'0.1em'}} onClick={() => { setSubmitted(false); setSubmittedEmail(''); setForm({company:'',name:'',email:'',country:'',industry:'',size:'',challenge:'',goals:'',revenue:''}); window.scrollTo(0,0); }}>{t.diag_submitted_new}</button>
+            <button style={{padding:'0.85rem 2rem',border:'1px solid var(--grey-700)',color:'var(--grey-300)',background:'transparent',cursor:'pointer',fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.7rem',letterSpacing:'0.1em'}} onClick={() => { setSubmitted(false); setSubmittedEmail(''); setForm({company:'',name:'',email:'',country:'',industry:'',size:'',challenge:'',goals:'',revenue:''}); window.scrollTo(0,0); }}>{t.diag_submitted_new}</button>
           </div>
         </div>
       </div>
@@ -3283,18 +3341,12 @@ function DiagnosisPage({ setPage, setReport, t }) {
 
       {processing && (
         <div className="processing-overlay">
-          {/* Vertex brand mark */}
           <div className="processing-logo">
-            <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
-              <circle cx="60" cy="29" r="14" fill="rgba(255,255,255,0.9)"/>
-              <circle cx="41" cy="55" r="11" fill="rgba(255,255,255,0.9)"/>
-              <circle cx="26" cy="77" r="6" fill="rgba(255,255,255,0.9)"/>
-            </svg>
-            <span className="processing-logo-text">Vertex Group Africa</span>
+            <Logo size={32}/>
           </div>
           <div className="processing-ring"/>
           <div style={{textAlign:'center'}}>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.6rem',letterSpacing:'0.22em',color:'var(--cta)',marginBottom:'0.75rem'}}>{t.proc_label}</div>
+            <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.6rem',letterSpacing:'0.22em',color:'var(--sky)',marginBottom:'0.75rem'}}>{t.proc_label}</div>
             <div className="processing-title">{t.proc_title}</div>
           </div>
           <div className="processing-steps">
@@ -3308,187 +3360,224 @@ function DiagnosisPage({ setPage, setReport, t }) {
           <div className="proc-progress-wrap">
             <div className="proc-progress-fill" style={{width:`${Math.min(100,Math.round((procStep/t.proc_steps.length)*100))}%`}}/>
           </div>
-          <p style={{color:'var(--grey-500)',fontSize:'0.8rem',textAlign:'center',maxWidth:380,lineHeight:1.65,fontFamily:'DM Mono,monospace'}}>{t.proc_sub}</p>
+          <p style={{color:'var(--grey-500)',fontSize:'0.8rem',textAlign:'center',maxWidth:380,lineHeight:1.65,fontFamily:"'IBM Plex Mono',monospace"}}>{t.proc_sub}</p>
         </div>
       )}
 
-      {/* Hero */}
-      <div style={{padding:'5rem 3rem 4rem',borderBottom:'var(--rule)',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'5rem',alignItems:'center',position:'relative',overflow:'hidden'}}>
-        <img style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',objectPosition:'center',zIndex:0,opacity:0.14}} src="https://images.unsplash.com/photo-1596524430615-b46475ddff6e?auto=format&fit=crop&w=1920&q=80" alt="" loading="eager"/>
-        <div style={{position:'absolute',inset:0,background:'rgba(5,5,5,0.85)',zIndex:1}}/>
-        <div style={{position:'relative',zIndex:2}}>
-          <div className="section-label" style={{color:'var(--cta)'}}>{t.diag_label}</div>
-          <h1 className="section-title" style={{maxWidth:500}}>{t.diag_title.split('.')[0]}.<br/><em style={{fontStyle:'italic',color:'var(--cta)'}}>{t.diag_title.split('.')[1]?.trim()}</em></h1>
-          <p style={{color:'var(--grey-300)',marginTop:'1.5rem',fontSize:'0.93rem',lineHeight:1.82,maxWidth:440}}>{t.diag_sub}</p>
-          <div style={{display:'flex',gap:'0.8rem',flexWrap:'wrap',marginTop:'2rem'}}>
-            <span style={{padding:'0.5rem 1.1rem',fontSize:'0.67rem',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',fontFamily:'DM Mono,monospace',background:'var(--cta)',color:'var(--white)'}}>{t.badge_free}</span>
-            <span style={{padding:'0.5rem 1.1rem',fontSize:'0.67rem',letterSpacing:'0.1em',textTransform:'uppercase',fontFamily:'DM Mono,monospace',border:'1px solid var(--grey-700)',color:'var(--grey-300)'}}>{t.badge_pro}</span>
+      {/* Hero — no image, editorial */}
+      <div className="diag-hero">
+        <div className="diag-hero-grid"/>
+        <div className="diag-hero-glow"/>
+        <div style={{position:'relative',zIndex:2,display:'grid',gridTemplateColumns:'1fr 1fr',gap:'5rem',alignItems:'center'}}>
+          <div>
+            <div className="diag-badges">
+              <span className="diag-badge diag-badge-free">✦ {isFr?'100% Gratuit':'100% Free'}</span>
+              <span className="diag-badge diag-badge-time">⏱ {isFr?'Sous 24 heures':'Within 24 hours'}</span>
+              <span className="diag-badge diag-badge-lock">🔒 {isFr?'Confidentiel':'Confidential'}</span>
+            </div>
+            <h1 style={{fontFamily:"'Instrument Serif',serif",fontSize:'clamp(2rem,4.5vw,3.6rem)',fontWeight:400,lineHeight:1.06,letterSpacing:'-0.015em',marginBottom:'1.5rem'}}>
+              {isFr
+                ? <>Obtenez votre rapport <em className="lit-word">360°</em> gratuit</>
+                : <>Get your free <em className="lit-word">360°</em> intelligence report</>}
+            </h1>
+            <p style={{color:'var(--grey-300)',fontSize:'0.95rem',lineHeight:1.85,maxWidth:460}}>
+              {isFr
+                ? "Remplissez le formulaire. Dans les 24 heures, nos analystes produisent un diagnostic personnalisé de votre entreprise — stratégie, marché, opérations et santé financière — avec des recommandations spécifiques."
+                : "Fill in the form. Within 24 hours, our analysts produce a personalized diagnostic of your business across strategy, market position, operations and financial health — with specific, actionable recommendations."}
+            </p>
+            <div style={{display:'flex',gap:'3rem',marginTop:'2.5rem',paddingTop:'2rem',borderTop:'var(--rule)'}}>
+              {[['500+',isFr?'Diagnostics livrés':'Diagnostics delivered'],['25',isFr?'Pays couverts':'Countries covered'],['24h',isFr?'Délai garanti':'Guaranteed turnaround']].map(([n,l]) => (
+                <div key={n}>
+                  <div style={{fontFamily:"'Instrument Serif',serif",fontSize:'2rem',fontWeight:400,color:'var(--white)',lineHeight:1}}>{n}</div>
+                  <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.6rem',letterSpacing:'0.1em',textTransform:'uppercase',color:'var(--grey-500)',marginTop:'0.3rem'}}>{l}</div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="diag-stats-row">
-            <div className="diag-stat"><div className="diag-stat-num">500+</div><div className="diag-stat-lbl">{isFr?'Diagnostics':'Diagnostics run'}</div></div>
-            <div className="diag-stat"><div className="diag-stat-num">25</div><div className="diag-stat-lbl">{isFr?'Pays couverts':'Countries'}</div></div>
-            <div className="diag-stat"><div className="diag-stat-num">24h</div><div className="diag-stat-lbl">{isFr?'Délai de livraison':'Delivery time'}</div></div>
+          <div style={{display:'flex',flexDirection:'column',gap:'0'}}>
+            {[[isFr?'Comment ça marche':'How it works'],
+              ...[t.step1_t,t.step2_t,t.step3_t,t.step4_t].map((tt,i) => [tt,[t.step1_d,t.step2_d,t.step3_d,t.step4_d][i],String(i+1).padStart(2,'0')])
+            ].filter((_,i)=>i>0).map(([tt,dd,n]) => (
+              <div key={n} style={{display:'flex',gap:'1.4rem',padding:'1.2rem 0',borderBottom:'var(--rule)'}}>
+                <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.6rem',color:'var(--sky)',letterSpacing:'0.1em',background:'rgba(4,174,239,0.08)',border:'1px solid rgba(4,174,239,0.2)',width:28,height:28,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,marginTop:2}}>{n}</div>
+                <div>
+                  <div style={{fontSize:'0.88rem',fontWeight:500,color:'var(--white)',marginBottom:'0.25rem'}}>{tt}</div>
+                  <div style={{fontSize:'0.76rem',color:'var(--grey-500)',lineHeight:1.65}}>{dd}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-        <div style={{position:'relative',zIndex:2}}>
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.6rem',letterSpacing:'0.2em',color:'var(--grey-500)',textTransform:'uppercase',marginBottom:'1.5rem'}}>{isFr?'Comment ça marche':'How it works'}</div>
-          {[[t.step1_t,t.step1_d,'01'],[t.step2_t,t.step2_d,'02'],[t.step3_t,t.step3_d,'03'],[t.step4_t,t.step4_d,'04']].map(([tt,dd,n]) => (
-            <div key={n} className="diag-step-item">
-              <div className="diag-step-num">{n}</div>
-              <div><div className="diag-step-title">{tt}</div><div className="diag-step-desc">{dd}</div></div>
+      </div>
+
+      {/* What you receive — 5 deliverables */}
+      <div style={{background:'var(--offblack)',borderBottom:'var(--rule)',padding:'2.5rem 3rem'}}>
+        <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.6rem',letterSpacing:'0.24em',textTransform:'uppercase',color:'var(--grey-500)',marginBottom:'1.5rem'}}>{isFr?"Ce que vous recevrez":"What you'll receive"}</div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:'1px',background:'var(--grey-700)',border:'1px solid var(--grey-700)'}}>
+          {[
+            {icon:'◎',title:isFr?'Score global':'Overall score',desc:isFr?'Note sur 100 avec label':'Score /100 with performance label'},
+            {icon:'⟁',title:isFr?'5 dimensions analysées':'5 dimensions analysed',desc:isFr?'Stratégie, marché, ventes, ops, finances':'Strategy, market, sales, ops, finance'},
+            {icon:'→',title:isFr?'Recommandations':'Recommendations',desc:isFr?'Actions prioritaires et actionnables':'Specific, prioritised action points'},
+            {icon:'◈',title:isFr?'Potentiel de croissance':'Growth potential',desc:isFr?'Estimation du potentiel non-exploité':'Estimate of untapped revenue upside'},
+            {icon:'✦',title:isFr?'Conseil Vertex':'Vertex recommendation',desc:isFr?'Notre étape suivante recommandée':'Our specific recommended next step'},
+          ].map((d,i) => (
+            <div key={i} className="diag-deliverable">
+              <div className="diag-deliverable-icon">{d.icon}</div>
+              <div className="diag-deliverable-title">{d.title}</div>
+              <div className="diag-deliverable-desc">{d.desc}</div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Form */}
-      <div style={{padding:'4rem 3rem',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'4rem',alignItems:'start'}}>
-        <div className="form-panel">
-          <div className="form-title">{isFr ? 'Lancez votre diagnostic' : 'Start your diagnosis'}</div>
-          <div className="form-subtitle">{isFr ? 'Diagnostic sous 24h · Confidentiel · Gratuit' : 'Diagnosis within 24h · Confidential · Free'}</div>
-
-          {/* Guidance block */}
-          <div style={{background:'rgba(12,148,216,0.05)',border:'1px solid rgba(12,148,216,0.2)',borderLeft:'3px solid var(--cta)',padding:'1.2rem 1.4rem',marginBottom:'0.5rem'}}>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.6rem',letterSpacing:'0.2em',color:'var(--cta)',marginBottom:'0.6rem',display:'flex',alignItems:'center',gap:'0.6rem'}}>
-              <span style={{width:5,height:5,borderRadius:'50%',background:'var(--cta)',display:'inline-block',flexShrink:0}}/>
-              {t.form_guide_title}
-            </div>
-            <p style={{fontSize:'0.77rem',color:'var(--grey-400)',marginBottom:'0.75rem',lineHeight:1.6}}>{t.form_guide_intro}</p>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.35rem 1rem'}}>
-              {t.form_guide_items.map((item,i) => (
-                <div key={i} style={{display:'flex',gap:'0.5rem',alignItems:'flex-start',fontSize:'0.74rem',color:'var(--grey-400)',lineHeight:1.5}}>
-                  <span style={{color:'var(--cta)',flexShrink:0,marginTop:2,fontSize:'0.6rem'}}>→</span><span>{item}</span>
-                </div>
-              ))}
-            </div>
+      {/* Form + Sidebar */}
+      <div className="diag-form-layout">
+        {/* The form */}
+        <div className="diag-form-card">
+          <div className="diag-form-header">
+            <div className="diag-form-title">{isFr ? 'Lancez votre diagnostic' : 'Start your diagnosis'}</div>
+            <div className="diag-form-sub">{isFr ? 'Résultat sous 24h · 100% gratuit · Confidentiel' : 'Results within 24h · 100% free · Confidential'}</div>
           </div>
+          <div className="diag-form-body">
 
-          <div className="form-section-label">{isFr ? 'Identité' : 'Your identity'}</div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0 1.5rem'}}>
-            {[['company',t.form_company,'text'],['name',t.form_name,'text']].map(([k,l,tp]) => (
-              <div key={k} className="form-group">
-                <label>{l}</label>
-                <input type={tp} placeholder={l.replace(' *','')} value={form[k]} onChange={e => ff(k,e.target.value)}/>
-                {errors[k] && <div className="form-error">{errors[k]}</div>}
+            <div className="diag-form-step">{isFr ? '01 · Votre identité' : '01 · Your identity'}</div>
+            <div className="diag-form-row">
+              <div className="form-group">
+                <label>{t.form_company}</label>
+                <input type="text" placeholder={isFr?'Nom de votre entreprise':'Company name'} value={form.company} onChange={e => ff('company',e.target.value)}/>
+                {errors.company && <div className="form-error">{errors.company}</div>}
               </div>
-            ))}
-          </div>
-          <div className="form-group">
-            <label>{t.form_email} <span style={{color:'var(--cta)',fontSize:'0.6rem',fontFamily:'DM Mono,monospace'}}>{t.form_email_note}</span></label>
-            <input type="email" placeholder="you@company.com" value={form.email} onChange={e => ff('email',e.target.value)}/>
-            {errors.email && <div className="form-error">{errors.email}</div>}
-          </div>
+              <div className="form-group">
+                <label>{t.form_name}</label>
+                <input type="text" placeholder={isFr?'Votre nom et titre':'Your name and title'} value={form.name} onChange={e => ff('name',e.target.value)}/>
+                {errors.name && <div className="form-error">{errors.name}</div>}
+              </div>
+            </div>
+            <div className="form-group">
+              <label>{t.form_email} <span style={{color:'var(--sky)',fontSize:'0.6rem',marginLeft:'0.4rem'}}>{t.form_email_note}</span></label>
+              <input type="email" placeholder="you@company.com" value={form.email} onChange={e => ff('email',e.target.value)}/>
+              {errors.email && <div className="form-error">{errors.email}</div>}
+            </div>
 
-          <div className="form-section-label">{isFr ? 'Votre entreprise' : 'Your business'}</div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0 1.5rem'}}>
-            <div className="form-group">
-              <label>{t.form_country}</label>
-              <select value={form.country} onChange={e => ff('country',e.target.value)}>
-                <option value="">—</option>
-                {countries.map(c => <option key={c}>{c}</option>)}
-              </select>
-              {errors.country && <div className="form-error">{errors.country}</div>}
+            <div className="diag-form-step">{isFr ? '02 · Votre entreprise' : '02 · Your business'}</div>
+            <div className="diag-form-row">
+              <div className="form-group">
+                <label>{t.form_country}</label>
+                <select value={form.country} onChange={e => ff('country',e.target.value)}>
+                  <option value="">—</option>
+                  {countries.map(c => <option key={c}>{c}</option>)}
+                </select>
+                {errors.country && <div className="form-error">{errors.country}</div>}
+              </div>
+              <div className="form-group">
+                <label>{t.form_industry}</label>
+                <select value={form.industry} onChange={e => ff('industry',e.target.value)}>
+                  <option value="">—</option>
+                  {industries.map(s => <option key={s}>{s}</option>)}
+                </select>
+                {errors.industry && <div className="form-error">{errors.industry}</div>}
+              </div>
             </div>
-            <div className="form-group">
-              <label>{t.form_industry}</label>
-              <select value={form.industry} onChange={e => ff('industry',e.target.value)}>
-                <option value="">—</option>
-                {industries.map(s => <option key={s}>{s}</option>)}
-              </select>
-              {errors.industry && <div className="form-error">{errors.industry}</div>}
+            <div className="diag-form-row">
+              <div className="form-group">
+                <label>{t.form_size}</label>
+                <select value={form.size} onChange={e => ff('size',e.target.value)}>
+                  <option value="">—</option>
+                  {sizes.map(s => <option key={s}>{s}</option>)}
+                </select>
+              </div>
+              <div className="form-group">
+                <label>{t.form_revenue}</label>
+                <select value={form.revenue} onChange={e => ff('revenue',e.target.value)}>
+                  <option value="">—</option>
+                  {revenues.map(s => <option key={s}>{s}</option>)}
+                </select>
+              </div>
             </div>
-          </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0 1.5rem'}}>
-            <div className="form-group">
-              <label>{t.form_size}</label>
-              <select value={form.size} onChange={e => ff('size',e.target.value)}>
-                <option value="">—</option>
-                {sizes.map(s => <option key={s}>{s}</option>)}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>{t.form_revenue}</label>
-              <select value={form.revenue} onChange={e => ff('revenue',e.target.value)}>
-                <option value="">—</option>
-                {revenues.map(s => <option key={s}>{s}</option>)}
-              </select>
-            </div>
-          </div>
 
-          <div className="form-section-label">{isFr ? 'Vos défis' : 'Your challenges'}</div>
-          <div className="form-group">
-            <label>{t.form_challenge}</label>
-            <textarea rows={3} placeholder={t.form_challenge_ph} value={form.challenge} onChange={e => ff('challenge',e.target.value)}/>
-            {errors.challenge && <div className="form-error">{errors.challenge}</div>}
-          </div>
-          <div className="form-group">
-            <label>{t.form_goals}</label>
-            <textarea rows={2} placeholder={t.form_goals_ph} value={form.goals} onChange={e => ff('goals',e.target.value)}/>
-          </div>
-
-          <div className="form-section-label">{isFr ? 'Document (optionnel)' : 'Supporting document (optional)'}</div>
-          <div className={`file-zone ${drag?'dragover':''}`}
-            onDragOver={e => {e.preventDefault();setDrag(true)}}
-            onDragLeave={() => setDrag(false)}
-            onDrop={e => {e.preventDefault();setDrag(false);const f=e.dataTransfer.files[0];if(f)setFile(f);}}>
-            <input type="file" accept=".pdf,.docx,.pptx,.doc,.txt" onChange={e => setFile(e.target.files[0])}/>
-            <div className="file-zone-text">
-              <span className="file-zone-icon">↑</span>
-              <div className="file-zone-main">{file ? file.name : t.form_upload}</div>
-              <div className="file-zone-sub">{t.form_upload_sub}</div>
+            <div className="diag-form-step">{isFr ? '03 · Votre situation' : '03 · Your situation'}</div>
+            <div className="form-group">
+              <label>{t.form_challenge}</label>
+              <textarea rows={4} placeholder={t.form_challenge_ph} value={form.challenge} onChange={e => ff('challenge',e.target.value)}/>
+              {errors.challenge && <div className="form-error">{errors.challenge}</div>}
             </div>
-          </div>
-          <button className="form-submit" onClick={runDiagnosis} disabled={processing}>{processing ? t.form_processing : t.form_submit}</button>
-          <div style={{marginTop:'0.8rem',fontSize:'0.68rem',color:'var(--grey-500)',fontFamily:'DM Mono,monospace',lineHeight:1.6,textAlign:'center',display:'flex',alignItems:'center',justifyContent:'center',gap:'0.5rem'}}>
-            <span style={{color:'var(--cta)',fontSize:'0.7rem'}}>🔒</span>{t.form_disclaimer}
+            <div className="form-group">
+              <label>{t.form_goals}</label>
+              <textarea rows={2} placeholder={t.form_goals_ph} value={form.goals} onChange={e => ff('goals',e.target.value)}/>
+            </div>
+            <div className={`file-zone ${drag?'dragover':''}`}
+              onDragOver={e => {e.preventDefault();setDrag(true)}}
+              onDragLeave={() => setDrag(false)}
+              onDrop={e => {e.preventDefault();setDrag(false);const f=e.dataTransfer.files[0];if(f)setFile(f);}}>
+              <input type="file" accept=".pdf,.docx,.pptx,.doc,.txt" onChange={e => setFile(e.target.files[0])}/>
+              <div className="file-zone-text">
+                <span className="file-zone-icon">↑</span>
+                <div className="file-zone-main">{file ? file.name : t.form_upload}</div>
+                <div className="file-zone-sub">{t.form_upload_sub}</div>
+              </div>
+            </div>
+
+            <button className="form-submit" onClick={runDiagnosis} disabled={processing} style={{marginTop:'1rem'}}>
+              {processing ? t.form_processing : t.form_submit}
+            </button>
+            <div style={{marginTop:'1rem',fontSize:'0.65rem',color:'var(--grey-500)',fontFamily:"'IBM Plex Mono',monospace",lineHeight:1.6,textAlign:'center'}}>
+              🔒 {t.form_disclaimer}
+            </div>
           </div>
         </div>
 
         {/* Sidebar */}
-        <div style={{display:'flex',flexDirection:'column',gap:'1.5rem',position:'sticky',top:'100px'}}>
-          {/* What you'll get */}
-          <div style={{border:'1px solid var(--grey-700)',borderTop:'3px solid var(--cta)',padding:'2rem',background:'var(--offblack)'}}>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.58rem',letterSpacing:'0.22em',color:'var(--cta)',marginBottom:'1.4rem',display:'flex',alignItems:'center',gap:'0.6rem'}}>
-              <span style={{width:5,height:5,borderRadius:'50%',background:'var(--cta)',display:'inline-block'}}/>
-              {t.what_youll_get}
+        <div className="diag-sidebar">
+
+          {/* Sample report preview */}
+          <div className="diag-score-preview">
+            <div className="diag-score-preview-header">
+              <span className="diag-score-preview-label">{isFr?'Aperçu du rapport':'Sample report'}</span>
+              <span className="diag-score-preview-tag">{isFr?'Exemple':'Example'}</span>
             </div>
+            <div className="diag-score-preview-body">
+              <div className="diag-score-num">74<span>/100</span></div>
+              <div className="diag-score-label">{isFr?'Performance solide':'Strong Performance'}</div>
+              <div className="diag-preview-blur">
+                {[
+                  [isFr?'Stratégie':'Strategy',68],
+                  [isFr?'Marché':'Market',81],
+                  [isFr?'Ventes':'Sales',62],
+                  [isFr?'Opérations':'Operations',77],
+                  [isFr?'Finances':'Finance',74],
+                ].map(([name,score]) => (
+                  <div key={name} className="diag-dim-row">
+                    <div className="diag-dim-name">{name}</div>
+                    <div className="diag-dim-bar"><div className="diag-dim-fill" style={{width:`${score}%`}}/></div>
+                    <div className="diag-dim-score">{score}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="diag-preview-cta">
+              <p>{isFr?"Votre rapport réel contiendra une analyse approfondie, des recommandations précises et un plan d'action.":"Your actual report contains in-depth analysis, specific recommendations and an action plan."}</p>
+              <button className="btn-primary" style={{width:'100%',fontSize:'0.72rem'}} onClick={() => document.querySelector('.diag-form-body input')?.focus()}>
+                {isFr?'Obtenir mon rapport →':'Get my report →'}
+              </button>
+            </div>
+          </div>
+
+          {/* What you'll get */}
+          <div style={{border:'1px solid var(--grey-700)',padding:'1.8rem',background:'var(--offblack)'}}>
+            <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.58rem',letterSpacing:'0.2em',textTransform:'uppercase',color:'var(--grey-500)',marginBottom:'1.2rem'}}>{t.what_youll_get}</div>
             {t.items_youll_get.map((item,i) => (
-              <div key={item} style={{display:'flex',gap:'0.9rem',alignItems:'flex-start',marginBottom:'0.85rem',fontSize:'0.82rem',color:'var(--grey-300)',lineHeight:1.55}}>
-                <span style={{width:18,height:18,border:'1px solid rgba(12,148,216,0.4)',background:'rgba(12,148,216,0.08)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,marginTop:1,fontSize:'0.6rem',color:'var(--cta)'}}>✓</span>
+              <div key={i} style={{display:'flex',gap:'0.8rem',alignItems:'flex-start',marginBottom:'0.75rem',fontSize:'0.78rem',color:'var(--grey-300)',lineHeight:1.6}}>
+                <span style={{width:16,height:16,borderRadius:'50%',background:'rgba(4,174,239,0.1)',border:'1px solid rgba(4,174,239,0.3)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,marginTop:2,fontSize:'0.55rem',color:'var(--sky)'}}>✓</span>
                 {item}
               </div>
             ))}
           </div>
 
-          {/* Freemium */}
-          <div style={{border:'1px solid var(--grey-700)',padding:'2rem',background:'var(--offblack)'}}>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.58rem',letterSpacing:'0.22em',color:'var(--grey-500)',marginBottom:'1.2rem'}}>{t.freemium_label}</div>
-            <div style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
-              <div style={{display:'flex',gap:'0.8rem',alignItems:'flex-start'}}>
-                <span style={{background:'var(--cta)',color:'var(--white)',fontSize:'0.58rem',padding:'0.2rem 0.45rem',fontFamily:'DM Mono,monospace',letterSpacing:'0.06em',flexShrink:0,marginTop:2}}>{isFr?'GRATUIT':'FREE'}</span>
-                <span style={{fontSize:'0.82rem',color:'var(--grey-300)',lineHeight:1.65}} dangerouslySetInnerHTML={{__html:t.freemium_free.replace('<strong>Free tier:</strong>','').replace('<strong>Niveau gratuit :</strong>','').trim()}}/>
-              </div>
-              <div style={{display:'flex',gap:'0.8rem',alignItems:'flex-start'}}>
-                <span style={{border:'1px solid var(--grey-700)',color:'var(--grey-400)',fontSize:'0.58rem',padding:'0.2rem 0.45rem',fontFamily:'DM Mono,monospace',letterSpacing:'0.06em',flexShrink:0,marginTop:2}}>{isFr?'PRO':'PRO'}</span>
-                <span style={{fontSize:'0.82rem',color:'var(--grey-300)',lineHeight:1.65}} dangerouslySetInnerHTML={{__html:t.freemium_pro.replace('<strong>Pro engagement:</strong>','').replace('<strong>Engagement pro :</strong>','').trim()}}/>
-              </div>
-            </div>
-          </div>
-
-          {/* Testimonial */}
-          <div style={{padding:'2rem',background:'var(--white)',color:'var(--black)',position:'relative',overflow:'hidden'}}>
-            <div style={{position:'absolute',top:'-0.5rem',left:'1.5rem',fontFamily:'Playfair Display,serif',fontSize:'5rem',fontWeight:900,color:'rgba(12,148,216,0.12)',lineHeight:1,userSelect:'none',pointerEvents:'none'}}>"</div>
-            <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.58rem',letterSpacing:'0.18em',color:'var(--cta)',marginBottom:'1.2rem',position:'relative'}}>{t.from_clients}</div>
-            <p style={{fontFamily:'Playfair Display,serif',fontSize:'0.98rem',fontStyle:'italic',lineHeight:1.68,marginBottom:'1.5rem',color:'#1a1a18',position:'relative'}}>{t.client_quote.replace(/^"|"$/g,'')}</p>
-            <div style={{display:'flex',alignItems:'center',gap:'0.8rem',borderTop:'1px solid rgba(0,0,0,0.08)',paddingTop:'1rem'}}>
-              <div style={{width:32,height:32,background:'#0a0a0a',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-                <span style={{color:'var(--cta)',fontFamily:'Playfair Display,serif',fontSize:'0.8rem',fontWeight:700}}>S</span>
-              </div>
-              <div>
-                <div style={{fontSize:'0.75rem',fontWeight:600,color:'#1a1a18'}}>Sanjay Pillay</div>
-                <div style={{fontSize:'0.65rem',color:'#787774',fontFamily:'DM Mono,monospace',letterSpacing:'0.04em'}}>MD · Meridian Retail</div>
-              </div>
-            </div>
+          {/* Client quote */}
+          <div style={{padding:'1.8rem',background:'var(--offblack)',border:'1px solid var(--grey-700)',borderLeft:'3px solid var(--sky)'}}>
+            <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.58rem',letterSpacing:'0.16em',color:'var(--sky)',marginBottom:'1rem'}}>{t.from_clients}</div>
+            <p style={{fontFamily:"'Instrument Serif',serif",fontSize:'1rem',fontStyle:'italic',lineHeight:1.65,marginBottom:'1.2rem',color:'var(--white)'}}>{t.client_quote.replace(/^"|"$/g,'')}</p>
+            <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.6rem',color:'var(--grey-500)',letterSpacing:'0.04em'}}>Sanjay Pillay · MD, Meridian Retail</div>
           </div>
         </div>
       </div>
@@ -3539,7 +3628,7 @@ function ReportPage({ report, setPage, t }) {
                 </div>
                 {dim.analysis.split('\n\n').map((p,i) => <p key={i}>{p}</p>)}
                 <div style={{marginTop:'1.5rem'}}>
-                  <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',letterSpacing:'0.18em',color:'var(--accent)',marginBottom:'0.8rem'}}>
+                  <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.62rem',letterSpacing:'0.18em',color:'var(--accent)',marginBottom:'0.8rem'}}>
                     {t.rep_priorities.replace('3 ','').toUpperCase()}
                   </div>
                   <div className="report-bullets">
@@ -3558,7 +3647,7 @@ function ReportPage({ report, setPage, t }) {
             <div className="report-section-body">
               <p>{report.growth_potential}</p>
               <div style={{marginTop:'1.5rem',padding:'1.5rem',background:'rgba(200,184,154,0.06)',borderLeft:'3px solid var(--accent)'}}>
-                <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',letterSpacing:'0.18em',color:'var(--accent)',marginBottom:'0.6rem'}}>{t.rep_rec_label}</div>
+                <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.62rem',letterSpacing:'0.18em',color:'var(--accent)',marginBottom:'0.6rem'}}>{t.rep_rec_label}</div>
                 <p style={{color:'var(--white)',fontWeight:400}}>{report.vertex_recommendation}</p>
               </div>
             </div>
@@ -3574,7 +3663,7 @@ function ReportPage({ report, setPage, t }) {
                 <div key={d.id}>
                   <div className="score-label" style={{display:'flex',justifyContent:'space-between'}}>
                     <span style={{fontSize:'0.72rem',color:'var(--grey-300)'}}>{d.title}</span>
-                    <span style={{fontFamily:'DM Mono,monospace',fontSize:'0.68rem',color:sc(d.score)}}>{d.score}</span>
+                    <span style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.68rem',color:sc(d.score)}}>{d.score}</span>
                   </div>
                   <div className="score-bar"><div className="score-fill" style={{width:`${d.score}%`,background:sc(d.score)}}/></div>
                 </div>
@@ -3651,7 +3740,7 @@ function NewsletterSection({ t }) {
         <h2 className="newsletter-title">{t.newsletter_title}</h2>
         <p className="newsletter-sub">{t.newsletter_sub}</p>
         <div className="newsletter-topics">
-          <span style={{fontSize:'0.68rem',color:'var(--grey-500)',fontFamily:'DM Mono,monospace',letterSpacing:'0.1em',textTransform:'uppercase',marginRight:'0.3rem'}}>{t.newsletter_topics_label}</span>
+          <span style={{fontSize:'0.68rem',color:'var(--grey-500)',fontFamily:"'IBM Plex Mono',monospace",letterSpacing:'0.1em',textTransform:'uppercase',marginRight:'0.3rem'}}>{t.newsletter_topics_label}</span>
           {t.newsletter_topics.map(tp => <span key={tp} className="newsletter-topic">{tp}</span>)}
         </div>
       </div>
@@ -3691,7 +3780,7 @@ function NewsletterSection({ t }) {
         )}
         {/* Social links */}
         <div style={{marginTop:'2.5rem'}}>
-          <div style={{fontFamily:'DM Mono,monospace',fontSize:'0.62rem',letterSpacing:'0.2em',color:'var(--grey-500)',textTransform:'uppercase',marginBottom:'1rem'}}>{t.social_label}</div>
+          <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.62rem',letterSpacing:'0.2em',color:'var(--grey-500)',textTransform:'uppercase',marginBottom:'1rem'}}>{t.social_label}</div>
           <div className="social-row">
             <a href="https://www.instagram.com/vertexgroup.africa" target="_blank" rel="noopener noreferrer" className="social-btn">
               <IconInstagram/> {t.social_instagram}
@@ -3700,7 +3789,7 @@ function NewsletterSection({ t }) {
               <IconLinkedIn/> {t.social_linkedin}
             </a>
           </div>
-          <div style={{marginTop:'0.8rem',fontSize:'0.68rem',color:'var(--grey-500)',fontFamily:'DM Mono,monospace',letterSpacing:'0.06em'}}>{t.social_follow}</div>
+          <div style={{marginTop:'0.8rem',fontSize:'0.68rem',color:'var(--grey-500)',fontFamily:"'IBM Plex Mono',monospace",letterSpacing:'0.06em'}}>{t.social_follow}</div>
         </div>
       </div>
     </div>
