@@ -34,8 +34,11 @@ const sendEmail = async (opts) => {
 
 // ── Email templates ───────────────────────────────────────────────────────────
 
+// All admin notification recipients (comma-separated in env, or fallback to EMAIL_USER)
+const ADMIN_RECIPIENTS = process.env.ADMIN_EMAILS || process.env.EMAIL_USER;
+
 const newLeadNotification = (lead) => ({
-  to: process.env.EMAIL_USER,
+  to: ADMIN_RECIPIENTS,
   subject: `[Vertex] New ${lead.type} from ${lead.name} (${lead.company || lead.country || 'website'})`,
   html: `
     <div style="font-family:sans-serif;max-width:560px;margin:0 auto">
@@ -49,6 +52,39 @@ const newLeadNotification = (lead) => ({
         <tr><td style="padding:8px;border:1px solid #eee;font-weight:bold">Message</td><td style="padding:8px;border:1px solid #eee">${lead.message || '—'}</td></tr>
       </table>
       <p style="margin-top:16px;color:#888;font-size:12px">Vertex Group Africa CRM · ${new Date().toISOString()}</p>
+    </div>
+  `,
+});
+
+const diagnosticTeamAlert = (data) => ({
+  to: ADMIN_RECIPIENTS,
+  subject: `[Vertex] New Diagnostic — ${data.name} · ${data.company} (${data.country || '—'})`,
+  html: `
+    <div style="font-family:sans-serif;max-width:580px;margin:0 auto">
+      <div style="background:#0a0a0a;padding:20px 32px;text-align:center">
+        <div style="color:#fff;font-size:16px;font-weight:800;letter-spacing:0.12em">VERTEX GROUP AFRICA</div>
+        <div style="color:#0c94d8;font-size:10px;margin-top:4px;letter-spacing:0.1em;text-transform:uppercase">New Diagnostic Submission</div>
+      </div>
+      <div style="padding:32px;background:#fff;border:1px solid #e5e5e5">
+        <h2 style="color:#0a0a0a;margin:0 0 20px;font-size:18px">New 360° Diagnostic Request</h2>
+        <table style="border-collapse:collapse;width:100%;font-size:14px">
+          <tr><td style="padding:8px 12px;border:1px solid #eee;font-weight:600;background:#f9f9f9;width:140px">Name</td><td style="padding:8px 12px;border:1px solid #eee">${data.name}</td></tr>
+          <tr><td style="padding:8px 12px;border:1px solid #eee;font-weight:600;background:#f9f9f9">Email</td><td style="padding:8px 12px;border:1px solid #eee"><a href="mailto:${data.email}" style="color:#0c94d8">${data.email}</a></td></tr>
+          <tr><td style="padding:8px 12px;border:1px solid #eee;font-weight:600;background:#f9f9f9">Company</td><td style="padding:8px 12px;border:1px solid #eee">${data.company || '—'}</td></tr>
+          <tr><td style="padding:8px 12px;border:1px solid #eee;font-weight:600;background:#f9f9f9">Country</td><td style="padding:8px 12px;border:1px solid #eee">${data.country || '—'}</td></tr>
+          <tr><td style="padding:8px 12px;border:1px solid #eee;font-weight:600;background:#f9f9f9">Industry</td><td style="padding:8px 12px;border:1px solid #eee">${data.industry || '—'}</td></tr>
+          <tr><td style="padding:8px 12px;border:1px solid #eee;font-weight:600;background:#f9f9f9">Revenue</td><td style="padding:8px 12px;border:1px solid #eee">${data.revenue || '—'}</td></tr>
+          <tr><td style="padding:8px 12px;border:1px solid #eee;font-weight:600;background:#f9f9f9">Employees</td><td style="padding:8px 12px;border:1px solid #eee">${data.employees || '—'}</td></tr>
+          <tr><td style="padding:8px 12px;border:1px solid #eee;font-weight:600;background:#f9f9f9">Challenge</td><td style="padding:8px 12px;border:1px solid #eee">${data.challenge || '—'}</td></tr>
+          <tr><td style="padding:8px 12px;border:1px solid #eee;font-weight:600;background:#f9f9f9">Language</td><td style="padding:8px 12px;border:1px solid #eee">${data.language === 'fr' ? 'French' : 'English'}</td></tr>
+        </table>
+        <div style="margin-top:24px;padding:16px;background:#eff8ff;border-left:4px solid #0c94d8;border-radius:0 4px 4px 0">
+          <p style="margin:0;font-size:13px;color:#1e3a5f">AI diagnostic is running. The results email will be sent to the client within 24 hours. Log into the dashboard to review or send manually.</p>
+        </div>
+      </div>
+      <div style="background:#0a0a0a;padding:14px 32px;text-align:center">
+        <p style="margin:0;color:#6b7280;font-size:11px">Vertex Group Africa CRM · ${new Date().toLocaleString('en-GB')}</p>
+      </div>
     </div>
   `,
 });
@@ -716,4 +752,4 @@ const invoiceEmail = (invoice) => {
   };
 };
 
-module.exports = { sendEmail, newLeadNotification, diagnosticConfirmation, newsletterConfirmation, diagnosticResults, buildNewsletterHtml, buildDashboardEmailHtml, invoiceEmail };
+module.exports = { sendEmail, newLeadNotification, diagnosticTeamAlert, diagnosticConfirmation, newsletterConfirmation, diagnosticResults, buildNewsletterHtml, buildDashboardEmailHtml, invoiceEmail };

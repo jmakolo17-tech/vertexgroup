@@ -1,7 +1,7 @@
 const Diagnostic = require('../models/Diagnostic');
 const Lead = require('../models/Lead');
 const Notification = require('../models/Notification');
-const { sendEmail, diagnosticConfirmation, newLeadNotification } = require('../utils/email');
+const { sendEmail, diagnosticConfirmation, diagnosticTeamAlert } = require('../utils/email');
 
 // ── Vertex AI Diagnostic Engine (powered by Claude) ──────────────────────────
 async function runAIDiagnostic(data) {
@@ -159,10 +159,10 @@ exports.submitDiagnostic = async (req, res) => {
     diagnostic.status = 'processing';
     await diagnostic.save();
 
-    // Send confirmation email to user
+    // Send confirmation email to user (fire-and-forget)
     sendEmail(diagnosticConfirmation({ name, email, company }, language));
-    // Notify team
-    sendEmail(newLeadNotification({ ...lead.toObject(), type: 'diagnostic' }));
+    // Notify team with full diagnostic details
+    sendEmail(diagnosticTeamAlert({ name, email, company, country, industry, challenge, employees, revenue, language }));
 
     // Dashboard notification
     await Notification.create({
