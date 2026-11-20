@@ -3,13 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vertex Group — Strategic Consulting for Africa's SMEs</title>
+<title>Vertex Group — Market Intelligence & Data for Africa</title>
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI2MCIgY3k9IjI5IiByPSIxNCIgZmlsbD0iIzExMSIvPjxjaXJjbGUgY3g9IjQxIiBjeT0iNTUiIHI9IjExIiBmaWxsPSIjMTExIi8+PGNpcmNsZSBjeD0iMjYiIGN5PSI3NyIgcj0iNiIgZmlsbD0iIzExMSIvPjwvc3ZnPg==">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-<link rel="preload" as="image" href="https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=1920&q=80" fetchpriority="high">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap" rel="stylesheet">
 <!-- API base URL config (must load before main script) -->
 <script src="config.js"></script>
 <!-- EmailJS for functional contact form -->
@@ -27,19 +25,20 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <style>
 :root{
-  --black:#0a0a0a;--offblack:#0f0f0d;--white:#f5f4f0;--cream:#ece9e2;
-  --grey-100:#e8e7e3;--grey-300:#b8b7b3;--grey-500:#787774;--grey-700:#3a3a38;--grey-800:#222220;
-  --accent:#c8b89a;--accent-dark:#9a8870;--accent-light:#e8ddd0;
-  --cta:#0c94d8;--cta-hover:#0a7fbf;--cta-glow:rgba(12,148,216,0.25);
-  --rule:1px solid rgba(255,255,255,0.08);--rule-light:1px solid rgba(0,0,0,0.1);
+  --black:#000000;--offblack:#0a0a0a;--white:#FFFFFF;--cream:#EBEBEB;
+  --grey-100:#EBEBEB;--grey-300:#9a9a9a;--grey-500:#58595B;--grey-700:#2a2a2a;--grey-800:#111111;
+  --accent:#1B75BC;--accent-dark:#1562a0;--accent-light:rgba(27,117,188,0.15);
+  --sky:#04AEEF;--sky-glow:rgba(4,174,239,0.4);
+  --cta:#1B75BC;--cta-hover:#1562a0;--cta-glow:rgba(27,117,188,0.3);
+  --rule:1px solid rgba(255,255,255,0.07);--rule-light:1px solid rgba(0,0,0,0.1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:16px}
-body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden}
+body{background:var(--black);color:var(--white);font-family:'IBM Plex Mono',monospace;font-weight:300;line-height:1.6;overflow-x:hidden}
 .section p,.sp-challenges p,.sp-how p,.sp-case p,.about-text p{font-size:1.05rem;line-height:1.82;color:var(--grey-300);margin-bottom:1.2rem}
 a{color:inherit;text-decoration:none}
-button{cursor:pointer;font-family:'DM Sans',sans-serif}
-input,select,textarea{font-family:'DM Sans',sans-serif}
+button{cursor:pointer;font-family:'IBM Plex Mono',monospace}
+input,select,textarea{font-family:'IBM Plex Mono',monospace}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--offblack)}::-webkit-scrollbar-thumb{background:var(--grey-700)}
 
 /* NAV */
@@ -56,7 +55,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 
 /* LANGUAGE SWITCHER */
 .lang-switcher{display:flex;align-items:center;gap:0;border:1px solid var(--grey-700);overflow:hidden}
-.lang-btn{background:none;border:none;color:var(--grey-500);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.4rem 0.7rem;transition:all 0.2s;font-family:'DM Mono',monospace}
+.lang-btn{background:none;border:none;color:var(--grey-500);font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.4rem 0.7rem;transition:all 0.2s;font-family:'IBM Plex Mono',monospace}
 .lang-btn.active{background:var(--accent);color:var(--black);font-weight:500}
 .lang-btn:hover:not(.active){color:var(--white)}
 .lang-divider{width:1px;height:100%;background:var(--grey-700)}
@@ -66,18 +65,18 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .nav-hamburger span{width:20px;height:1px;background:var(--white);display:block;transition:all 0.3s}
 .mobile-menu{display:none;position:fixed;inset:0;z-index:199;background:rgba(10,10,10,0.98);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:2rem}
 .mobile-menu.open{display:flex}
-.mobile-menu button{background:none;border:none;color:var(--white);font-size:1.4rem;font-family:'Playfair Display',serif;font-weight:600;letter-spacing:0.05em;padding:0.5rem}
+.mobile-menu button{background:none;border:none;color:var(--white);font-size:1.4rem;font-family:'Instrument Serif',serif;font-weight:600;letter-spacing:0.05em;padding:0.5rem}
 .mobile-lang{display:flex;gap:1rem;margin-top:1rem}
-.mobile-lang button{background:none;border:1px solid var(--grey-700);color:var(--grey-300);font-size:0.8rem;padding:0.5rem 1.2rem;font-family:'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase}
+.mobile-lang button{background:none;border:1px solid var(--grey-700);color:var(--grey-300);font-size:0.8rem;padding:0.5rem 1.2rem;font-family:'IBM Plex Mono',monospace;letter-spacing:0.1em;text-transform:uppercase}
 .mobile-lang button.active{background:var(--accent);border-color:var(--accent);color:var(--black)}
 
 /* HERO */
 .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:8rem 3rem 5rem;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 65% 65% at 72% 38%,rgba(200,184,154,0.08) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 18% 82%,rgba(200,184,154,0.04) 0%,transparent 60%)}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 65% 65% at 72% 38%,rgba(27,117,188,0.07) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 18% 82%,rgba(4,174,239,0.04) 0%,transparent 60%)}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:80px 80px}
-.hero-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2rem;animation:fadeUp 0.8s 0.3s both}
-.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,7.5vw,8rem);font-weight:900;line-height:0.96;letter-spacing:-0.025em;max-width:950px;animation:fadeUp 0.9s 0.5s both}
-.hero-h1 em{font-style:italic;color:var(--accent)}
+.hero-label{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--sky);margin-bottom:2rem;animation:fadeUp 0.8s 0.3s both;opacity:0.85}
+.hero-h1{font-family:'Instrument Serif',serif;font-size:clamp(3rem,7.5vw,8rem);font-weight:400;line-height:0.96;letter-spacing:-0.015em;max-width:950px;animation:fadeUp 0.9s 0.5s both}
+.hero-h1 em{font-style:italic;color:var(--sky);text-shadow:0 0 18px rgba(4,174,239,0.6),0 0 40px rgba(4,174,239,0.3)}
 .hero-sub{margin-top:2.5rem;font-size:1.05rem;color:var(--grey-300);max-width:520px;line-height:1.75;animation:fadeUp 0.9s 0.7s both}
 .hero-actions{margin-top:3rem;display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;animation:fadeUp 0.9s 0.9s both}
 .btn-primary{background:var(--cta);color:var(--white);padding:1rem 2.2rem;font-size:0.78rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;border:none;transition:background 0.25s,transform 0.2s,box-shadow 0.2s;cursor:pointer;box-shadow:0 0 0 0 var(--cta-glow)}
@@ -87,6 +86,13 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .hero-scroll-indicator{position:absolute;bottom:2.5rem;right:3rem;display:flex;flex-direction:column;align-items:center;gap:0.6rem;animation:fadeUp 0.9s 1.2s both}
 .hero-scroll-indicator span{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey-500);writing-mode:vertical-rl}
 .scroll-line{width:1px;height:60px;background:linear-gradient(to bottom,var(--grey-700),transparent);animation:scrollPulse 2s infinite}
+/* BRAND DEVICES */
+.lit-word{font-style:italic;color:var(--sky);text-shadow:0 0 18px rgba(4,174,239,0.65),0 0 40px rgba(4,174,239,0.3)}
+.hero-rise{position:absolute;top:3rem;right:3rem;display:flex;flex-direction:column;align-items:flex-end;gap:0.6rem;z-index:3;pointer-events:none}
+.hero-rise-dot{border-radius:50%;background:var(--sky);opacity:0.7}
+.hero-orbit{position:absolute;bottom:-4rem;right:-4rem;width:320px;height:320px;border-radius:50%;border:1px solid rgba(27,117,188,0.18);z-index:2;pointer-events:none}
+.hero-gradient-line{position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(150deg,var(--sky),var(--accent));z-index:4;opacity:0.5}
+
 /* HERO PHOTO + CAROUSEL */
 .hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none;z-index:0;transition:opacity 1.4s ease}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,5,5,0.6) 0%,rgba(5,5,5,0.32) 45%,rgba(5,5,5,0.9) 100%);z-index:1}
@@ -103,8 +109,8 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .editorial-strip-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
 .editorial-strip-overlay{position:absolute;inset:0;background:linear-gradient(108deg,rgba(5,5,5,0.92) 0%,rgba(5,5,5,0.68) 50%,rgba(5,5,5,0.18) 100%)}
 .editorial-strip-content{position:relative;z-index:2;padding:4rem 3.5rem;max-width:640px}
-.editorial-strip-label{font-family:'DM Mono',monospace;font-size:0.64rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem}
-.editorial-strip-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.8vw,3.2rem);font-weight:900;line-height:1.06;letter-spacing:-0.025em;margin-bottom:1.2rem;color:var(--white)}
+.editorial-strip-label{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem}
+.editorial-strip-title{font-family:'Instrument Serif',serif;font-size:clamp(2rem,3.8vw,3.2rem);font-weight:900;line-height:1.06;letter-spacing:-0.025em;margin-bottom:1.2rem;color:var(--white)}
 .editorial-strip-sub{font-size:1.05rem;color:rgba(255,255,255,0.75);line-height:1.82;margin-bottom:2rem;max-width:480px}
 @media(max-width:900px){.editorial-strip{height:auto}.editorial-strip-content{padding:3rem 1.5rem}}
 /* IMAGE FEATURE SPLIT */
@@ -119,53 +125,53 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);border-top:var(--rule);border-bottom:var(--rule)}
 .stat-item{padding:2.5rem 2.5rem;border-right:var(--rule)}
 .stat-item:last-child{border-right:none}
-.stat-number{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;line-height:1;letter-spacing:-0.03em}
+.stat-number{font-family:'Instrument Serif',serif;font-size:3rem;font-weight:900;line-height:1;letter-spacing:-0.03em}
 .stat-label{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--grey-500);margin-top:0.5rem;font-weight:400}
 
 /* SECTIONS */
 .section{padding:7rem 3rem}
-.section-label{font-family:'DM Mono',monospace;font-size:0.64rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem;display:flex;align-items:center;gap:1rem}
+.section-label{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem;display:flex;align-items:center;gap:1rem}
 .section-label::after{content:'';height:1px;width:40px;background:var(--accent);opacity:0.5}
-.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:900;line-height:1.05;letter-spacing:-0.02em}
+.section-title{font-family:'Instrument Serif',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:900;line-height:1.05;letter-spacing:-0.02em}
 
 /* ABOUT */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
 .about-text p{color:var(--grey-300);margin-top:1.5rem;font-size:0.95rem;line-height:1.82}
 .about-text p strong{color:var(--white);font-weight:500}
 .about-philosophy{margin-top:2.5rem;padding:2rem;border-left:3px solid var(--accent);background:rgba(200,184,154,0.06)}
-.about-philosophy p{font-family:'Playfair Display',serif;font-size:1.35rem;font-style:italic;color:var(--white);line-height:1.5}
+.about-philosophy p{font-family:'Instrument Serif',serif;font-size:1.35rem;font-style:italic;color:var(--white);line-height:1.5}
 .africa-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1.5rem}
 .africa-tag{padding:0.35rem 0.8rem;border:1px solid var(--grey-700);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--grey-300)}
 .about-visual{background:linear-gradient(135deg,#1a1a18,#0a0a0a);aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .about-visual-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,rgba(200,184,154,0.12),transparent 65%)}
 .about-visual-logo{width:72%;height:auto;object-fit:contain;z-index:1;opacity:0.85;border-radius:8px}
-.about-visual-tag{position:absolute;bottom:2rem;left:2rem;font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase}
+.about-visual-tag{position:absolute;bottom:2rem;left:2rem;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase}
 
 /* SERVICES */
 .services-section{background:var(--offblack)}
 .services-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4rem;gap:2rem;flex-wrap:wrap}
-.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);min-width:0}
 .service-card{background:var(--offblack);padding:3rem;position:relative;overflow:hidden;transition:background 0.3s;cursor:default}
 .service-card::before{content:'';position:absolute;top:0;left:0;width:0;height:2px;background:var(--accent);transition:width 0.4s}
 .service-card:hover{background:#131311}
 .service-card:hover::before{width:100%}
-.service-num{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--grey-500);letter-spacing:0.15em;margin-bottom:2rem}
+.service-num{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--grey-500);letter-spacing:0.15em;margin-bottom:2rem}
 .service-icon{width:42px;height:42px;border:1px solid var(--grey-700);display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;font-size:1rem;transition:border-color 0.3s}
 .service-card:hover .service-icon{border-color:var(--accent)}
-.service-title{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:600;margin-bottom:1rem;line-height:1.2}
+.service-title{font-family:'Instrument Serif',serif;font-size:1.45rem;font-weight:600;margin-bottom:1rem;line-height:1.2}
 .service-desc{color:var(--grey-300);font-size:0.87rem;line-height:1.8}
 .service-outcomes{margin-top:1.5rem;display:flex;flex-direction:column;gap:0.4rem}
-.service-outcome{font-size:0.72rem;color:var(--grey-500);display:flex;align-items:center;gap:0.6rem;font-family:'DM Mono',monospace;letter-spacing:0.04em}
+.service-outcome{font-size:0.72rem;color:var(--grey-500);display:flex;align-items:center;gap:0.6rem;font-family:'IBM Plex Mono',monospace;letter-spacing:0.04em}
 .service-outcome::before{content:'→';color:var(--accent);font-size:0.68rem}
 
 /* FORM */
 .form-panel{background:var(--offblack);border:1px solid var(--grey-700);border-top:3px solid var(--cta);padding:2.5rem}
-.form-title{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:700;margin-bottom:0.4rem;line-height:1.25}
-.form-subtitle{font-size:0.75rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.06em;margin-bottom:2rem;line-height:1.5}
-.form-section-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--cta);border-bottom:1px solid var(--grey-700);padding-bottom:0.65rem;margin:1.8rem 0 1.25rem;display:flex;align-items:center;gap:0.7rem}
+.form-title{font-family:'Instrument Serif',serif;font-size:1.55rem;font-weight:700;margin-bottom:0.4rem;line-height:1.25}
+.form-subtitle{font-size:0.75rem;color:var(--grey-500);font-family:'IBM Plex Mono',monospace;letter-spacing:0.06em;margin-bottom:2rem;line-height:1.5}
+.form-section-label{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--cta);border-bottom:1px solid var(--grey-700);padding-bottom:0.65rem;margin:1.8rem 0 1.25rem;display:flex;align-items:center;gap:0.7rem}
 .form-section-label::before{content:'';display:inline-block;width:5px;height:5px;background:var(--cta);border-radius:50%;flex-shrink:0}
 .form-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem}
-.form-group label{font-size:0.62rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--grey-500);font-family:'DM Mono',monospace}
+.form-group label{font-size:0.62rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--grey-500);font-family:'IBM Plex Mono',monospace}
 .form-group input,.form-group select,.form-group textarea{background:var(--grey-800);border:1px solid var(--grey-700);color:var(--white);padding:0.8rem 1rem;font-size:0.88rem;font-weight:300;outline:none;transition:border-color 0.2s,background 0.2s,box-shadow 0.2s;width:100%;box-sizing:border-box}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--cta);background:rgba(12,148,216,0.04);box-shadow:0 0 0 3px rgba(12,148,216,0.07)}
 .form-group select option{background:#1a1a18;color:var(--white)}
@@ -176,31 +182,31 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .file-zone-text{pointer-events:none}
 .file-zone-icon{font-size:1.3rem;margin-bottom:0.5rem;display:block;color:var(--cta)}
 .file-zone-main{font-size:0.82rem;color:var(--grey-300);font-weight:500;margin-bottom:0.2rem}
-.file-zone-sub{font-size:0.7rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.06em}
+.file-zone-sub{font-size:0.7rem;color:var(--grey-500);font-family:'IBM Plex Mono',monospace;letter-spacing:0.06em}
 .form-submit{width:100%;background:var(--cta);color:var(--white);border:none;padding:1.15rem 2rem;font-size:0.78rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;transition:background 0.25s,transform 0.2s,box-shadow 0.2s;margin-top:0.75rem}
 .form-submit:hover:not(:disabled){background:var(--cta-hover);transform:translateY(-2px);box-shadow:0 8px 28px var(--cta-glow)}
 .form-submit:disabled{opacity:0.45;cursor:not-allowed}
-.form-error{color:#e07070;font-size:0.72rem;font-family:'DM Mono',monospace;margin-top:0.25rem}
+.form-error{color:#e07070;font-size:0.72rem;font-family:'IBM Plex Mono',monospace;margin-top:0.25rem}
 .diag-step-item{display:flex;gap:1.5rem;padding:1.5rem 0;border-bottom:var(--rule)}
 .diag-step-item:first-child{padding-top:0}
 .diag-step-item:last-child{border-bottom:none}
 .diag-step-num-wrap{display:flex;flex-direction:column;align-items:center;gap:0;min-width:28px}
-.diag-step-num{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--cta);letter-spacing:0.15em;background:rgba(12,148,216,0.1);border:1px solid rgba(12,148,216,0.25);width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.diag-step-num{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--cta);letter-spacing:0.15em;background:rgba(12,148,216,0.1);border:1px solid rgba(12,148,216,0.25);width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .diag-step-title{font-size:0.88rem;font-weight:500;margin-bottom:0.3rem;color:var(--white)}
 .diag-step-desc{font-size:0.78rem;color:var(--grey-500);line-height:1.65}
 .diag-stats-row{display:flex;gap:0;border:var(--rule);margin-top:2rem}
 .diag-stat{flex:1;padding:1.2rem 1.5rem;border-right:var(--rule);display:flex;flex-direction:column;gap:0.3rem}
 .diag-stat:last-child{border-right:none}
-.diag-stat-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--white);line-height:1}
-.diag-stat-lbl{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--grey-500)}
+.diag-stat-num{font-family:'Instrument Serif',serif;font-size:1.6rem;font-weight:900;color:var(--white);line-height:1}
+.diag-stat-lbl{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--grey-500)}
 
 /* PROCESSING */
 .processing-overlay{position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.8rem;padding:2rem}
 .processing-logo{display:flex;align-items:center;gap:0.8rem;margin-bottom:0.5rem}
-.processing-logo-text{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;letter-spacing:0.08em;color:var(--white)}
+.processing-logo-text{font-family:'Instrument Serif',serif;font-size:1rem;font-weight:600;letter-spacing:0.08em;color:var(--white)}
 .processing-ring{width:68px;height:68px;border:2px solid rgba(12,148,216,0.15);border-top-color:var(--cta);border-radius:50%;animation:spin 0.9s linear infinite}
-.processing-title{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;text-align:center;line-height:1.2}
-.processing-timer{font-family:'DM Mono',monospace;font-size:2.4rem;color:var(--cta);letter-spacing:0.12em}
+.processing-title{font-family:'Instrument Serif',serif;font-size:1.75rem;font-weight:700;text-align:center;line-height:1.2}
+.processing-timer{font-family:'IBM Plex Mono',monospace;font-size:2.4rem;color:var(--cta);letter-spacing:0.12em}
 .processing-steps{display:flex;flex-direction:column;gap:0.55rem;max-width:420px;width:100%}
 .proc-step{display:flex;align-items:center;gap:1rem;font-size:0.77rem;color:var(--grey-700);transition:color 0.3s,opacity 0.3s}
 .proc-step.done{color:var(--grey-500)}
@@ -215,9 +221,9 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .report-page{min-height:100vh;padding-top:80px;background:var(--black)}
 .report-hero{padding:4rem 3rem;border-bottom:var(--rule);background:linear-gradient(180deg,rgba(12,148,216,0.05) 0%,transparent 100%)}
 .report-meta{display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem}
-.report-meta-item{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;color:var(--grey-500);text-transform:uppercase;display:flex;gap:0.5rem;align-items:center}
+.report-meta-item{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;color:var(--grey-500);text-transform:uppercase;display:flex;gap:0.5rem;align-items:center}
 .report-meta-item span{color:var(--accent)}
-.report-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:900;margin-bottom:1rem;line-height:1.1}
+.report-title{font-family:'Instrument Serif',serif;font-size:clamp(2rem,4vw,3.2rem);font-weight:900;margin-bottom:1rem;line-height:1.1}
 .report-email-notice{display:flex;align-items:center;gap:0.8rem;background:rgba(12,148,216,0.06);border:1px solid rgba(12,148,216,0.2);padding:1rem 1.5rem;margin-top:1.5rem;font-size:0.83rem;color:var(--grey-300)}
 .report-email-notice strong{color:var(--cta)}
 .report-body{padding:3rem;display:grid;grid-template-columns:2fr 1fr;gap:3rem;align-items:start}
@@ -225,8 +231,8 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .report-section{border:1px solid var(--grey-700);overflow:hidden}
 .report-section-header{padding:1.5rem 2rem;border-bottom:1px solid var(--grey-700);display:flex;align-items:center;gap:1rem;background:var(--offblack)}
 .report-section-icon{font-size:1.1rem}
-.report-section-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600}
-.report-section-tag{margin-left:auto;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.25rem 0.6rem;border:1px solid;flex-shrink:0}
+.report-section-title{font-family:'Instrument Serif',serif;font-size:1.1rem;font-weight:600}
+.report-section-tag{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.25rem 0.6rem;border:1px solid;flex-shrink:0}
 .tag-critical{color:#e07070;border-color:#e07070;background:rgba(224,112,112,0.08)}
 .tag-medium{color:var(--accent);border-color:var(--accent);background:rgba(200,184,154,0.08)}
 .tag-strong{color:#7ab5a0;border-color:#7ab5a0;background:rgba(122,181,160,0.08)}
@@ -237,26 +243,26 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .report-bullet{display:flex;gap:0.8rem;align-items:flex-start;font-size:0.84rem;color:var(--grey-300);line-height:1.6}
 .report-bullet::before{content:'→';color:var(--accent);font-size:0.72rem;flex-shrink:0;margin-top:3px}
 .score-bar-wrap{margin-top:0.8rem}
-.score-label{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--grey-500);font-family:'DM Mono',monospace;margin-bottom:0.4rem}
+.score-label{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--grey-500);font-family:'IBM Plex Mono',monospace;margin-bottom:0.4rem}
 .score-bar{height:3px;background:var(--grey-700);position:relative;overflow:hidden}
 .score-fill{height:100%;background:var(--accent);transition:width 1s 0.3s}
 .report-sidebar{display:flex;flex-direction:column;gap:1.5rem;position:sticky;top:100px}
 .sidebar-card{border:1px solid var(--grey-700);padding:1.8rem}
-.sidebar-card-title{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem}
-.overall-score{font-family:'Playfair Display',serif;font-size:4rem;font-weight:900;line-height:1;margin-bottom:0.3rem}
+.sidebar-card-title{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem}
+.overall-score{font-family:'Instrument Serif',serif;font-size:4rem;font-weight:900;line-height:1;margin-bottom:0.3rem}
 .overall-score-label{font-size:0.72rem;color:var(--grey-500);letter-spacing:0.1em;text-transform:uppercase}
 .score-breakdown{display:flex;flex-direction:column;gap:0.8rem;margin-top:1.2rem}
 .priority-list{display:flex;flex-direction:column;gap:0.7rem}
 .priority-item{display:flex;gap:0.8rem;align-items:flex-start}
-.priority-num{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--accent);min-width:20px;margin-top:2px}
+.priority-num{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--accent);min-width:20px;margin-top:2px}
 .priority-text{font-size:0.8rem;color:var(--grey-300);line-height:1.5}
 .cta-card{background:var(--white);color:var(--black);padding:2rem}
-.cta-card-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:0.8rem;line-height:1.3}
+.cta-card-title{font-family:'Instrument Serif',serif;font-size:1.2rem;font-weight:700;margin-bottom:0.8rem;line-height:1.3}
 .cta-card-desc{font-size:0.8rem;color:var(--grey-700);line-height:1.6;margin-bottom:1.5rem}
 .cta-card-btn{width:100%;background:var(--cta);color:var(--white);border:none;padding:0.9rem;font-size:0.75rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:background 0.2s,box-shadow 0.2s}
 .cta-card-btn:hover{background:var(--cta-hover);box-shadow:0 4px 16px var(--cta-glow)}
 .print-actions{display:flex;gap:1rem;margin-top:1.5rem;flex-wrap:wrap}
-.print-btn{background:transparent;border:1px solid var(--grey-700);color:var(--grey-300);padding:0.7rem 1.2rem;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;font-family:'DM Mono',monospace}
+.print-btn{background:transparent;border:1px solid var(--grey-700);color:var(--grey-300);padding:0.7rem 1.2rem;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;font-family:'IBM Plex Mono',monospace}
 .print-btn:hover{border-color:var(--accent);color:var(--accent)}
 
 /* CASES */
@@ -265,17 +271,17 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .case-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform 0.4s}
 .case-card:hover{border-color:var(--grey-500)}
 .case-card:hover::after{transform:scaleX(1)}
-.case-industry{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:1.2rem}
-.case-metric{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;line-height:1;margin-bottom:0.3rem;letter-spacing:-0.02em}
+.case-industry{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:1.2rem}
+.case-metric{font-family:'Instrument Serif',serif;font-size:2.8rem;font-weight:900;line-height:1;margin-bottom:0.3rem;letter-spacing:-0.02em}
 .case-metric-label{font-size:0.7rem;color:var(--grey-500);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1.5rem}
 .case-desc{font-size:1rem;color:var(--grey-300);line-height:1.82}
-.case-country{margin-top:1.5rem;display:flex;align-items:center;gap:0.5rem;font-size:0.68rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.1em}
+.case-country{margin-top:1.5rem;display:flex;align-items:center;gap:0.5rem;font-size:0.68rem;color:var(--grey-500);font-family:'IBM Plex Mono',monospace;letter-spacing:0.1em}
 .case-country::before{content:'◎';color:var(--accent);font-size:0.58rem}
 .testimonial-bar{margin-top:4rem;padding:3rem;border:1px solid var(--grey-700);display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:center}
-.testimonial-quote{font-family:'Playfair Display',serif;font-size:1.25rem;font-style:italic;line-height:1.55}
+.testimonial-quote{font-family:'Instrument Serif',serif;font-size:1.25rem;font-style:italic;line-height:1.55}
 .testimonial-attr{text-align:right;min-width:160px}
 .testimonial-name{font-size:0.8rem;font-weight:500;margin-bottom:0.2rem}
-.testimonial-role{font-size:0.68rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.08em}
+.testimonial-role{font-size:0.68rem;color:var(--grey-500);font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em}
 
 /* CONTACT */
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;padding:0}
@@ -283,7 +289,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .contact-left .section-label{color:var(--accent-dark)}
 .contact-left .section-label::after{background:var(--accent-dark)}
 .contact-details{margin-top:3rem;display:flex;flex-direction:column;gap:1.8rem}
-.contact-detail-label{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey-500);margin-bottom:0.2rem}
+.contact-detail-label{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey-500);margin-bottom:0.2rem}
 .contact-detail-value{font-size:0.95rem;color:var(--black);font-weight:400;line-height:1.5}
 .contact-right{background:var(--offblack);padding:6rem 4rem;display:flex;flex-direction:column;justify-content:center}
 .contact-right .section-label{color:var(--accent)}
@@ -292,9 +298,9 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .footer{background:#050505;padding:3rem;border-top:var(--rule);display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap}
 .footer-logo{display:flex;align-items:center;gap:0.6rem}
 .footer-logo img{height:36px;width:auto;max-width:120px;object-fit:contain;border-radius:4px;opacity:0.8;filter:brightness(1.8)}
-.footer-logo-text{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600}
+.footer-logo-text{font-family:'Instrument Serif',serif;font-size:1rem;font-weight:600}
 .footer-logo-text span{color:var(--accent)}
-.footer-copy{font-size:0.68rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.08em}
+.footer-copy{font-size:0.68rem;color:var(--grey-500);font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em}
 .footer-links{display:flex;gap:2rem;list-style:none}
 .footer-links button{background:none;border:none;color:var(--grey-500);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:color 0.2s}
 .footer-links button:hover{color:var(--white)}
@@ -303,46 +309,46 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .newsletter-section{background:#070706;border-top:var(--rule);border-bottom:var(--rule);padding:5rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
 .newsletter-left .section-label{color:var(--cta)}
 .newsletter-left .section-label::after{background:var(--cta);opacity:0.6}
-.newsletter-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;line-height:1.1;letter-spacing:-0.02em;margin-bottom:1rem}
+.newsletter-title{font-family:'Instrument Serif',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;line-height:1.1;letter-spacing:-0.02em;margin-bottom:1rem}
 .newsletter-sub{font-size:0.88rem;color:var(--grey-300);line-height:1.75;max-width:400px}
 .newsletter-form{display:flex;flex-direction:column;gap:1rem}
 .newsletter-input-row{display:flex;gap:0}
-.newsletter-input{flex:1;background:transparent;border:1px solid var(--grey-700);border-right:none;color:var(--white);padding:0.9rem 1.2rem;font-size:0.88rem;font-family:'DM Sans',sans-serif;font-weight:300;outline:none;transition:border-color 0.2s}
+.newsletter-input{flex:1;background:transparent;border:1px solid var(--grey-700);border-right:none;color:var(--white);padding:0.9rem 1.2rem;font-size:0.88rem;font-family:'IBM Plex Mono',monospace;font-weight:300;outline:none;transition:border-color 0.2s}
 .newsletter-input:focus{border-color:var(--cta)}
 .newsletter-input::placeholder{color:var(--grey-500)}
-.newsletter-btn{background:var(--cta);color:var(--white);border:none;padding:0.9rem 1.6rem;font-size:0.75rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background 0.2s,box-shadow 0.2s;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.newsletter-btn{background:var(--cta);color:var(--white);border:none;padding:0.9rem 1.6rem;font-size:0.75rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:background 0.2s,box-shadow 0.2s;white-space:nowrap;font-family:'IBM Plex Mono',monospace}
 .newsletter-btn:hover{background:var(--cta-hover);box-shadow:0 4px 20px var(--cta-glow)}
 .newsletter-btn:disabled{opacity:0.5;cursor:not-allowed}
-.newsletter-disclaimer{font-size:0.68rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.06em}
+.newsletter-disclaimer{font-size:0.68rem;color:var(--grey-500);font-family:'IBM Plex Mono',monospace;letter-spacing:0.06em}
 .newsletter-topics{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.8rem}
-.newsletter-topic{padding:0.3rem 0.7rem;border:1px solid var(--grey-700);font-size:0.65rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase}
+.newsletter-topic{padding:0.3rem 0.7rem;border:1px solid var(--grey-700);font-size:0.65rem;color:var(--grey-500);font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em;text-transform:uppercase}
 .newsletter-success{display:flex;align-items:center;gap:0.8rem;padding:1rem 1.2rem;background:rgba(12,148,216,0.08);border:1px solid rgba(12,148,216,0.3);font-size:0.84rem;color:var(--white)}
 .newsletter-success-icon{font-size:1.2rem;flex-shrink:0}
 
 /* SOCIAL ICONS */
 .social-row{display:flex;gap:0.8rem;align-items:center;margin-top:1.5rem}
-.social-btn{display:flex;align-items:center;gap:0.6rem;padding:0.55rem 1rem;border:1px solid var(--grey-700);background:transparent;color:var(--grey-300);font-size:0.72rem;font-family:'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-decoration:none}
+.social-btn{display:flex;align-items:center;gap:0.6rem;padding:0.55rem 1rem;border:1px solid var(--grey-700);background:transparent;color:var(--grey-300);font-size:0.72rem;font-family:'IBM Plex Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-decoration:none}
 .social-btn:hover{border-color:var(--cta);color:var(--white);background:rgba(12,148,216,0.08)}
 .social-btn svg{flex-shrink:0}
 
-/* FOOTER — expanded, blue */
-.footer{background:#01325a;padding:0;border-top:none}
+/* FOOTER — expanded, black */
+.footer{background:#000000;padding:0;border-top:var(--rule)}
 .footer-main{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;padding:4rem 3rem 3rem}
-.footer-brand{}
+.footer-brand{display:flex;flex-direction:column}
 .footer-brand-logo{display:flex;align-items:center;gap:0.7rem;margin-bottom:1.2rem;cursor:pointer}
-.footer-brand-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:#fff}
-.footer-brand-text span{color:var(--accent)}
-.footer-brand-desc{font-size:0.82rem;color:rgba(255,255,255,0.62);line-height:1.7;max-width:280px;margin-bottom:1.5rem}
-.footer-address{font-size:0.75rem;color:rgba(255,255,255,0.5);font-family:'DM Mono',monospace;line-height:1.8;letter-spacing:0.04em}
-.footer-address strong{color:rgba(255,255,255,0.75);display:block;margin-bottom:0.3rem;letter-spacing:0.1em;font-size:0.65rem;text-transform:uppercase}
-.footer-col-title{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.8);margin-bottom:1.2rem}
+.footer-brand-text{font-family:'Instrument Serif',serif;font-size:1.1rem;font-weight:600;color:#fff}
+.footer-brand-text span{color:var(--sky)}
+.footer-brand-desc{font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.7;max-width:280px;margin-bottom:1.5rem}
+.footer-address{font-size:0.72rem;color:rgba(255,255,255,0.4);font-family:'IBM Plex Mono',monospace;line-height:1.8;letter-spacing:0.04em}
+.footer-address strong{color:rgba(255,255,255,0.65);display:block;margin-bottom:0.3rem;letter-spacing:0.1em;font-size:0.62rem;text-transform:uppercase}
+.footer-col-title{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:1.2rem}
 .footer-col-links{display:flex;flex-direction:column;gap:0.6rem;list-style:none}
-.footer-col-links button{background:none;border:none;color:rgba(255,255,255,0.52);font-size:0.8rem;cursor:pointer;transition:color 0.2s;padding:0;text-align:left}
+.footer-col-links button{background:none;border:none;color:rgba(255,255,255,0.4);font-size:0.78rem;cursor:pointer;transition:color 0.2s;padding:0;text-align:left}
 .footer-col-links button:hover{color:#fff}
-.footer-bottom{border-top:1px solid rgba(255,255,255,0.12);padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;background:#012647}
-.footer-copy{font-size:0.65rem;color:rgba(255,255,255,0.42);font-family:'DM Mono',monospace;letter-spacing:0.08em}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.07);padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;background:#000000}
+.footer-copy{font-size:0.65rem;color:rgba(255,255,255,0.42);font-family:'IBM Plex Mono',monospace;letter-spacing:0.08em}
 .footer-legal{display:flex;gap:1.5rem}
-.footer-legal span{font-size:0.65rem;color:rgba(255,255,255,0.32);font-family:'DM Mono',monospace;letter-spacing:0.06em;cursor:default}
+.footer-legal span{font-size:0.65rem;color:rgba(255,255,255,0.32);font-family:'IBM Plex Mono',monospace;letter-spacing:0.06em;cursor:default}
 
 @media(max-width:768px){
   .nav-logo img,.nav-logo svg{height:54px;max-width:170px}
@@ -371,19 +377,19 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .plan-card:hover{background:#121210}
 .plan-card.featured{background:#0d1a24;border-top:3px solid var(--cta)}
 .plan-card.featured:hover{background:#0f1e2a}
-.plan-badge{position:absolute;top:-1px;left:0;right:0;background:var(--cta);color:var(--white);font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.3rem 0;text-align:center;font-weight:500}
-.plan-name{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;margin-bottom:0.4rem;line-height:1;margin-top:0.5rem}
+.plan-badge{position:absolute;top:-1px;left:0;right:0;background:var(--cta);color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.3rem 0;text-align:center;font-weight:500}
+.plan-name{font-family:'Instrument Serif',serif;font-size:1.5rem;font-weight:900;margin-bottom:0.4rem;line-height:1;margin-top:0.5rem}
 .plan-name.featured-name{color:var(--cta)}
-.plan-duration{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--grey-500);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.5rem}
-.plan-price{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--white);margin-bottom:0.3rem;line-height:1}
-.plan-price-note{font-size:0.72rem;color:var(--grey-500);font-family:'DM Mono',monospace;margin-bottom:1.5rem;letter-spacing:0.06em}
+.plan-duration{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--grey-500);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.5rem}
+.plan-price{font-family:'Instrument Serif',serif;font-size:2rem;font-weight:900;color:var(--white);margin-bottom:0.3rem;line-height:1}
+.plan-price-note{font-size:0.72rem;color:var(--grey-500);font-family:'IBM Plex Mono',monospace;margin-bottom:1.5rem;letter-spacing:0.06em}
 .plan-divider{height:1px;background:var(--grey-700);margin:1.5rem 0}
 .plan-features{display:flex;flex-direction:column;gap:0.7rem;flex:1;margin-bottom:2rem}
 .plan-feature{display:flex;align-items:flex-start;gap:0.7rem;font-size:0.82rem;color:var(--grey-300);line-height:1.5}
 .plan-feature-icon{font-size:0.7rem;flex-shrink:0;margin-top:3px;color:var(--accent)}
 .plan-feature-icon.cta-color{color:var(--cta)}
 .plan-feature.highlight{color:var(--white)}
-.plan-cta{width:100%;padding:0.9rem;font-size:0.75rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;border:none}
+.plan-cta{width:100%;padding:0.9rem;font-size:0.75rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;font-family:'IBM Plex Mono',monospace;border:none}
 .plan-cta-outline{background:transparent;border:1px solid var(--grey-700)!important;color:var(--grey-300)}
 .plan-cta-outline:hover{border-color:var(--cta)!important;color:var(--white);background:rgba(12,148,216,0.06)}
 .plan-cta-solid{background:var(--cta);color:var(--white)}
@@ -394,8 +400,8 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .modal-overlay{position:fixed;inset:0;background:rgba(5,5,5,0.92);z-index:400;display:flex;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(8px)}
 .modal-box{background:var(--offblack);border:1px solid var(--grey-700);width:100%;max-width:620px;max-height:90vh;overflow-y:auto;position:relative;animation:fadeUp 0.35s both}
 .modal-header{padding:2rem 2.5rem 1.5rem;border-bottom:1px solid var(--grey-700);display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;position:sticky;top:0;background:var(--offblack);z-index:1}
-.modal-plan-tag{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--cta);margin-bottom:0.5rem}
-.modal-title{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;line-height:1.2}
+.modal-plan-tag{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--cta);margin-bottom:0.5rem}
+.modal-title{font-family:'Instrument Serif',serif;font-size:1.45rem;font-weight:700;line-height:1.2}
 .modal-close{background:none;border:none;color:var(--grey-500);font-size:1.1rem;cursor:pointer;padding:0;flex-shrink:0;margin-top:2px}
 .modal-close:hover{color:var(--white)}
 .modal-body{padding:1.5rem 2.5rem}
@@ -405,7 +411,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 /* COMPARISON */
 .comparison-wrap{margin:0 3rem 4rem;overflow-x:auto}
 .comparison-table{width:100%;border-collapse:collapse;border:1px solid var(--grey-700)}
-.comparison-table th{background:var(--offblack);padding:1rem 1.2rem;font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--grey-300);text-align:left;border-bottom:1px solid var(--grey-700);border-right:1px solid var(--grey-700)}
+.comparison-table th{background:var(--offblack);padding:1rem 1.2rem;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--grey-300);text-align:left;border-bottom:1px solid var(--grey-700);border-right:1px solid var(--grey-700)}
 .comparison-table th:first-child{width:36%}
 .comparison-table td{padding:0.8rem 1.2rem;font-size:0.8rem;color:var(--grey-300);border-bottom:1px solid rgba(255,255,255,0.04);border-right:1px solid rgba(255,255,255,0.04);vertical-align:middle}
 .comparison-table tr:last-child td{border-bottom:none}
@@ -413,20 +419,20 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .check{color:var(--accent);text-align:center}
 .check-cta{color:var(--cta);text-align:center;font-weight:500}
 .dash{color:var(--grey-700);text-align:center}
-.cat-row td{background:rgba(255,255,255,0.025)!important;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--grey-500)!important;padding:0.55rem 1.2rem!important}
+.cat-row td{background:rgba(255,255,255,0.025)!important;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--grey-500)!important;padding:0.55rem 1.2rem!important}
 .featured-col{background:rgba(12,148,216,0.05)!important;border-right:1px solid rgba(12,148,216,0.18)!important}
 /* VS COMPARISON SECTION */
 .vs-section{padding:5rem 3rem;border-top:var(--rule);border-bottom:var(--rule);background:var(--bg)}
 .vs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);margin-top:3rem}
 .vs-card{background:var(--offblack);padding:2.5rem 2rem;display:flex;flex-direction:column;gap:1.2rem}
-.vs-card-target{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey-500);margin-bottom:0.2rem}
-.vs-card-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--white);line-height:1.2}
+.vs-card-target{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey-500);margin-bottom:0.2rem}
+.vs-card-title{font-family:'Instrument Serif',serif;font-size:1.2rem;font-weight:700;color:var(--white);line-height:1.2}
 .vs-truth{font-size:0.92rem;color:var(--grey-400);line-height:1.78;padding-top:1rem;border-top:1px solid var(--grey-700)}
 .vs-vertex{font-size:0.92rem;color:var(--grey-200);line-height:1.78}
-.vs-signal{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.08em;padding-top:1rem;border-top:1px solid var(--grey-700);margin-top:auto}
+.vs-signal{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--accent);letter-spacing:0.08em;padding-top:1rem;border-top:1px solid var(--grey-700);margin-top:auto}
 /* SCARCITY / CAPACITY SIGNAL */
 .capacity-bar{margin:0 3rem;padding:1rem 1.8rem;border:1px solid rgba(200,184,154,0.2);background:rgba(200,184,154,0.03);display:flex;align-items:center;gap:1.5rem;justify-content:space-between;flex-wrap:wrap}
-.capacity-label{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent)}
+.capacity-label{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent)}
 .capacity-text{font-size:0.86rem;color:var(--grey-300)}
 .capacity-dots{display:flex;gap:0.4rem;align-items:center}
 .capacity-dot{width:10px;height:10px;border-radius:50%;background:var(--grey-700)}
@@ -450,15 +456,15 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .influence-section{padding:5rem 3rem;border-top:var(--rule)}
 .influence-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);margin-top:2.5rem}
 .influence-item{background:var(--offblack);padding:2rem 1.8rem}
-.influence-n{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--grey-600);letter-spacing:0.18em;margin-bottom:1rem;text-transform:uppercase}
-.influence-item-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:0.8rem;color:var(--white)}
+.influence-n{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--grey-600);letter-spacing:0.18em;margin-bottom:1rem;text-transform:uppercase}
+.influence-item-title{font-family:'Instrument Serif',serif;font-size:1.1rem;font-weight:700;margin-bottom:0.8rem;color:var(--white)}
 .influence-desc{font-size:0.9rem;color:var(--grey-400);line-height:1.78}
 /* FIRST CALL SECTION */
 .first-call-section{padding:5rem 3rem;background:var(--bg);border-top:var(--rule);border-bottom:var(--rule)}
 .first-call-inner{max-width:820px}
 .first-call-items{margin-top:2rem;display:flex;flex-direction:column;gap:0.8rem}
 .first-call-item{display:flex;gap:1.5rem;align-items:flex-start;padding:1.2rem 1.5rem;border:1px solid var(--grey-700);background:var(--offblack)}
-.first-call-item-n{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--grey-600);letter-spacing:0.15em;flex-shrink:0;padding-top:3px;text-transform:uppercase}
+.first-call-item-n{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--grey-600);letter-spacing:0.15em;flex-shrink:0;padding-top:3px;text-transform:uppercase}
 .first-call-item-text{font-size:0.97rem;color:var(--grey-300);line-height:1.75}
 .first-call-note{margin-top:1.5rem;padding:1.2rem 1.5rem;border-left:3px solid var(--accent);background:rgba(200,184,154,0.04);font-size:0.9rem;color:var(--grey-300);line-height:1.75;font-style:italic}
 @media(max-width:900px){
@@ -483,8 +489,8 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .sme-hero{min-height:88vh;display:flex;flex-direction:column;justify-content:flex-end;padding:8rem 3rem 5rem;position:relative;overflow:hidden;background:var(--black)}
 .sme-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 65% 65% at 72% 38%,rgba(200,184,154,0.08) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 18% 82%,rgba(200,184,154,0.04) 0%,transparent 60%)}
 .sme-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:80px 80px}
-.sme-hero-label{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);margin-bottom:2rem;animation:fadeUp 0.8s 0.3s both}
-.sme-hero-h1{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,7vw,7.5rem);font-weight:900;line-height:0.95;letter-spacing:-0.025em;max-width:900px;animation:fadeUp 0.9s 0.5s both}
+.sme-hero-label{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:0.24em;text-transform:uppercase;color:var(--accent);margin-bottom:2rem;animation:fadeUp 0.8s 0.3s both}
+.sme-hero-h1{font-family:'Instrument Serif',serif;font-size:clamp(2.8rem,7vw,7.5rem);font-weight:900;line-height:0.95;letter-spacing:-0.025em;max-width:900px;animation:fadeUp 0.9s 0.5s both}
 .sme-hero-h1 .accent{color:var(--accent)}
 .sme-hero-h1 .italic{font-style:italic;color:var(--accent)}
 .sme-hero-sub{margin-top:2.5rem;font-size:1rem;color:var(--grey-300);max-width:540px;line-height:1.8;animation:fadeUp 0.9s 0.7s both}
@@ -492,7 +498,7 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 
 .sme-philosophy{padding:6rem 3rem;background:var(--offblack);border-top:var(--rule);border-bottom:var(--rule)}
 .sme-philosophy-inner{max-width:820px;margin:0 auto;text-align:center}
-.sme-philosophy-quote{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,3vw,2.2rem);font-style:italic;line-height:1.45;color:var(--white);margin:2rem 0}
+.sme-philosophy-quote{font-family:'Instrument Serif',serif;font-size:clamp(1.4rem,3vw,2.2rem);font-style:italic;line-height:1.45;color:var(--white);margin:2rem 0}
 .sme-philosophy-line{width:48px;height:2px;background:var(--accent);margin:0 auto 1.5rem}
 .sme-philosophy-sub{font-size:0.92rem;color:var(--grey-300);line-height:1.85;max-width:680px;margin:0 auto}
 
@@ -503,19 +509,19 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .sme-service-card::before{content:'';position:absolute;top:0;left:0;width:0;height:2px;background:var(--accent);transition:width 0.4s}
 .sme-service-card:hover{background:#131311}
 .sme-service-card:hover::before{width:100%}
-.sme-service-num{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--grey-500);letter-spacing:0.15em;margin-bottom:1.5rem}
-.sme-service-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:600;margin-bottom:0.8rem;line-height:1.2}
+.sme-service-num{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:var(--grey-500);letter-spacing:0.15em;margin-bottom:1.5rem}
+.sme-service-title{font-family:'Instrument Serif',serif;font-size:1.25rem;font-weight:600;margin-bottom:0.8rem;line-height:1.2}
 .sme-service-desc{color:var(--grey-300);font-size:1rem;line-height:1.82;margin-bottom:1.2rem}
-.sme-service-tag{font-family:'DM Mono',monospace;font-size:0.64rem;letter-spacing:0.08em;color:var(--accent);padding:0.3rem 0.7rem;border:1px solid rgba(200,184,154,0.3);display:inline-block}
+.sme-service-tag{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;letter-spacing:0.08em;color:var(--accent);padding:0.3rem 0.7rem;border:1px solid rgba(200,184,154,0.3);display:inline-block}
 
 .sme-insights-section{padding:7rem 3rem;background:var(--offblack);border-top:var(--rule)}
 .sme-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:var(--rule);border-bottom:var(--rule);margin:3rem 0}
 .sme-stat-item{padding:2.5rem 2rem;border-right:var(--rule);text-align:center}
 .sme-stat-item:last-child{border-right:none}
-.sme-stat-num{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;line-height:1;letter-spacing:-0.03em}
+.sme-stat-num{font-family:'Instrument Serif',serif;font-size:3rem;font-weight:900;line-height:1;letter-spacing:-0.03em}
 .sme-stat-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--grey-500);margin-top:0.5rem;font-weight:400;line-height:1.5}
 
-.sme-markets-label{font-family:'DM Mono',monospace;font-size:0.64rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2rem;display:flex;align-items:center;gap:1rem}
+.sme-markets-label{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--accent);margin-bottom:2rem;display:flex;align-items:center;gap:1rem}
 .sme-markets-label::after{content:'';height:1px;width:40px;background:var(--accent);opacity:0.5}
 .sme-market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:1rem}
 .sme-market-card{border:1px solid var(--grey-700);padding:2rem;position:relative;overflow:hidden;transition:border-color 0.3s}
@@ -523,8 +529,8 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .sme-market-card:hover{border-color:var(--grey-500)}
 .sme-market-card:hover::after{transform:scaleX(1)}
 .sme-market-flag{font-size:2rem;margin-bottom:0.8rem}
-.sme-market-country{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;margin-bottom:0.3rem}
-.sme-market-stat{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:0.8rem}
+.sme-market-country{font-family:'Instrument Serif',serif;font-size:1.1rem;font-weight:600;margin-bottom:0.3rem}
+.sme-market-stat{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:0.8rem}
 .sme-market-insight{font-size:0.82rem;color:var(--grey-300);line-height:1.7}
 
 .sme-difference-section{padding:7rem 3rem;background:var(--black);border-top:var(--rule)}
@@ -537,12 +543,12 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .sme-pillar-card:hover{border-color:var(--grey-500)}
 .sme-pillar-card:hover::before{width:100%}
 .sme-pillar-icon{font-size:1.4rem;margin-bottom:0.8rem}
-.sme-pillar-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;margin-bottom:0.5rem}
+.sme-pillar-title{font-family:'Instrument Serif',serif;font-size:1rem;font-weight:600;margin-bottom:0.5rem}
 .sme-pillar-desc{font-size:0.8rem;color:var(--grey-300);line-height:1.7}
 
 .sme-cta-section{padding:7rem 3rem;background:var(--offblack);border-top:var(--rule);text-align:center}
 .sme-cta-inner{max-width:680px;margin:0 auto}
-.sme-cta-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;line-height:1.1;letter-spacing:-0.02em;margin-bottom:1.5rem}
+.sme-cta-title{font-family:'Instrument Serif',serif;font-size:clamp(2rem,4vw,3rem);font-weight:900;line-height:1.1;letter-spacing:-0.02em;margin-bottom:1.5rem}
 .sme-cta-sub{font-size:0.95rem;color:var(--grey-300);line-height:1.8;margin-bottom:2.5rem;max-width:520px;margin-left:auto;margin-right:auto}
 .sme-cta-actions{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap}
 
@@ -566,35 +572,35 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .ins-hero{min-height:72vh;display:flex;flex-direction:column;justify-content:flex-end;padding:8rem 3rem 5rem;position:relative;overflow:hidden;background:var(--black)}
 .ins-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 80% 30%,rgba(12,148,216,0.06) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 15% 85%,rgba(12,148,216,0.03) 0%,transparent 60%)}
 .ins-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.018) 1px,transparent 1px);background-size:80px 80px}
-.ins-hero-label{font-family:'DM Mono',monospace;font-size:0.66rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--cta);margin-bottom:1.8rem;animation:fadeUp 0.8s 0.3s both}
-.ins-hero-h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,8vw,8rem);font-weight:900;line-height:0.92;letter-spacing:-0.03em;max-width:800px;animation:fadeUp 0.9s 0.5s both}
+.ins-hero-label{font-family:'IBM Plex Mono',monospace;font-size:0.66rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--cta);margin-bottom:1.8rem;animation:fadeUp 0.8s 0.3s both}
+.ins-hero-h1{font-family:'Instrument Serif',serif;font-size:clamp(3rem,8vw,8rem);font-weight:900;line-height:0.92;letter-spacing:-0.03em;max-width:800px;animation:fadeUp 0.9s 0.5s both}
 .ins-hero-h1 em{font-style:italic;color:var(--cta)}
 .ins-hero-sub{margin-top:2.5rem;font-size:1rem;color:var(--grey-300);max-width:560px;line-height:1.82;animation:fadeUp 0.9s 0.7s both}
 .ins-hero-meta{margin-top:2.5rem;display:flex;gap:2.5rem;flex-wrap:wrap;animation:fadeUp 0.9s 0.9s both}
-.ins-hero-meta-item{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;color:var(--grey-500);text-transform:uppercase;display:flex;align-items:center;gap:0.5rem}
-.ins-hero-meta-item span{color:var(--cta);font-size:1.1rem;font-weight:600;font-family:'Playfair Display',serif;letter-spacing:0}
+.ins-hero-meta-item{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.12em;color:var(--grey-500);text-transform:uppercase;display:flex;align-items:center;gap:0.5rem}
+.ins-hero-meta-item span{color:var(--cta);font-size:1.1rem;font-weight:600;font-family:'Instrument Serif',serif;letter-spacing:0}
 /* Live KPI strip */
 .ins-kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid rgba(12,148,216,0.2);border-bottom:1px solid rgba(12,148,216,0.2);background:rgba(12,148,216,0.03)}
 .ins-kpi{padding:2rem 2rem;border-right:var(--rule);display:flex;flex-direction:column;gap:0.35rem;position:relative}
 .ins-kpi:last-child{border-right:none}
-.ins-kpi-num{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--white);line-height:1}
-.ins-kpi-lbl{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--grey-500)}
+.ins-kpi-num{font-family:'Instrument Serif',serif;font-size:2.2rem;font-weight:900;color:var(--white);line-height:1}
+.ins-kpi-lbl{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--grey-500)}
 .ins-kpi-live{position:absolute;top:1rem;right:1rem;width:6px;height:6px;border-radius:50%;background:var(--cta);animation:livePulse 2s infinite}
 @keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(12,148,216,0.4)}50%{opacity:0.7;box-shadow:0 0 0 6px rgba(12,148,216,0)}}
 /* Explorer section */
 .ins-explorer{padding:5rem 3rem;background:var(--offblack);border-top:var(--rule)}
 .ins-explorer-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem;gap:2rem;flex-wrap:wrap}
 .ins-filters{display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:2.5rem}
-.ins-filter-btn{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.55rem 1.1rem;border:1px solid var(--grey-700);background:none;color:var(--grey-400);cursor:pointer;transition:all 0.2s}
+.ins-filter-btn{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.55rem 1.1rem;border:1px solid var(--grey-700);background:none;color:var(--grey-400);cursor:pointer;transition:all 0.2s}
 .ins-filter-btn:hover{border-color:var(--grey-400);color:var(--white)}
 .ins-filter-btn.active{border-color:var(--cta);color:var(--cta);background:rgba(12,148,216,0.08)}
-.ins-filter-select{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;padding:0.55rem 1rem;border:1px solid var(--grey-700);background:var(--grey-800);color:var(--grey-300);cursor:pointer;outline:none}
+.ins-filter-select{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.08em;padding:0.55rem 1rem;border:1px solid var(--grey-700);background:var(--grey-800);color:var(--grey-300);cursor:pointer;outline:none}
 .ins-filter-select:focus{border-color:var(--cta)}
 .ins-filter-select option{background:#1a1a18}
 .ins-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem}
 .ins-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem;margin-bottom:2rem}
 .ins-chart-card{border:1px solid var(--grey-700);padding:1.8rem;background:var(--black)}
-.ins-chart-title{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey-500);margin-bottom:1.5rem;display:flex;align-items:center;gap:0.7rem}
+.ins-chart-title{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--grey-500);margin-bottom:1.5rem;display:flex;align-items:center;gap:0.7rem}
 .ins-chart-title::before{content:'';display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--cta);flex-shrink:0}
 .ins-bar-row{display:flex;align-items:center;gap:0.9rem;margin-bottom:0.85rem}
 .ins-bar-label{font-size:0.75rem;color:var(--grey-300);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 0 130px}
@@ -603,24 +609,24 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .ins-bar-fill.green{background:#16a34a}
 .ins-bar-fill.amber{background:#d97706}
 .ins-bar-fill.red{background:#e07070}
-.ins-bar-pct{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--grey-500);flex-shrink:0;min-width:32px;text-align:right}
+.ins-bar-pct{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:var(--grey-500);flex-shrink:0;min-width:32px;text-align:right}
 .ins-score-dist{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--grey-700)}
 .ins-score-band{padding:1.4rem 1rem;background:var(--black);display:flex;flex-direction:column;gap:0.4rem;text-align:center}
-.ins-score-band-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;line-height:1}
-.ins-score-band-label{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--grey-500)}
-.ins-score-band-range{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--grey-700);margin-top:0.2rem}
+.ins-score-band-num{font-family:'Instrument Serif',serif;font-size:2rem;font-weight:900;line-height:1}
+.ins-score-band-label{font-family:'IBM Plex Mono',monospace;font-size:0.56rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--grey-500)}
+.ins-score-band-range{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:var(--grey-700);margin-top:0.2rem}
 .ins-trend-row{display:flex;align-items:flex-end;gap:4px;height:64px;margin-top:1rem}
 .ins-trend-bar{flex:1;background:rgba(12,148,216,0.25);transition:height 0.6s ease;position:relative;cursor:default}
 .ins-trend-bar:hover{background:var(--cta)}
-.ins-trend-bar-tip{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:0.55rem;color:var(--cta);white-space:nowrap;display:none}
+.ins-trend-bar-tip{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:0.55rem;color:var(--cta);white-space:nowrap;display:none}
 .ins-trend-bar:hover .ins-trend-bar-tip{display:block}
 .ins-trend-months{display:flex;gap:4px;margin-top:0.4rem}
-.ins-trend-month{flex:1;font-family:'DM Mono',monospace;font-size:0.5rem;color:var(--grey-700);text-align:center;overflow:hidden;text-overflow:clip}
-.ins-empty{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--grey-700);font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;border:1px dashed var(--grey-700)}
+.ins-trend-month{flex:1;font-family:'IBM Plex Mono',monospace;font-size:0.5rem;color:var(--grey-700);text-align:center;overflow:hidden;text-overflow:clip}
+.ins-empty{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--grey-700);font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;border:1px dashed var(--grey-700)}
 /* Market section */
 .ins-markets{padding:5rem 3rem;background:var(--black);border-top:var(--rule)}
 .ins-market-tabs{display:flex;gap:0;border-bottom:1px solid var(--grey-700);margin-bottom:3rem;flex-wrap:wrap}
-.ins-market-tab{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.8rem 1.5rem;border:none;background:none;color:var(--grey-500);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;margin-bottom:-1px}
+.ins-market-tab{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.8rem 1.5rem;border:none;background:none;color:var(--grey-500);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;margin-bottom:-1px}
 .ins-market-tab:hover{color:var(--grey-300)}
 .ins-market-tab.active{color:var(--cta);border-bottom-color:var(--cta)}
 .ins-market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
@@ -629,25 +635,25 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .ins-market-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cta),transparent);transform:scaleX(0);transform-origin:left;transition:transform 0.35s}
 .ins-market-card:hover::after{transform:scaleX(1)}
 .ins-market-flag{font-size:2.2rem;margin-bottom:0.8rem;display:block}
-.ins-market-country{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;margin-bottom:0.2rem}
-.ins-market-region{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;color:var(--cta);text-transform:uppercase;margin-bottom:0.7rem}
-.ins-market-stat{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--grey-500);letter-spacing:0.04em;margin-bottom:0.8rem}
+.ins-market-country{font-family:'Instrument Serif',serif;font-size:1.15rem;font-weight:700;margin-bottom:0.2rem}
+.ins-market-region{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;color:var(--cta);text-transform:uppercase;margin-bottom:0.7rem}
+.ins-market-stat{font-family:'IBM Plex Mono',monospace;font-size:0.65rem;color:var(--grey-500);letter-spacing:0.04em;margin-bottom:0.8rem}
 .ins-market-insight{font-size:0.82rem;color:var(--grey-300);line-height:1.72;margin-bottom:1rem}
 .ins-market-tags{display:flex;flex-wrap:wrap;gap:0.4rem}
-.ins-market-tag{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.06em;padding:0.2rem 0.55rem;border:1px solid var(--grey-700);color:var(--grey-500)}
+.ins-market-tag{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.06em;padding:0.2rem 0.55rem;border:1px solid var(--grey-700);color:var(--grey-500)}
 .ins-market-opp{background:rgba(12,148,216,0.06);border-top:1px solid var(--grey-700);margin:1rem -2rem -2rem;padding:1rem 2rem;font-size:0.78rem;color:var(--grey-400);line-height:1.55;display:flex;gap:0.6rem;align-items:flex-start}
 .ins-market-opp::before{content:'→';color:var(--cta);flex-shrink:0;font-size:0.7rem;margin-top:2px}
 /* Investor section */
 .ins-investor{padding:5rem 3rem;background:var(--offblack);border-top:var(--rule)}
 .ins-investor-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;margin-top:3rem}
 .ins-investor-card{border:1px solid var(--grey-700);padding:2rem;border-left:3px solid var(--cta)}
-.ins-investor-card-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;margin-bottom:0.4rem}
-.ins-investor-card-sub{font-size:0.78rem;color:var(--grey-500);font-family:'DM Mono',monospace;margin-bottom:1.2rem}
+.ins-investor-card-title{font-family:'Instrument Serif',serif;font-size:1.1rem;font-weight:600;margin-bottom:0.4rem}
+.ins-investor-card-sub{font-size:0.78rem;color:var(--grey-500);font-family:'IBM Plex Mono',monospace;margin-bottom:1.2rem}
 .ins-investor-metrics{display:flex;flex-direction:column;gap:0.6rem}
 .ins-investor-metric{display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid var(--grey-700)}
 .ins-investor-metric:last-child{border-bottom:none}
 .ins-investor-metric-label{font-size:0.8rem;color:var(--grey-300)}
-.ins-investor-metric-val{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--cta)}
+.ins-investor-metric-val{font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:var(--cta)}
 /* Responsive */
 @media(max-width:900px){
   .ins-hero{padding:7rem 1.5rem 4rem}
@@ -706,17 +712,17 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .qualify-inner{display:grid;grid-template-columns:1fr 1px 1fr;gap:0 4rem;max-width:960px;margin:0 auto;align-items:start}
 .qualify-divider{background:var(--grey-700);align-self:stretch}
 .qualify-col{padding:0 0.5rem}
-.qualify-col-icon{font-family:'DM Mono',monospace;font-size:0.85rem;letter-spacing:0.15em;font-weight:700;margin-bottom:1rem}
+.qualify-col-icon{font-family:'IBM Plex Mono',monospace;font-size:0.85rem;letter-spacing:0.15em;font-weight:700;margin-bottom:1rem}
 .qualify-col.qualify-yes .qualify-col-icon{color:#4ade80}
 .qualify-col.qualify-no .qualify-col-icon{color:var(--grey-600)}
-.qualify-col-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;margin-bottom:1.6rem;line-height:1.3}
+.qualify-col-title{font-family:'Instrument Serif',serif;font-size:1.25rem;font-weight:700;margin-bottom:1.6rem;line-height:1.3}
 .qualify-col.qualify-yes .qualify-col-title{color:var(--white)}
 .qualify-col.qualify-no .qualify-col-title{color:var(--grey-400)}
 .qualify-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1rem}
 .qualify-list li{font-size:1rem;color:var(--grey-300);line-height:1.78;padding-left:1.6rem;position:relative}
-.qualify-col.qualify-yes .qualify-list li::before{content:'→';position:absolute;left:0;color:#4ade80;font-family:'DM Mono',monospace;font-size:0.72rem;top:3px}
-.qualify-col.qualify-no .qualify-list li::before{content:'—';position:absolute;left:0;color:var(--grey-600);font-family:'DM Mono',monospace;font-size:0.72rem;top:3px}
-.qualify-cta-note{max-width:960px;margin:2.5rem auto 0;text-align:center;font-size:0.82rem;color:var(--grey-500);font-family:'DM Mono',monospace;letter-spacing:0.06em}
+.qualify-col.qualify-yes .qualify-list li::before{content:'→';position:absolute;left:0;color:#4ade80;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;top:3px}
+.qualify-col.qualify-no .qualify-list li::before{content:'—';position:absolute;left:0;color:var(--grey-600);font-family:'IBM Plex Mono',monospace;font-size:0.72rem;top:3px}
+.qualify-cta-note{max-width:960px;margin:2.5rem auto 0;text-align:center;font-size:0.82rem;color:var(--grey-500);font-family:'IBM Plex Mono',monospace;letter-spacing:0.06em}
 @media(max-width:768px){.qualify-inner{grid-template-columns:1fr;gap:3rem 0}.qualify-divider{height:1px;width:100%;align-self:auto}.qualify-section{padding:4rem 1.5rem}}
 /* ── SECTOR SECTION ──────────────────────────────────────────────── */
 .sector-section{padding:5rem 3rem 6rem;border-bottom:var(--rule)}
@@ -729,9 +735,9 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .sector-card-img-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,5,5,0.05) 0%,rgba(5,5,5,0.6) 100%)}
 .sector-card-body{padding:1.8rem 2rem 2rem}
 .sector-card-icon{font-size:1.1rem;color:var(--accent);margin-bottom:0.5rem;opacity:0.9}
-.sector-card-name{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:0.6rem;line-height:1.25}
+.sector-card-name{font-family:'Instrument Serif',serif;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:0.6rem;line-height:1.25}
 .sector-card-desc{font-size:0.85rem;color:var(--grey-400);line-height:1.72;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.sector-card-cta{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.14em;color:var(--accent);margin-top:1.3rem;padding-top:1rem;border-top:1px solid rgba(200,184,154,0.12);display:flex;align-items:center;gap:0.4rem;transition:gap 0.2s}
+.sector-card-cta{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:0.14em;color:var(--accent);margin-top:1.3rem;padding-top:1rem;border-top:1px solid rgba(200,184,154,0.12);display:flex;align-items:center;gap:0.4rem;transition:gap 0.2s}
 .sector-card:hover .sector-card-cta{gap:0.7rem}
 @media(max-width:900px){.sector-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.sector-grid{grid-template-columns:1fr}.sector-section{padding:4rem 1.5rem 5rem}}
@@ -743,11 +749,11 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .how-step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 1.8rem;position:relative;z-index:1}
 .how-step-badge{width:62px;height:62px;border-radius:50%;border:1px solid rgba(200,184,154,0.55);display:flex;align-items:center;justify-content:center;background:var(--offblack);margin-bottom:2rem;transition:border-color 0.3s,background 0.3s,box-shadow 0.3s;flex-shrink:0}
 .how-step:hover .how-step-badge{border-color:var(--accent);background:rgba(200,184,154,0.07);box-shadow:0 0 24px rgba(200,184,154,0.12)}
-.how-step-num{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.14em;color:var(--accent);font-weight:500}
+.how-step-num{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:0.14em;color:var(--accent);font-weight:500}
 .how-step-icon{font-size:1.05rem;margin-bottom:1rem;opacity:0.7}
-.how-step-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--white);margin-bottom:0.9rem;line-height:1.15}
+.how-step-title{font-family:'Instrument Serif',serif;font-size:1.3rem;font-weight:900;color:var(--white);margin-bottom:0.9rem;line-height:1.15}
 .how-step-desc{font-size:0.88rem;color:var(--grey-400);line-height:1.82;max-width:215px}
-.how-step-phase{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,184,154,0.35);margin-top:1.4rem}
+.how-step-phase{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,184,154,0.35);margin-top:1.4rem}
 @media(max-width:900px){.how-process{grid-template-columns:1fr 1fr;gap:3.5rem}.how-connector{display:none}.how-header{margin-bottom:3.5rem}}
 @media(max-width:600px){.how-process{grid-template-columns:1fr;gap:2.5rem}.how-section{padding:5rem 1.5rem}}
 /* ── TEAM SECTION ────────────────────────────────────────────────── */
@@ -758,50 +764,50 @@ input,select,textarea{font-family:'DM Sans',sans-serif}
 .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
 .team-card{background:rgba(8,8,7,0.7);border:1px solid rgba(200,184,154,0.15);padding:2.5rem 2rem;backdrop-filter:blur(8px);transition:border-color 0.3s,background 0.3s}
 .team-card:hover{background:rgba(8,8,7,0.88);border-color:rgba(200,184,154,0.32)}
-.team-role{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:0.8rem}
-.team-focus{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:1rem;line-height:1.3}
+.team-role{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:0.8rem}
+.team-focus{font-family:'Instrument Serif',serif;font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:1rem;line-height:1.3}
 .team-exp{font-size:0.9rem;color:var(--grey-400);line-height:1.78}
-.team-note{max-width:700px;margin:2.5rem auto 0;text-align:center;font-size:0.82rem;color:rgba(255,255,255,0.42);font-family:'DM Mono',monospace;letter-spacing:0.05em;line-height:1.6}
+.team-note{max-width:700px;margin:2.5rem auto 0;text-align:center;font-size:0.82rem;color:rgba(255,255,255,0.42);font-family:'IBM Plex Mono',monospace;letter-spacing:0.05em;line-height:1.6}
 @media(max-width:900px){.team-grid{grid-template-columns:1fr}.team-section{padding:4rem 1.5rem}}
 /* ── FINAL CTA SECTION ───────────────────────────────────────────── */
 .final-cta-section{padding:8rem 3rem;text-align:center;background:var(--bg);border-top:var(--rule)}
-.final-cta-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4.5vw,3.5rem);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:1.5rem}
+.final-cta-title{font-family:'Instrument Serif',serif;font-size:clamp(2.2rem,4.5vw,3.5rem);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:1.5rem}
 .final-cta-sub{font-size:0.95rem;color:var(--grey-300);max-width:540px;margin:0 auto 2.5rem;line-height:1.75}
-.final-cta-note{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;color:var(--grey-600);margin-top:1.5rem}
+.final-cta-note{font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:0.1em;color:var(--grey-600);margin-top:1.5rem}
 @media(max-width:600px){.final-cta-section{padding:5rem 1.5rem}}
 /* ── SECTOR PAGE ─────────────────────────────────────────────────── */
 .sp-hero{padding:6rem 3rem 4rem;border-bottom:var(--rule);position:relative;overflow:hidden}
 .sp-hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
 .sp-hero-overlay{position:absolute;inset:0;background:linear-gradient(105deg,rgba(5,5,5,0.92) 0%,rgba(5,5,5,0.72) 60%,rgba(5,5,5,0.45) 100%);z-index:1}
 .sp-hero-inner{position:relative;z-index:2}
-.sp-hero-label{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem}
-.sp-hero-name{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:1.5rem}
+.sp-hero-label{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem}
+.sp-hero-name{font-family:'Instrument Serif',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:900;color:var(--white);line-height:1.1;margin-bottom:1.5rem}
 .sp-hero-sub{font-size:1.05rem;color:var(--grey-400);max-width:640px;line-height:1.85}
 .sp-challenges{padding:5rem 3rem;border-bottom:var(--rule)}
 .sp-challenges-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--grey-700);border:1px solid var(--grey-700);margin-top:3rem}
 .sp-challenge{background:var(--offblack);padding:2.5rem 2rem}
-.sp-challenge-n{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;color:var(--grey-600);margin-bottom:1rem}
-.sp-challenge-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:0.8rem;line-height:1.4}
+.sp-challenge-n{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;color:var(--grey-600);margin-bottom:1rem}
+.sp-challenge-title{font-family:'Instrument Serif',serif;font-size:1.05rem;font-weight:700;color:var(--white);margin-bottom:0.8rem;line-height:1.4}
 .sp-challenge-desc{font-size:1rem;color:var(--grey-400);line-height:1.8}
 .sp-how{padding:5rem 3rem;background:var(--bg);border-bottom:var(--rule)}
 .sp-how-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;margin-top:3rem}
 .sp-how-item{padding:2rem;border:1px solid var(--grey-800);border-left:3px solid rgba(200,184,154,0.3)}
-.sp-how-title{font-family:'DM Mono',monospace;font-size:0.78rem;letter-spacing:0.08em;font-weight:700;color:var(--white);margin-bottom:0.7rem}
+.sp-how-title{font-family:'IBM Plex Mono',monospace;font-size:0.78rem;letter-spacing:0.08em;font-weight:700;color:var(--white);margin-bottom:0.7rem}
 .sp-how-desc{font-size:1rem;color:var(--grey-400);line-height:1.8}
 .sp-case{padding:5rem 3rem;border-bottom:var(--rule)}
 .sp-case-inner{border:1px solid var(--grey-700);border-top:3px solid var(--accent);max-width:820px;margin:3rem auto 0}
 .sp-case-header{padding:1.2rem 2.5rem;background:var(--offblack);border-bottom:1px solid var(--grey-700)}
-.sp-case-tag{font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent)}
+.sp-case-tag{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent)}
 .sp-case-body{padding:2.5rem}
 .sp-case-row{margin-bottom:1.8rem}
-.sp-case-row-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--grey-600);margin-bottom:0.4rem}
+.sp-case-row-label{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--grey-600);margin-bottom:0.4rem}
 .sp-case-row-text{font-size:1.05rem;color:var(--grey-200);line-height:1.82}
 .sp-case-row.outcome .sp-case-row-text{color:var(--white);font-weight:600}
 .sp-services{padding:4rem 3rem;background:var(--offblack);border-bottom:var(--rule)}
 .sp-services-tags{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:1.5rem}
-.sp-service-tag{font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;padding:0.4rem 0.8rem;border:1px solid var(--grey-700);color:var(--grey-400)}
+.sp-service-tag{font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;padding:0.4rem 0.8rem;border:1px solid var(--grey-700);color:var(--grey-400)}
 .sp-cta{padding:6rem 3rem;text-align:center;border-top:var(--rule)}
-.sp-cta-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;color:var(--white);line-height:1.2;margin-bottom:1.2rem}
+.sp-cta-title{font-family:'Instrument Serif',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;color:var(--white);line-height:1.2;margin-bottom:1.2rem}
 .sp-cta-sub{font-size:1.05rem;color:var(--grey-400);max-width:520px;margin:0 auto 2.5rem;line-height:1.8}
 @media(max-width:900px){.sp-challenges-grid{grid-template-columns:1fr}.sp-how-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.sp-hero,.sp-challenges,.sp-how,.sp-case,.sp-services,.sp-cta{padding-left:1.5rem;padding-right:1.5rem}.sp-hero{padding-top:5rem}.sp-case-body{padding:1.5rem}.sp-case-header{padding:1rem 1.5rem}}
@@ -819,22 +825,22 @@ window.__T__ = {
     nav_about:"About", nav_services:"Services", nav_sme:"SME Hub", nav_results:"Our Work",
     nav_events:"Events", nav_plans:"Plans", nav_diagnosis:"Free 360° Scorecard", nav_contact:"Contact",
     // Hero
-    hero_label:"Execution partner for African SMEs · $200K–$5M annual revenue",
-    hero_h1a:"The gap isn't strategy.", hero_h1b:"It's execution.",
-    hero_sub:"Vertex Group embeds dedicated consultants inside African SMEs and stays until the numbers move. Not a report. Not a framework handoff. Execution — tracked against the KPIs we set together.",
-    hero_cta1:"Get Your Free 360° Scorecard", hero_cta2:"See how we work →",
+    hero_label:"INTELLIGENCE · TERRAIN · CONNEXIONS",
+    hero_h1a:"From ", hero_h1lit:"insight", hero_h1b:" to impact.",
+    hero_sub:"We equip established African businesses with market intelligence, field data and strategic connections — turning information into competitive advantage, mission after mission.",
+    hero_cta1:"Get Your Free 360° Scorecard", hero_cta2:"Our services →",
     hero_scroll:"Scroll",
     // Stats
-    stat1n:"200+", stat1l:"SMEs supported — Nigeria, South Africa, Kenya, DRC, Ghana & more",
-    stat2n:"94%", stat2l:"of engagements produce measurable revenue growth within 6 months",
-    stat3n:"12+", stat3l:"African markets with active client engagements",
-    stat4n:"3×", stat4l:"average revenue growth within 18 months of a structured engagement",
+    stat1n:"12+", stat1l:"African markets with active intelligence coverage",
+    stat2n:"500+", stat2l:"Organisations served — investors, corporates, institutions & SMEs",
+    stat3n:"95%", stat3l:"of clients act on our data within 30 days of delivery",
+    stat4n:"24h", stat4l:"average turnaround on diagnostic and intelligence briefs",
     // About
     about_label:"Who We Are",
-    about_title:"Built for businesses that have outgrown their current strategy.",
-    about_p1:"Vertex Group is a strategic consulting firm focused exclusively on one mandate: helping established SMEs across Africa scale sustainably. We work with businesses that have already found their footing — companies with a proven product or service, a functioning operation, and real revenue.",
-    about_p2:"We are not a firm for startups or early-stage concepts. We work with businesses that are ready to scale but need a clear strategy, stronger operations, and disciplined execution to do it without breaking what already works.",
-    about_philosophy:"\"Growth without structure is just expensive chaos.\"",
+    about_title:"The data company that closes the information gap in African markets.",
+    about_p1:"Vertex Group is a data and intelligence company operating across Africa. We exist to give businesses, investors and institutions the market intelligence, field data and strategic connections they need to operate with confidence — in markets where reliable information is scarce and high-stakes decisions cannot wait.",
+    about_p2:"From primary data collection and qualitative research to thematic panels and economic missions, we build the information infrastructure that underpins sound strategy. Every service we deliver is designed to close the gap between what decision-makers need to know and what is actually available.",
+    about_philosophy:"\"In markets with incomplete information, the best-informed actor wins.\"",
     about_presence:"Our Presence",
     about_visual_tag:"Est. Sandton · Pan-African",
     about_principle1_title:"Regional fluency",
@@ -845,21 +851,25 @@ window.__T__ = {
     about_principle3_desc:"We measure our success by yours. We don't consider an engagement complete until the metrics move — and we stay engaged as long as it takes to get there.",
     // Services
     services_label:"What We Do",
-    services_title:"Four services.\nOne outcome: structured, measurable growth.",
-    svc1_title:"Strategic Growth Planning",
-    svc1_desc:"We work with your leadership to define a clear growth strategy — identifying your highest-value opportunities, resolving strategic ambiguity, and building a multi-year plan that gives your business direction and discipline.",
-    svc1_o1:"Growth strategy development",svc1_o2:"Opportunity prioritisation",svc1_o3:"Multi-year execution planning",
-    svc2_title:"Operational Scaling Roadmaps",
-    svc2_desc:"Growth without operational readiness creates chaos. We assess your organisational capacity, processes, and structure, then design a scaling roadmap that allows you to grow without breaking what already works.",
-    svc2_o1:"Operational capacity assessment",svc2_o2:"Process design & optimisation",svc2_o3:"Scaling roadmap development",
-    svc3_title:"Market & Competitive Positioning",
-    svc3_desc:"We analyse your market dynamics, competitive landscape, and customer segments to sharpen your positioning — so you compete where you can win, and stop competing where you can't.",
-    svc3_o1:"Market dynamics analysis",svc3_o2:"Competitive landscape mapping",svc3_o3:"Positioning & differentiation strategy",
-    svc4_title:"Growth Governance & Advisory",
-    svc4_desc:"Sustained growth requires sustained oversight. We provide ongoing strategic advisory — tracking progress against your plan, challenging assumptions, and adapting your strategy as the market shifts.",
-    svc4_o1:"Monthly strategic reviews",svc4_o2:"KPI tracking & accountability",svc4_o3:"Adaptive strategy management",
-    svc5_title:"",svc5_desc:"",svc5_o1:"",svc5_o2:"",svc5_o3:"",
-    svc6_title:"",svc6_desc:"",svc6_o1:"",svc6_o2:"",svc6_o3:"",
+    services_title:"Six capabilities.\nOne mission: intelligence that drives decisions.",
+    svc1_title:"Business Intelligence",
+    svc1_desc:"We produce rigorous market data, sector analyses and competitive intelligence reports that give your leadership team a clear view of the landscape — so decisions are made on evidence, not intuition.",
+    svc1_o1:"Sector & market reports",svc1_o2:"Competitive benchmarking",svc1_o3:"Strategic intelligence briefs",
+    svc2_title:"Data Collection",
+    svc2_desc:"We design and execute on-the-ground quantitative surveys and field data collection across African markets — gathering the primary data your strategy needs and that secondary sources cannot provide.",
+    svc2_o1:"Quantitative field surveys",svc2_o2:"Consumer & SME panel data",svc2_o3:"Multi-country data collection",
+    svc3_title:"Interviews & Qualitative Research",
+    svc3_desc:"We conduct deep stakeholder interviews, focus groups and expert consultations with business leaders, regulators, and consumers — uncovering the insights that numbers alone cannot reveal.",
+    svc3_o1:"Executive stakeholder interviews",svc3_o2:"Focus groups & consumer research",svc3_o3:"Expert panel consultations",
+    svc4_title:"Thematic Panels",
+    svc4_desc:"We organise high-impact thematic panels and roundtables that bring together business leaders, policymakers and investors around the strategic topics shaping Africa's economic agenda.",
+    svc4_o1:"Sector roundtables",svc4_o2:"Policy & investment panels",svc4_o3:"Cross-border dialogue events",
+    svc5_title:"Economic Missions",
+    svc5_desc:"We design and lead targeted economic missions into African markets — structuring B2B matching, institutional introductions, and site visits to give investors and companies on-the-ground access they cannot build alone.",
+    svc5_o1:"B2B matching & introductions",svc5_o2:"Institutional access & site visits",svc5_o3:"Market entry facilitation",
+    svc6_title:"Investor Preparation",
+    svc6_desc:"We prepare international and diaspora investors for the DRC, Central Africa and beyond — providing due diligence support, regulatory navigation, and strategic positioning to de-risk market entry.",
+    svc6_o1:"DRC & Central Africa advisory",svc6_o2:"Due diligence support",svc6_o3:"Market entry & regulatory navigation",
     // How we engage
     engage_label:"Our Approach",engage_title:"Four phases. One non-negotiable: measurable outcomes.",
     eng1_t:"Diagnosis",eng1_d:"We begin with a structured 360° audit — strategy, operations, sales pipeline, and market position. You receive a health score and priority action list. Nothing proceeds without this foundation.",
@@ -1284,20 +1294,20 @@ window.__T__ = {
   fr: {
     nav_about:"À propos", nav_services:"Services", nav_results:"Notre travail",
     nav_events:"Événements", nav_plans:"Offres", nav_diagnosis:"Bilan 360° Gratuit", nav_contact:"Contact",
-    hero_label:"Partenaire d'exécution pour PME africaines · 200K–5M$ de CA annuel",
-    hero_h1a:"Le problème n'est pas la stratégie.", hero_h1b:"C'est l'exécution.",
-    hero_sub:"Vertex Group s'intègre dans les PME africaines et reste jusqu'à ce que les indicateurs bougent. Pas un rapport. Pas une remise de cadre. Exécution — mesurée contre les KPIs que nous fixons ensemble.",
-    hero_cta1:"Obtenir votre Bilan 360° Gratuit", hero_cta2:"Comment nous travaillons →",
+    hero_label:"INTELLIGENCE · TERRAIN · CONNEXIONS",
+    hero_h1a:"De l'", hero_h1lit:"analyse", hero_h1b:" à l'impact.",
+    hero_sub:"Nous équipons les entreprises africaines établies avec des données de marché, une collecte terrain et des connexions stratégiques — transformant l'information en avantage concurrentiel, mission après mission.",
+    hero_cta1:"Obtenir votre Bilan 360° Gratuit", hero_cta2:"Nos services →",
     hero_scroll:"Défiler",
-    stat1n:"200+", stat1l:"PME accompagnées — Nigeria, Afrique du Sud, Kenya, RDC, Ghana et plus",
-    stat2n:"94%", stat2l:"des missions produisent une croissance mesurable des revenus en 6 mois",
-    stat3n:"12+", stat3l:"marchés africains avec des missions clients actives",
-    stat4n:"3×", stat4l:"croissance moyenne des revenus dans les 18 mois d'un engagement structuré",
+    stat1n:"12+", stat1l:"Marchés africains avec couverture intelligence active",
+    stat2n:"500+", stat2l:"Organisations servies — investisseurs, corporates, institutions et PME",
+    stat3n:"95%", stat3l:"des clients agissent sur nos données dans les 30 jours suivant la livraison",
+    stat4n:"24h", stat4l:"délai moyen de livraison des diagnostics et briefs d'intelligence",
     about_label:"Qui Nous Sommes",
-    about_title:"Conçus pour les entreprises qui ont dépassé leur stratégie actuelle.",
-    about_p1:"Vertex Group est un cabinet de conseil stratégique axé exclusivement sur un seul mandat : aider les PME établies d'Afrique à se développer durablement. Nous travaillons avec des entreprises qui ont déjà trouvé leur assise — des sociétés avec un produit ou service éprouvé, une opération fonctionnelle et des revenus réels.",
-    about_p2:"Nous ne sommes pas un cabinet pour les startups ou les concepts en phase initiale. Nous travaillons avec des entreprises prêtes à se développer mais ayant besoin d'une stratégie claire, d'opérations plus solides et d'une exécution disciplinée — sans briser ce qui fonctionne déjà.",
-    about_philosophy:"\"La croissance sans structure n'est que du chaos coûteux.\"",
+    about_title:"La société de données qui comble le déficit d'information sur les marchés africains.",
+    about_p1:"Vertex Group est une société de données et d'intelligence opérant à travers l'Afrique. Nous existons pour donner aux entreprises, aux investisseurs et aux institutions l'intelligence de marché, les données terrain et les connexions stratégiques dont ils ont besoin pour agir avec confiance — dans des marchés où l'information fiable est rare.",
+    about_p2:"De la collecte de données primaires et de la recherche qualitative aux panels thématiques et aux missions économiques, nous construisons l'infrastructure informationnelle qui sous-tend une stratégie solide. Chaque service que nous livrons est conçu pour combler l'écart entre ce que les décideurs doivent savoir et ce qui est réellement disponible.",
+    about_philosophy:"\"Dans les marchés à information incomplète, l'acteur le mieux informé gagne.\"",
     about_presence:"Notre présence",
     about_visual_tag:"Fondé à Sandton · Pan-africain",
     about_principle1_title:"Maîtrise régionale",
@@ -1307,21 +1317,25 @@ window.__T__ = {
     about_principle3_title:"Partenariat à long terme",
     about_principle3_desc:"Nous mesurons notre succès par le vôtre. Nous ne considérons pas une mission terminée tant que les métriques ne bougent pas — et nous restons engagés aussi longtemps qu'il le faut.",
     services_label:"Ce Que Nous Faisons",
-    services_title:"Quatre services.\nUn résultat : une croissance structurée et mesurable.",
-    svc1_title:"Planification Stratégique de Croissance",
-    svc1_desc:"Nous travaillons avec votre direction pour définir une stratégie de croissance claire — identifier vos opportunités à plus haute valeur, résoudre les ambiguïtés stratégiques et construire un plan pluriannuel qui donne à votre entreprise direction et discipline.",
-    svc1_o1:"Développement de stratégie de croissance",svc1_o2:"Priorisation des opportunités",svc1_o3:"Planification d'exécution pluriannuelle",
-    svc2_title:"Feuilles de Route de Mise à l'Échelle",
-    svc2_desc:"La croissance sans préparation opérationnelle crée le chaos. Nous évaluons votre capacité organisationnelle, vos processus et votre structure, puis concevons une feuille de route qui vous permet de croître sans briser ce qui fonctionne.",
-    svc2_o1:"Évaluation de la capacité opérationnelle",svc2_o2:"Conception et optimisation des processus",svc2_o3:"Développement de feuille de route",
-    svc3_title:"Positionnement Marché et Concurrentiel",
-    svc3_desc:"Nous analysons vos dynamiques de marché, le paysage concurrentiel et vos segments clients pour affiner votre positionnement — afin que vous concourriez là où vous pouvez gagner, et cessiez de concourir là où vous ne pouvez pas.",
-    svc3_o1:"Analyse des dynamiques de marché",svc3_o2:"Cartographie du paysage concurrentiel",svc3_o3:"Stratégie de positionnement et différenciation",
-    svc4_title:"Gouvernance de Croissance et Conseil",
-    svc4_desc:"Une croissance soutenue nécessite une supervision soutenue. Nous fournissons un conseil stratégique continu — suivi des progrès par rapport à votre plan, remise en question des hypothèses et adaptation de votre stratégie.",
-    svc4_o1:"Revues stratégiques mensuelles",svc4_o2:"Suivi des KPI et responsabilisation",svc4_o3:"Gestion adaptative de la stratégie",
-    svc5_title:"",svc5_desc:"",svc5_o1:"",svc5_o2:"",svc5_o3:"",
-    svc6_title:"",svc6_desc:"",svc6_o1:"",svc6_o2:"",svc6_o3:"",
+    services_title:"Six expertises.\nUne mission : l'intelligence qui oriente les décisions.",
+    svc1_title:"Intelligence d'Affaire",
+    svc1_desc:"Nous produisons des analyses de marché rigoureuses, des rapports sectoriels et de l'intelligence concurrentielle qui donnent à votre direction une vision claire du terrain — pour des décisions fondées sur la donnée, pas l'intuition.",
+    svc1_o1:"Rapports sectoriels et de marché",svc1_o2:"Benchmarks concurrentiels",svc1_o3:"Briefs d'intelligence stratégique",
+    svc2_title:"Collecte des Données",
+    svc2_desc:"Nous concevons et exécutons des enquêtes quantitatives terrain et des collectes de données primaires à travers les marchés africains — capturant les informations que votre stratégie exige et que les sources secondaires ne peuvent pas fournir.",
+    svc2_o1:"Enquêtes quantitatives terrain",svc2_o2:"Données panels PME et consommateurs",svc2_o3:"Collecte multi-pays",
+    svc3_title:"Interviews et Recherche Qualitative",
+    svc3_desc:"Nous menons des entretiens approfondis avec des décideurs, groupes de discussion et consultations d'experts — révélant les insights que les chiffres seuls ne peuvent pas capturer.",
+    svc3_o1:"Entretiens dirigeants",svc3_o2:"Focus groups et études consommateurs",svc3_o3:"Consultations d'experts",
+    svc4_title:"Organisation de Panels Thématiques",
+    svc4_desc:"Nous organisons des panels et tables rondes thématiques à fort impact, réunissant dirigeants, décideurs politiques et investisseurs autour des enjeux stratégiques qui façonnent l'agenda économique africain.",
+    svc4_o1:"Tables rondes sectorielles",svc4_o2:"Panels politique et investissement",svc4_o3:"Dialogues transfrontaliers",
+    svc5_title:"Missions Économiques",
+    svc5_desc:"Nous concevons et pilotons des missions économiques ciblées vers les marchés africains — structurant du B2B matching, des introductions institutionnelles et des visites terrain pour offrir un accès que vous ne pouvez pas construire seul.",
+    svc5_o1:"B2B matching et introductions",svc5_o2:"Accès institutionnel et visites terrain",svc5_o3:"Facilitation d'entrée sur le marché",
+    svc6_title:"Préparation des Investisseurs",
+    svc6_desc:"Nous préparons les investisseurs internationaux et de la diaspora pour la RDC, l'Afrique centrale et au-delà — appui à la due diligence, navigation réglementaire et positionnement stratégique pour sécuriser l'entrée sur le marché.",
+    svc6_o1:"Conseil RDC et Afrique centrale",svc6_o2:"Appui à la due diligence",svc6_o3:"Entrée marché et navigation réglementaire",
     engage_label:"Notre approche",engage_title:"Quatre phases. Un impératif non négociable : des résultats mesurables.",
     eng1_t:"Diagnostic",eng1_d:"Nous démarrons par un audit 360° structuré — stratégie, opérations, pipeline commercial et position sur le marché. Vous recevez un score de santé et une liste d'actions prioritaires. Rien ne progresse sans cette fondation.",
     eng2_t:"Conception",eng2_d:"Nous concevons une feuille de route d'exécution sur 90 jours avec votre équipe dirigeante. Les OKR sont définis, les jalons fixés, et les critères de succès verrouillés avant qu'un consultant touche à votre entreprise.",
@@ -2529,9 +2543,11 @@ function PlansPage({ setPage, t }) {
 function ServicesGrid({ t }) {
   const svcs = [
     {n:'01',icon:'◎',tk:'svc1_title',dk:'svc1_desc',ok:['svc1_o1','svc1_o2','svc1_o3']},
-    {n:'02',icon:'△',tk:'svc2_title',dk:'svc2_desc',ok:['svc2_o1','svc2_o2','svc2_o3']},
-    {n:'03',icon:'⟨/⟩',tk:'svc3_title',dk:'svc3_desc',ok:['svc3_o1','svc3_o2','svc3_o3']},
-    {n:'04',icon:'∞',tk:'svc4_title',dk:'svc4_desc',ok:['svc4_o1','svc4_o2','svc4_o3']},
+    {n:'02',icon:'▦',tk:'svc2_title',dk:'svc2_desc',ok:['svc2_o1','svc2_o2','svc2_o3']},
+    {n:'03',icon:'◈',tk:'svc3_title',dk:'svc3_desc',ok:['svc3_o1','svc3_o2','svc3_o3']},
+    {n:'04',icon:'⬡',tk:'svc4_title',dk:'svc4_desc',ok:['svc4_o1','svc4_o2','svc4_o3']},
+    {n:'05',icon:'↗',tk:'svc5_title',dk:'svc5_desc',ok:['svc5_o1','svc5_o2','svc5_o3']},
+    {n:'06',icon:'◇',tk:'svc6_title',dk:'svc6_desc',ok:['svc6_o1','svc6_o2','svc6_o3']},
   ];
   return (
     <div className="services-grid">
@@ -2662,76 +2678,28 @@ function PlanTeaser({ t, setPage }) {
 }
 
 // ── HOME PAGE ─────────────────────────────────────────────────────
-function HeroCarousel({ t, setPage }) {
+function HeroSection({ t, setPage }) {
   const isFr = t === T.fr;
-  const [idx, setIdx] = React.useState(0);
-  const [paused, setPaused] = React.useState(false);
-  const [imgReady, setImgReady] = React.useState(false);
-  const slides = [
-    {
-      img:"https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=1920&q=80",
-      pos:"center 40%",
-      label: isFr ? "Le moteur de croissance de l'Afrique" : "Africa's Growth Engine",
-      h1a: isFr ? "44 millions de PME." : "44 million SMEs.",
-      h1b: isFr ? "Un potentiel immense. Sous-exploité." : "Enormous potential. Largely untapped.",
-      sub:  isFr
-        ? "L'Afrique abrite le plus grand bassin d'entrepreneurs à croissance rapide au monde. Vertex Group est là pour transformer ce potentiel en résultats mesurables."
-        : "Africa is home to the world's fastest-growing pool of entrepreneurs. Vertex Group exists to turn that potential into measurable results.",
-    },
-    {
-      img:"https://images.unsplash.com/photo-1596524430615-b46475ddff6e?auto=format&fit=crop&w=1920&q=80",
-      pos:"center 35%",
-      label: isFr ? "Marchés en expansion" : "Expanding Markets",
-      h1a: isFr ? "Lagos. Nairobi. Accra." : "Lagos. Nairobi. Accra.",
-      h1b: isFr ? "Johannesburg. Votre prochain marché." : "Johannesburg. Your next market.",
-      sub:  isFr
-        ? "Nous disposons des relations institutionnelles et de la connaissance locale pour vous emmener au-delà de votre territoire actuel — rapidement, avec les bons partenaires."
-        : "We hold the institutional relationships and local knowledge to take you beyond your current territory — quickly, with the right partners in place.",
-    },
-    {
-      img:"https://images.unsplash.com/photo-1574783951979-c1781edb1834?auto=format&fit=crop&w=1920&q=80",
-      pos:"center 30%",
-      label: isFr ? "Exécution. Pas de rapports." : "Execution. Not Reports.",
-      h1a: isFr ? "Le problème n'est pas la stratégie." : "The gap isn't strategy.",
-      h1b: isFr ? "C'est l'exécution." : "It's execution.",
-      sub:  isFr
-        ? "Vertex Group s'intègre dans les PME africaines et reste jusqu'à ce que les indicateurs bougent. Pas un rapport. Pas une remise de cadre. Des résultats concrets."
-        : "Vertex Group embeds inside African SMEs and stays until the numbers move. Not a report. Not a framework handoff. Concrete, tracked results.",
-    },
-  ];
-  React.useEffect(() => {
-    if (paused) return;
-    const timer = setInterval(() => setIdx(i => (i + 1) % slides.length), 5500);
-    return () => clearInterval(timer);
-  }, [paused, slides.length]);
-  const s = slides[idx];
   return (
-    <section className="hero" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
-      {slides.map((sl,i) => (
-        <img key={i} className="hero-photo" src={sl.img} alt=""
-          style={{opacity: i===idx ? 1 : 0, objectPosition: sl.pos}}
-          loading={i===0 ? "eager" : "lazy"}
-          fetchpriority={i===0 ? "high" : "auto"}
-          onLoad={i===0 ? () => setImgReady(true) : undefined}/>
-      ))}
-      <div className="hero-overlay"/>
+    <section className="hero">
       <div className="hero-bg"/><div className="hero-grid"/>
-      <div style={{transition:'opacity 0.55s ease',opacity: imgReady ? 1 : 0}}>
-        <div key={`lbl-${idx}`} className="hero-label" style={{animationDuration:'0.65s',animationDelay:'0s'}}>{s.label}</div>
-        <h1 key={`h1-${idx}`} className="hero-h1" style={{animationDuration:'0.65s',animationDelay:'0.1s'}}>{s.h1a}<br/><em>{s.h1b}</em></h1>
-        <p key={`sub-${idx}`} className="hero-sub" style={{animationDuration:'0.65s',animationDelay:'0.2s'}}>{s.sub}</p>
-        <div className="hero-actions">
-          <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.hero_cta1}</button>
-        </div>
+      {/* Rise dots — brand device */}
+      <div className="hero-rise">
+        <div className="hero-rise-dot" style={{width:'18px',height:'18px'}}/>
+        <div className="hero-rise-dot" style={{width:'13px',height:'13px',opacity:0.5}}/>
+        <div className="hero-rise-dot" style={{width:'8px',height:'8px',opacity:0.28}}/>
       </div>
-      <button className="carousel-arrow carousel-prev" onClick={() => setIdx(i => (i-1+slides.length)%slides.length)}>&#8249;</button>
-      <button className="carousel-arrow carousel-next" onClick={() => setIdx(i => (i+1)%slides.length)}>&#8250;</button>
-      <div className="carousel-progress">
-        {slides.map((_,i) => (
-          <button key={i} onClick={() => setIdx(i)}
-            className={`carousel-pip${i===idx?' active':''}`}
-            style={{width: i===idx ? '40px' : '20px'}}/>
-        ))}
+      {/* Orbit — hairline circle brand device */}
+      <div className="hero-orbit"/>
+      <div className="hero-gradient-line"/>
+      <div className="hero-label">{t.hero_label}</div>
+      <h1 className="hero-h1">
+        {t.hero_h1a}<em className="lit-word">{t.hero_h1lit}</em>{t.hero_h1b}
+      </h1>
+      <p className="hero-sub">{t.hero_sub}</p>
+      <div className="hero-actions">
+        <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.hero_cta1}</button>
+        <button className="btn-ghost" onClick={() => { setPage('services'); window.scrollTo(0,0); }}>{t.hero_cta2}</button>
       </div>
       <div className="hero-scroll-indicator">
         <div className="scroll-line"/>
@@ -2747,8 +2715,8 @@ function HomePage({ setPage, goSector, t }) {
   return (
     <div>
 
-      {/* ── 1. HERO CAROUSEL ── */}
-      <HeroCarousel t={t} setPage={setPage}/>
+      {/* ── 1. HERO ── */}
+      <HeroSection t={t} setPage={setPage}/>
 
       {/* ── 2. STATS BAR ── */}
       <div className="stats-bar">
@@ -2760,15 +2728,35 @@ function HomePage({ setPage, goSector, t }) {
         ))}
       </div>
 
-      {/* ── EDITORIAL STRIP — Cape Town ── */}
-      <div className="editorial-strip">
-        <img className="editorial-strip-img" src="https://images.unsplash.com/photo-1526512340740-9217d0159da9?auto=format&fit=crop&w=1920&q=80" alt="Cape Town" style={{objectPosition:'center 45%'}}/>
-        <div className="editorial-strip-overlay"/>
-        <div className="editorial-strip-content reveal">
-          <div className="editorial-strip-label">{isFr ? "L'opportunité africaine" : "The African Opportunity"}</div>
-          <h2 className="editorial-strip-title">{isFr ? "L'Afrique n'a pas besoin d'aide. Elle a besoin d'exécution." : "Africa doesn't need aid. It needs execution."}</h2>
-          <p className="editorial-strip-sub">{isFr ? "Avec 44 millions de PME et une classe moyenne en pleine expansion, le continent dispose de toutes les conditions pour une croissance accélérée. Ce qui manque, c'est la rigueur d'exécution." : "With 44 million SMEs and a rapidly expanding middle class, the continent has every condition for accelerated growth. What is missing is execution rigour."}</p>
-          <button className="btn-primary" onClick={() => { setPage('diagnosis'); window.scrollTo(0,0); }}>{t.hero_cta1}</button>
+      {/* ── DATA STATEMENT STRIP ── */}
+      <div style={{background:'var(--offblack)',borderTop:'var(--rule)',borderBottom:'var(--rule)',padding:'5rem 3rem',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'5rem',alignItems:'center'}}>
+        <div className="reveal">
+          <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.62rem',letterSpacing:'0.26em',textTransform:'uppercase',color:'var(--sky)',marginBottom:'1.5rem',opacity:0.9}}>
+            {isFr ? "Le déficit d'information" : "The information gap"}
+          </div>
+          <h2 style={{fontFamily:"'Instrument Serif',serif",fontSize:'clamp(2rem,3.5vw,3rem)',fontWeight:400,lineHeight:1.1,letterSpacing:'-0.015em',marginBottom:'1.5rem'}}>
+            {isFr
+              ? <>Les bonnes décisions naissent de <em className="lit-word">données fiables.</em></>
+              : <>Great decisions are built on <em className="lit-word">reliable data.</em></>}
+          </h2>
+          <p style={{color:'var(--grey-300)',fontSize:'0.92rem',lineHeight:1.82,maxWidth:480}}>
+            {isFr
+              ? "Dans les marchés africains, l'information fiable est la ressource la plus rare. Nous la produisons — terrain, secteur, concurrence — pour que vos décisions reposent sur des faits, pas sur des suppositions."
+              : "Across African markets, reliable information is the scarcest resource. We produce it — from the field, the sector, the competition — so your decisions rest on facts, not assumptions."}
+          </p>
+        </div>
+        <div className="reveal" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1px',background:'var(--grey-700)',border:'1px solid var(--grey-700)'}}>
+          {[
+            {n:'44M', l: isFr ? 'PME actives en Afrique' : 'Active SMEs in Africa'},
+            {n:'12+', l: isFr ? 'Marchés couverts' : 'Markets covered'},
+            {n:'80%', l: isFr ? 'Données primaires, pas secondaires' : 'Primary data, not secondary'},
+            {n:'24h', l: isFr ? 'Délai de livraison diagnostic' : 'Diagnostic turnaround'},
+          ].map((item,i) => (
+            <div key={i} style={{background:'var(--offblack)',padding:'2rem 1.8rem'}}>
+              <div style={{fontFamily:"'Instrument Serif',serif",fontSize:'2.6rem',fontWeight:400,lineHeight:1,color:'var(--white)',letterSpacing:'-0.02em'}}>{item.n}</div>
+              <div style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:'0.62rem',letterSpacing:'0.1em',textTransform:'uppercase',color:'var(--grey-500)',marginTop:'0.5rem',lineHeight:1.4}}>{item.l}</div>
+            </div>
+          ))}
         </div>
       </div>
 
