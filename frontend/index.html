@@ -2115,22 +2115,10 @@ async function readFileAsBase64(file) {
 }
 
 // ── LOGO COMPONENT ────────────────────────────────────────────────
-function Logo({ size = 38, style = {} }) {
+function Logo({ size = 68, style = {} }) {
   return (
-    <svg height={size} viewBox="0 0 320 78" fill="none" xmlns="http://www.w3.org/2000/svg"
-      style={{width:'auto',display:'block',flexShrink:0,...style}} aria-label="Vertex Group">
-      <defs>
-        <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#04AEEF"/>
-          <stop offset="100%" stopColor="#1B75BC"/>
-        </linearGradient>
-      </defs>
-      <text x="0" y="62" fontFamily="'Helvetica Neue',Helvetica,Arial,sans-serif"
-        fontWeight="800" fontSize="64" fill="url(#logoGrad)">VerteX</text>
-      <circle cx="307" cy="8"  r="8.5" fill="url(#logoGrad)"/>
-      <circle cx="292" cy="23" r="6.5" fill="url(#logoGrad)"/>
-      <circle cx="280" cy="35" r="4.5" fill="url(#logoGrad)"/>
-    </svg>
+    <img src="logo.png" alt="Vertex Group" height={size}
+      style={{width:'auto',display:'block',flexShrink:0,height:size,...style}}/>
   );
 }
 
@@ -3342,7 +3330,7 @@ function DiagnosisPage({ setPage, setReport, t }) {
       {processing && (
         <div className="processing-overlay">
           <div className="processing-logo">
-            <Logo size={32}/>
+            <img src="logo.png" alt="Vertex Group" height={32} style={{width:'auto',height:32}}/>
           </div>
           <div className="processing-ring"/>
           <div style={{textAlign:'center'}}>
